@@ -1,19 +1,13 @@
 import { View, Text, ScrollView, Flatlist } from "react-native";
 
 import styles from "./faq.style";
+import { FAQuestions } from "../../../constants";
 
 const FAQ = () => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          flex: 1,
-          padding: SIZES.medium,
-        }}
-      >
-        <Text>FAQ</Text>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Text>FAQ</Text>
+    </View>
   );
 };
 

@@ -1,5 +1,3 @@
-const violet = "#312651";
-
 const COLORS = {
   primary: violet,
   secondary: "#444262",
@@ -8,7 +6,7 @@ const COLORS = {
   gray: "#83829A",
   gray2: "#C1C0C8",
 
-  white: "#F3F4F8",
+  white: "#FFFFFF",
   lightWhite: "#FAFAFC",
 };
 

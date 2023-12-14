@@ -4,16 +4,9 @@ import styles from "./maps.style";
 
 const Maps = () => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          flex: 1,
-          padding: SIZES.medium,
-        }}
-      >
-        <Text>Maps</Text>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Text>Maps</Text>
+    </View>
   );
 };
 

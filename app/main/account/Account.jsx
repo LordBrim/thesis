@@ -4,16 +4,9 @@ import styles from "./account.style";
 
 const Account = () => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          flex: 1,
-          padding: SIZES.medium,
-        }}
-      >
-        <Text>Account</Text>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Text>Account</Text>
+    </View>
   );
 };
 

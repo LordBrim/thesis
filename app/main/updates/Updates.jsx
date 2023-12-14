@@ -4,16 +4,9 @@ import styles from "./updates.style";
 
 const Updates = () => {
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View
-        style={{
-          flex: 1,
-          padding: SIZES.medium,
-        }}
-      >
-        <Text>Updates</Text>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Text>Updates</Text>
+    </View>
   );
 };
 

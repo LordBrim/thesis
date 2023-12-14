@@ -1,8 +1,9 @@
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { Stack } from "expo-router";
 
-import { COLORS } from "../constants/theme";
+import { icons, COLORS } from "../constants";
 import { Account, FAQ, Home, Maps, Updates } from "./main";
+import { ScreenHeaderBtn } from "../components/headers/ScreenHeaderBtn";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -13,40 +14,45 @@ export default function Main() {
   return (
     <NavigationContainer independent={true} options={{ headerShown: false }}>
       <Tab.Navigator
-      // screenOptions={({ route }) => ({
-      //   tabBarIcon: ({ focused, color, size }) => {
-      //     if (route.name === "Home") {
-      //       return (
-      //         <Ionicons
-      //           name={
-      //             focused
-      //               ? "ios-information-circle"
-      //               : "ios-information-circle-outline"
-      //           }
-      //           size={size}
-      //           color={color}
-      //         />
-      //       );
-      //     } else if (route.name === "Settings") {
-      //       return (
-      //         <Ionicons
-      //           name={focused ? "ios-list-box" : "ios-list"}
-      //           size={size}
-      //           color={color}
-      //         />
-      //       );
-      //     }
-      //   },
-      //   tabBarInactiveTintColor: "gray",
-      //   tabBarActiveTintColor: "tomato",
-      // })}
+        initialRouteName="Home"
+        // screenOptions={({ route }) => ({
+        //   tabBarIcon: ({ focused, color, size }) => {
+        //     if (route.name === "Home") {
+        //       return (
+        //         <Ionicons
+        //           name={
+        //             focused
+        //               ? "ios-information-circle"
+        //               : "ios-information-circle-outline"
+        //           }
+        //           size={size}
+        //           color={color}
+        //         />
+        //       );
+        //     } else if (route.name === "Settings") {
+        //       return (
+        //         <Ionicons
+        //           name={focused ? "ios-list-box" : "ios-list"}
+        //           size={size}
+        //           color={color}
+        //         />
+        //       );
+        //     }
+        //   },
+        //   tabBarInactiveTintColor: "gray",
+        //   tabBarActiveTintColor: "tomato",
+        // })}
       >
         <Tab.Screen
           name="Home"
           component={Home}
           options={{
             headerShadowVisible: false,
-            headerTitle: "Home",
+            // headerTitleAlign: "center",
+            headerTitle: "Lifeline",
+            // headerRight: () => (
+            //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
+            // ),
           }}
         />
         <Tab.Screen

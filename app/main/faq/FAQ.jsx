@@ -17,9 +17,12 @@ const FAQ = () => {
           <QuestionPanel
             question={item.question}
             answer={item.answer}
-            isActive={isActiveIndex === item.id}
+            isActive={isActiveIndex === item.id + 1}
             onShow={() => {
-              setActiveIndex(item.id);
+              setActiveIndex(item.id + 1);
+            }}
+            onHide={() => {
+              setActiveIndex(0);
             }}
           />
         )}

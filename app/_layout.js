@@ -10,6 +10,9 @@ export default function HomeLayout() {
     DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
     DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
     DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
+    Bakbakone: require("../assets/fonts/BakbakOne.ttf"),
+    Raleway_Italic_SemiBold: require("../assets/fonts/Raleway_Italic_SemiBold.ttf"),
+    Raleway_Semibold: require("../assets/fonts/Raleway_SemiBold.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {

@@ -1,7 +1,7 @@
 // Home Tab Components
-import { default as HomeWelcome } from "./home/welcome/Welcome";
-import { default as HomeDonations } from "./home/donations/Donations";
-import { default as HomeEvents } from "./home/events/Events";
+import Welcome from "./home/welcome/Welcome";
+import Donations from "./home/donations/Donations";
+import Events from "./home/events/Events";
 
 // Updates Tab Components
 
@@ -11,4 +11,4 @@ import { default as HomeEvents } from "./home/events/Events";
 
 // Account Tab Components
 
-export { HomeWelcome, HomeDonations, HomeEvents };
+export { Welcome, Donations, Events };

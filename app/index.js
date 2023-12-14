@@ -2,9 +2,8 @@ import { Text, View, SafeAreaView, ScrollView } from "react-native";
 import { Stack } from "expo-router";
 
 import { COLORS, SIZES } from "../constants/theme";
-import { HomeDonations, HomeEvents, HomeWelcome } from "../components/index";
 
-export default function Home() {
+export default function Main() {
   return (
     <SafeAreaView sytle={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
       <Stack.Screen
@@ -15,19 +14,7 @@ export default function Home() {
           headerTitle: "Home",
         }}
       />
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flex: 1,
-            padding: SIZES.medium,
-          }}
-        >
-          <HomeWelcome />
-          <HomeDonations />
-          <HomeEvents />
-        </View>
-      </ScrollView>
+      <Text>Hello Main</Text>
     </SafeAreaView>
   );
 }

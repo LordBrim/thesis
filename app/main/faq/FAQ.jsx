@@ -1,13 +1,31 @@
-import { View, Text, ScrollView, Flatlist } from "react-native";
+import { View, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
+import { useState } from "react";
 
 import styles from "./faq.style";
 import { FAQuestions } from "../../../constants";
 
+import QuestionPanel from "../../../components/faq/QuestionPanel";
+
 const FAQ = () => {
+  const [isActiveIndex, setActiveIndex] = useState(0);
+
   return (
-    <View style={styles.container}>
-      <Text>FAQ</Text>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={FAQuestions}
+        renderItem={({ item }) => (
+          <QuestionPanel
+            question={item.question}
+            answer={item.answer}
+            isActive={isActiveIndex === item.id}
+            onShow={() => {
+              setActiveIndex(item.id);
+            }}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+      />
+    </SafeAreaView>
   );
 };
 

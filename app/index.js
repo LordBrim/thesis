@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 import { Stack } from "expo-router";
 
 import { icons, COLORS } from "../constants";
@@ -15,33 +15,55 @@ export default function Main() {
     <NavigationContainer independent={true} options={{ headerShown: false }}>
       <Tab.Navigator
         initialRouteName="Home"
-        // screenOptions={({ route }) => ({
-        //   tabBarIcon: ({ focused, color, size }) => {
-        //     if (route.name === "Home") {
-        //       return (
-        //         <Ionicons
-        //           name={
-        //             focused
-        //               ? "ios-information-circle"
-        //               : "ios-information-circle-outline"
-        //           }
-        //           size={size}
-        //           color={color}
-        //         />
-        //       );
-        //     } else if (route.name === "Settings") {
-        //       return (
-        //         <Ionicons
-        //           name={focused ? "ios-list-box" : "ios-list"}
-        //           size={size}
-        //           color={color}
-        //         />
-        //       );
-        //     }
-        //   },
-        //   tabBarInactiveTintColor: "gray",
-        //   tabBarActiveTintColor: "tomato",
-        // })}
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === "Home") {
+              return (
+                <Image
+                  source={focused ? icons.home : icons.homeOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1, color: color }}
+                />
+              );
+            } else if (route.name === "Updates") {
+              return (
+                <Image
+                  source={focused ? icons.bell : icons.bellOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1, color: color }}
+                />
+              );
+            } else if (route.name === "Maps") {
+              return (
+                <Image
+                  source={focused ? icons.map : icons.mapOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1, color: color }}
+                />
+              );
+            } else if (route.name === "FAQ") {
+              return (
+                <Image
+                  source={focused ? icons.question : icons.questionOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1, color: color }}
+                />
+              );
+            } else if (route.name === "Account") {
+              return (
+                <Image
+                  source={focused ? icons.person : icons.personOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1, color: color }}
+                />
+              );
+            }
+          },
+          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: "black",
+        })}
       >
         <Tab.Screen
           name="Home"

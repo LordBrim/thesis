@@ -24,7 +24,7 @@ export default function Main() {
                 <Image
                   source={focused ? icons.home : icons.homeOutline}
                   resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1, color: color }}
+                  style={{ width: size, aspectRatio: 1 }}
                 />
               );
             } else if (route.name === "Updates") {
@@ -32,7 +32,7 @@ export default function Main() {
                 <Image
                   source={focused ? icons.bell : icons.bellOutline}
                   resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1, color: color }}
+                  style={{ width: size, aspectRatio: 1 }}
                 />
               );
             } else if (route.name === "Maps") {
@@ -40,7 +40,7 @@ export default function Main() {
                 <Image
                   source={focused ? icons.map : icons.mapOutline}
                   resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1, color: color }}
+                  style={{ width: size, aspectRatio: 1 }}
                 />
               );
             } else if (route.name === "FAQ") {
@@ -48,7 +48,7 @@ export default function Main() {
                 <Image
                   source={focused ? icons.question : icons.questionOutline}
                   resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1, color: color }}
+                  style={{ width: size, aspectRatio: 1 }}
                 />
               );
             } else if (route.name === "Account") {
@@ -56,7 +56,7 @@ export default function Main() {
                 <Image
                   source={focused ? icons.person : icons.personOutline}
                   resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1, color: color }}
+                  style={{ width: size, aspectRatio: 1 }}
                 />
               );
             }

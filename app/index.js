@@ -1,41 +1,116 @@
-import { Text, View, SafeAreaView, ScrollView } from "react-native";
+import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
-import { COLORS, SIZES } from "../constants/theme";
-import { HomeDonations, HomeEvents, HomeWelcome } from "../components/index";
 
-export default function Home() {
-  const [fontsLoaded] = useFonts({
-    // DMBold: require("../assets/fonts/DMSans-Bold.ttf"),
-    // DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
-    // DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
-    Bakbakone: require("../assets/fonts/BakbakOne.ttf"),
-    Raleway_Italic_SemiBold: require("../assets/fonts/Raleway_Italic_SemiBold.ttf"),
-    Raleway_Semibold: require("../assets/fonts/Raleway_SemiBold.ttf"),
-  });
+import { icons, COLORS } from "../constants";
+import { Account, FAQ, Home, Maps, Updates } from "./main";
+import { ScreenHeaderBtn } from "../components/headers/ScreenHeaderBtn";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+export default function Main() {
+  const Tab = createBottomTabNavigator();
+
   return (
-    <SafeAreaView sytle={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-      <Stack.Screen
-        options={{
-          headerStyle: { backgroundColor: COLORS.lightWhite },
-          headerShadowVisible: false,
-          headerTitleAlign: "center",
-          headerTitle: "Home",
-        }}
-      />
+    <NavigationContainer independent={true} options={{ headerShown: false }}>
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flex: 1,
-            padding: SIZES.medium,
+            if (route.name === "Home") {
+              return (
+                <Image
+                  source={focused ? icons.home : icons.homeOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1 }}
+                />
+              );
+            } else if (route.name === "Updates") {
+              return (
+                <Image
+                  source={focused ? icons.bell : icons.bellOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1 }}
+                />
+              );
+            } else if (route.name === "Maps") {
+              return (
+                <Image
+                  source={focused ? icons.map : icons.mapOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1 }}
+                />
+              );
+            } else if (route.name === "FAQ") {
+              return (
+                <Image
+                  source={focused ? icons.question : icons.questionOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1 }}
+                />
+              );
+            } else if (route.name === "Account") {
+              return (
+                <Image
+                  source={focused ? icons.person : icons.personOutline}
+                  resizeMode="cover"
+                  style={{ width: size, aspectRatio: 1 }}
+                />
+              );
+            }
+          },
+          tabBarInactiveTintColor: "gray",
+          tabBarActiveTintColor: "black",
+        })}
+      >
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            headerShadowVisible: false,
+            // headerTitleAlign: "center",
+            headerTitle: "Lifeline",
+            // headerRight: () => (
+            //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
+            // ),
           }}
-        >
-          <HomeWelcome />
-          <HomeDonations />
-          <HomeEvents />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        />
+        <Tab.Screen
+          name="Updates"
+          component={Updates}
+          options={{
+            tabBarBadge: 3,
+            headerShadowVisible: false,
+            headerTitle: "Updates",
+          }}
+        />
+        <Tab.Screen
+          name="Maps"
+          component={Maps}
+          options={{
+            headerShadowVisible: false,
+            headerTitle: "Maps",
+          }}
+        />
+        <Tab.Screen
+          name="FAQ"
+          component={FAQ}
+          options={{
+            headerShadowVisible: false,
+            headerTitle: "FAQ",
+          }}
+        />
+        <Tab.Screen
+          name="Account"
+          component={Account}
+          options={{
+            headerShadowVisible: false,
+            headerTitle: "Account",
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }

@@ -23,5 +23,7 @@ export default function HomeLayout() {
 
   if (!fontsLoaded) return null;
 
-  return <Stack onLayout={onLayoutRootView} />;
+  return (
+    <Stack onLayout={onLayoutRootView} screenOptions={{ headerShown: false }} />
+  );
 }

@@ -1,0 +1,14 @@
+import { StyleSheet } from "react-native";
+
+import { COLORS, FONT, SIZES, SHADOWS } from "../../../constants/theme";
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    flex: 1,
+    padding: SIZES.medium,
+    backgroundColor: COLORS.white,
+  },
+});
+
+export default styles;

@@ -1,5 +1,5 @@
-import avatar from "../assets/images/placeholder-avatar.jpg";
+// import avatar from "../assets/images/placeholder-avatar.jpg";
 
-export default {
-  avatar,
-};
+// export default {
+//   avatar,
+// };

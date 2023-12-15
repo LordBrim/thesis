@@ -13,6 +13,7 @@ export default function HomeLayout() {
     Bakbakone: require("../assets/fonts/BakbakOne.ttf"),
     Raleway_Italic_SemiBold: require("../assets/fonts/Raleway_Italic_SemiBold.ttf"),
     Raleway_Semibold: require("../assets/fonts/Raleway_SemiBold.ttf"),
+    Grotesk: require("../assets/fonts/Grotesk.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {

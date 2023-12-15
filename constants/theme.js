@@ -10,12 +10,17 @@ const COLORS = {
 
   white: "#FFFFFF",
   lightWhite: "#FAFAFC",
+
+  red: "#FF000F",
+  redWhite: "#FF364E",
 };
 
 const FONT = {
   regular: "DMRegular",
   medium: "DMMedium",
   bold: "DMBold",
+  raleway: "Raleway_Semibold",
+  Grotesk: "Grotesk",
 };
 
 const SIZES = {

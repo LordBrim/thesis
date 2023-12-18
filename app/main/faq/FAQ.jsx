@@ -1,59 +1,77 @@
-import { View, Text, ScrollView, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
-import { useState } from "react";
-import { useNavigation } from '@react-navigation/native';
+import {
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
+import { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import styles from "./faq.style";
-import { COLORS, FAQuestions } from "../../../constants";
 
 import QuestionPanel from "../../../components/faq/QuestionPanel";
 import Divider from "../../../components/Divider";
-import {Icon} from 'react-native-paper'
+import { collection, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
+import db from "../../../db";
+import BackButton from "../../../components/backButton";
+
 const FAQ = () => {
   const [isActiveIndex, setActiveIndex] = useState(0);
+  const [faqs, setFaqs] = useState([]);
   const navigation = useNavigation();
 
   const redirectToHome = () => {
-    navigation.navigate('Home'); 
+    navigation.navigate("Home");
   };
+
+  useEffect(() => {
+    async function getFaqs() {
+      const faqCollection = collection(db, "faqs");
+      const faqSnapshot = await getDocs(faqCollection);
+
+      if (faqSnapshot.docs) {
+        const faqs = faqSnapshot.docs.map((faqDoc) => {
+          const faqData = faqDoc.data();
+          return {
+            id: faqDoc.id,
+            title: faqData.title,
+            answer: faqData.answer,
+          };
+        });
+        setFaqs(faqs);
+        console.log(faqs);
+      }
+    }
+    getFaqs();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-    <View style={{ alignSelf: 'flex-start' }}>
-      <TouchableOpacity
-        onPress={redirectToHome}
-        style={styles.button}
-      >
-      <Icon name="arrow-left" size={30} color="black" source="chevron-left" />
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 15,
-              fontFamily: 'Grotesk',
-            }}
-          >
-            BACK
-          </Text>
-      </TouchableOpacity>
-      <Text style={styles.header}>
-        Frequently Asked <Text style={{ color: "red" }}>Questions</Text>
-      </Text>
-     </View>
+      <View style={{ width: "90%" }}>
+        <BackButton navigation={redirectToHome} />
+        <Text style={styles.header}>
+          Frequently Asked <Text style={{ color: "red" }}>Questions</Text>
+        </Text>
+      </View>
       <Divider marginTop={30} marginBottom={30} />
       <FlatList
-        data={FAQuestions}
+        data={faqs}
         renderItem={({ item }) => (
           <QuestionPanel
-            question={item.question}
+            key={item.id}
+            question={item.title}
             answer={item.answer}
-            isActive={isActiveIndex === item.id + 1}
+            isActive={isActiveIndex === item.id}
             onShow={() => {
-              setActiveIndex(item.id + 1);
+              setActiveIndex(item.id);
             }}
             onHide={() => {
-              setActiveIndex(0);
+              setActiveIndex(null);
             }}
           />
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
       />
     </SafeAreaView>
   );

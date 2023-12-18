@@ -20,7 +20,9 @@ const FONT = {
   medium: "DMMedium",
   bold: "DMBold",
   raleway: "Raleway_Semibold",
+  raleway_italic: "Raleway_Italic_SemiBold",
   Grotesk: "Grotesk",
+  Grotesk_regular: "Grotesk_regular",
 };
 
 const SIZES = {

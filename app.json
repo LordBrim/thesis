@@ -4,6 +4,9 @@
     "web": {
       "bundler": "metro"
     },
+    "android": {
+      "permissions": ["ACCESS_FINE_LOCATION"]
+    },
     "plugins": [
       "expo-router"
     ],

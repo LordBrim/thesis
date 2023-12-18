@@ -14,9 +14,11 @@ import bellOutline from "../assets/icons/bell-outline.png";
 import mapOutline from "../assets/icons/map-outline.png";
 import questionOutline from "../assets/icons/question-outline.png";
 import personOutline from "../assets/icons/person-outline.png";
+import hospitalMarker from "../assets/icons/marker.png";
 
 export default {
   // logo,
+  hospitalMarker,
   arrowUpBold,
   arrowDownBold,
   qrCode,

@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   },
   iconToggle: {
     marginLeft: SIZES.small,
+
     width: 20,
     height: 20,
   },

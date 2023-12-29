@@ -7,9 +7,7 @@
     "android": {
       "permissions": ["ACCESS_FINE_LOCATION"]
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "name": "lifeline",
     "slug": "lifeline"
   }

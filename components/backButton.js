@@ -3,11 +3,26 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { COLORS } from "../constants";
 import { Icon } from "react-native-paper";
 
-const BackButton = ({ navigation }) => {
+const BackButton = ({ navigation, style, isPressed }) => {
   return (
-    <TouchableOpacity onPress={navigation} style={styles.buttonChoose}>
-      <Icon source="chevron-left" size={30} color="black" />
-      <Text style={styles.text}>BACK</Text>
+    <TouchableOpacity
+      onPress={navigation}
+      style={[
+        styles.buttonChoose,
+        style,
+        isPressed
+          ? { backgroundColor: COLORS.redTop }
+          : { backgroundColor: "white" },
+      ]}
+    >
+      <Icon
+        source="chevron-left"
+        size={30}
+        color={isPressed ? "white" : "black"}
+      />
+      <Text style={[styles.text, isPressed ? { color: "white" } : {}]}>
+        BACK
+      </Text>
     </TouchableOpacity>
   );
 };

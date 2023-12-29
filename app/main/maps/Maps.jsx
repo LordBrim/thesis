@@ -1,53 +1,95 @@
-import React, { useState, useRef } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableWithoutFeedback,
-} from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
-import { FAB, Icon } from "react-native-paper";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import Divider from "../../../components/Divider";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, FONT, SIZES, SHADOWS } from "../../../constants/theme";
 import { mapStyle } from "./mapStyle";
 import BackButton from "../../../components/backButton";
-
+import HospitalMapView from "./hospitalMapView";
 const hospitals = [
   {
     id: 1,
     name: "UERM Hospital",
     coordinates: { latitude: 14.607184, longitude: 121.020384 },
+    address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
+    logoUrl: require("../../../assets/images/UERM.png"),
+    bloodBanks: [
+      { bloodType: "A+", quantity: 0 },
+      { bloodType: "B+", quantity: 10 },
+      { bloodType: "B-", quantity: 10 },
+      { bloodType: "AB+", quantity: 10 },
+      { bloodType: "AB-", quantity: 10 },
+      { bloodType: "O+", quantity: 10 },
+      { bloodType: "O-", quantity: 0 },
+    ],
   },
   {
     id: 2,
     name: "De Los Santos Medical Center",
     coordinates: { latitude: 14.6200998, longitude: 121.0175533 },
+    address: "201 E Rodriguez Sr. Ave, Quezon City, 1112 Metro Manila",
+    logoUrl: require("../../../assets/images/santos.png"),
+
+    bloodBanks: [
+      { bloodType: "A+", quantity: 10 },
+      { bloodType: "A-", quantity: 0 },
+      { bloodType: "B+", quantity: 10 },
+      { bloodType: "B-", quantity: 10 },
+      { bloodType: "AB+", quantity: 10 },
+      { bloodType: "AB-", quantity: 10 },
+      { bloodType: "O+", quantity: 0 },
+      { bloodType: "O-", quantity: 0 },
+    ],
   },
   {
     id: 3,
     name: "Our Lady of Lourdes Hospital",
     coordinates: { latitude: 14.5949547, longitude: 121.0199822 },
+    address: "46 P. Sanchez St, Santa Mesa, Manila, 1016 Metro Manila",
+    logoUrl: require("../../../assets/images/lourdes.png"),
+    bloodBanks: [
+      { bloodType: "A+", quantity: 0 },
+      { bloodType: "A-", quantity: 0 },
+      { bloodType: "B+", quantity: 10 },
+      { bloodType: "B-", quantity: 10 },
+      { bloodType: "AB+", quantity: 10 },
+      { bloodType: "AB-", quantity: 10 },
+      { bloodType: "O+", quantity: 0 },
+      { bloodType: "O-", quantity: 0 },
+    ],
   },
   {
     id: 4,
     name: "Quirino Memorial Medical Center",
     coordinates: { latitude: 14.6222558, longitude: 121.0702733 },
+    address: "Project 4, Quezon City, 1109 Metro Manila",
+    logoUrl: require("../../../assets/images/quirino.png"),
+    bloodBanks: [
+      { bloodType: "A+", quantity: 0 },
+      { bloodType: "A-", quantity: 0 },
+      { bloodType: "B+", quantity: 10 },
+      { bloodType: "B-", quantity: 10 },
+      { bloodType: "AB+", quantity: 10 },
+      { bloodType: "AB-", quantity: 10 },
+      { bloodType: "O+", quantity: 0 },
+      { bloodType: "O-", quantity: 0 },
+    ],
   },
 ];
 
-function App() {
+function Maps({ setMapBackground, setMapHeader }) {
   const [selectedHospital, setSelectedHospital] = useState(null);
-  const [isMapViewShown, setIsMapViewShown] = useState(false);
-  const [isPressed, setIsPressed] = useState(false);
   const [pressedButtonId, setPressedButtonId] = useState(null);
 
   const navigation = useNavigation();
-
+  useEffect(() => {
+    if (!selectedHospital) {
+      setMapBackground(COLORS.white);
+      setMapHeader("black");
+    }
+  }, [selectedHospital]);
   const focusMap = (hospital) => {
     setSelectedHospital(hospital);
-    setIsMapViewShown(true);
 
     selectedHospital?.current.animateCamera(
       {
@@ -62,11 +104,6 @@ function App() {
     );
   };
 
-  const goBack = () => {
-    setIsMapViewShown(false);
-    setSelectedHospital(null);
-    setPressedButtonId(null);
-  };
   const toHomeScreen = () => {
     navigation.navigate("Home");
   };
@@ -112,42 +149,21 @@ function App() {
             </View>
           </TouchableWithoutFeedback>
         ))}
-      {isMapViewShown && (
-        <>
-          <MapView
-            style={styles.map}
-            provider={PROVIDER_GOOGLE}
-            customMapStyle={mapStyle}
-            initialRegion={{
-              latitude: selectedHospital.coordinates.latitude,
-              longitude: selectedHospital.coordinates.longitude,
-              latitudeDelta: 0.0024,
-              longitudeDelta: 0.0021,
-            }}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            showsPointsOfInterest={false}
-          >
-            {hospitals.map((hospital) => (
-              <Marker coordinate={hospital.coordinates} key={hospital.name}>
-                <View style={styles.markerContainer}>
-                  <Text style={styles.markerText}>{hospital.name}</Text>
-                  <Image
-                    source={require("../../../assets/icons/marker.png")}
-                    style={styles.markerImage}
-                  />
-                </View>
-              </Marker>
-            ))}
-          </MapView>
-          <FAB
-            style={styles.fab}
-            icon="chevron-left"
-            onPress={goBack}
-            customSize={40}
-            label="Back"
-          />
-        </>
+      {selectedHospital && (
+        <HospitalMapView
+          mapStyle={mapStyle}
+          selectedHospital={selectedHospital}
+          setSelectedHospital={setSelectedHospital}
+          setPressedButtonId={setPressedButtonId}
+          hospitals={hospitals}
+          goBack={() => {
+            setPressedButtonId(null);
+            setSelectedHospital(null);
+          }}
+          styles={styles}
+          setMapBackground={setMapBackground}
+          setMapHeader={setMapHeader}
+        />
       )}
     </View>
   );
@@ -233,6 +249,7 @@ const styles = StyleSheet.create({
     margin: 16,
     left: 0,
     top: 0,
+    zIndex: 6,
   },
   header: {
     fontFamily: FONT.Grotesk,
@@ -244,6 +261,47 @@ const styles = StyleSheet.create({
     fontFamily: FONT.raleway_italic,
     fontSize: SIZES.medium,
   },
+  infoBottom: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "white",
+    padding: 10,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+  },
+  infoTop: {
+    position: "absolute",
+    zIndex: 5,
+    height: 120,
+    left: 0,
+    right: 0,
+    top: 0,
+    paddingTop: 20,
+    backgroundColor: COLORS.redTop,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    padding: 10,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+  },
+  infoTopTitle: {
+    fontFamily: FONT.Grotesk,
+    fontSize: SIZES.xLarge,
+    fontWeight: "bold",
+    color: COLORS.white,
+  },
+  infoTopDistance: {
+    fontFamily: FONT.Grotesk_regular,
+    fontSize: SIZES.medium,
+    color: COLORS.white,
+  },
 });
 
-export default App;
+export default Maps;

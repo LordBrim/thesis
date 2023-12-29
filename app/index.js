@@ -4,13 +4,15 @@ import { Stack } from "expo-router";
 import { icons, COLORS } from "../constants";
 import { Account, FAQ, Home, Maps, Updates } from "./main";
 import { ScreenHeaderBtn } from "../components/headers/ScreenHeaderBtn";
-
+import { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 export default function Main() {
-  const Tab = createBottomTabNavigator();
+  const [mapsBackground, setMapBackground] = useState("white");
+  const [mapsHeader, setMapHeader] = useState("#000000");
 
+  const Tab = createBottomTabNavigator();
   return (
     <NavigationContainer independent={true} options={{ headerShown: false }}>
       <Tab.Navigator
@@ -88,10 +90,21 @@ export default function Main() {
         />
         <Tab.Screen
           name="Maps"
-          component={Maps}
+          children={() => (
+            <Maps
+              setMapBackground={setMapBackground}
+              setMapHeader={setMapHeader}
+            />
+          )}
           options={{
             headerShadowVisible: false,
             headerTitle: "Maps",
+            headerStyle: {
+              backgroundColor: mapsBackground,
+            },
+            headerTitleStyle: {
+              color: mapsHeader,
+            },
           }}
         />
         <Tab.Screen

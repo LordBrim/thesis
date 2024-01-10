@@ -15,6 +15,7 @@ const hospitals = [
     logoUrl: require("../../../assets/images/UERM.png"),
     bloodBanks: [
       { bloodType: "A+", quantity: 0 },
+      { bloodType: "A-", quantity: 0 },
       { bloodType: "B+", quantity: 10 },
       { bloodType: "B-", quantity: 10 },
       { bloodType: "AB+", quantity: 10 },

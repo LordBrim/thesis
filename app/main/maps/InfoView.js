@@ -1,13 +1,7 @@
 import React from "react";
 import { View, Text, Image, Animated } from "react-native";
-import BloodBankInfo from "./BloodBankInfo";
-const InfoView = ({
-  selectedHospital,
-  infoBottom,
-  infoVisible,
-  BloodTypeIcons,
-  styles,
-}) => (
+// import BloodBankInfo from "./BloodBankInfo";
+const InfoView = ({ selectedHospital, infoBottom, styles }) => (
   <Animated.View
     style={[styles.infoBottom, { bottom: infoBottom }]}
     key={selectedHospital.name}
@@ -17,9 +11,9 @@ const InfoView = ({
       source={{ uri: selectedHospital.logoUrl }}
       style={{ width: 50, height: 50 }}
     />
-    {selectedHospital.bloodBanks.map((bank, index) => (
+    {/* {selectedHospital.bloodBanks.map((bank, index) => (
       <BloodBankInfo key={index} bank={bank} BloodTypeIcons={BloodTypeIcons} />
-    ))}
+    ))} */}
   </Animated.View>
 );
 

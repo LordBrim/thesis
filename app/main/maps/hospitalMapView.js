@@ -3,9 +3,8 @@ import * as Location from "expo-location";
 import { getDistance } from "geolib"; // You'll need to install this package
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, Text, View } from "react-native";
-import MapView, { PROVIDER_GOOGLE, Polyline } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Polyline, UrlTile } from "react-native-maps";
 import { Divider, Icon } from "react-native-paper";
-
 import BackButton from "../../../components/backButton";
 import { COLORS } from "../../../constants";
 import HospitalMarker from "./HospitalMarkers";
@@ -176,7 +175,7 @@ const HospitalMapView = ({
       }
       const start = `${currentLocation.longitude},${currentLocation.latitude}`;
       const end = `${selectedHospital.coordinates.longitude},${selectedHospital.coordinates.latitude}`;
-      console.log(start, end);
+      // console.log(start, end);
       const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62480d5edcd000074935966b0d86d130c538&start=${start}&end=${end}`;
 
       try {
@@ -186,24 +185,16 @@ const HospitalMapView = ({
           data.features[0].properties.segments[0].distance;
         setDistance((distanceInMeters / 1000).toFixed(1)); // Convert to kilometers and set the state
 
-        const instructions = data.features[0].properties.segments[0].steps.map(
-          (step) => step.instruction
-        );
-        setInstructions(instructions);
-
-        // Extract the route coordinates and set them to the state
         const route = data.features[0].geometry.coordinates;
         const routeCoordinates = route.map((coord) => ({
           longitude: coord[0],
           latitude: coord[1],
         }));
         setRouteCoordinates(routeCoordinates);
-        console.log(instructions);
       } catch (error) {
         console.error(error);
       }
     };
-    console.log(selectedHospital.logoUrl);
     fetchRoute();
   }, [currentLocation, selectedHospital]);
 
@@ -229,41 +220,42 @@ const HospitalMapView = ({
             : "Calculating..."}
         </Text>
       </Animated.View>
-
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        customMapStyle={mapStyle}
-        initialRegion={{
-          latitude: selectedHospital.coordinates.latitude,
-          longitude: selectedHospital.coordinates.longitude,
-          latitudeDelta: 0.0024,
-          longitudeDelta: 0.0021,
-        }}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        onPress={() => {
-          setSelectedMarker(null);
-        }}
-        onPanDrag={() => {
-          setSelectedMarker(null);
-        }}
-      >
-        <Polyline
-          coordinates={routeCoordinates}
-          strokeWidth={5}
-          strokeColor="blue"
-        />
-        {hospitals.map((hospital) => (
-          <HospitalMarker
-            key={hospital.id}
-            hospital={hospital}
-            setSelectedMarker={setSelectedMarker}
-            // showInfo={showInfo}
-            styles={styles}
+      {selectedHospital && selectedHospital.coordinates ? (
+        <MapView
+          style={styles.map}
+          // customMapStyle={mapStyle}
+          mapType="none"
+          initialRegion={{
+            latitude: selectedHospital.coordinates.latitude,
+            longitude: selectedHospital.coordinates.longitude,
+            latitudeDelta: 0.0024,
+            longitudeDelta: 0.0021,
+          }}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          onPress={() => {
+            setSelectedMarker(null);
+          }}
+          onPanDrag={() => {
+            setSelectedMarker(null);
+          }}
+        >
+          <Polyline
+            coordinates={routeCoordinates}
+            strokeWidth={5}
+            strokeColor="blue"
           />
-        ))}
-      </MapView>
+          {hospitals.map((hospital) => (
+            <HospitalMarker
+              key={hospital.id}
+              hospital={hospital}
+              setSelectedMarker={setSelectedMarker}
+              // showInfo={showInfo}
+              styles={styles}
+            />
+          ))}
+        </MapView>
+      ) : null}
 
       <Animated.View
         style={[styles.infoBottom, { bottom: infoBottomOffset }]}
@@ -318,8 +310,9 @@ const HospitalMapView = ({
           }}
         >
           {/* Display all icons and only change color based on availability */}
-          {DisplayedIcons.map(({ Icon, types }) => (
+          {DisplayedIcons.map(({ Icon, types }, index) => (
             <View
+              key={index}
               style={[
                 {
                   display: "flex",
@@ -335,7 +328,7 @@ const HospitalMapView = ({
                 fill={
                   selectedHospital.bloodBanks
                     .filter((bt) => types.includes(bt.bloodType))
-                    .every((t) => t.quantity > 0)
+                    .some((t) => t.quantity > 0)
                     ? "red"
                     : "gray"
                 }
@@ -348,7 +341,7 @@ const HospitalMapView = ({
                   flexDirection: "column",
                 }}
               >
-                {types.map((bb) => {
+                {types.map((bb, bbIndex) => {
                   const positive = bb.includes("+");
                   // Get the one bloobank with the same blood type.
                   let iconColor =
@@ -360,7 +353,12 @@ const HospitalMapView = ({
                   const Icon = positive ? Plus : Minus;
 
                   return (
-                    <Icon key={bb.id} width={20} height={20} fill={iconColor} />
+                    <Icon
+                      key={bbIndex}
+                      width={20}
+                      height={20}
+                      fill={iconColor}
+                    />
                   );
                 })}
               </View>

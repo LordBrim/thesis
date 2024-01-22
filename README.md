@@ -12,7 +12,8 @@
 
 **Step 5**: You can run the project on your device or install android studio with expo go https://docs.expo.dev/workflow/android-studio-emulator/. 
 
-**Step 6**: Create your own branch off the branch you selected. This way you can make commits without interfering with other branches.
+**Step 6**: Create your own branch off the branch you selected. This way you can make commits without interfering with other branches. You can find tasks for development [here in projects](https://github.com/users/Andrei-Sager/projects/5/views/1).
+
 
 **Step 7**: Make a pull request to merge your brach changes.
 

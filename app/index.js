@@ -19,63 +19,69 @@ export default function Main() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === "Home") {
-              return (
-                <Image
-                  source={focused ? icons.home : icons.homeOutline}
-                  resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1 }}
-                />
-              );
-            } else if (route.name === "Updates") {
-              return (
+            switch (route.name) {
+              case "Home":
+                return (
+                  <Image
+                    source={focused ? icons.bell : icons.bellOutline}
+                    resizeMode="cover"
+                    style={{ width: size, aspectRatio: 1 }}
+                  />
+                );
+                break;
+              case "Updates":
                 <Image
                   source={focused ? icons.bell : icons.bellOutline}
                   resizeMode="cover"
                   style={{ width: size, aspectRatio: 1 }}
-                />
-              );
-            } else if (route.name === "Maps") {
-              return (
-                <Image
-                  source={focused ? icons.map : icons.mapOutline}
-                  resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1 }}
-                />
-              );
-            } else if (route.name === "FAQ") {
-              return (
-                <Image
-                  source={focused ? icons.question : icons.questionOutline}
-                  resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1 }}
-                />
-              );
-            } else if (route.name === "Account") {
-              return (
-                <Image
-                  source={focused ? icons.person : icons.personOutline}
-                  resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1 }}
-                />
-              );
+                />;
+                break;
+              case "Maps":
+                return (
+                  <Image
+                    source={focused ? icons.map : icons.mapOutline}
+                    resizeMode="cover"
+                    style={{ width: size, aspectRatio: 1 }}
+                  />
+                );
+                break;
+              case "FAQ":
+                return (
+                  <Image
+                    source={focused ? icons.question : icons.questionOutline}
+                    resizeMode="cover"
+                    style={{ width: size, aspectRatio: 1 }}
+                  />
+                );
+                break;
+              case "Account":
+                return (
+                  <Image
+                    source={focused ? icons.person : icons.personOutline}
+                    resizeMode="cover"
+                    style={{ width: size, aspectRatio: 1 }}
+                  />
+                );
+                break;
+              default:
+                console.log("Route Does Not Exist.");
             }
           },
-          tabBarInactiveTintColor: "gray",
-          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: COLORS.disabled,
+          tabBarActiveTintColor: COLORS.enabled,
         })}
       >
         <Tab.Screen
           name="Home"
           component={Home}
-          options={{
-            headerShadowVisible: false,
-            // headerTitleAlign: "center",
-            headerTitle: "Lifeline",
-            // headerRight: () => (
-            //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
-            // ),
-          }}
+          // options={{
+          //   headerShadowVisible: false,
+          //   // headerTitleAlign: "center",
+          //   headerTitle: "Lifeline",
+          //   // headerRight: () => (
+          //   //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
+          //   // ),
+          // }}
         />
         <Tab.Screen
           name="Updates"

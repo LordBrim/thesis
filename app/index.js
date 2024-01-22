@@ -8,6 +8,8 @@ import { ScreenHeaderBtn } from "../components/headers/ScreenHeaderBtn";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
+
 export default function Main() {
   const Tab = createBottomTabNavigator();
 
@@ -22,50 +24,44 @@ export default function Main() {
             switch (route.name) {
               case "Home":
                 return (
-                  <Image
-                    source={focused ? icons.bell : icons.bellOutline}
-                    resizeMode="cover"
-                    style={{ width: size, aspectRatio: 1 }}
+                  <Ionicons
+                    name={focused ? "home" : "home-outline"}
+                    size={size}
+                    color={color}
                   />
                 );
-                break;
               case "Updates":
                 return (
-                  <Image
-                    source={focused ? icons.bell : icons.bellOutline}
-                    resizeMode="cover"
-                    style={{ width: size, aspectRatio: 1 }}
+                  <Ionicons
+                    name={focused ? "notifications" : "notifications-outline"}
+                    size={size}
+                    color={color}
                   />
                 );
-
-                break;
               case "Maps":
                 return (
-                  <Image
-                    source={focused ? icons.map : icons.mapOutline}
-                    resizeMode="cover"
-                    style={{ width: size, aspectRatio: 1 }}
+                  <Ionicons
+                    name={focused ? "map" : "map-outline"}
+                    size={size}
+                    color={color}
                   />
                 );
-                break;
               case "FAQ":
                 return (
-                  <Image
-                    source={focused ? icons.question : icons.questionOutline}
-                    resizeMode="cover"
-                    style={{ width: size, aspectRatio: 1 }}
+                  <AntDesign
+                    name={focused ? "questioncircle" : "questioncircleo"}
+                    size={size}
+                    color={color}
                   />
                 );
-                break;
               case "Account":
                 return (
-                  <Image
-                    source={focused ? icons.person : icons.personOutline}
-                    resizeMode="cover"
-                    style={{ width: size, aspectRatio: 1 }}
+                  <FontAwesome5
+                    name={focused ? "user-alt" : "user"}
+                    size={size}
+                    color={color}
                   />
                 );
-                break;
               default:
                 console.log("Route Does Not Exist.");
             }

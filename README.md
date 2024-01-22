@@ -22,8 +22,6 @@ Ps: Mag pull request na lng kayo sasabihin ko na lng kung may problema.
 # How To Add Icons
 Find icons over at https://icons.expo.fyi/Index.
 
-```
-
 # 📝 Project Documentation
 
 - [React Native: Docs](https://reactnative.dev/docs/environment-setup)

@@ -30,11 +30,14 @@ export default function Main() {
                 );
                 break;
               case "Updates":
-                <Image
-                  source={focused ? icons.bell : icons.bellOutline}
-                  resizeMode="cover"
-                  style={{ width: size, aspectRatio: 1 }}
-                />;
+                return (
+                  <Image
+                    source={focused ? icons.bell : icons.bellOutline}
+                    resizeMode="cover"
+                    style={{ width: size, aspectRatio: 1 }}
+                  />
+                );
+
                 break;
               case "Maps":
                 return (

@@ -1,7 +1,5 @@
-const violet = "#312651";
-
 const COLORS = {
-  primary: violet,
+  primary: "#bf2831",
   secondary: "#444262",
   tertiary: "#FF7754",
 
@@ -10,6 +8,9 @@ const COLORS = {
 
   white: "#FFFFFF",
   lightWhite: "#FAFAFC",
+
+  enabled: "#bf2831",
+  disabled: "#8a8a8a",
 };
 
 const FONT = {

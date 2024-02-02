@@ -6,6 +6,27 @@
     },
     "plugins": ["expo-router"],
     "name": "Lifeline",
-    "slug": "lifeline"
+    "slug": "lifeline",
+    "icon": "./assets/splash/icon.png",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "74c64710-300f-438f-8f6f-be14d279f434"
+      }
+    },
+    "splash": {
+      "image": "./assets/splash/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FF3642"
+    },
+    "android": {
+      "package": "com.andreisager.lifeline",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/splash/adaptive-icon.png",
+        "backgroundColor": "#FF3642"
+      }
+    }
   }
 }

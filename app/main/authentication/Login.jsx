@@ -4,8 +4,8 @@ import {
   Image,
   Text,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
+  TouchableHighlight,
 } from "react-native";
 
 import styles from "./login.style";
@@ -17,15 +17,20 @@ const Login = () => {
   // const { signIn } = React.useContext(AuthContext);
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.containerTop}>
+    <View style={styles.container}>
+      <View style={styles.containerTop}>
+        <View
+          style={{
+            gap: 8,
+            alignItems: "flex-end",
+          }}
+        >
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "center",
+              justifyContent: "flex-end",
               alignItems: "center",
-              gap: 20,
+              gap: 10,
             }}
           >
             <Text style={styles.title}>Lifeline</Text>
@@ -37,55 +42,50 @@ const Login = () => {
           <Text style={styles.subtitle}>Bloodbank management system</Text>
         </View>
 
-        <View style={styles.containerCenter}>
-          <Text style={styles.header}>Log in</Text>
-          <View style={{ gap: 10 }}>
-            <View style={styles.field}>
-              <Text style={styles.formName}>Email Address</Text>
-              <TextInput
-                style={styles.formInput}
-                placeholder="Enter your email address"
-                value={email}
-                onChangeText={setEmail}
-              />
-            </View>
-            <View style={styles.field}>
-              <Text style={styles.formName}>Password</Text>
-              <TextInput
-                style={styles.formInput}
-                placeholder="Enter your password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            </View>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text>?Remember Me</Text>
-              <TouchableOpacity>
-                <Text style={styles.link}>Forgot Password?</Text>
-              </TouchableOpacity>
-            </View>
+        <Text style={styles.header}>Log in</Text>
+        <View style={{ gap: 10 }}>
+          <View style={styles.field}>
+            <Text style={styles.formName}>Email Address</Text>
+            <TextInput
+              style={styles.formInput}
+              placeholder="Enter your email address"
+              value={email}
+              onChangeText={setEmail}
+            />
           </View>
-
-          <TouchableHighlight
-          // onPress={() => signIn({ email, password })}
+          <View style={styles.field}>
+            <Text style={styles.formName}>Password</Text>
+            <TextInput
+              style={styles.formInput}
+              placeholder="Enter your password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <View style={styles.formCta}>
-              <Text>Log In</Text>
-            </View>
-          </TouchableHighlight>
+            <Text>?Remember Me</Text>
+            <TouchableOpacity>
+              <Text style={styles.link}>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
-        <View style={styles.containerBottom}>
-          <Text>Don't have an account? </Text>
-          <TouchableOpacity>
-            <Text style={styles.link}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableHighlight style={styles.formCta}>
+          {/* onPress={() => signIn({ email, password })} */}
+          <Text style={styles.formCtaText}>Log In</Text>
+        </TouchableHighlight>
       </View>
-    </>
+
+      <View style={styles.containerBottom}>
+        <Text>Don't have an account? </Text>
+        <TouchableOpacity>
+          <Text style={styles.link}>Sign Up</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 

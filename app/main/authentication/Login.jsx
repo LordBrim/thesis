@@ -66,7 +66,7 @@ const Login = () => {
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text>?Remember Me</Text>
+            <Text style={styles.formName}>? Remember Me</Text>
             <TouchableOpacity>
               <Text style={styles.link}>Forgot Password?</Text>
             </TouchableOpacity>

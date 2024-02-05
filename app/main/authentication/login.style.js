@@ -13,12 +13,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
   },
-  // containerTop: {
-  //   width: "100%",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   gap: 20,
-  // },
   containerTop: {
     gap: SIZES.xxxLarge,
   },
@@ -62,6 +56,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: SIZES.xSmall,
     borderColor: COLORS.gray,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   formCta: {
     width: "100%",
@@ -73,7 +70,8 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.xSmall,
   },
   formCtaText: {
-    textTransform: "uppercase",
+    fontSize: SIZES.medium,
+    textTransform: "capitalize",
     color: COLORS.white,
   },
   link: {

@@ -8,18 +8,18 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingVertical: SIZES.xxxLarge,
-    paddingHorizontal: SIZES.medium,
+    paddingHorizontal: SIZES.large,
     backgroundColor: COLORS.white,
     justifyContent: "space-between",
     alignContent: "center",
   },
+  // containerTop: {
+  //   width: "100%",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   gap: 20,
+  // },
   containerTop: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 20,
-  },
-  containerCenter: {
     gap: SIZES.xxxLarge,
   },
   containerBottom: {
@@ -30,12 +30,21 @@ const styles = StyleSheet.create({
     padding: SIZES.xSmall,
   },
   icon: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 100,
   },
-  title: {},
-  subtitle: {},
+  title: {
+    fontSize: SIZES.xxLarge,
+    fontWeight: "900",
+    textTransform: "uppercase",
+    color: COLORS.primary,
+  },
+  subtitle: {
+    fontSize: SIZES.medium,
+    fontWeight: "500",
+    textTransform: "uppercase",
+  },
   header: {
     fontWeight: "bold",
     fontSize: SIZES.xxLarge,
@@ -55,14 +64,17 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray,
   },
   formCta: {
-    justifyContent: "center",
-    alignContent: "center",
     width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
     padding: SIZES.medium,
     color: COLORS.white,
     backgroundColor: COLORS.primary,
     borderRadius: SIZES.xSmall,
+  },
+  formCtaText: {
     textTransform: "uppercase",
+    color: COLORS.white,
   },
   link: {
     fontWeight: "bold",

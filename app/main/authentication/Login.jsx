@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Image,
@@ -6,15 +6,22 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableHighlight,
+  Pressable,
 } from "react-native";
+
+import useTogglePasswordVisibility from "../../../hooks/useTogglePasswordVisibility";
+import { Ionicons } from "react-native-vector-icons";
 
 import styles from "./login.style";
 
-const Login = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+export default function Login() {
+  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
+    useTogglePasswordVisibility();
 
-  // const { signIn } = React.useContext(AuthContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // const { signIn } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -55,13 +62,21 @@ const Login = () => {
           </View>
           <View style={styles.field}>
             <Text style={styles.formName}>Password</Text>
-            <TextInput
-              style={styles.formInput}
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
+            <View style={styles.formInput}>
+              <TextInput
+                style={{ width: "90%" }}
+                placeholder="Enter your password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={passwordVisibility}
+                autoCapitalize="none"
+                autoCorrect={false}
+                enablesReturnKeyAutomatically
+              />
+              <Pressable onPress={handlePasswordVisibility}>
+                <Ionicons name={rightIcon} size={22} color="#83829A" />
+              </Pressable>
+            </View>
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -87,6 +102,4 @@ const Login = () => {
       </View>
     </View>
   );
-};
-
-export default Login;
+}

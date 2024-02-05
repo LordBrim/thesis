@@ -11,6 +11,7 @@ import {
 
 import useTogglePasswordVisibility from "../../../hooks/useTogglePasswordVisibility";
 import { Ionicons } from "react-native-vector-icons";
+import { CheckBox } from "react-native-btr";
 
 import styles from "./login.style";
 
@@ -20,6 +21,11 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [toggleRemember, setToggleRemember] = useState(false);
+  const handleToggelRemember = () => {
+    setToggleRemember(!toggleRemember);
+  };
 
   // const { signIn } = useContext(AuthContext);
 
@@ -81,7 +87,20 @@ export default function Login() {
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={styles.formName}>? Remember Me</Text>
+            <View style={{ flexDirection: "row", gap: 10 }}>
+              {/* <CheckBox
+                disabled={false}
+                value={toggleRemember}
+                onValueChange={(newValue) => setToggleRemember(newValue)}
+              /> */}
+              <CheckBox
+                checked={toggleRemember}
+                // color={item.color}
+                onPress={() => handleToggelRemember()}
+              />
+
+              <Text style={styles.formName}>Remember Me</Text>
+            </View>
             <TouchableOpacity>
               <Text style={styles.link}>Forgot Password?</Text>
             </TouchableOpacity>

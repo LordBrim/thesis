@@ -88,17 +88,12 @@ export default function Login() {
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
             <View style={{ flexDirection: "row", gap: 10 }}>
-              {/* <CheckBox
-                disabled={false}
-                value={toggleRemember}
-                onValueChange={(newValue) => setToggleRemember(newValue)}
-              /> */}
               <CheckBox
                 checked={toggleRemember}
-                // color={item.color}
+                color="#FF3642"
+                borderRadius={3}
                 onPress={() => handleToggelRemember()}
               />
-
               <Text style={styles.formName}>Remember Me</Text>
             </View>
             <TouchableOpacity>

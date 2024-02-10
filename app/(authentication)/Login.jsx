@@ -16,7 +16,7 @@ import { CheckBox } from "react-native-btr";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
@@ -101,7 +101,9 @@ export default function Login() {
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ForgotPassword")}
+            >
               <Text style={styles.link}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
@@ -115,8 +117,8 @@ export default function Login() {
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
-        <TouchableOpacity>
-          <Text style={styles.link}>Sign Up</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={styles.link}>Register</Text>
         </TouchableOpacity>
       </View>
     </View>

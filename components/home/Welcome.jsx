@@ -1,6 +1,6 @@
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
-const Welcome = () => {
+export default function Welcome() {
   return (
     <View>
       <Text style={styles.title}>Welcome To Lifeline, User</Text>
@@ -10,9 +10,7 @@ const Welcome = () => {
       </View>
     </View>
   );
-};
-
-export default Welcome;
+}
 
 const styles = StyleSheet.create({
   container: {

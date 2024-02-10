@@ -1,10 +1,9 @@
-import { View, Text } from "react-native";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
-export default function ForgotPassword() {
+export default function About() {
   return (
     <View style={styles.container}>
-      <Text>Forgot Password Screen</Text>
+      <Text>About Screen</Text>
     </View>
   );
 }

@@ -1,8 +1,8 @@
-import Home from "./(home)/Home";
-import Updates from "./(updates)/Updates";
-import Maps from "./(maps)/Maps";
-import FAQ from "./(faq)/FAQ";
-import Account from "./(account)/Account";
+import Home from "./(root)/(home)/Home";
+import Updates from "./(root)/(updates)/Updates";
+import Maps from "./(root)/(maps)/Maps";
+import FAQ from "./(root)/(faq)/FAQ";
+import Account from "./(root)/(account)/Account";
 import Login from "./(authentication)/Login";
 import Register from "./(authentication)/Register";
 

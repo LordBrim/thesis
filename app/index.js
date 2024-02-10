@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 import { Stack } from "expo-router";
 
@@ -12,7 +14,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 
-export function Main() {
+export default function Main() {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 

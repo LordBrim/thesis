@@ -1,11 +1,11 @@
 import { View, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
 import { useState } from "react";
 
-import { FAQuestions } from "../../constants";
-import QuestionPanel from "../../components/faq/QuestionPanel";
+import { FAQuestions } from "../../../constants";
+import QuestionPanel from "../../../components/faq/QuestionPanel";
 
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS, SIZES } from "../../../constants/theme";
 
 const FAQ = () => {
   const [isActiveIndex, setActiveIndex] = useState(0);

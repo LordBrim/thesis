@@ -26,11 +26,6 @@ export default function Main() {
   return (
     <>
       {isSignedIn ? (
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
-        </Stack.Navigator>
-      ) : (
         <NavigationContainer
           independent={true}
           options={{ headerShown: false }}
@@ -137,6 +132,11 @@ export default function Main() {
             />
           </Tab.Navigator>
         </NavigationContainer>
+      ) : (
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+        </Stack.Navigator>
       )}
     </>
   );

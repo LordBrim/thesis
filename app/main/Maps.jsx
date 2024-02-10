@@ -1,6 +1,17 @@
-import { StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
-import { COLORS, FONT, SIZES, SHADOWS } from "../../../constants/theme";
+import { StyleSheet } from "react-native";
+import { COLORS, SIZES } from "../../constants";
+
+const Maps = () => {
+  return (
+    <View style={styles.container}>
+      <Text>Maps</Text>
+    </View>
+  );
+};
+
+export default Maps;
 
 const styles = StyleSheet.create({
   container: {
@@ -12,5 +23,3 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
 });
-
-export default styles;

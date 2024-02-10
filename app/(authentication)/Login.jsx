@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Image,
@@ -16,6 +16,8 @@ import { CheckBox } from "react-native-btr";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
+import { SignInContext } from "../index";
+
 export default function Login({ navigation }) {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
@@ -29,6 +31,8 @@ export default function Login({ navigation }) {
   };
 
   // const { signIn } = useContext(AuthContext);
+
+  const [isSignedIn, setIsSignedIn] = useContext(SignInContext);
 
   return (
     <View style={styles.container}>
@@ -109,7 +113,10 @@ export default function Login({ navigation }) {
           </View>
         </View>
 
-        <TouchableHighlight style={styles.formCta}>
+        <TouchableHighlight
+          style={styles.formCta}
+          onPress={() => setIsSignedIn(true)}
+        >
           {/* onPress={() => signIn({ email, password })} */}
           <Text style={styles.formCtaText}>Log In</Text>
         </TouchableHighlight>

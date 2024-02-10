@@ -1,8 +1,6 @@
-import { useState } from "react";
-
+import { useState, createContext } from "react";
 import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 
-import { icons, COLORS } from "../constants";
 import {
   Account,
   FAQ,
@@ -19,11 +17,14 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import { icons, COLORS } from "../constants";
 import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import ForgotPassword from "./(authentication)/ForgotPassword";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+export const SignInContext = createContext();
 
 export default function Main() {
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -32,7 +33,7 @@ export default function Main() {
   };
 
   return (
-    <>
+    <SignInContext.Provider value={[isSignedIn, setIsSignedIn]}>
       {isSignedIn ? (
         <NavigationContainer
           independent={true}
@@ -151,7 +152,7 @@ export default function Main() {
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         </Stack.Navigator>
       )}
-    </>
+    </SignInContext.Provider>
   );
 }
 

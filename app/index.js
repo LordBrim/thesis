@@ -26,7 +26,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function Main() {
-  const [isSignedIn, setIsSignedIn] = useState(true);
+  const [isSignedIn, setIsSignedIn] = useState(false);
   const handleSignIn = () => {
     setIsSignedIn(!isSignedIn);
   };
@@ -141,11 +141,12 @@ export default function Main() {
           </Tab.Navigator>
         </NavigationContainer>
       ) : (
-        <Stack.Navigator
-          initialRouteName="Login"
-          screenOptions={{ title: false }}
-        >
-          <Stack.Screen name="Login" component={Login} />
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         </Stack.Navigator>

@@ -1,6 +1,17 @@
-import { StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 
-import { COLORS, FONT, SIZES, SHADOWS } from "../../../constants";
+import { StyleSheet } from "react-native";
+import { COLORS, SIZES } from "../../constants/theme";
+
+const Account = () => {
+  return (
+    <View style={styles.container}>
+      <Text>Account</Text>
+    </View>
+  );
+};
+
+export default Account;
 
 const styles = StyleSheet.create({
   container: {
@@ -12,5 +23,3 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
 });
-
-export default styles;

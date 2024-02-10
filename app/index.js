@@ -2,7 +2,8 @@ import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 import { Stack } from "expo-router";
 
 import { icons, COLORS } from "../constants";
-import { Login, Register, Account, FAQ, Home, Maps, Updates } from "./main";
+import { Login, Register } from "./authentication";
+import { Account, FAQ, Home, Maps, Updates } from "./main";
 import { ScreenHeaderBtn } from "../components/headers/ScreenHeaderBtn";
 
 import { createStackNavigator } from "@react-navigation/stack";

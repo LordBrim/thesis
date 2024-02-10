@@ -1,10 +1,11 @@
 import { View, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
 import { useState } from "react";
 
-import styles from "./faq.style";
-import { FAQuestions } from "../../../constants";
+import { FAQuestions } from "../../constants";
+import QuestionPanel from "../../components/faq/QuestionPanel";
 
-import QuestionPanel from "../../../components/faq/QuestionPanel";
+import { StyleSheet } from "react-native";
+import { COLORS, SIZES } from "../../constants/theme";
 
 const FAQ = () => {
   const [isActiveIndex, setActiveIndex] = useState(0);
@@ -33,3 +34,14 @@ const FAQ = () => {
 };
 
 export default FAQ;
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    flex: 1,
+    padding: SIZES.medium,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.white,
+  },
+});

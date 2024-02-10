@@ -50,7 +50,7 @@ export default function Login({ navigation }) {
             <Text style={styles.title}>Lifeline</Text>
             <Image
               style={styles.icon}
-              source={require("../../assets/splash/splash.png")}
+              source={require("../../assets/splash/icon.png")}
             />
           </View>
           <Text style={styles.subtitle}>Bloodbank management system</Text>

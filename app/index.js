@@ -1,10 +1,18 @@
 import { useState } from "react";
 
 import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
-import { Stack } from "expo-router";
 
 import { icons, COLORS } from "../constants";
-import { Account, FAQ, Home, Maps, Updates, Login, Register } from "./screens";
+import {
+  Account,
+  FAQ,
+  Home,
+  Maps,
+  Updates,
+  Login,
+  Register,
+  EmptyScreen,
+} from "./screens";
 import { ScreenHeaderBtn } from "../components/headers/ScreenHeaderBtn";
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -12,12 +20,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import ForgotPassword from "./(authentication)/ForgotPassword";
+
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function Main() {
-  const Stack = createStackNavigator();
-  const Tab = createBottomTabNavigator();
-
-  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(true);
   const handleSignIn = () => {
     setIsSignedIn(!isSignedIn);
   };
@@ -132,11 +141,19 @@ export default function Main() {
           </Tab.Navigator>
         </NavigationContainer>
       ) : (
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{ title: false }}
+        >
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         </Stack.Navigator>
       )}
     </>
   );
+}
+
+export function Root() {
+  console.log("Not Yet Implemented");
 }

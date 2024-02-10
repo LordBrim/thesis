@@ -15,11 +15,10 @@ export default Account;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     flex: 1,
-    padding: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
+    padding: SIZES.medium,
     backgroundColor: COLORS.white,
   },
 });

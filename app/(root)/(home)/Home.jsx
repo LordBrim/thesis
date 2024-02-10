@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { Donations, Events, Welcome } from "../../../components";
+import { RecentDonations, Events, Welcome } from "../../../components";
 
 import { COLORS, SIZES } from "../../../constants/theme";
 
@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Welcome />
-      <Donations />
+      <RecentDonations />
       <Events />
     </View>
   );

@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS, SIZES } from "../../../constants/theme";
 
 const Updates = () => {
   return (

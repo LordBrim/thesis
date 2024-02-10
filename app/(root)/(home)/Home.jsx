@@ -1,8 +1,8 @@
 import { View } from "react-native";
-import { Donations, Events, Welcome } from "../../components";
+import { Donations, Events, Welcome } from "../../../components";
 
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS, SIZES } from "../../../constants/theme";
 
 const Home = () => {
   return (

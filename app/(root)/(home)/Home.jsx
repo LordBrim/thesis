@@ -1,26 +1,33 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 
 import { RecentDonations, Events, Welcome } from "../../../components";
 import { COLORS, SIZES } from "../../../constants/theme";
 
 export default function Home({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Welcome
-        toDonate={() => navigation.navigate("Donate")}
-        toRequest={() => navigation.navigate("Request")}
-      />
-      <RecentDonations />
-      <Events />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Welcome
+          toDonate={() => navigation.navigate("Donate")}
+          toRequest={() => navigation.navigate("Request")}
+        />
+        <RecentDonations
+          toDonationHistory={() =>
+            navigation.navigate("Account", { screen: "DonationHistory" })
+          }
+        />
+        <Events />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     flex: 1,
+    width: "100%",
     padding: SIZES.medium,
     backgroundColor: COLORS.white,
   },
+  scrollView: { rowGap: SIZES.large },
 });

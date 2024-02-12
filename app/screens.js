@@ -6,5 +6,16 @@ import FAQ from "./(root)/(faq)/FAQ";
 import Account from "./(root)/(account)/Account";
 import Login from "./(authentication)/Login";
 import Register from "./(authentication)/Register";
+import ForgotPassword from "./(authentication)/ForgotPassword";
 
-export { EmptyScreen, Home, Updates, Maps, FAQ, Account, Login, Register };
+export {
+  EmptyScreen,
+  Home,
+  Updates,
+  Maps,
+  FAQ,
+  Account,
+  Login,
+  Register,
+  ForgotPassword,
+};

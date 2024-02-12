@@ -1,13 +1,11 @@
-import { View, Text, TouchableHighlight } from "react-native";
-
-import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../../constants/theme";
 import { useContext } from "react";
+import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
+import { COLORS, SIZES } from "../../../constants/theme";
 
-import { SignInContext } from "../../index";
+import { SignedInContext } from "../../../context/SignedInContext";
 
 export default function Account() {
-  const [isSignedIn, setIsSignedIn] = useContext(SignInContext);
+  const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
 
   return (
     <View style={styles.container}>

@@ -66,14 +66,12 @@ export default function Root() {
         <Tab.Screen
           name="Home"
           component={Home}
-          // options={{
-          //   headerShadowVisible: false,
-          //   // headerTitleAlign: "center",
-          //   headerTitle: "Lifeline",
-          //   // headerRight: () => (
-          //   //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
-          //   // ),
-          // }}
+          options={{
+            headerShadowVisible: false,
+            // headerRight: () => (
+            //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
+            // ),
+          }}
         />
         <Tab.Screen
           name="Updates"

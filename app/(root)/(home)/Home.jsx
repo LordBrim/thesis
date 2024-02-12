@@ -3,7 +3,7 @@ import { RecentDonations, Events, Welcome } from "../../../components";
 
 import { COLORS, SIZES } from "../../../constants/theme";
 
-const Home = () => {
+export default function Home() {
   return (
     <View style={styles.container}>
       <Welcome />
@@ -11,9 +11,7 @@ const Home = () => {
       <Events />
     </View>
   );
-};
-
-export default Home;
+}
 
 const styles = StyleSheet.create({
   container: {

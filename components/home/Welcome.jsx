@@ -12,12 +12,18 @@ export default function Welcome({ toDonate, toRequest }) {
           onPress={toDonate}
         >
           <Text style={[styles.subtitle, styles.txtDonate]}>Donate</Text>
+          <Text style={[styles.description, styles.txtDonate]}>
+            Donate blood to someone in need.
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, styles.btnRequest]}
           onPress={toRequest}
         >
           <Text style={[styles.subtitle, styles.txtRequest]}>Request</Text>
+          <Text style={[styles.description, styles.txtRequest]}>
+            Request for compatible blood and its location.
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -32,15 +38,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Bakbakone",
-    fontSize: 24,
+    fontSize: SIZES.xLarge,
     color: "#000",
   },
   subtitle: {
-    fontFamily: "Raleway_Semibold",
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
   },
+  description: { fontSize: SIZES.small },
   buttons: {
     flexDirection: "row",
     height: 120,
@@ -53,16 +58,17 @@ const styles = StyleSheet.create({
     aspectRatio: 16 / 9,
     borderRadius: SIZES.small,
     padding: SIZES.small,
+    justifyContent: "space-between",
   },
   btnDonate: {
     backgroundColor: COLORS.primary,
   },
-  txtDonate: {
-    color: COLORS.white,
-  },
   btnRequest: {
     borderWidth: 1,
     borderColor: COLORS.gray,
+  },
+  txtDonate: {
+    color: COLORS.white,
   },
   txtRequest: {
     color: COLORS.gray,

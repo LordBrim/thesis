@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     gap: SIZES.medium,
   },
   title: {
-    fontFamily: "Bakbakone",
     fontSize: SIZES.xLarge,
     color: "#000",
   },
@@ -48,8 +47,7 @@ const styles = StyleSheet.create({
   description: { fontSize: SIZES.small },
   buttons: {
     flexDirection: "row",
-    height: 120,
-    maxHeight: 120,
+    height: 90,
     gap: SIZES.xxSmall,
   },
   button: {

@@ -1,16 +1,15 @@
 import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
+import { SIZES } from "../../constants/theme";
 
-export default function RecentDonations({ navigation }) {
+export default function RecentDonations({ toDonationHistory }) {
   return (
     <View style={styles.container}>
-      <Text>Recent Donations</Text>
-      <TouchableHighlight
-        onPress={() =>
-          navigation.navigate(About, { screen: "DonationHistory" })
-        }
-      >
-        <Text>View All</Text>
-      </TouchableHighlight>
+      <View style={styles.bar}>
+        <Text style={styles.title}>Recent Donations</Text>
+        <TouchableHighlight onPress={toDonationHistory}>
+          <Text>View All</Text>
+        </TouchableHighlight>
+      </View>
     </View>
   );
 }
@@ -18,7 +17,13 @@ export default function RecentDonations({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  bar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  title: {
+    fontSize: SIZES.medium,
+    fontWeight: "bold",
   },
 });

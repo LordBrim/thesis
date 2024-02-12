@@ -20,7 +20,7 @@ export default function Root() {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             switch (route.name) {
-              case "HomeMain":
+              case "HomeMainTab":
                 return (
                   <Ionicons
                     name={focused ? "home" : "home-outline"}
@@ -28,7 +28,7 @@ export default function Root() {
                     color={color}
                   />
                 );
-              case "Updates":
+              case "UpdatesTab":
                 return (
                   <Ionicons
                     name={focused ? "notifications" : "notifications-outline"}
@@ -36,7 +36,7 @@ export default function Root() {
                     color={color}
                   />
                 );
-              case "Maps":
+              case "MapsTab":
                 return (
                   <Ionicons
                     name={focused ? "map" : "map-outline"}
@@ -44,7 +44,7 @@ export default function Root() {
                     color={color}
                   />
                 );
-              case "FAQ":
+              case "FAQTab":
                 return (
                   <AntDesign
                     name={focused ? "questioncircle" : "questioncircleo"}
@@ -52,7 +52,7 @@ export default function Root() {
                     color={color}
                   />
                 );
-              case "Account":
+              case "AccountTab":
                 return (
                   <FontAwesome5
                     name={focused ? "user-alt" : "user"}
@@ -69,7 +69,7 @@ export default function Root() {
         })}
       >
         <Tab.Screen
-          name="HomeMain"
+          name="HomeMainTab"
           component={HomeMain}
           options={{
             headerShadowVisible: false,
@@ -80,7 +80,7 @@ export default function Root() {
           }}
         />
         <Tab.Screen
-          name="Updates"
+          name="UpdatesTab"
           component={Updates}
           options={{
             tabBarBadge: 3,
@@ -89,7 +89,7 @@ export default function Root() {
           }}
         />
         <Tab.Screen
-          name="Maps"
+          name="MapsTab"
           component={Maps}
           options={{
             headerShadowVisible: false,
@@ -97,7 +97,7 @@ export default function Root() {
           }}
         />
         <Tab.Screen
-          name="FAQ"
+          name="FAQTab"
           component={FAQ}
           options={{
             headerShadowVisible: false,
@@ -105,7 +105,7 @@ export default function Root() {
           }}
         />
         <Tab.Screen
-          name="Account"
+          name="AccountTab"
           component={Account}
           options={{
             headerShadowVisible: false,

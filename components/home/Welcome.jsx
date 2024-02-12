@@ -1,12 +1,21 @@
 import { StyleSheet, View, Text } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function Welcome() {
+export default function Welcome({ toDonate, toRequest }) {
   return (
     <View>
       <Text style={styles.title}>Welcome To Lifeline, User</Text>
       <View>
-        <Text style={styles.subtitle}>Donate</Text>
-        <Text style={styles.subtitle}>Request</Text>
+        <View>
+          <TouchableOpacity onPress={toDonate}>
+            <Text style={styles.subtitle}>Donate</Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity onPress={toRequest}>
+            <Text style={styles.subtitle}>Request</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

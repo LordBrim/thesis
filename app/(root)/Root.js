@@ -1,4 +1,5 @@
-import { Account, FAQ, Home, Maps, Updates } from "../screens";
+import { Account, FAQ, Maps, Updates } from "../screens";
+import HomeMain from "./(home)/HomeMain";
 import { icons, COLORS } from "../../constants";
 
 import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
@@ -9,13 +10,17 @@ export default function Root() {
   const Tab = createBottomTabNavigator();
 
   return (
-    <NavigationContainer independent={true} options={{ headerShown: false }}>
+    <NavigationContainer
+      independent={true}
+      detachInactiveScreens={false}
+      options={{ headerShown: false }}
+    >
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             switch (route.name) {
-              case "Home":
+              case "HomeMain":
                 return (
                   <Ionicons
                     name={focused ? "home" : "home-outline"}
@@ -64,10 +69,11 @@ export default function Root() {
         })}
       >
         <Tab.Screen
-          name="Home"
-          component={Home}
+          name="HomeMain"
+          component={HomeMain}
           options={{
             headerShadowVisible: false,
+            headerShown: false,
             // headerRight: () => (
             //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
             // ),

@@ -28,7 +28,7 @@ export const SignInContext = createContext();
 
 export default function Main() {
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const handleSignIn = () => {
+  const handleIsSignedIn = () => {
     setIsSignedIn(!isSignedIn);
   };
 

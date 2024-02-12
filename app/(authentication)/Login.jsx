@@ -16,9 +16,7 @@ import { CheckBox } from "react-native-btr";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
-import { SignInContext } from "../index";
-
-export default function Login({ navigation }) {
+export default function Login({ navigation, handleIsSignedIn }) {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
@@ -26,13 +24,11 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
 
   const [toggleRemember, setToggleRemember] = useState(false);
-  const handleToggelRemember = () => {
+  const handleToggleRemember = () => {
     setToggleRemember(!toggleRemember);
   };
 
   // const { signIn } = useContext(AuthContext);
-
-  const [isSignedIn, setIsSignedIn] = useContext(SignInContext);
 
   return (
     <View style={styles.container}>
@@ -101,7 +97,7 @@ export default function Login({ navigation }) {
                 checked={toggleRemember}
                 color="#FF3642"
                 borderRadius={3}
-                onPress={() => handleToggelRemember()}
+                onPress={() => handleToggleRemember()}
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
@@ -113,10 +109,7 @@ export default function Login({ navigation }) {
           </View>
         </View>
 
-        <TouchableHighlight
-          style={styles.formCta}
-          onPress={() => setIsSignedIn(true)}
-        >
+        <TouchableHighlight style={styles.formCta} onPress={handleIsSignedIn}>
           {/* onPress={() => signIn({ email, password })} */}
           <Text style={styles.formCtaText}>Log In</Text>
         </TouchableHighlight>

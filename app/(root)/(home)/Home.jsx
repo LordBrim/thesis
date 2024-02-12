@@ -29,5 +29,5 @@ const styles = StyleSheet.create({
     padding: SIZES.medium,
     backgroundColor: COLORS.white,
   },
-  scrollView: { rowGap: SIZES.large },
+  scrollView: { rowGap: SIZES.xxLarge },
 });

@@ -1,7 +1,7 @@
 // Home Tab Components
-import Welcome from "./home/welcome/Welcome";
-import Donations from "./home/donations/Donations";
-import Events from "./home/events/Events";
+import Welcome from "./home/Welcome";
+import RecentDonations from "./home/RecentDonations";
+import Events from "./home/UpcomingEvents";
 
 // Updates Tab Components
 
@@ -11,4 +11,4 @@ import Events from "./home/events/Events";
 
 // Account Tab Components
 
-export { Welcome, Donations, Events };
+export { Welcome, RecentDonations, Events };

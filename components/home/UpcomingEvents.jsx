@@ -34,6 +34,10 @@ export default function UpcomingEvents({ toEvent }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: SIZES.medium,
+  },
   flatlist: {
     flex: 1,
     gap: SIZES.medium,

@@ -1,4 +1,11 @@
-import { StyleSheet, SafeAreaView, View, Text, FlatList } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  Image,
+} from "react-native";
 import { SIZES } from "../../constants/theme";
 import EventCard from "./EventCard";
 
@@ -10,7 +17,11 @@ export default function UpcomingEvents({ toEvent }) {
         <FlatList
           data={sampleData}
           renderItem={({ item }) => (
-            <EventCard toEvent={toEvent} title={item.title} />
+            <EventCard
+              toEvent={toEvent}
+              title={item.title}
+              image={item.image}
+            />
           )}
           keyExtractor={(item) => item.id}
           numColumns={1}
@@ -34,9 +45,19 @@ const styles = StyleSheet.create({
 });
 
 const sampleData = [
-  { id: 1, title: "Event Card 1" },
-  { id: 2, title: "Event Card 2" },
-  { id: 3, title: "Event Card 3" },
-  { id: 4, title: "Event Card 4" },
-  { id: 5, title: "Event Card 5" },
+  {
+    id: 1,
+    image: require("../../assets/images/location1.jpg"),
+    title: "Event Card 1",
+  },
+  {
+    id: 2,
+    image: require("../../assets/images/location2.jpg"),
+    title: "Event Card 2",
+  },
+  {
+    id: 3,
+    image: require("../../assets/images/location3.jpg"),
+    title: "Event Card 3",
+  },
 ];

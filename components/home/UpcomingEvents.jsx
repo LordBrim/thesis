@@ -26,7 +26,7 @@ export default function UpcomingEvents({ toEvent }) {
           keyExtractor={(item) => item.id}
           numColumns={1}
           scrollEnabled={false}
-          contentContainerStyle={styles.container}
+          contentContainerStyle={styles.flatlist}
         />
       </SafeAreaView>
     </View>
@@ -34,7 +34,7 @@ export default function UpcomingEvents({ toEvent }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  flatlist: {
     flex: 1,
     gap: SIZES.medium,
   },

@@ -4,12 +4,28 @@ import { COLORS, SIZES } from "../../../constants/theme";
 
 import { SignedInContext } from "../../../context/SignedInContext";
 
-export default function Account() {
+export default function Account({ navigation }) {
   const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
 
   return (
     <View style={styles.container}>
-      <Text>Account</Text>
+      <TouchableHighlight
+        onPress={() => navigation.navigate("DonationHistory")}
+      >
+        <Text>Donation History</Text>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={() => navigation.navigate("Profile")}>
+        <Text>Profile</Text>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={() => navigation.navigate("Settings")}>
+        <Text>Settings</Text>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={() => navigation.navigate("About")}>
+        <Text>About</Text>
+      </TouchableHighlight>
+      <TouchableHighlight onPress={() => navigation.navigate("Help")}>
+        <Text>Help</Text>
+      </TouchableHighlight>
       <TouchableHighlight onPress={() => setIsSignedIn(false)}>
         <Text>Logout</Text>
       </TouchableHighlight>

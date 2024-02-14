@@ -1,4 +1,13 @@
-import { Home, Donate, Request, Event } from "../../screens";
+import {
+  Home,
+  Donate,
+  Request,
+  Event,
+  ManageBloodUnits,
+  ManageEvents,
+  ManageStaff,
+  ManageUsers,
+} from "../../screens";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -19,6 +28,10 @@ export default function HomeMain() {
         options={{ headerTitleAlign: "center" }}
       />
       <Stack.Screen name="Event" component={Event} />
+      <Stack.Screen name="ManageBloodUnits" component={ManageBloodUnits} />
+      <Stack.Screen name="ManageEvents" component={ManageEvents} />
+      <Stack.Screen name="ManageStaff" component={ManageStaff} />
+      <Stack.Screen name="ManageUsers" component={ManageUsers} />
     </Stack.Navigator>
   );
 }

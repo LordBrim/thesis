@@ -1,5 +1,6 @@
-import { Account, FAQ, Maps, Updates } from "../screens";
+import { FAQ, Maps, Updates } from "../screens";
 import HomeMain from "./(home)/HomeMain";
+import AccountMain from "./(account)/AccountMain";
 import { icons, COLORS } from "../../constants";
 
 import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
@@ -52,7 +53,7 @@ export default function Root() {
                     color={color}
                   />
                 );
-              case "AccountTab":
+              case "AccountMainTab":
                 return (
                   <FontAwesome5
                     name={focused ? "user-alt" : "user"}
@@ -72,7 +73,6 @@ export default function Root() {
           name="HomeMainTab"
           component={HomeMain}
           options={{
-            headerShadowVisible: false,
             headerShown: false,
             // headerRight: () => (
             //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
@@ -105,11 +105,10 @@ export default function Root() {
           }}
         />
         <Tab.Screen
-          name="AccountTab"
-          component={Account}
+          name="AccountMainTab"
+          component={AccountMain}
           options={{
-            headerShadowVisible: false,
-            headerTitle: "Account",
+            headerShown: false,
           }}
         />
       </Tab.Navigator>

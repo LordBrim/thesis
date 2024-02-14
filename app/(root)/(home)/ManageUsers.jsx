@@ -1,10 +1,9 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function About() {
+export default function ManageUsers() {
   return (
     <View style={styles.container}>
-      <Text>About Us</Text>
-      <Text>About This App</Text>
+      <Text>Manage Users Screen</Text>
     </View>
   );
 }

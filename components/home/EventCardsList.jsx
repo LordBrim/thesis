@@ -12,11 +12,14 @@ const sampleData = [
 
 export default function EventCardsList() {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <FlatList
         data={sampleData}
         renderItem={({ item }) => <EventCard title={item.title} />}
         keyExtractor={(item) => item.id}
+        numColumns={1}
+        scrollEnabled={false}
+        contentContainerStyle={styles.container}
       />
     </SafeAreaView>
   );
@@ -24,6 +27,8 @@ export default function EventCardsList() {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     gap: SIZES.medium,
+    marginTop: SIZES.large,
   },
 });

@@ -12,6 +12,7 @@ export default function RecentDonationCard({ location, date }) {
         <Text style={styles.location}>{location || "Medical Institution"}</Text>
         <Text style={styles.date}>{date || "February 14, 2024"}</Text>
       </View>
+      <View style={styles.line} />
     </View>
   );
 }
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
     shadowColor: "#52006A",
     gap: SIZES.small,
     backgroundColor: COLORS.white,
+    position: "relative",
   },
   image: { height: 45, width: 25 },
   text: {
@@ -39,5 +41,13 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: SIZES.small,
+  },
+  line: {
+    width: 2,
+    height: "100%",
+    position: "absolute",
+    backgroundColor: COLORS.primary,
+    left: 35.2,
+    bottom: 0,
   },
 });

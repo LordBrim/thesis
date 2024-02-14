@@ -74,6 +74,7 @@ export default function Root() {
           component={HomeMain}
           options={{
             headerShown: false,
+            title: "Home",
             // headerRight: () => (
             //   <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
             // ),
@@ -86,6 +87,7 @@ export default function Root() {
             tabBarBadge: 3,
             headerShadowVisible: false,
             headerTitle: "Updates",
+            title: "Updates",
           }}
         />
         <Tab.Screen
@@ -94,6 +96,7 @@ export default function Root() {
           options={{
             headerShadowVisible: false,
             headerTitle: "Maps",
+            title: "Maps",
           }}
         />
         <Tab.Screen
@@ -102,6 +105,7 @@ export default function Root() {
           options={{
             headerShadowVisible: false,
             headerTitle: "FAQ",
+            title: "FAQ",
           }}
         />
         <Tab.Screen
@@ -109,6 +113,7 @@ export default function Root() {
           component={AccountMain}
           options={{
             headerShown: false,
+            title: "Account",
           }}
         />
       </Tab.Navigator>

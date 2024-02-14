@@ -1,4 +1,10 @@
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
@@ -12,10 +18,12 @@ export default function EventCard({
 }) {
   return (
     <TouchableOpacity style={styles.container} onPress={toEvent}>
-      {/* <ImageBackground style={styles.image} source={image} resizeMode="cover" /> */}
-      <Text style={styles.title}>{title || "Title"}</Text>
-      <Text style={styles.description}>{description || "Description"}</Text>
-      <Text style={styles.date}>{date || "Date"}</Text>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image} />
+      <View style={styles.details}>
+        <Text style={styles.title}>{title || "Title"}</Text>
+        <Text style={styles.date}>{date || "Date"}</Text>
+        <Text style={styles.description}>{description || "Description"}</Text>
+      </View>
       <Text style={styles.address}>{address || "Address"}</Text>
     </TouchableOpacity>
   );
@@ -23,14 +31,19 @@ export default function EventCard({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     minWidth: "100%",
-    aspectRatio: 16 / 9,
+    aspectRatio: 16 / 7,
     backgroundColor: COLORS.primary,
     borderRadius: SIZES.small,
+    overflow: "hidden",
   },
-  image: {},
-  title: {},
-  description: {},
-  date: {},
-  address: {},
+  image: { opacity: 7, width: "100%", height: "100%" },
+  details: {
+    width: "70%",
+  },
+  title: { fontSize: SIZES.xLarge },
+  date: { fontSize: SIZES.medium },
+  description: { fontSize: SIZES.large },
+  address: { fontSize: SIZES.medium },
 });

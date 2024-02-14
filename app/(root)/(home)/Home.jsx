@@ -19,10 +19,10 @@ export default function Home({ navigation }) {
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
         <RecentDonations
           toDonationHistory={() =>
-            navigation.navigate("Account", { screen: "DonationHistory" })
+            navigation.navigate("AccountMainTab", { screen: "DonationHistory" })
           }
         />
-        <Events />
+        <Events toEvent={() => navigation.navigate("Event")} />
         {/* Temporary Admin Controls */}
         <AdminDashboard
           toManageBloodUnits={() => navigation.navigate("ManageBloodUnits")}

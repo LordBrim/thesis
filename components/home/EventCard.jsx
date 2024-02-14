@@ -1,8 +1,9 @@
-import { ImageBackground, Text, View } from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
 export default function EventCard({
+  toEvent,
   image,
   title,
   description,
@@ -10,13 +11,13 @@ export default function EventCard({
   address,
 }) {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={toEvent}>
       {/* <ImageBackground style={styles.image} source={image} resizeMode="cover" /> */}
       <Text style={styles.title}>{title || "Title"}</Text>
       <Text style={styles.description}>{description || "Description"}</Text>
       <Text style={styles.date}>{date || "Date"}</Text>
       <Text style={styles.address}>{address || "Address"}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 

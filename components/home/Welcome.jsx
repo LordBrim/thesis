@@ -22,7 +22,7 @@ export default function Welcome({ toDonate, toRequest }) {
         >
           <Text style={[styles.subtitle, styles.txtRequest]}>Request</Text>
           <Text style={[styles.description, styles.txtRequest]}>
-            Request for compatible blood and its location.
+            Request for compatible blood from a location.
           </Text>
         </TouchableOpacity>
       </View>

@@ -1,7 +1,7 @@
 import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 
 import { RecentDonations, Events, Welcome } from "../../../components";
-import { COLORS, SIZES } from "../../../constants/theme";
+import { COLORS, SIZES, SPACES } from "../../../constants/theme";
 import AdminDashboard from "../../../components/home/AdminDashboard";
 
 export default function Home({ navigation }) {
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    padding: SIZES.medium,
+    padding: SPACES.lg,
     backgroundColor: COLORS.white,
   },
-  scrollView: { rowGap: SIZES.xxLarge },
+  scrollView: { rowGap: SPACES.lg },
 });

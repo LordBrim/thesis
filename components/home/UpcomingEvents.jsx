@@ -6,7 +6,7 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import { SIZES } from "../../constants/theme";
+import { SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
 
 export default function UpcomingEvents({ toEvent }) {
@@ -36,11 +36,11 @@ export default function UpcomingEvents({ toEvent }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: SIZES.medium,
+    gap: SPACES.sm,
   },
   flatlist: {
     flex: 1,
-    gap: SIZES.medium,
+    gap: SPACES.md,
   },
   title: {
     fontSize: SIZES.medium,

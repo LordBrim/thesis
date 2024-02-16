@@ -6,7 +6,7 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { SIZES } from "../../constants/theme";
+import { SIZES, SPACES } from "../../constants/theme";
 import RecentDonationCard from "./RecentDonationCard";
 
 export default function RecentDonations({ toDonationHistory }) {
@@ -37,7 +37,7 @@ export default function RecentDonations({ toDonationHistory }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: SIZES.medium,
+    gap: SPACES.xs,
   },
   bar: {
     flexDirection: "row",
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   flatlist: {
     flex: 1,
-    gap: SIZES.medium,
+    gap: SPACES.sm,
     padding: 2,
   },
 });
@@ -69,5 +69,15 @@ const sampleData = [
     id: 3,
     location: "Location 3",
     date: "February 17, 2024",
+  },
+  {
+    id: 4,
+    location: "Location 4",
+    date: "February 15, 2024",
+  },
+  {
+    id: 5,
+    location: "",
+    date: "",
   },
 ];

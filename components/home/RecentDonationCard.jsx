@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS, SIZES, SPACES } from "../../constants/theme";
 
 export default function RecentDonationCard({ location, date }) {
   return (
@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    paddingHorizontal: SIZES.xLarge,
-    paddingVertical: SIZES.small,
+    paddingHorizontal: 32,
+    paddingVertical: SPACES.md,
     borderRadius: SIZES.small,
     elevation: 3,
     shadowColor: "#52006A",
-    gap: SIZES.small,
+    gap: SPACES.md,
     backgroundColor: COLORS.white,
     position: "relative",
   },
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     height: "100%",
     position: "absolute",
     backgroundColor: COLORS.primary,
-    left: 35.2,
+    left: 43.3,
     bottom: 0,
   },
 });

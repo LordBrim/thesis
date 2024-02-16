@@ -31,6 +31,15 @@ const SIZES = {
   xxxLarge: 40,
 };
 
+const SPACES = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 20,
+  xxl: 24,
+};
+
 const SHADOWS = {
   small: {
     shadowColor: "#000",
@@ -54,4 +63,4 @@ const SHADOWS = {
   },
 };
 
-export { COLORS, FONT, SIZES, SHADOWS };
+export { COLORS, FONT, SIZES, SPACES, SHADOWS };

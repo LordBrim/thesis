@@ -1,21 +1,8 @@
-import {
-  Image,
-  ImageBackground,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS, SIZES, SPACES } from "../../constants/theme";
 
-export default function EventCard({
-  toEvent,
-  image,
-  title,
-  description,
-  date,
-  address,
-}) {
+export default function EventCard({ toEvent, image, title, date }) {
   return (
     <TouchableOpacity style={styles.container} onPress={toEvent}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
@@ -44,7 +31,7 @@ const styles = StyleSheet.create({
   },
   details: {
     flex: 1,
-    padding: SIZES.medium,
+    padding: SPACES.lg,
     backgroundColor: "rgba(0, 0, 0, .4)",
     justifyContent: "flex-end",
   },

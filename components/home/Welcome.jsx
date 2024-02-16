@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { COLORS, SIZES } from "../../constants/theme";
+import { COLORS, SIZES, SPACES } from "../../constants/theme";
 
 export default function Welcome({ toDonate, toRequest }) {
   return (
@@ -34,10 +34,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    gap: SIZES.medium,
+    gap: SPACES.xs,
   },
   title: {
     fontSize: SIZES.xLarge,
+    fontWeight: "bold",
     color: "#000",
   },
   subtitle: {
@@ -48,14 +49,14 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: "row",
     height: 90,
-    gap: SIZES.xxSmall,
+    gap: SPACES.sm,
   },
   button: {
     flex: 3,
     maxHeight: 90,
     aspectRatio: 16 / 9,
     borderRadius: SIZES.small,
-    padding: SIZES.small,
+    padding: SPACES.md,
     justifyContent: "space-between",
   },
   btnDonate: {

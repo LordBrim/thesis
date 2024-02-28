@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import Root from "./(root)/Root";
-import Authentication from "./(authentication)/Authentication";
+import Root from "./root/Root";
+import Authentication from "./authentication/Authentication";
 
 import { SignedInContext } from "../context/SignedInContext";
 

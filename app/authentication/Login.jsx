@@ -107,10 +107,10 @@ export default function Login({ navigation }) {
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
-            <TouchableOpacity
-              onPress={() => router.push("/authentication/ForgotPassword")}
-            >
-              <Text style={styles.link}>Forgot Password?</Text>
+            <TouchableOpacity>
+              <Link push href="/authentication/ForgotPassword">
+                <Text style={styles.link}>Forgot Password?</Text>
+              </Link>
             </TouchableOpacity>
           </View>
         </View>

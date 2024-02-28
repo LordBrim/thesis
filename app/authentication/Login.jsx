@@ -9,7 +9,7 @@ import {
   Pressable,
 } from "react-native";
 
-import { router } from "expo-router";
+import { Link } from "expo-router";
 
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { Ionicons } from "react-native-vector-icons";
@@ -108,7 +108,7 @@ export default function Login({ navigation }) {
               <Text style={styles.formName}>Remember Me</Text>
             </View>
             <TouchableOpacity
-              onPress={() => router.push("authentication/ForgotPassword")}
+              onPress={() => router.push("/authentication/ForgotPassword")}
             >
               <Text style={styles.link}>Forgot Password?</Text>
             </TouchableOpacity>
@@ -126,10 +126,10 @@ export default function Login({ navigation }) {
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
-        <TouchableOpacity
-          onPress={() => router.push("authentication/Register")}
-        >
-          <Text style={styles.link}>Register</Text>
+        <TouchableOpacity>
+          <Link push href="/authentication/Register">
+            <Text style={styles.link}>Register</Text>
+          </Link>
         </TouchableOpacity>
       </View>
     </View>

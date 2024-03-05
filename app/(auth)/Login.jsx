@@ -9,7 +9,7 @@ import {
   Pressable,
 } from "react-native";
 
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { Ionicons } from "react-native-vector-icons";
@@ -115,7 +115,10 @@ export default function Login({ navigation }) {
           </View>
         </View>
 
-        <TouchableHighlight style={styles.formCta}>
+        <TouchableHighlight
+          style={styles.formCta}
+          onPress={() => router.replace("/(app)/index.js")}
+        >
           {/* onPress={() => signIn({ email, password })} */}
           <Text style={styles.formCtaText}>Log In</Text>
         </TouchableHighlight>
@@ -138,7 +141,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    paddingVertical: SIZES.xxxLarge,
+    paddingBottom: SIZES.xxxLarge,
     paddingHorizontal: SIZES.large,
     backgroundColor: COLORS.white,
     justifyContent: "space-between",

@@ -117,7 +117,7 @@ export default function Login({ navigation }) {
 
         <TouchableHighlight
           style={styles.formCta}
-          onPress={() => router.replace("/(app)/index.js")}
+          onPress={() => router.push("/(app)/index.js")}
         >
           {/* onPress={() => signIn({ email, password })} */}
           <Text style={styles.formCtaText}>Log In</Text>

@@ -11,17 +11,21 @@ import { Account, FAQ, Home, Maps, Updates } from "../../screens";
 export default function HomeTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="HomeTab" component={Home} />
       <Tab.Screen
-        name="UpdatesTab"
+        name="index"
+        component={Home}
+        options={{ tabBarLabel: "Home" }}
+      />
+      <Tab.Screen
+        name="Updates"
         component={Updates}
         options={{
           tabBarBadge: 3,
         }}
       />
-      <Tab.Screen name="MapsTab" component={Maps} />
-      <Tab.Screen name="FAQTab" component={FAQ} />
-      <Tab.Screen name="AccounTab" component={Account} />
+      <Tab.Screen name="Maps" component={Maps} />
+      <Tab.Screen name="FAQ" component={FAQ} />
+      <Tab.Screen name="Account" component={Account} />
     </Tab.Navigator>
   );
 }

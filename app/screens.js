@@ -1,9 +1,9 @@
 import EmptyScreen from "./(aux)/EmptyScreen";
 
 // Authentication Screens
-import Login from "./authentication/Login";
-import Register from "./authentication/Register";
-import ForgotPassword from "./authentication/ForgotPassword";
+import Login from "./(authentication)/Login";
+import Register from "./(authentication)/Register";
+import ForgotPassword from "./(authentication)/ForgotPassword";
 
 // Home Main Screens
 import Home from "./root/(home)/Home";

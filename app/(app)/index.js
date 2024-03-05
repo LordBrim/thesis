@@ -1,16 +1,14 @@
-import { useState } from "react";
+// import { SignedInContext } from "../context/SignedInContext";
+// const [isSignedIn, setIsSignedIn] = useState(false);
+// <SignedInContext.Provider value={[isSignedIn, setIsSignedIn]}>
+//   </SignedInContext.Provider>
 
-import Root from "./root/Root";
-import Authentication from "./authentication/Authentication";
+import { View } from "react-native";
 
-import { SignedInContext } from "../context/SignedInContext";
-
-export default function Main() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
+export default function HomeTabs() {
   return (
-    <SignedInContext.Provider value={[isSignedIn, setIsSignedIn]}>
-      {isSignedIn ? <Root /> : <Authentication />}
-    </SignedInContext.Provider>
+    <View>
+      <Text>Hellow</Text>
+    </View>
   );
 }

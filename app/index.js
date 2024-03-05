@@ -1,16 +1,14 @@
-import { useState } from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ForgotPassword, Login, Register } from "./screens";
 
-import Root from "./root/Root";
-import Authentication from "./authentication/Authentication";
+const Stack = createNativeStackNavigator();
 
-import { SignedInContext } from "../context/SignedInContext";
-
-export default function Main() {
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
+export default function Authentication() {
   return (
-    <SignedInContext.Provider value={[isSignedIn, setIsSignedIn]}>
-      {isSignedIn ? <Root /> : <Authentication />}
-    </SignedInContext.Provider>
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+    </Stack.Navigator>
   );
 }

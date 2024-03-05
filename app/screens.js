@@ -6,16 +6,16 @@ import Register from "./(auth)/Register";
 import ForgotPassword from "./(auth)/ForgotPassword";
 
 // Home Screens
-import Home from "./(app)/(tabs)/Home";
-import Updates from "./(app)/(tabs)/Updates";
-import Maps from "./(app)/(tabs)/Maps";
-import FAQ from "./(app)/(tabs)/FAQ";
-import Account from "./(app)/(tabs)/Account";
+import HomeTab from "./(app)/(tabs)";
+import UpdatesTab from "./(app)/(tabs)/UpdatesTab";
+import MapsTab from "./(app)/(tabs)/MapsTab";
+import FAQTab from "./(app)/(tabs)/FAQTab";
+import AccountTab from "./(app)/(tabs)/AccountTab";
 
 // Home Screens
 import Donate from "./(app)/(home)/Donate";
 import Request from "./(app)/(home)/Request";
-import Event from "./(app)/(home)/Event";
+import EventDetails from "./(app)/(home)/EventDetails";
 import ManageBloodUnits from "./(app)/(home)/ManageBloodUnits";
 import ManageEvents from "./(app)/(home)/ManageEvents";
 import ManageStaff from "./(app)/(home)/ManageStaff";
@@ -33,18 +33,18 @@ export {
   Login,
   Register,
   ForgotPassword,
-  Home,
+  HomeTab,
   Donate,
   Request,
-  Event,
+  EventDetails,
   ManageBloodUnits,
   ManageEvents,
   ManageStaff,
   ManageUsers,
-  Updates,
-  Maps,
-  FAQ,
-  Account,
+  UpdatesTab,
+  MapsTab,
+  FAQTab,
+  AccountTab,
   Profile,
   DonationHistory,
   Settings,

@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ForgotPassword, Login, Register } from "./screens";
+import { SafeAreaView } from "react-native";
 
 const Stack = createNativeStackNavigator();
 

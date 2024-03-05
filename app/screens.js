@@ -1,31 +1,31 @@
 import EmptyScreen from "./(aux)/EmptyScreen";
 
 // Authentication Screens
-import Login from "./(authentication)/Login";
-import Register from "./(authentication)/Register";
-import ForgotPassword from "./(authentication)/ForgotPassword";
+import Login from "./(auth)/Login";
+import Register from "./(auth)/Register";
+import ForgotPassword from "./(auth)/ForgotPassword";
 
 // Home Main Screens
-import Home from "./root/(home)/Home";
-import Donate from "./root/(home)/Donate";
-import Request from "./root/(home)/Request";
-import Event from "./root/(home)/Event";
-import ManageBloodUnits from "./root/(home)/ManageBloodUnits";
-import ManageEvents from "./root/(home)/ManageEvents";
-import ManageStaff from "./root/(home)/ManageStaff";
-import ManageUsers from "./root/(home)/ManageUsers";
+import Home from "./(app)/(tabs)/Home";
+import Donate from "./(app)/(home)/Donate";
+import Request from "./(app)/(home)/Request";
+import Event from "./(app)/(home)/Event";
+import ManageBloodUnits from "./(app)/(home)/ManageBloodUnits";
+import ManageEvents from "./(app)/(home)/ManageEvents";
+import ManageStaff from "./(app)/(home)/ManageStaff";
+import ManageUsers from "./(app)/(home)/ManageUsers";
 
-import Updates from "./root/(updates)/Updates";
-import Maps from "./root/(maps)/Maps";
-import FAQ from "./root/(faq)/FAQ";
+import Updates from "./(app)/(updates)/Updates";
+import Maps from "./(app)/(tabs)/Maps";
+import FAQ from "./(app)/(tabs)/FAQ";
 
 // Account Main Screens
-import Account from "./root/(account)/Account";
-import Profile from "./root/(account)/Profile";
-import DonationHistory from "./root/(account)/DonationHistory";
-import Settings from "./root/(account)/Settings";
-import About from "./root/(account)/About";
-import Help from "./root/(account)/Help";
+import Account from "./(app)/(tabs)/Account";
+import Profile from "./(app)/(account)/Profile";
+import DonationHistory from "./(app)/(account)/DonationHistory";
+import Settings from "./(app)/(account)/Settings";
+import About from "./(app)/(account)/About";
+import Help from "./(app)/(account)/Help";
 
 export {
   EmptyScreen,

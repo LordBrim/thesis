@@ -34,7 +34,7 @@ export default function Login({ navigation }) {
 
   // const { signIn } = useContext(AuthContext);
 
-  const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
+  // const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
 
   return (
     <View style={styles.container}>
@@ -108,7 +108,7 @@ export default function Login({ navigation }) {
               <Text style={styles.formName}>Remember Me</Text>
             </View>
             <TouchableOpacity>
-              <Link push href="/authentication/ForgotPassword">
+              <Link push href="/(authentication)/ForgotPassword">
                 <Text style={styles.link}>Forgot Password?</Text>
               </Link>
             </TouchableOpacity>
@@ -127,7 +127,7 @@ export default function Login({ navigation }) {
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
         <TouchableOpacity>
-          <Link push href="/authentication/Register">
+          <Link push href="/(authentication)/Register">
             <Text style={styles.link}>Register</Text>
           </Link>
         </TouchableOpacity>

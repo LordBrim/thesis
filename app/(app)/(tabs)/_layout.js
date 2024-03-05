@@ -14,9 +14,10 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: COLORS.primary,
+        tabBarActiveTintColor: COLORS.enabled,
+        tabBarInactiveTintColor: COLORS.disabled,
         headerRight: () => (
-          <TouchableOpacity>
+          <TouchableOpacity style={{ paddingRight: 16 }}>
             <MaterialCommunityIcons
               name="qrcode-scan"
               size={24}
@@ -27,7 +28,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="Home"
+        name="index"
         options={{
           title: "Home",
           tabBarIcon: ({ focused, color, size }) => (
@@ -39,63 +40,81 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="UpdatesTab"
+        options={{
+          title: "Updates",
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? "notifications" : "notifications-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="MapsTab"
+        options={{
+          title: "Maps",
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? "map" : "map-outline"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="FAQTab"
+        options={{
+          title: "FAQ",
+          tabBarIcon: ({ focused, color, size }) => (
+            <AntDesign
+              name={focused ? "questioncircle" : "questioncircleo"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="AccountTab"
+        options={{
+          title: "Account",
+          tabBarIcon: ({ focused, color, size }) => (
+            <FontAwesome5
+              name={focused ? "user-alt" : "user"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
-    // <Tabs
-    //   initialRouteName="Home"
-    //   screenOptions={({ route }) => ({
-    //     headerShown: false,
-    //     headerRight: () => (
-    //       <ScreenHeaderBtn iconUrl={icons.qrCode} dimension="100%" />
-    //     ),
-    //     tabBarInactiveTintColor: COLORS.disabled,
-    //     tabBarActiveTintColor: COLORS.enabled,
-    //     tabBarIcon: ({ focused, color, size }) => {
-    //       switch (route.name) {
-    //         case "HomeTab":
-    //           return (
-    //             <Ionicons
-    //               name={focused ? "home" : "home-outline"}
-    //               size={size}
-    //               color={color}
-    //             />
-    //           );
-    //         case "UpdatesTab":
-    //           return (
-    //             <Ionicons
-    //               name={focused ? "notifications" : "notifications-outline"}
-    //               size={size}
-    //               color={color}
-    //             />
-    //           );
-    //         case "MapsTab":
-    //           return (
-    //             <Ionicons
-    //               name={focused ? "map" : "map-outline"}
-    //               size={size}
-    //               color={color}
-    //             />
-    //           );
-    //         case "FAQTab":
-    //           return (
-    //             <AntDesign
-    //               name={focused ? "questioncircle" : "questioncircleo"}
-    //               size={size}
-    //               color={color}
-    //             />
-    //           );
-    //         case "AccountTab":
-    //           return (
-    //             <FontAwesome5
-    //               name={focused ? "user-alt" : "user"}
-    //               size={size}
-    //               color={color}
-    //             />
-    //           );
-    //         default:
-    //           console.log("Route Does Not Exist.");
-    //       }
-    //     },
-    //   })}
-    // />
   );
 }
+
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// const Tab = createBottomTabNavigator();
+
+// import { Account, FAQ, Home, Maps, Updates } from "../screens";
+
+// export function HomeTabs() {
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="HomeTab" component={Home} />
+//       <Tab.Screen
+//         name="UpdatesTab"
+//         component={Updates}
+//         options={{
+//           tabBarBadge: 3,
+//         }}
+//       />
+//       <Tab.Screen name="MapsTab" component={Maps} />
+//       <Tab.Screen name="FAQTab" component={FAQ} />
+//       <Tab.Screen name="AccountTab" component={Account} />
+//     </Tab.Navigator>
+//   );
+// }

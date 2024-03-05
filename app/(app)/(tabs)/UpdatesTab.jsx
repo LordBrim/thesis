@@ -1,17 +1,15 @@
 import { View, Text } from "react-native";
 
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../../constants";
+import { COLORS, SIZES } from "../../../constants/theme";
 
-const Maps = () => {
+export default function UpdatesTab() {
   return (
     <View style={styles.container}>
-      <Text>Maps</Text>
+      <Text>Updates</Text>
     </View>
   );
-};
-
-export default Maps;
+}
 
 const styles = StyleSheet.create({
   container: {

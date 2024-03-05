@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Event() {
+export default function EventDetails() {
   return (
     <View style={styles.container}>
       <Text>Event Screen</Text>

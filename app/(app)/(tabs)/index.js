@@ -1,31 +1,46 @@
-// import { SignedInContext } from "../context/SignedInContext";
-// const [isSignedIn, setIsSignedIn] = useState(false);
-// <SignedInContext.Provider value={[isSignedIn, setIsSignedIn]}>
-//   </SignedInContext.Provider>
+import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-const Tab = createBottomTabNavigator();
+import { RecentDonations, Events, Welcome } from "../../../components";
+import { COLORS, SIZES, SPACES } from "../../../constants/theme";
+import AdminDashboard from "../../../components/home/AdminDashboard";
 
-import { Account, FAQ, Home, Maps, Updates } from "../../screens";
-
-export default function HomeTabs() {
+export default function Home({ navigation }) {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="index"
-        component={Home}
-        options={{ tabBarLabel: "Home" }}
-      />
-      <Tab.Screen
-        name="Updates"
-        component={Updates}
-        options={{
-          tabBarBadge: 3,
-        }}
-      />
-      <Tab.Screen name="Maps" component={Maps} />
-      <Tab.Screen name="FAQ" component={FAQ} />
-      <Tab.Screen name="Account" component={Account} />
-    </Tab.Navigator>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
+        <Welcome
+          toDonate={() => navigation.navigate("(home)/Donate")}
+          toRequest={() => navigation.navigate("Request")}
+        />
+        {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
+        <RecentDonations
+          toDonationHistory={() =>
+            navigation.navigate("AccountMainTab", { screen: "DonationHistory" })
+          }
+        />
+        <Events toEvent={() => navigation.navigate("Event")} />
+        {/* Temporary Admin Controls */}
+        <AdminDashboard
+          toManageBloodUnits={() => navigation.navigate("ManageBloodUnits")}
+          toManageEvents={() => navigation.navigate("ManageEvents")}
+          toManageStaff={() => navigation.navigate("ManageStaff")}
+          toManageUsers={() => navigation.navigate("ManageUsers")}
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: "100%",
+    padding: SPACES.lg,
+    backgroundColor: COLORS.white,
+  },
+  scrollView: { rowGap: SPACES.xxl },
+});

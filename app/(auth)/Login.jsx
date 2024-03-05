@@ -108,17 +108,14 @@ export default function Login({ navigation }) {
               <Text style={styles.formName}>Remember Me</Text>
             </View>
             <TouchableOpacity>
-              <Link push href="/(authentication)/ForgotPassword">
+              <Link push href="/(auth)/ForgotPassword">
                 <Text style={styles.link}>Forgot Password?</Text>
               </Link>
             </TouchableOpacity>
           </View>
         </View>
 
-        <TouchableHighlight
-          style={styles.formCta}
-          onPress={() => setIsSignedIn(true)}
-        >
+        <TouchableHighlight style={styles.formCta}>
           {/* onPress={() => signIn({ email, password })} */}
           <Text style={styles.formCtaText}>Log In</Text>
         </TouchableHighlight>
@@ -127,7 +124,7 @@ export default function Login({ navigation }) {
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
         <TouchableOpacity>
-          <Link push href="/(authentication)/Register">
+          <Link push href="/(auth)/Register">
             <Text style={styles.link}>Register</Text>
           </Link>
         </TouchableOpacity>

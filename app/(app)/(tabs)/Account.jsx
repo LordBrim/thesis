@@ -26,7 +26,7 @@ export default function Account({ navigation }) {
       <TouchableHighlight onPress={() => navigation.navigate("Help")}>
         <Text>Help</Text>
       </TouchableHighlight>
-      <TouchableHighlight onPress={() => setIsSignedIn(false)}>
+      <TouchableHighlight>
         <Text>Logout</Text>
       </TouchableHighlight>
     </View>

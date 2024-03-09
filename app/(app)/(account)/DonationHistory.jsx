@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from "react-native";
 export default function DonationHistory() {
   return (
     <View style={styles.container}>
-      <Text>DonationHistory Screen</Text>
+      <Text>Donation History Screen</Text>
     </View>
   );
 }

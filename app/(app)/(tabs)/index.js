@@ -12,10 +12,7 @@ export default function HomeTab({ navigation }) {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       >
-        <Welcome
-          toDonate={() => navigation.navigate("(home)/Donate")}
-          toRequest={() => navigation.navigate("Request")}
-        />
+        <Welcome toDonate="Donate" toRequest="Request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
         <RecentDonations
           toDonationHistory={() =>

@@ -14,11 +14,7 @@ export default function HomeTab({ navigation }) {
       >
         <Welcome toDonate="Donate" toRequest="Request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
-        <RecentDonations
-          toDonationHistory={() =>
-            navigation.navigate("AccountMainTab", { screen: "DonationHistory" })
-          }
-        />
+        <RecentDonations />
         <Events toEvent={() => navigation.navigate("Event")} />
         {/* Temporary Admin Controls */}
         <AdminDashboard

@@ -8,15 +8,18 @@ import {
 } from "react-native";
 import { SIZES, SPACES } from "../../constants/theme";
 import RecentDonationCard from "./RecentDonationCard";
+import { Link } from "expo-router";
 
-export default function RecentDonations({ toDonationHistory }) {
+export default function RecentDonations({}) {
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Recent Donations</Text>
-        <TouchableHighlight onPress={toDonationHistory}>
-          <Text>View All</Text>
-        </TouchableHighlight>
+        <Link asChild push href="/DonationHistory">
+          <TouchableHighlight>
+            <Text>View All</Text>
+          </TouchableHighlight>
+        </Link>
       </View>
       <SafeAreaView>
         <FlatList

@@ -107,27 +107,29 @@ export default function Login({ navigation }) {
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
-            <TouchableOpacity>
-              <Link push href="/(auth)/ForgotPassword">
+            <Link asChild push href="/ForgotPassword">
+              <TouchableOpacity>
                 <Text style={styles.link}>Forgot Password?</Text>
-              </Link>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
 
-        <TouchableHighlight style={styles.formCta}>
-          {/* onPress={() => signIn({ email, password })} */}
-          <Text style={styles.formCtaText}>Log In</Text>
-        </TouchableHighlight>
+        <Link asChild replace href="/(tabs)">
+          <TouchableHighlight style={styles.formCta}>
+            {/* onPress={() => signIn({ email, password })} */}
+            <Text style={styles.formCtaText}>Log In</Text>
+          </TouchableHighlight>
+        </Link>
       </View>
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
-        <TouchableOpacity>
-          <Link push href="/(auth)/Register">
+        <Link asChild push href="/Register">
+          <TouchableOpacity>
             <Text style={styles.link}>Register</Text>
-          </Link>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </Link>
       </View>
     </View>
   );

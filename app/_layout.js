@@ -2,10 +2,25 @@ import { Stack } from "expo-router/stack";
 
 export default function StackLayout() {
   return (
-    <Stack screenOptions={{ headerShadowVisible: false, headerTitle: "" }}>
-      <Stack.Screen name="(auth)/Login" />
-      <Stack.Screen name="(auth)/Register" />
-      <Stack.Screen name="(auth)/ForgotPassword" />
+    <Stack
+      initialRouteName="Login"
+      screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
+    >
+      // Authentication Screens
+      <Stack.Screen name="Login" />
+      <Stack.Screen name="Register" />
+      <Stack.Screen name="ForgotPassword" />
+      // Home Screens
+      <Stack.Screen name="HomeTab" />
+      // User Level Home Screens
+      <Stack.Screen name="Donate" />
+      <Stack.Screen name="Request" />
+      <Stack.Screen name="EventDetails" />
+      // Staff Level Home Screens
+      <Stack.Screen name="ManageBloodUnits" />
+      <Stack.Screen name="ManageEvents" />
+      <Stack.Screen name="ManageUsers" />
+      <Stack.Screen name="ManageStaff" />
     </Stack>
   );
 }

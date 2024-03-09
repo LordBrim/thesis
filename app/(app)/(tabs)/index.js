@@ -4,7 +4,7 @@ import { RecentDonations, Events, Welcome } from "../../../components";
 import { COLORS, SIZES, SPACES } from "../../../constants/theme";
 import AdminDashboard from "../../../components/home/AdminDashboard";
 
-export default function Home({ navigation }) {
+export default function HomeTab({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

@@ -8,6 +8,7 @@ import {
   ManageEvents,
   ManageStaff,
   ManageUsers,
+  Request,
 } from "../screens";
 
 export default function Root() {
@@ -35,4 +36,4 @@ export default function Root() {
 // import { SignedInContext } from "../context/SignedInContext";
 // const [isSignedIn, setIsSignedIn] = useState(false);
 // <SignedInContext.Provider value={[isSignedIn, setIsSignedIn]}>
-//   </SignedInContext.Provider>
+// </SignedInContext.Provider>

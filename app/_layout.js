@@ -21,6 +21,8 @@ export default function StackLayout() {
       <Stack.Screen name="ManageEvents" />
       <Stack.Screen name="ManageUsers" />
       <Stack.Screen name="ManageStaff" />
+      // QR Code Screens
+      <Stack.Screen name="QRCode" />
     </Stack>
   );
 }

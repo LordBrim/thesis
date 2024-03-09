@@ -5,7 +5,7 @@ import Login from "./(auth)/Login";
 import Register from "./(auth)/Register";
 import ForgotPassword from "./(auth)/ForgotPassword";
 
-// Home Screens
+// Tab Screens
 import HomeTab from "./(app)/(tabs)";
 import UpdatesTab from "./(app)/(tabs)/UpdatesTab";
 import MapsTab from "./(app)/(tabs)/MapsTab";
@@ -21,12 +21,15 @@ import ManageEvents from "./(app)/(home)/ManageEvents";
 import ManageStaff from "./(app)/(home)/ManageStaff";
 import ManageUsers from "./(app)/(home)/ManageUsers";
 
-// Account Main Screens
+// Account Screens
 import Profile from "./(app)/(account)/Profile";
 import DonationHistory from "./(app)/(account)/DonationHistory";
 import Settings from "./(app)/(account)/Settings";
 import About from "./(app)/(account)/About";
 import Help from "./(app)/(account)/Help";
+
+// QR Code Screens
+import QRScanner from "./(app)/(qr)/QRScanner";
 
 export {
   EmptyScreen,
@@ -50,4 +53,5 @@ export {
   Settings,
   About,
   Help,
+  QRScanner,
 };

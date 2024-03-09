@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router";
+import { Link, Tabs } from "expo-router";
 
 import { COLORS } from "../../../constants";
 import {
@@ -17,13 +17,15 @@ export default function TabLayout() {
         tabBarActiveTintColor: COLORS.enabled,
         tabBarInactiveTintColor: COLORS.disabled,
         headerRight: () => (
-          <TouchableOpacity style={{ paddingRight: 16 }}>
-            <MaterialCommunityIcons
-              name="qrcode-scan"
-              size={24}
-              color="black"
-            />
-          </TouchableOpacity>
+          <Link asChild push href="/QRScanner">
+            <TouchableOpacity style={{ paddingRight: 16 }}>
+              <MaterialCommunityIcons
+                name="qrcode-scan"
+                size={24}
+                color="black"
+              />
+            </TouchableOpacity>
+          </Link>
         ),
       }}
     >

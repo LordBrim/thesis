@@ -20,7 +20,7 @@ import { COLORS, SIZES } from "../../constants/theme";
 
 import { SignedInContext } from "../../context/SignedInContext";
 
-export default function Login({ navigation }) {
+export default function Login() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 

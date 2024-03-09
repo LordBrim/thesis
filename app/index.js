@@ -11,6 +11,7 @@ import {
   ManageStaff,
   ManageUsers,
   Request,
+  QRScanner,
 } from "./screens";
 
 const Stack = createNativeStackNavigator();
@@ -42,6 +43,8 @@ export default function Authentication() {
       <Stack.Screen name="Help" component={Help} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Settings" component={Settings} /> */}
+      {/* QR Code Screens */}
+      <Stack.Screen name="QRScanner" component={QRScanner} />
     </Stack.Navigator>
   );
 }

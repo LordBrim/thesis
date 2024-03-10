@@ -1,4 +1,3 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   ForgotPassword,
   Login,
@@ -19,6 +18,7 @@ import {
   DonationHistory,
 } from "./screens";
 
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 
 export default function Authentication() {
@@ -33,23 +33,7 @@ export default function Authentication() {
       <Stack.Screen name="Register" component={Register} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       {/* Home Activities */}
-      <Stack.Screen
-        name="HomeTab"
-        component={HomeTab}
-        options={{
-          headerRight: () => (
-            <Link asChild push href="QRScanner">
-              <TouchableOpacity style={{ paddingRight: 16 }}>
-                <MaterialCommunityIcons
-                  name="qrcode-scan"
-                  size={24}
-                  color="black"
-                />
-              </TouchableOpacity>
-            </Link>
-          ),
-        }}
-      />
+      <Stack.Screen name="(app)/(tabs)" component={HomeTab} />
       {/* User Level */}
       <Stack.Screen name="Donate" component={Donate} />
       <Stack.Screen name="Request" component={Request} />

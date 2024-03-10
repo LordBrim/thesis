@@ -1,4 +1,5 @@
 import { Stack } from "expo-router/stack";
+import QRHeaderBtn from "../components/common/QRHeaderBtn";
 
 export default function StackLayout() {
   return (
@@ -11,7 +12,12 @@ export default function StackLayout() {
       <Stack.Screen name="(auth)/Register" />
       <Stack.Screen name="(auth)/ForgotPassword" />
       {/* Home Screens */}
-      <Stack.Screen name="(app)/(tabs)" />
+      <Stack.Screen
+        name="(app)/(tabs)"
+        options={{
+          headerRight: () => <QRHeaderBtn />,
+        }}
+      />
       {/* User Level Home Screens */}
       <Stack.Screen name="(app)/(home)/Donate" />
       <Stack.Screen name="(app)/(home)/Request" />

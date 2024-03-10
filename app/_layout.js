@@ -1,3 +1,4 @@
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { Stack } from "expo-router/stack";
 import QRHeaderBtn from "../components/common/QRHeaderBtn";
 
@@ -14,9 +15,10 @@ export default function StackLayout() {
       {/* Home Screens */}
       <Stack.Screen
         name="(app)/(tabs)"
-        options={{
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
           headerRight: () => <QRHeaderBtn />,
-        }}
+        })}
       />
       {/* User Level Home Screens */}
       <Stack.Screen name="(app)/(home)/Donate" />
@@ -37,4 +39,21 @@ export default function StackLayout() {
       <Stack.Screen name="(app)/(qr)/QRScanner" />
     </Stack>
   );
+}
+
+function getHeaderTitle(route) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? "index";
+
+  switch (routeName) {
+    case "index":
+      return "Home";
+    case "UpdatesTab":
+      return "Updates";
+    case "MapsTab":
+      return "Maps";
+    case "FAQTab":
+      return "FAQ";
+    case "AccountTab":
+      return "Account";
+  }
 }

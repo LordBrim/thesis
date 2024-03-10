@@ -16,17 +16,6 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: COLORS.enabled,
         tabBarInactiveTintColor: COLORS.disabled,
-        headerRight: () => (
-          <Link asChild push href="/QRScanner">
-            <TouchableOpacity style={{ paddingRight: 16 }}>
-              <MaterialCommunityIcons
-                name="qrcode-scan"
-                size={24}
-                color="black"
-              />
-            </TouchableOpacity>
-          </Link>
-        ),
         headerShown: false,
       }}
     >

@@ -16,6 +16,7 @@ import {
   Help,
   Profile,
   Settings,
+  DonationHistory,
 } from "./screens";
 
 const Stack = createNativeStackNavigator();
@@ -37,7 +38,7 @@ export default function Authentication() {
         component={HomeTab}
         options={{
           headerRight: () => (
-            <Link asChild push href="/QRScanner">
+            <Link asChild push href="QRScanner">
               <TouchableOpacity style={{ paddingRight: 16 }}>
                 <MaterialCommunityIcons
                   name="qrcode-scan"
@@ -60,6 +61,7 @@ export default function Authentication() {
       <Stack.Screen name="ManageStaff" component={ManageStaff} />
       {/* Account Screens */}
       <Stack.Screen name="About" component={About} />
+      <Stack.Screen name="DonationHistory" component={DonationHistory} />
       <Stack.Screen name="Help" component={Help} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Settings" component={Settings} />

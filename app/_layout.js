@@ -7,27 +7,28 @@ export default function StackLayout() {
       screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
     >
       {/* Authentication Screens */}
-      <Stack.Screen name="Login" />
-      <Stack.Screen name="Register" />
-      <Stack.Screen name="ForgotPassword" />
+      <Stack.Screen name="(auth)/Login" />
+      <Stack.Screen name="(auth)/Register" />
+      <Stack.Screen name="(auth)/ForgotPassword" />
       {/* Home Screens */}
-      <Stack.Screen name="HomeTab" />
+      <Stack.Screen name="(app)/(tabs)" />
       {/* User Level Home Screens */}
-      <Stack.Screen name="Donate" />
-      <Stack.Screen name="Request" />
-      <Stack.Screen name="EventDetails" />
+      <Stack.Screen name="(app)/(home)/Donate" />
+      <Stack.Screen name="(app)/(home)/Request" />
+      <Stack.Screen name="(app)/(home)/EventDetails" />
       {/* Staff Level Home Screens */}
-      <Stack.Screen name="ManageBloodUnits" />
-      <Stack.Screen name="ManageEvents" />
-      <Stack.Screen name="ManageUsers" />
-      <Stack.Screen name="ManageStaff" />
+      <Stack.Screen name="(app)/(home)/ManageBloodUnits" />
+      <Stack.Screen name="(app)/(home)/ManageEvents" />
+      <Stack.Screen name="(app)/(home)/ManageUsers" />
+      <Stack.Screen name="(app)/(home)/ManageStaff" />
       {/* Account Screens */}
-      <Stack.Screen name="About" />
-      <Stack.Screen name="Help" />
-      <Stack.Screen name="Profile" />
-      <Stack.Screen name="Settings" />
+      <Stack.Screen name="(app)/(account)/About" />
+      <Stack.Screen name="(app)/(account)/DonationHistory" />
+      <Stack.Screen name="(app)/(account)/Help" />
+      <Stack.Screen name="(app)/(account)/Profile" />
+      <Stack.Screen name="(app)/(account)/Settings" />
       {/* QR Code Screens */}
-      <Stack.Screen name="QRScanner" />
+      <Stack.Screen name="(app)/(qr)/QRScanner" />
     </Stack>
   );
 }

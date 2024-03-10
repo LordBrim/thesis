@@ -11,7 +11,7 @@ export default function StackLayout() {
       <Stack.Screen name="Register" />
       <Stack.Screen name="ForgotPassword" />
       // Home Screens
-      <Stack.Screen name="HomeTab" />
+      <Stack.Screen name="HomeTab" options={{ headerShown: false }} />
       // User Level Home Screens
       <Stack.Screen name="Donate" />
       <Stack.Screen name="Request" />

@@ -27,6 +27,7 @@ export default function TabLayout() {
             </TouchableOpacity>
           </Link>
         ),
+        headerShown: false,
       }}
     >
       <Tabs.Screen

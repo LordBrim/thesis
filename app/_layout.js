@@ -6,23 +6,28 @@ export default function StackLayout() {
       initialRouteName="Login"
       screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
     >
-      // Authentication Screens
+      {/* Authentication Screens */}
       <Stack.Screen name="Login" />
       <Stack.Screen name="Register" />
       <Stack.Screen name="ForgotPassword" />
-      // Home Screens
-      <Stack.Screen name="HomeTab" options={{ headerShown: false }} />
-      // User Level Home Screens
+      {/* Home Screens */}
+      <Stack.Screen name="HomeTab" />
+      {/* User Level Home Screens */}
       <Stack.Screen name="Donate" />
       <Stack.Screen name="Request" />
       <Stack.Screen name="EventDetails" />
-      // Staff Level Home Screens
+      {/* Staff Level Home Screens */}
       <Stack.Screen name="ManageBloodUnits" />
       <Stack.Screen name="ManageEvents" />
       <Stack.Screen name="ManageUsers" />
       <Stack.Screen name="ManageStaff" />
-      // QR Code Screens
-      <Stack.Screen name="QRCode" />
+      {/* Account Screens */}
+      <Stack.Screen name="About" />
+      <Stack.Screen name="Help" />
+      <Stack.Screen name="Profile" />
+      <Stack.Screen name="Settings" />
+      {/* QR Code Screens */}
+      <Stack.Screen name="QRScanner" />
     </Stack>
   );
 }

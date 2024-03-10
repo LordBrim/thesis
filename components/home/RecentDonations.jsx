@@ -2,9 +2,9 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableHighlight,
   FlatList,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import { SIZES, SPACES } from "../../constants/theme";
 import RecentDonationCard from "./RecentDonationCard";
@@ -16,9 +16,9 @@ export default function RecentDonations({}) {
       <View style={styles.bar}>
         <Text style={styles.title}>Recent Donations</Text>
         <Link asChild push href="/DonationHistory">
-          <TouchableHighlight>
+          <TouchableOpacity>
             <Text>View All</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </Link>
       </View>
       <SafeAreaView>

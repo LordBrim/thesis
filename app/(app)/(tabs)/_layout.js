@@ -1,14 +1,7 @@
-import { Link, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 
 import { COLORS } from "../../../constants";
-import {
-  Ionicons,
-  AntDesign,
-  FontAwesome5,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
-import ScreenHeaderBtn from "../../../components/common/ScreenHeaderBtn";
-import { TouchableOpacity } from "react-native";
+import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 
 export default function TabLayout() {
   return (

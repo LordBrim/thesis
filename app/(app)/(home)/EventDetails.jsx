@@ -3,7 +3,8 @@ import { StyleSheet, Text, View } from "react-native";
 export default function EventDetails() {
   return (
     <View style={styles.container}>
-      <Text>Event Screen</Text>
+      {/* Dynamic For Each User */}
+      <Text>Event Details Screen</Text>
     </View>
   );
 }

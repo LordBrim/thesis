@@ -2,14 +2,6 @@
 
 <!-- Description -->
 
-# Core Features
-
-- **SMS Blood Stock Query** It is a feature that allows a blood bank to manage blood stock inquiries using SMS.
-- **Online Blood Stock Query** It is a feature that allows a blood bank to manage blood stock inquiries online.
-- **Report Generation** It is a feature that generates reports from the accumulated daily records. It displays a daily, weekly, monthly, and yearly reports for the medical professionals typically in the form of digestible graphs.
-- **QR Technology** It is a feature to expedite processes related to blood inventory.
-- **GPS Route Planning** It is implemented to provide the quickest route to the selected hospital with the avai blood unit.
-
 # Use Cases
 
 - Registering and logging into Lifeline using Email/Password Authentication.

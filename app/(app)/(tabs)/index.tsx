@@ -12,16 +12,16 @@ export default function HomeTab() {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       >
-        <Welcome toDonate="Donate" toRequest="Request" />
+        <Welcome toDonate="/donate" toRequest="/request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
         <RecentDonations />
-        <Events toEvent={"/EventDetails"} />
+        <Events toEvent={"/event-details"} />
         {/* Temporary Admin Controls */}
         <AdminDashboard
-          toManageBloodUnits={"ManageBloodUnits"}
-          toManageEvents={"ManageEvents"}
-          toManageStaff={"ManageStaff"}
-          toManageUsers={"ManageUsers"}
+          toManageBloodUnits={"/manage-blood-units"}
+          toManageEvents={"/manage-events"}
+          toManageStaff={"/manage-staff"}
+          toManageUsers={"/manage-users"}
         />
       </ScrollView>
     </SafeAreaView>

@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import { StyleSheet } from "react-native";
 
-export default function EmailPassword() {
+export default function ConfirmEmail() {
   return (
     <View style={styles.container}>
-      <Text>Email Password Screen</Text>
+      <Text>Confirm Email Password Screen</Text>
     </View>
   );
 }

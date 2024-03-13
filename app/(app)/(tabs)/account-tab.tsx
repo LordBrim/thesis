@@ -10,37 +10,37 @@ export default function AccountTab({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Link asChild push href="/DonationHistory">
+      <Link asChild href="/donation-history">
         <TouchableOpacity>
           <Text>Donation History</Text>
         </TouchableOpacity>
       </Link>
 
-      <Link asChild push href="/Profile">
+      <Link asChild href="/profile">
         <TouchableOpacity>
           <Text>Profile</Text>
         </TouchableOpacity>
       </Link>
 
-      <Link asChild push href="/Settings">
+      <Link asChild href="/settings">
         <TouchableOpacity>
           <Text>Settings</Text>
         </TouchableOpacity>
       </Link>
 
-      <Link asChild push href="/About">
+      <Link asChild href="/about">
         <TouchableOpacity>
           <Text>About</Text>
         </TouchableOpacity>
       </Link>
 
-      <Link asChild push href="/Help">
+      <Link asChild href="/help">
         <TouchableOpacity>
           <Text>Help</Text>
         </TouchableOpacity>
       </Link>
 
-      <Link asChild replace href="/Login">
+      <Link asChild replace href="/login">
         <TouchableOpacity>
           <Text>Logout</Text>
         </TouchableOpacity>

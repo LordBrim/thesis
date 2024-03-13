@@ -107,7 +107,7 @@ export default function Login() {
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
-            <Link asChild push href="/ForgotPassword">
+            <Link asChild href="/forgot-password">
               <TouchableOpacity>
                 <Text style={styles.link}>Forgot Password?</Text>
               </TouchableOpacity>
@@ -125,7 +125,7 @@ export default function Login() {
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
-        <Link asChild push href="/Register">
+        <Link asChild href="/register">
           <TouchableOpacity>
             <Text style={styles.link}>Register</Text>
           </TouchableOpacity>

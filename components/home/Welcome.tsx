@@ -8,12 +8,7 @@ export default function Welcome({ toDonate, toRequest }) {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome To Lifeline, User</Text>
       <View style={styles.buttons}>
-        <Link
-          asChild
-          push
-          href={toDonate}
-          style={[styles.button, styles.btnDonate]}
-        >
+        <Link asChild href={toDonate} style={[styles.button, styles.btnDonate]}>
           <TouchableOpacity>
             <Text style={[styles.subtitle, styles.txtDonate]}>Donate</Text>
             <Text style={[styles.description, styles.txtDonate]}>
@@ -24,7 +19,6 @@ export default function Welcome({ toDonate, toRequest }) {
 
         <Link
           asChild
-          push
           href={toRequest}
           style={[styles.button, styles.btnRequest]}
         >

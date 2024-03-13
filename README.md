@@ -1,29 +1,64 @@
-# How To Contribute
+# Lifeline
 
-**Step 1**: Select the branch you wish to clone.
-![image](https://github.com/Andrei-Sager/lifeline/assets/107153674/c92e08a9-5bae-4b7f-9fe4-a0f41f75d59a)
+<!-- Description -->
 
-**Step 2**: Clone the branch to your computer. Do it in anyway you want. It doesn't matter. (I reccommend using GitHub desktop)
-![image](https://github.com/Andrei-Sager/lifeline/assets/107153674/23bd5045-8241-4bdf-bc84-b88c0eb20d8b)
+# Core Features
 
-**Step 3**: Open your clone in your compiler. 
+- **SMS Blood Stock Query** It is a feature that allows a blood bank to manage blood stock inquiries using SMS.
+- **Online Blood Stock Query** It is a feature that allows a blood bank to manage blood stock inquiries online.
+- **Report Generation** It is a feature that generates reports from the accumulated daily records. It displays a daily, weekly, monthly, and yearly reports for the medical professionals typically in the form of digestible graphs.
+- **QR Technology** It is a feature to expedite processes related to blood inventory.
+- **GPS Route Planning** It is implemented to provide the quickest route to the selected hospital with the avai blood unit.
 
-**Step 4**: Run the command ```npx expo install``` to initialize your clone.
+# Use Cases
 
-**Step 5**: You can run the project on your device or install android studio with expo go https://docs.expo.dev/workflow/android-studio-emulator/. 
+- Registering and logging into Lifeline using Email/Password Authentication.
+- Accessing and managing records for blood units, users, events, etc:
+  - Create
+  - Read
+  - Update
+  - Delete
+  - Archive
+- Provides a summary and generates reports based on gathered data in the database.
+  - Weekly
+  - Monthly
+  - Yearly
+- QR code technology to streamline procedures.
+- Online accessibility and inquiry.
+- Map navigation using gps route planning.
 
-**Step 6**: Create your own branch off the branch you selected. This way you can make commits without interfering with other branches. You can find tasks for development [here in projects](https://github.com/users/Andrei-Sager/projects/5/views/1).
+# References
 
+> Any source of information that I found helpful when building this project.
 
-**Step 7**: Make a pull request to merge your brach changes.
+**Thesis Documentation:**
 
-Ps: Mag pull request na lng kayo sasabihin ko na lng kung may problema.
+- [Lifeline Document](https://shawsti-my.sharepoint.com/:w:/g/personal/munar_268156_stamesa_sti_edu_ph/ETsZnAOEpHlIgCj-mAJuMyABsJzXtZX-qPQFqLs-mvmv-A?e=AZ0T2O)
+- [Lifeline PowerPoint](https://www.canva.com/design/DAFz3lD2Qv8/qaUKsftKty8ODSmyUE1R6g/edit)
 
-# How To Add Icons
-Find icons over at https://icons.expo.fyi/Index.
-
-# 📝 Project Documentation
+**Project Documentation:**
 
 - [React Native: Docs](https://reactnative.dev/docs/environment-setup)
 - [Expo Router: Docs](https://expo.github.io/router)
 - [Expo Router: Repo](https://github.com/expo/router)
+
+**Package Explorer:**
+
+- [React Native Directory](https://reactnative.directory)
+
+**Potential Mapping APIs:**
+
+- [react-native-maps](https://www.npmjs.com/package/react-native-maps)
+- [react-native-mapbox-gl/maps](https://www.npmjs.com/package/@react-native-mapbox-gl/maps)
+
+**Realm**
+
+- [Realm React Native](https://blog.logrocket.com/realm-react-native/)
+- [Realm JS Examples](https://github.com/realm/realm-js/tree/main/examples)
+
+**Others:**
+
+- [Stack Navigator for Each Tab](https://reactnavigation.org/docs/tab-based-navigation/#a-stack-navigator-for-each-tab)
+- [React Native Loading Skeleton](https://www.npmjs.com/package/react-native-skeleton-content)
+- [Google Maps API](https://youtu.be/iP3DnhCUIsE?si=UUPBvp72aRljmGMo)
+- [React Native Styles](https://thoughtbot.com/blog/structure-for-styling-in-react-native#:~:text=Keep%20styles%20close&text=Defining%20StyleSheets%20in%20the%20same,maintained%20as%20the%20component%20evolves)

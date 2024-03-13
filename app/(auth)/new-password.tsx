@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import { StyleSheet } from "react-native";
 
-export default function CreateNewPassword() {
+export default function NewPassword() {
   return (
     <View style={styles.container}>
-      <Text>Create New Password Screen</Text>
+      <Text>New Password Screen</Text>
     </View>
   );
 }

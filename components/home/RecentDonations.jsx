@@ -15,7 +15,7 @@ export default function RecentDonations({}) {
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Recent Donations</Text>
-        <Link asChild push href="/DonationHistory">
+        <Link asChild href="/donation-history">
           <TouchableOpacity>
             <Text>View All</Text>
           </TouchableOpacity>

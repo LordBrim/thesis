@@ -9,9 +9,9 @@ export default function StackLayout() {
       screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
     >
       {/* Authentication Screens */}
-      <Stack.Screen name="(auth)/Login" />
-      <Stack.Screen name="(auth)/Register" />
-      <Stack.Screen name="(auth)/ForgotPassword" />
+      <Stack.Screen name="(auth)/login" />
+      <Stack.Screen name="(auth)/register" />
+      <Stack.Screen name="(auth)/forgot-password" />
       {/* Home Screens */}
       <Stack.Screen
         name="(app)/(tabs)"
@@ -21,22 +21,23 @@ export default function StackLayout() {
         })}
       />
       {/* User Level Home Screens */}
-      <Stack.Screen name="(app)/(home)/Donate" />
-      <Stack.Screen name="(app)/(home)/Request" />
-      <Stack.Screen name="(app)/(home)/EventDetails" />
+      <Stack.Screen name="(app)/(home)/donate" />
+      <Stack.Screen name="(app)/(home)/request" />
+      <Stack.Screen name="(app)/(home)/event-details" />
       {/* Staff Level Home Screens */}
-      <Stack.Screen name="(app)/(home)/ManageBloodUnits" />
-      <Stack.Screen name="(app)/(home)/ManageEvents" />
-      <Stack.Screen name="(app)/(home)/ManageUsers" />
-      <Stack.Screen name="(app)/(home)/ManageStaff" />
+      <Stack.Screen name="(app)/(home)/manage-blood-units" />
+      <Stack.Screen name="(app)/(home)/manage-events" />
+      <Stack.Screen name="(app)/(home)/manage-users" />
+      {/* Admin Level Home Screens */}
+      <Stack.Screen name="(app)/(home)/manage-staff" />
       {/* Account Screens */}
-      <Stack.Screen name="(app)/(account)/About" />
-      <Stack.Screen name="(app)/(account)/DonationHistory" />
-      <Stack.Screen name="(app)/(account)/Help" />
-      <Stack.Screen name="(app)/(account)/Profile" />
-      <Stack.Screen name="(app)/(account)/Settings" />
+      <Stack.Screen name="(app)/(account)/about" />
+      <Stack.Screen name="(app)/(account)/donation-history" />
+      <Stack.Screen name="(app)/(account)/help" />
+      <Stack.Screen name="(app)/(account)/profile" />
+      <Stack.Screen name="(app)/(account)/settings" />
       {/* QR Code Screens */}
-      <Stack.Screen name="(app)/(qr)/QRScanner" />
+      <Stack.Screen name="(app)/(qr)/qr-scanner" />
     </Stack>
   );
 }
@@ -47,13 +48,13 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case "index":
       return "Home";
-    case "UpdatesTab":
+    case "updates-tab":
       return "Updates";
-    case "MapsTab":
+    case "maps-tab":
       return "Maps";
-    case "FAQTab":
+    case "faq-tab":
       return "FAQ";
-    case "AccountTab":
+    case "account-tab":
       return "Account";
   }
 }

@@ -26,7 +26,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="UpdatesTab"
+        name="updates-tab"
         options={{
           title: "Updates",
           tabBarIcon: ({ focused, color, size }) => (
@@ -39,7 +39,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="MapsTab"
+        name="maps-tab"
         options={{
           title: "Maps",
           tabBarIcon: ({ focused, color, size }) => (
@@ -52,7 +52,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="FAQTab"
+        name="faq-tab"
         options={{
           title: "FAQ",
           tabBarIcon: ({ focused, color, size }) => (
@@ -65,7 +65,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="AccountTab"
+        name="account-tab"
         options={{
           title: "Account",
           tabBarIcon: ({ focused, color, size }) => (

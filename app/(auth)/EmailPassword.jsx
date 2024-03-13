@@ -1,10 +1,10 @@
-import { StyleSheet, View, Text } from "react-native";
+import { View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 
-export default function About() {
+export default function EmailPassword() {
   return (
     <View style={styles.container}>
-      <Text>About Us</Text>
-      <Text>About This App</Text>
+      <Text>Email Password Screen</Text>
     </View>
   );
 }

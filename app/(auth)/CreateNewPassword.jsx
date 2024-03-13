@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 
-export default function Event() {
+export default function CreateNewPassword() {
   return (
     <View style={styles.container}>
-      <Text>Event Screen</Text>
+      <Text>Create New Password Screen</Text>
     </View>
   );
 }

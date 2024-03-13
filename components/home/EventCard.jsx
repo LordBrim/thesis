@@ -1,17 +1,20 @@
 import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
+import { Link } from "expo-router";
 
 export default function EventCard({ toEvent, image, title, date }) {
   return (
-    <TouchableOpacity style={styles.container} onPress={toEvent}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-        <View style={styles.details}>
-          <Text style={styles.date}>{date || "April 20, 2024"}</Text>
-          <Text style={styles.title}>{title || "Blood Donation Event"}</Text>
-        </View>
-      </ImageBackground>
-    </TouchableOpacity>
+    <Link asChild push href={toEvent}>
+      <TouchableOpacity style={styles.container}>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+          <View style={styles.details}>
+            <Text style={styles.date}>{date || "April 20, 2024"}</Text>
+            <Text style={styles.title}>{title || "Blood Donation Event"}</Text>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    </Link>
   );
 }
 

@@ -1,9 +1,9 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-export default function DonationHistory() {
+export default function QRScanner() {
   return (
     <View style={styles.container}>
-      <Text>DonationHistory Screen</Text>
+      <Text>QR Code Screen</Text>
     </View>
   );
 }

@@ -1,9 +1,10 @@
 import { StyleSheet, View, Text } from "react-native";
 
-export default function Settings() {
+export default function About() {
   return (
     <View style={styles.container}>
-      <Text>Settings</Text>
+      <Text>About Us Screen</Text>
+      <Text>About This App</Text>
     </View>
   );
 }

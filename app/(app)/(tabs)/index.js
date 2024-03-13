@@ -1,10 +1,10 @@
 import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 
 import { RecentDonations, Events, Welcome } from "../../../components";
-import { COLORS, SIZES, SPACES } from "../../../constants/theme";
+import { COLORS, SPACES } from "../../../constants/theme";
 import AdminDashboard from "../../../components/home/AdminDashboard";
 
-export default function Home({ navigation }) {
+export default function HomeTab() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -12,23 +12,16 @@ export default function Home({ navigation }) {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       >
-        <Welcome
-          toDonate={() => navigation.navigate("Donate")}
-          toRequest={() => navigation.navigate("Request")}
-        />
+        <Welcome toDonate="Donate" toRequest="Request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
-        <RecentDonations
-          toDonationHistory={() =>
-            navigation.navigate("AccountMainTab", { screen: "DonationHistory" })
-          }
-        />
-        <Events toEvent={() => navigation.navigate("Event")} />
+        <RecentDonations />
+        <Events toEvent={"/EventDetails"} />
         {/* Temporary Admin Controls */}
         <AdminDashboard
-          toManageBloodUnits={() => navigation.navigate("ManageBloodUnits")}
-          toManageEvents={() => navigation.navigate("ManageEvents")}
-          toManageStaff={() => navigation.navigate("ManageStaff")}
-          toManageUsers={() => navigation.navigate("ManageUsers")}
+          toManageBloodUnits={"ManageBloodUnits"}
+          toManageEvents={"ManageEvents"}
+          toManageStaff={"ManageStaff"}
+          toManageUsers={"ManageUsers"}
         />
       </ScrollView>
     </SafeAreaView>

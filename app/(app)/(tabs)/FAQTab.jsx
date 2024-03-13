@@ -7,7 +7,7 @@ import QuestionPanel from "../../../components/faq/QuestionPanel";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../../constants/theme";
 
-const FAQ = () => {
+export default function FAQTab() {
   const [isActiveIndex, setActiveIndex] = useState(0);
 
   return (
@@ -31,9 +31,7 @@ const FAQ = () => {
       />
     </SafeAreaView>
   );
-};
-
-export default FAQ;
+}
 
 const styles = StyleSheet.create({
   container: {

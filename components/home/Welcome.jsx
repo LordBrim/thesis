@@ -1,30 +1,40 @@
 import { StyleSheet, View, Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
+import { Link } from "expo-router";
 
 export default function Welcome({ toDonate, toRequest }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome To Lifeline, User</Text>
       <View style={styles.buttons}>
-        <TouchableOpacity
+        <Link
+          asChild
+          push
+          href={toDonate}
           style={[styles.button, styles.btnDonate]}
-          onPress={toDonate}
         >
-          <Text style={[styles.subtitle, styles.txtDonate]}>Donate</Text>
-          <Text style={[styles.description, styles.txtDonate]}>
-            Donate blood to someone in need.
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          <TouchableOpacity>
+            <Text style={[styles.subtitle, styles.txtDonate]}>Donate</Text>
+            <Text style={[styles.description, styles.txtDonate]}>
+              Donate blood to someone in need.
+            </Text>
+          </TouchableOpacity>
+        </Link>
+
+        <Link
+          asChild
+          push
+          href={toRequest}
           style={[styles.button, styles.btnRequest]}
-          onPress={toRequest}
         >
-          <Text style={[styles.subtitle, styles.txtRequest]}>Request</Text>
-          <Text style={[styles.description, styles.txtRequest]}>
-            Request for compatible blood from a location.
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={[styles.subtitle, styles.txtRequest]}>Request</Text>
+            <Text style={[styles.description, styles.txtRequest]}>
+              Request for compatible blood from a location.
+            </Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </View>
   );

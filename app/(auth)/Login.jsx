@@ -9,6 +9,8 @@ import {
   Pressable,
 } from "react-native";
 
+import { Link, router } from "expo-router";
+
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { Ionicons } from "react-native-vector-icons";
 import { CheckBox } from "react-native-btr";
@@ -18,7 +20,7 @@ import { COLORS, SIZES } from "../../constants/theme";
 
 import { SignedInContext } from "../../context/SignedInContext";
 
-export default function Login({ navigation }) {
+export default function Login() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
@@ -32,7 +34,7 @@ export default function Login({ navigation }) {
 
   // const { signIn } = useContext(AuthContext);
 
-  const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
+  // const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
 
   return (
     <View style={styles.container}>
@@ -105,28 +107,29 @@ export default function Login({ navigation }) {
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ForgotPassword")}
-            >
-              <Text style={styles.link}>Forgot Password?</Text>
-            </TouchableOpacity>
+            <Link asChild push href="/ForgotPassword">
+              <TouchableOpacity>
+                <Text style={styles.link}>Forgot Password?</Text>
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
 
-        <TouchableHighlight
-          style={styles.formCta}
-          onPress={() => setIsSignedIn(true)}
-        >
-          {/* onPress={() => signIn({ email, password })} */}
-          <Text style={styles.formCtaText}>Log In</Text>
-        </TouchableHighlight>
+        <Link asChild replace href="/(tabs)">
+          <TouchableHighlight style={styles.formCta}>
+            {/* onPress={() => signIn({ email, password })} */}
+            <Text style={styles.formCtaText}>Log In</Text>
+          </TouchableHighlight>
+        </Link>
       </View>
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.link}>Register</Text>
-        </TouchableOpacity>
+        <Link asChild push href="/Register">
+          <TouchableOpacity>
+            <Text style={styles.link}>Register</Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </View>
   );
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    paddingVertical: SIZES.xxxLarge,
+    paddingBottom: SIZES.xxxLarge,
     paddingHorizontal: SIZES.large,
     backgroundColor: COLORS.white,
     justifyContent: "space-between",

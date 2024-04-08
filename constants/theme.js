@@ -6,6 +6,10 @@ const COLORS = {
   gray: "#83829A",
   gray2: "#C1C0C8",
 
+  red: "#FF000F",
+  redTop: "#FF3642",
+  redWhite: "#FF364E",
+
   white: "#FFFFFF",
   lightWhite: "#FAFAFC",
 

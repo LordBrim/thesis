@@ -1,18 +1,20 @@
-const violet = "#312651";
-
 const COLORS = {
-  primary: violet,
+  primary: "#FF3642",
   secondary: "#444262",
   tertiary: "#FF7754",
 
   gray: "#83829A",
   gray2: "#C1C0C8",
 
+  red: "#FF000F",
+  redTop: "#FF3642",
+  redWhite: "#FF364E",
+
   white: "#FFFFFF",
   lightWhite: "#FAFAFC",
 
-  red: "#FF000F",
-  redWhite: "#FF364E",
+  enabled: "#bf2831",
+  disabled: "#8a8a8a",
 };
 
 const FONT = {
@@ -24,12 +26,24 @@ const FONT = {
 };
 
 const SIZES = {
+  xxxSmall: 6,
+  xxSmall: 8,
   xSmall: 10,
   small: 12,
   medium: 16,
   large: 20,
   xLarge: 24,
   xxLarge: 32,
+  xxxLarge: 40,
+};
+
+const SPACES = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 20,
+  xxl: 24,
 };
 
 const SHADOWS = {
@@ -55,4 +69,4 @@ const SHADOWS = {
   },
 };
 
-export { COLORS, FONT, SIZES, SHADOWS };
+export { COLORS, FONT, SIZES, SPACES, SHADOWS };

@@ -1,0 +1,45 @@
+import { View, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
+import { useState } from "react";
+
+import { FAQuestions } from "../../../constants";
+import QuestionPanel from "../../../components/faq/QuestionPanel";
+
+import { StyleSheet } from "react-native";
+import { COLORS, SIZES } from "../../../constants/theme";
+
+export default function FAQTab() {
+  const [isActiveIndex, setActiveIndex] = useState(0);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={FAQuestions}
+        renderItem={({ item }) => (
+          <QuestionPanel
+            question={item.question}
+            answer={item.answer}
+            isActive={isActiveIndex === item.id + 1}
+            onShow={() => {
+              setActiveIndex(item.id + 1);
+            }}
+            onHide={() => {
+              setActiveIndex(0);
+            }}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    flex: 1,
+    padding: SIZES.medium,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.white,
+  },
+});

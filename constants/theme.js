@@ -21,8 +21,8 @@ const FONT = {
   regular: "DMRegular",
   medium: "DMMedium",
   bold: "DMBold",
-  raleway: "Raleway_Semibold",
-  Grotesk: "Grotesk",
+  // raleway: "Raleway_Semibold",
+  // Grotesk: "Grotesk",
 };
 
 const SIZES = {

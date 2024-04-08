@@ -1,15 +1,6 @@
-import { View, Text } from "react-native";
-
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../../constants";
 
-export default function MapsTab() {
-  return (
-    <View style={styles.container}>
-      <Text>Maps</Text>
-    </View>
-  );
-}
+import { COLORS, FONT, SIZES, SHADOWS } from "../../constants";
 
 const styles = StyleSheet.create({
   container: {
@@ -21,3 +12,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
 });
+
+export default styles;

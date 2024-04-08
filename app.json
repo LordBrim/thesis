@@ -1,13 +1,32 @@
 {
   "expo": {
+    "experiments": {
+      "typedRoutes": true
+    },
     "scheme": "acme",
     "web": {
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-router"
-    ],
-    "name": "lifeline",
-    "slug": "lifeline"
+    "plugins": ["expo-router"],
+    "name": "Lifeline",
+    "slug": "lifeline",
+    "icon": "./assets/splash/icon.png",
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    },
+    "splash": {
+      "image": "./assets/splash/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FF3642"
+    },
+    "android": {
+      "package": "com.andreisager.lifeline",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/splash/adaptive-icon.png",
+        "backgroundColor": "#FF3642"
+      }
+    }
   }
 }

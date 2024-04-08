@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
   header: {
-    fontFamily: FONT.Grotesk,
+    // fontFamily: FONT.Grotesk,
     fontSize: SIZES.xLarge,
     marginBottom: SIZES.medium,
     marginTop: 30,

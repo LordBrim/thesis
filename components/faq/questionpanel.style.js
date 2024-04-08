@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   questionTitle: {
-    fontFamily: FONT.Grotesk,
+    // fontFamily: FONT.Grotesk,
     fontWeight: "bold",
     color: COLORS.redWhite,
   },

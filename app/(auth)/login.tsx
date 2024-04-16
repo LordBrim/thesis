@@ -8,7 +8,12 @@ import {
   TouchableHighlight,
   Pressable,
 } from "react-native";
+import {
+  Raleway_400Regular,
+  Raleway_500Medium,
+} from "@expo-google-fonts/raleway";
 
+import { useFonts } from "expo-font";
 import { Link, router } from "expo-router";
 
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
@@ -21,6 +26,13 @@ import { COLORS, SIZES } from "../../constants/theme";
 import { SignedInContext } from "../../context/SignedInContext";
 
 export default function Login() {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_500Medium,
+    Grotesk: require("../../assets/fonts/Grotesk.ttf"),
+    Grotesk_regular: require("../../assets/fonts/Grotesk_Reg.ttf"),
+    BakbakOne: require("../../assets/fonts/BakbakOne.ttf"),
+  });
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
@@ -136,7 +148,7 @@ export default function Login() {
                 borderColor: COLORS.red,
               }}
             >
-              <Ionicons name="logo-google" size={40} color={COLORS.red} />
+              <Ionicons name="logo-google" size={30} color={COLORS.red} />
             </TouchableOpacity>
           </Link>
           <Link asChild href="/(tabs)">
@@ -148,7 +160,7 @@ export default function Login() {
                 borderColor: COLORS.red,
               }}
             >
-              <Ionicons name="logo-facebook" size={40} color={COLORS.red} />
+              <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
             </TouchableOpacity>
           </Link>
         </View>

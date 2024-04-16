@@ -5,6 +5,7 @@ const COLORS = {
 
   gray: "#83829A",
   gray2: "#C1C0C8",
+  gray3: "#a5a4ab",
 
   red: "#FF000F",
   redTop: "#FF3642",
@@ -22,7 +23,9 @@ const FONT = {
   medium: "DMMedium",
   bold: "DMBold",
   // raleway: "Raleway_Semibold",
-  // Grotesk: "Grotesk",
+  Grotesk: "Grotesk",
+  Grotesk_regular: "Grotesk_regular",
+  BakbakOne: "BakbakOne",
 };
 
 const SIZES = {

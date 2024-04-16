@@ -118,9 +118,40 @@ export default function Login() {
         <Link asChild replace href="/(tabs)">
           <TouchableHighlight style={styles.formCta}>
             {/* onPress={() => signIn({ email, password })} */}
-            <Text style={styles.formCtaText}>Log In</Text>
+            <Text style={styles.formCtaText}>Sign In</Text>
           </TouchableHighlight>
         </Link>
+      </View>
+      <View style={styles.signUpWith}>
+        <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+          - Or sign in with -
+        </Text>
+        <View style={{ flexDirection: "row", gap: 20 }}>
+          <Link asChild href="/(tabs)">
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderRadius: 50,
+                padding: 10,
+                borderColor: COLORS.red,
+              }}
+            >
+              <Ionicons name="logo-google" size={40} color={COLORS.red} />
+            </TouchableOpacity>
+          </Link>
+          <Link asChild href="/(tabs)">
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderRadius: 50,
+                padding: 10,
+                borderColor: COLORS.red,
+              }}
+            >
+              <Ionicons name="logo-facebook" size={40} color={COLORS.red} />
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
 
       <View style={styles.containerBottom}>
@@ -210,5 +241,14 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: "bold",
     textDecorationLine: "underline",
+  },
+  signUpWith: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: SIZES.xSmall,
+    padding: SIZES.xSmall,
+    borderTopWidth: 1,
+    borderColor: COLORS.gray,
   },
 });

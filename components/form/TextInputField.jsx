@@ -1,17 +1,9 @@
+import { COLORS } from "../../constants/theme";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
-  inputContainer: {
-    // Add your styles here
-  },
-  input: {
-    // Add your styles here
-  },
-});
-
-export const TextInputField = ({ field, handleInputChange }) => {
-  const [inputValue, setInputValue] = useState(""); // Add this line
+export const TextInputField = ({ field, handleInputChange, width = "95%" }) => {
+  const [inputValue, setInputValue] = useState("");
   const isPassword = field.type === "password";
   const isEmail = field.type === "email";
   const keyboardType = isEmail ? "email-address" : "default";
@@ -21,9 +13,31 @@ export const TextInputField = ({ field, handleInputChange }) => {
     handleInputChange(field.name, text);
   };
 
+  const styles = StyleSheet.create({
+    inputContainer: {
+      // Add your styles here
+      width: width,
+    },
+    input: {
+      borderColor: COLORS.gray,
+      borderWidth: 1,
+      borderRadius: 5,
+      padding: 3,
+    },
+  });
+
   return (
     <View style={styles.inputContainer}>
-      <Text>{field.title}</Text>
+      <Text
+        style={{
+          fontFamily: "Raleway_500Medium",
+          fontStyle: "italic",
+          fontSize: 16,
+          color: COLORS.redWhite,
+        }}
+      >
+        {field.title}
+      </Text>
       <TextInput
         style={styles.input}
         secureTextEntry={isPassword}

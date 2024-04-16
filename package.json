@@ -10,6 +10,7 @@
     "ts:check": "tsc"
   },
   "dependencies": {
+    "@expo-google-fonts/raleway": "^0.2.3",
     "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-picker/picker": "^2.7.2",
     "@react-navigation/bottom-tabs": "^6.5.11",

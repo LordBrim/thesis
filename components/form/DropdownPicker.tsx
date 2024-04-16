@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import { COLORS, FONT } from "../../constants/theme";
 
 const DropdownPickerField = ({ label, items, value, onValueChange }) => {
   const [open, setOpen] = useState(false);
@@ -34,6 +35,7 @@ const DropdownPickerField = ({ label, items, value, onValueChange }) => {
         setValue={setSelectedValue}
         open={open}
         setOpen={handleOpen}
+        scrollViewProps={{ scrollEnabled: false }}
       />
     </View>
   );
@@ -45,14 +47,16 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
     marginBottom: 4,
+    fontFamily: "Raleway_500Medium",
+    fontStyle: "italic",
+    color: COLORS.redWhite,
   },
   dropdown: {
     backgroundColor: "#fafafa",
   },
   dropdownLabel: {
-    fontSize: 14,
+    fontSize: 16,
     textAlign: "left",
     color: "#000",
   },

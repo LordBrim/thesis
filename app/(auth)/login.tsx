@@ -138,6 +138,7 @@ export default function Login() {
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>
           - Or sign in with -
         </Text>
+
         <View style={{ flexDirection: "row", gap: 20 }}>
           <Link asChild href="/(tabs)">
             <TouchableOpacity

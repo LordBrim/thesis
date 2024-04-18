@@ -23,6 +23,7 @@ export const TextInputField = ({ field, handleInputChange, width = "95%" }) => {
       borderWidth: 1,
       borderRadius: 5,
       padding: 3,
+      height: 50,
     },
   });
 
@@ -31,9 +32,9 @@ export const TextInputField = ({ field, handleInputChange, width = "95%" }) => {
       <Text
         style={{
           fontFamily: "Raleway_500Medium",
-          fontStyle: "italic",
           fontSize: 16,
-          color: COLORS.redWhite,
+          fontWeight: "bold",
+          marginVertical: 10,
         }}
       >
         {field.title}
@@ -45,7 +46,6 @@ export const TextInputField = ({ field, handleInputChange, width = "95%" }) => {
         onChangeText={handleChangeText} // Use the new handleChangeText function
         placeholder={field.title}
       />
-      <Text>{inputValue}</Text>
     </View>
   );
 };

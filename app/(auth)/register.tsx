@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "expo-router";
+
 import {
   View,
   Text,
@@ -8,6 +10,9 @@ import {
   ScrollView,
   SafeAreaView,
   FlatList,
+  Image,
+  TouchableOpacity,
+  TouchableHighlight,
 } from "react-native";
 import { TextInputField } from "../../components/form/TextInputField";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -17,195 +22,89 @@ import { Ionicons } from "react-native-vector-icons";
 import DropdownPickerField from "../../components/form/DropdownPicker";
 import CustomDropdown from "../../components/form/CustomDropdown";
 import RadioGroupField from "../../components/form/RadioGroupField";
-import { COLORS, FONT } from "../../constants/theme";
+import { COLORS, FONT, SIZES } from "../../constants/theme";
 
 export default function Register() {
   const [form, setForm] = useState({});
-  const [date, setDate] = useState(null);
-  const [show, setShow] = useState(false);
-  const [dropdownValue, setDropdownValue] = useState(null);
-  const [radioValue, setRadioValue] = useState(null);
   const [toggleTerms, setToggleTerms] = useState(false);
   const [toggleAlerts, setToggleAlerts] = useState(false);
-
-  const [bloodTypeValue, setBloodTypeValue] = useState(null);
-  const [civilStatusValue, setCivilStatusValue] = useState(null);
-  const [nationalityValue, setNationalityValue] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleInputChange = (name, value) => {
-    setForm({
-      ...form,
-      [name]: value,
-    });
+    switch (name) {
+      case "email":
+        setEmail(value);
+        break;
+      case "password":
+        setPassword(value);
+        break;
+      case "confirmPassword":
+        setConfirmPassword(value);
+        break;
+      default:
+        break;
+    }
   };
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDate(currentDate);
-  };
+
   const handleToggleTerms = () => {
     setToggleTerms(!toggleTerms);
   };
   const handleToggleAlerts = () => {
     setToggleAlerts(!toggleAlerts);
   };
+  function validateEmailAndPassword(email, password, confirmPassword) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return console.log("Invalid email.");
+    }
+
+    if (password !== confirmPassword) {
+      return console.log("Passwords do not match.");
+    }
+
+    return console.log("Valid email and password.");
+  }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <ScrollView style={styles.container}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 10,
+            marginTop: 30,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: SIZES.xxxLarge,
+              fontWeight: "900",
+              textTransform: "uppercase",
+              color: COLORS.primary,
+            }}
+          >
+            Lifeline
+          </Text>
+          <Image
+            style={{ width: 50, height: 50, borderRadius: 100 }}
+            source={require("../../assets/splash/icon.png")}
+          />
+        </View>
         <Text
           style={{
-            fontSize: 20,
+            fontSize: SIZES.xLarge,
             fontWeight: "bold",
             fontFamily: FONT.BakbakOne,
+            marginTop: 20,
           }}
         >
           Register an <Text style={{ color: COLORS.redWhite }}> Account</Text>
         </Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <TextInputField
-            width="45%"
-            field={{
-              title: "First Name",
-              name: "First Name",
-              type: "First Name",
-            }}
-            handleInputChange={handleInputChange}
-          />
-          <TextInputField
-            width="45%"
-            field={{ title: "Last Name", name: "Last Name", type: "Last Name" }}
-            handleInputChange={handleInputChange}
-          />
-        </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <TextInputField
-            width="45%"
-            field={{
-              title: "Middle Name",
-              name: "Middle Name",
-              type: "Middle Name",
-            }}
-            handleInputChange={handleInputChange}
-          />
-          <TextInputField
-            width="45%"
-            field={{
-              title: "Username",
-              name: "Username",
-              type: "Username",
-            }}
-            handleInputChange={handleInputChange}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-evenly",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "column",
-              width: "45%",
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Raleway_500Medium",
-                fontStyle: "italic",
-                fontSize: 16,
-                color: COLORS.redWhite,
-              }}
-            >
-              Date of Birth
-            </Text>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                borderWidth: 1,
-                borderColor: COLORS.gray,
-                borderRadius: 5,
-                padding: 3,
-              }}
-            >
-              <Text style={{ marginRight: 8 }}>
-                {date ? date.toLocaleDateString() : "MM/DD/YYYY"}
-              </Text>
-              <Ionicons
-                name="calendar"
-                size={30}
-                onPress={() => setShow(true)}
-                color={COLORS.gray}
-              />
-              {show && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date || new Date()}
-                  mode="date"
-                  is24Hour={true}
-                  display="default"
-                  onChange={onChange}
-                />
-              )}
-            </View>
-          </View>
-          <CustomDropdown
-            label="Blood Type"
-            items={["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]}
-            value={bloodTypeValue}
-            onValueChange={(value) => {
-              setBloodTypeValue(value);
-              handleInputChange("bloodType", value);
-            }}
-          />
-        </View>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <CustomDropdown
-            label="Civil Status"
-            items={["Single", "Married", "Divorced"]}
-            value={civilStatusValue}
-            onValueChange={(value) => {
-              setCivilStatusValue(value);
-              handleInputChange("civilstatus", value);
-            }}
-          />
-          <CustomDropdown
-            label="Nationality"
-            items={[
-              "Filipino",
-              "American",
-              "Japanese",
-              "Chinese",
-              "Korean",
-              "Indian",
-              "Others",
-            ]}
-            value={nationalityValue}
-            onValueChange={(value) => {
-              setNationalityValue(value);
-              handleInputChange("nationality", value);
-            }}
-          />
-        </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <TextInputField
-            width="45%"
-            field={{ title: "Email", name: "email", type: "email" }}
-            handleInputChange={handleInputChange}
-          />
-          <RadioGroupField
-            label="Gender"
-            options={["Male", "Female"]}
-            value={radioValue}
-            onValueChange={setRadioValue}
-          />
-        </View>
         <View
           style={{
             justifyContent: "center",
@@ -214,11 +113,7 @@ export default function Register() {
           }}
         >
           <TextInputField
-            field={{
-              title: "Home Adrress",
-              name: "Home Adrress",
-              type: "Home Adrress",
-            }}
+            field={{ title: "Email", name: "email", type: "email" }}
             handleInputChange={handleInputChange}
           />
           <TextInputField
@@ -228,8 +123,8 @@ export default function Register() {
           <TextInputField
             field={{
               title: "Confirm Password",
-              name: "Confirm password",
-              type: "Confirm password",
+              name: "confirmPassword",
+              type: "password",
             }}
             handleInputChange={handleInputChange}
           />
@@ -240,7 +135,8 @@ export default function Register() {
                 gap: 10,
                 alignContent: "center",
                 alignItems: "center",
-                marginVertical: 5,
+                marginTop: 30,
+                marginBottom: 10,
               }}
             >
               <CheckBox
@@ -258,38 +154,51 @@ export default function Register() {
                 </Text>
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                alignContent: "center",
-                alignItems: "center",
-                marginVertical: 5,
-              }}
-            >
-              <CheckBox
-                checked={toggleAlerts}
-                color="#FF3642"
-                borderRadius={3}
-                onPress={() => handleToggleAlerts()}
-              />
-              <Text style={{ fontSize: 17 }}>
-                Recieve{" "}
-                <Text style={{ color: COLORS.red }}>
-                  Notifications and Emails?
-                </Text>
-              </Text>
-            </View>
           </View>
           <View
             style={{
               marginVertical: 10,
             }}
-          >
-            <Button
-              title="Next"
-              onPress={() => console.log("Form Submitted", form)}
-            />
+          ></View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.formCta}
+          onPress={() =>
+            validateEmailAndPassword(email, password, confirmPassword)
+          }
+        >
+          <Text style={styles.formCtaText}>Sign up</Text>
+        </TouchableOpacity>
+        <View style={styles.signUpWith}>
+          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+            - Or sign up with -
+          </Text>
+          <View style={{ flexDirection: "row", gap: 20 }}>
+            <Link asChild href="/(tabs)">
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 50,
+                  padding: 10,
+                  borderColor: COLORS.red,
+                }}
+              >
+                <Ionicons name="logo-google" size={30} color={COLORS.red} />
+              </TouchableOpacity>
+            </Link>
+            <Link asChild href="/(tabs)">
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 50,
+                  padding: 10,
+                  borderColor: COLORS.red,
+                }}
+              >
+                <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
+              </TouchableOpacity>
+            </Link>
           </View>
         </View>
       </ScrollView>
@@ -300,7 +209,7 @@ export default function Register() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 10,
+    marginHorizontal: 20,
   },
   inputContainer: {
     margin: 5,
@@ -309,5 +218,29 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
+  },
+  signUpWith: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: SIZES.xSmall,
+    padding: SIZES.xSmall,
+    borderTopWidth: 1,
+    borderColor: COLORS.gray,
+    marginTop: SIZES.xLarge,
+  },
+  formCta: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: SIZES.medium,
+    color: COLORS.white,
+    backgroundColor: COLORS.primary,
+    borderRadius: SIZES.xSmall,
+  },
+  formCtaText: {
+    fontSize: SIZES.medium,
+    textTransform: "capitalize",
+    color: COLORS.white,
   },
 });

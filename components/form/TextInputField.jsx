@@ -1,8 +1,8 @@
-import { COLORS } from "../../constants/theme";
+import { COLORS, SIZES } from "../../constants/theme";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 
-export const TextInputField = ({ field, handleInputChange, width = "95%" }) => {
+export const TextInputField = ({ field, handleInputChange }) => {
   const [inputValue, setInputValue] = useState("");
   const isPassword = field.type === "password";
   const isEmail = field.type === "email";
@@ -16,13 +16,12 @@ export const TextInputField = ({ field, handleInputChange, width = "95%" }) => {
   const styles = StyleSheet.create({
     inputContainer: {
       // Add your styles here
-      width: width,
     },
     input: {
       borderColor: COLORS.gray,
       borderWidth: 1,
-      borderRadius: 5,
-      padding: 3,
+      borderRadius: SIZES.xSmall,
+      padding: 5,
       height: 50,
     },
   });

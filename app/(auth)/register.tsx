@@ -105,6 +105,51 @@ export default function Register() {
           Register an <Text style={{ color: COLORS.redWhite }}> Account</Text>
         </Text>
 
+        <TextInputField
+          field={{ title: "Email", name: "email", type: "email" }}
+          handleInputChange={handleInputChange}
+        />
+        <TextInputField
+          field={{ title: "Password", name: "password", type: "password" }}
+          handleInputChange={handleInputChange}
+        />
+        <TextInputField
+          field={{
+            title: "Confirm Password",
+            name: "confirmPassword",
+            type: "password",
+          }}
+          handleInputChange={handleInputChange}
+        />
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              alignContent: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 30,
+              marginBottom: 20,
+            }}
+          >
+            <CheckBox
+              checked={toggleTerms}
+              color="#FF3642"
+              borderRadius={3}
+              onPress={() => handleToggleTerms()}
+            />
+            <Text style={{ fontSize: 17 }}>
+              Accept{" "}
+              <Text
+                style={{ color: COLORS.red, textDecorationLine: "underline" }}
+              >
+                Terms and Conditions?
+              </Text>
+            </Text>
+          </View>
+        </View>
+
         <View
           style={{
             justifyContent: "center",
@@ -112,93 +157,45 @@ export default function Register() {
             alignItems: "center",
           }}
         >
-          <TextInputField
-            field={{ title: "Email", name: "email", type: "email" }}
-            handleInputChange={handleInputChange}
-          />
-          <TextInputField
-            field={{ title: "Password", name: "password", type: "password" }}
-            handleInputChange={handleInputChange}
-          />
-          <TextInputField
-            field={{
-              title: "Confirm Password",
-              name: "confirmPassword",
-              type: "password",
-            }}
-            handleInputChange={handleInputChange}
-          />
-          <View>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 10,
-                alignContent: "center",
-                alignItems: "center",
-                marginTop: 30,
-                marginBottom: 10,
-              }}
-            >
-              <CheckBox
-                checked={toggleTerms}
-                color="#FF3642"
-                borderRadius={3}
-                onPress={() => handleToggleTerms()}
-              />
-              <Text style={{ fontSize: 17 }}>
-                Accept{" "}
-                <Text
-                  style={{ color: COLORS.red, textDecorationLine: "underline" }}
-                >
-                  Terms and Conditions?
-                </Text>
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              marginVertical: 10,
-            }}
-          ></View>
-        </View>
+          <TouchableOpacity
+            style={styles.formCta}
+            onPress={() =>
+              validateEmailAndPassword(email, password, confirmPassword)
+            }
+          >
+            <Text style={styles.formCtaText}>Sign up</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.formCta}
-          onPress={() =>
-            validateEmailAndPassword(email, password, confirmPassword)
-          }
-        >
-          <Text style={styles.formCtaText}>Sign up</Text>
-        </TouchableOpacity>
-        <View style={styles.signUpWith}>
-          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-            - Or sign up with -
-          </Text>
-          <View style={{ flexDirection: "row", gap: 20 }}>
-            <Link asChild href="/(tabs)">
-              <TouchableOpacity
-                style={{
-                  borderWidth: 1,
-                  borderRadius: 50,
-                  padding: 10,
-                  borderColor: COLORS.red,
-                }}
-              >
-                <Ionicons name="logo-google" size={30} color={COLORS.red} />
-              </TouchableOpacity>
-            </Link>
-            <Link asChild href="/(tabs)">
-              <TouchableOpacity
-                style={{
-                  borderWidth: 1,
-                  borderRadius: 50,
-                  padding: 10,
-                  borderColor: COLORS.red,
-                }}
-              >
-                <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
-              </TouchableOpacity>
-            </Link>
+          <View style={styles.signUpWith}>
+            <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+              - Or sign up with -
+            </Text>
+            <View style={{ flexDirection: "row", gap: 20 }}>
+              <Link asChild href="/(tabs)">
+                <TouchableOpacity
+                  style={{
+                    borderWidth: 1,
+                    borderRadius: 50,
+                    padding: 10,
+                    borderColor: COLORS.red,
+                  }}
+                >
+                  <Ionicons name="logo-google" size={30} color={COLORS.red} />
+                </TouchableOpacity>
+              </Link>
+              <Link asChild href="/(tabs)">
+                <TouchableOpacity
+                  style={{
+                    borderWidth: 1,
+                    borderRadius: 50,
+                    padding: 10,
+                    borderColor: COLORS.red,
+                  }}
+                >
+                  <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
+                </TouchableOpacity>
+              </Link>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -225,6 +222,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: SIZES.xSmall,
     padding: SIZES.xSmall,
+    width: "100%",
     borderTopWidth: 1,
     borderColor: COLORS.gray,
     marginTop: SIZES.xLarge,
@@ -233,6 +231,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    alignContent: "center",
     padding: SIZES.medium,
     color: COLORS.white,
     backgroundColor: COLORS.primary,

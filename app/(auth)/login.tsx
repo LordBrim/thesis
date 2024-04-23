@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 
 import { Link, router } from "expo-router";
@@ -19,6 +20,11 @@ import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
 import { SignedInContext } from "../../context/SignedInContext";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export default function Login() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
@@ -26,13 +32,27 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const auth = FIREBASE_AUTH;
 
   const [toggleRemember, setToggleRemember] = useState(false);
   const handleToggleRemember = () => {
     setToggleRemember(!toggleRemember);
   };
 
-  // const { signIn } = useContext(AuthContext);
+  const login = async () => {
+    setLoading(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      console.log(response);
+      router.replace("/(app)/(tabs)");
+    } catch (error) {
+      console.log(error);
+      alert("Login Failed:" + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
 
@@ -70,7 +90,9 @@ export default function Login() {
               style={styles.formInput}
               placeholder="Enter your email address"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(email) => setEmail(email)}
+              autoCapitalize="none"
+              autoCorrect={false}
             />
           </View>
           <View style={styles.field}>
@@ -80,7 +102,7 @@ export default function Login() {
                 style={{ width: "90%" }}
                 placeholder="Enter your password"
                 value={password}
-                onChangeText={setPassword}
+                onChangeText={(password) => setPassword(password)}
                 secureTextEntry={passwordVisibility}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -95,6 +117,7 @@ export default function Login() {
               </Pressable>
             </View>
           </View>
+
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -115,12 +138,9 @@ export default function Login() {
           </View>
         </View>
 
-        <Link asChild replace href="/(tabs)">
-          <TouchableHighlight style={styles.formCta}>
-            {/* onPress={() => signIn({ email, password })} */}
-            <Text style={styles.formCtaText}>Log In</Text>
-          </TouchableHighlight>
-        </Link>
+        <TouchableHighlight style={styles.formCta} onPress={() => login()}>
+          <Text style={styles.formCtaText}>Log In</Text>
+        </TouchableHighlight>
       </View>
 
       <View style={styles.containerBottom}>

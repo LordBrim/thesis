@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   Pressable,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 
 import { Link, router } from "expo-router";
@@ -49,7 +50,7 @@ export default function LoginScreen() {
       router.replace("/(app)/(tabs)");
     } catch (error) {
       console.log(error);
-      alert("Login Failed:" + error.message);
+      Alert.alert("Login Failed:" + error.message);
     } finally {
       setLoading(false);
     }

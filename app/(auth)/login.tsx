@@ -27,6 +27,7 @@ import {
   User,
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebase-config";
+import LinkBtn from "../../components/common/LinkBtn";
 
 export default function LoginScreen() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
@@ -130,11 +131,7 @@ export default function LoginScreen() {
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
-            <Link asChild href="/forgot-password">
-              <TouchableOpacity>
-                <Text style={styles.link}>Forgot Password?</Text>
-              </TouchableOpacity>
-            </Link>
+            <LinkBtn label="Forgot Password?" href="/forgot-password" />
           </View>
         </View>
 
@@ -145,11 +142,7 @@ export default function LoginScreen() {
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
-        <Link asChild href="/register">
-          <TouchableOpacity>
-            <Text style={styles.link}>Register</Text>
-          </TouchableOpacity>
-        </Link>
+        <LinkBtn label="Register" href="/register" />
       </View>
     </View>
   );
@@ -226,9 +219,5 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     textTransform: "capitalize",
     color: COLORS.white,
-  },
-  link: {
-    fontWeight: "bold",
-    textDecorationLine: "underline",
   },
 });

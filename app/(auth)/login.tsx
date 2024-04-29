@@ -28,6 +28,8 @@ import {
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebase-config";
 import LinkBtn from "../../components/common/LinkBtn";
+import CallToActionBtn from "../../components/common/CallToActionBtn";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 
 export default function LoginScreen() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
@@ -135,9 +137,7 @@ export default function LoginScreen() {
           </View>
         </View>
 
-        <TouchableHighlight style={styles.formCta} onPress={() => login()}>
-          <Text style={styles.formCtaText}>Log In</Text>
-        </TouchableHighlight>
+        <CallToActionBtn label="Login" onPress={() => login()} />
       </View>
 
       <View style={styles.containerBottom}>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingBottom: SIZES.xxxLarge,
-    paddingHorizontal: SIZES.large,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     justifyContent: "space-between",
     alignContent: "center",
@@ -205,19 +205,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  formCta: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: SIZES.medium,
-    color: COLORS.white,
-    backgroundColor: COLORS.primary,
-    borderRadius: SIZES.xSmall,
-  },
-  formCtaText: {
-    fontSize: SIZES.medium,
-    textTransform: "capitalize",
-    color: COLORS.white,
   },
 });

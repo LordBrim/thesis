@@ -1,0 +1,1 @@
+export const HORIZONTAL_SCREEN_MARGIN = 8;

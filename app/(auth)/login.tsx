@@ -46,9 +46,7 @@ export default function Login() {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
-      if (user != null) {
-        router.replace("/(app)/(tabs)");
-      }
+      router.replace("/(app)/(tabs)");
     } catch (error) {
       console.log(error);
       alert("Login Failed:" + error.message);

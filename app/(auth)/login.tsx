@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -19,11 +19,12 @@ import { CheckBox } from "react-native-btr";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
-import { SignedInContext } from "../../context/SignedInContext";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { FIREBASE_AUTH } from "../../firebase.config";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  User,
 } from "firebase/auth";
 
 export default function Login() {
@@ -45,7 +46,9 @@ export default function Login() {
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
-      router.replace("/(app)/(tabs)");
+      if (user != null) {
+        router.replace("/(app)/(tabs)");
+      }
     } catch (error) {
       console.log(error);
       alert("Login Failed:" + error.message);
@@ -53,8 +56,6 @@ export default function Login() {
       setLoading(false);
     }
   };
-
-  // const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
 
   return (
     <View style={styles.container}>

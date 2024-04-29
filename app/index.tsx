@@ -43,9 +43,9 @@ export default function Authentication() {
 
   console.log(user);
 
-  const auth = initializeAuth(FIREBASE_APP, {
-    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
-  });
+  // const auth = initializeAuth(FIREBASE_APP, {
+  //   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+  // });
 
   return (
     <UserRoleContext.Provider value={role}>

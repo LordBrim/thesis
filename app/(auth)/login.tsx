@@ -19,13 +19,13 @@ import { CheckBox } from "react-native-btr";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
-import { FIREBASE_AUTH } from "../../firebase.config";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   User,
 } from "firebase/auth";
+import { FIREBASE_AUTH } from "../../firebase-config";
 
 export default function Login() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =

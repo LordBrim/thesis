@@ -1,4 +1,4 @@
-import { UserRoleContext, UserRoleType } from "context/UserRoleContext";
+import { UserRoleContext, UserRoleType } from "../context/UserRoleContext";
 import {
   ForgotPassword,
   Login,
@@ -19,10 +19,10 @@ import {
   DonationHistory,
 } from "./screens";
 
+import { FIREBASE_AUTH } from "../firebase-config";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
 import { User, onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH } from "firebase.config";
 const Stack = createNativeStackNavigator();
 
 export default function Authentication() {
@@ -34,6 +34,8 @@ export default function Authentication() {
       setUser(user);
     });
   }, []);
+
+  console.log(user);
 
   return (
     <UserRoleContext.Provider value={role}>

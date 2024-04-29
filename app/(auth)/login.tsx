@@ -27,7 +27,7 @@ import {
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebase-config";
 
-export default function Login() {
+export default function LoginScreen() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 

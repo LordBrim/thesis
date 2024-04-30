@@ -1,27 +1,43 @@
-import { FIREBASE_AUTH } from "../../firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+// <<<<<<< QRCode
+import React, { useState } from "react";
+import { Link } from "expo-router";
+
 import {
   View,
   Text,
-  TouchableHighlight,
   TextInput,
+  ScrollView,
+  Image,
+  TouchableOpacity,
   Pressable,
+  StyleSheet,
+  TouchableHighlight,
 } from "react-native";
-import { StyleSheet } from "react-native";
-import { SIZES, COLORS } from "../../constants";
+import { CheckBox } from "react-native-btr";
 import { Ionicons } from "react-native-vector-icons";
+import { SIZES, FONT, COLORS } from "../../constants";
+import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 
-export default function Register() {
+import { FIREBASE_AUTH } from "../../firebase-config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import CallToActionBtn from "../../components/common/CallToActionBtn";
+
+export default function RegisterScreen() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const auth = FIREBASE_AUTH;
+  const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [form, setForm] = useState({});
+  const [toggleTerms, setToggleTerms] = useState(false);
+  const [toggleAlerts, setToggleAlerts] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const auth = FIREBASE_AUTH;
   const register = async () => {
     setLoading(true);
     try {
@@ -39,75 +55,216 @@ export default function Register() {
     }
   };
 
+  const handleToggleTerms = () => {
+    setToggleTerms(!toggleTerms);
+  };
+  const handleToggleAlerts = () => {
+    setToggleAlerts(!toggleAlerts);
+  };
+  function validateEmailAndPassword(email, password, confirmPassword) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return console.log("Invalid email.");
+    }
+
+    if (password !== confirmPassword) {
+      return console.log("Passwords do not match.");
+    }
+
+    return console.log("Valid email and password.");
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Registration Screen</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 10,
+          marginTop: 30,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: SIZES.xxxLarge,
+            fontWeight: "900",
+            textTransform: "uppercase",
+            color: COLORS.primary,
+          }}
+        >
+          Lifeline
+        </Text>
+        <Image
+          style={{ width: 50, height: 50, borderRadius: 100 }}
+          source={require("../../assets/splash/icon.png")}
+        />
+      </View>
 
-      <View style={{ gap: 10 }}>
-        <View style={styles.field}>
-          <Text style={styles.formName}>Email Address</Text>
+      <Text
+        style={{
+          fontSize: SIZES.xLarge,
+          fontWeight: "bold",
+          fontFamily: FONT.BakbakOne,
+          marginTop: 20,
+        }}
+      >
+        Register an <Text style={{ color: COLORS.primary }}>Account</Text>
+      </Text>
+
+      <View style={{ gap: 24 }}>
+        <TextInputWrapper label="Email">
           <TextInput
-            style={styles.formInput}
-            placeholder="Enter your email address"
+            style={styles.input}
             value={email}
+            placeholder="Enter your email address..."
             onChangeText={(email) => setEmail(email)}
             autoCapitalize="none"
-            autoCorrect={false}
+            autoCorrect={true}
+            enablesReturnKeyAutomatically
           />
-        </View>
-        <View style={styles.field}>
-          <Text style={styles.formName}>Password</Text>
-          <View style={styles.formInput}>
-            <TextInput
-              style={{ width: "90%" }}
-              placeholder="Enter your password"
-              value={password}
-              onChangeText={(password) => setPassword(password)}
-              secureTextEntry={passwordVisibility}
-              autoCapitalize="none"
-              autoCorrect={false}
-              enablesReturnKeyAutomatically
+        </TextInputWrapper>
+        <TextInputWrapper label="Password">
+          <TextInput
+            style={styles.input}
+            value={password}
+            placeholder="Enter your password..."
+            onChangeText={(password) => setPassword(password)}
+            autoCapitalize="none"
+            autoCorrect={true}
+            enablesReturnKeyAutomatically
+            secureTextEntry={passwordVisibility}
+          />
+          <Pressable onPress={handlePasswordVisibility}>
+            <Ionicons
+              name={rightIcon}
+              size={SIZES.xLarge}
+              color={COLORS.gray}
             />
-            <Pressable onPress={handlePasswordVisibility}>
-              <Ionicons
-                name={rightIcon}
-                size={SIZES.xLarge}
-                color={COLORS.gray}
-              />
-            </Pressable>
-          </View>
+          </Pressable>
+        </TextInputWrapper>
+        <TextInputWrapper label="Confirm Password">
+          <TextInput
+            style={styles.input}
+            value={password}
+            placeholder="Confirm your password..."
+            onChangeText={(password) => setPassword(password)}
+            autoCapitalize="none"
+            autoCorrect={true}
+            enablesReturnKeyAutomatically
+            secureTextEntry={passwordVisibility}
+          />
+          <Pressable onPress={handlePasswordVisibility}>
+            <Ionicons
+              name={rightIcon}
+              size={SIZES.xLarge}
+              color={COLORS.gray}
+            />
+          </Pressable>
+        </TextInputWrapper>
+      </View>
+
+      <View>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            alignContent: "center",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: 30,
+            marginBottom: 20,
+          }}
+        >
+          <CheckBox
+            checked={toggleTerms}
+            color="#FF3642"
+            borderRadius={3}
+            onPress={() => handleToggleTerms()}
+          />
+          <Text style={{ fontSize: 17 }}>
+            Accept{" "}
+            <Text
+              style={{ color: COLORS.red, textDecorationLine: "underline" }}
+            >
+              Terms and Conditions?
+            </Text>
+          </Text>
         </View>
       </View>
 
-      <TouchableHighlight style={styles.formCta} onPress={() => register()}>
-        <Text style={styles.formCtaText}>Register</Text>
-      </TouchableHighlight>
+      <CallToActionBtn label="Register" onPress={() => register()} />
+
+      <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+        - Or sign up with -
+      </Text>
+
+      {/* Cut Off */}
+
+      <View
+        style={{
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <View style={styles.signUpWith}>
+          <View style={{ flexDirection: "row", gap: 20 }}>
+            <Link asChild href="/(tabs)">
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 50,
+                  padding: 10,
+                  borderColor: COLORS.red,
+                }}
+              >
+                <Ionicons name="logo-google" size={30} color={COLORS.red} />
+              </TouchableOpacity>
+            </Link>
+            <Link asChild href="/(tabs)">
+              <TouchableOpacity
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 50,
+                  padding: 10,
+                  borderColor: COLORS.red,
+                }}
+              >
+                <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
+              </TouchableOpacity>
+            </Link>
+          </View>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    // flex: 1,
+    marginHorizontal: 20,
+    backgroundColor: "white",
+  },
+  inputContainer: {
+    margin: 5,
+  },
+  input: {
     flex: 1,
+    height: 40,
+  },
+  signUpWith: {
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
-  },
-  field: {
-    gap: SIZES.xxxSmall,
-  },
-  formName: {
-    fontWeight: "bold",
-  },
-  formInput: {
-    width: "100%",
+    gap: SIZES.xSmall,
     padding: SIZES.xSmall,
-    borderWidth: 1,
-    borderRadius: SIZES.xSmall,
+    width: "100%",
+    borderTopWidth: 1,
     borderColor: COLORS.gray,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    marginTop: SIZES.xLarge,
   },
   formCta: {
     width: "100%",

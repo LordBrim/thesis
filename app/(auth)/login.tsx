@@ -10,7 +10,12 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
+import {
+  Raleway_400Regular,
+  Raleway_500Medium,
+} from "@expo-google-fonts/raleway";
 
+import { useFonts } from "expo-font";
 import { router } from "expo-router";
 
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
@@ -34,6 +39,14 @@ import TextInputField from "../../components/common/TextInputWrapper";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 
 export default function LoginScreen() {
+  const [fontsLoaded] = useFonts({
+    Raleway_400Regular,
+    Raleway_500Medium,
+    Grotesk: require("../../assets/fonts/Grotesk.ttf"),
+    Grotesk_regular: require("../../assets/fonts/Grotesk_Reg.ttf"),
+    BakbakOne: require("../../assets/fonts/BakbakOne.ttf"),
+  });
+  
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
@@ -127,40 +140,6 @@ export default function LoginScreen() {
             </TextInputWrapper>
           </View>
 
-          {/* <View style={styles.field}>
-            <Text style={styles.formName}>Email Address</Text>
-            <TextInput
-              style={styles.formInput}
-              placeholder="Enter your email address"
-              value={email}
-              onChangeText={}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.formName}>Password</Text>
-            <View style={styles.formInput}>
-              <TextInput
-                style={{ width: "90%" }}
-                placeholder="Enter your password"
-                value={password}
-                onChangeText={(password) => setPassword(password)}
-                secureTextEntry={passwordVisibility}
-                autoCapitalize="none"
-                autoCorrect={false}
-                enablesReturnKeyAutomatically
-              />
-              <Pressable onPress={handlePasswordVisibility}>
-                <Ionicons
-                  name={rightIcon}
-                  size={SIZES.xLarge}
-                  color={COLORS.gray}
-                />
-              </Pressable>
-          
-          </View> */}
-
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -178,6 +157,38 @@ export default function LoginScreen() {
         </View>
 
         <CallToActionBtn label="Login" onPress={() => login()} />
+      </View>
+      <View style={styles.signUpWith}>
+        <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+          - Or sign in with -
+        </Text>
+
+        <View style={{ flexDirection: "row", gap: 20 }}>
+          <Link asChild href="/(tabs)">
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderRadius: 50,
+                padding: 10,
+                borderColor: COLORS.red,
+              }}
+            >
+              <Ionicons name="logo-google" size={30} color={COLORS.red} />
+            </TouchableOpacity>
+          </Link>
+          <Link asChild href="/(tabs)">
+            <TouchableOpacity
+              style={{
+                borderWidth: 1,
+                borderRadius: 50,
+                padding: 10,
+                borderColor: COLORS.red,
+              }}
+            >
+              <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
 
       <View style={styles.containerBottom}>

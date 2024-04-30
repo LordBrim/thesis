@@ -1,10 +1,10 @@
 import { View, Text } from "react-native";
 import { StyleSheet } from "react-native";
 
-export default function EmptyScreen() {
+export default function NoInternetScreen() {
   return (
     <View style={styles.container}>
-      <Text>Empty Screen</Text>
+      <Text>Check Your Internet Connection</Text>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -8,9 +8,10 @@ import {
   TouchableHighlight,
   Pressable,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { Ionicons } from "react-native-vector-icons";
@@ -19,27 +20,37 @@ import { CheckBox } from "react-native-btr";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 
-import { SignedInContext } from "../../context/SignedInContext";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  User,
 } from "firebase/auth";
+import { FIREBASE_AUTH } from "../../firebase-config";
+import LinkBtn from "../../components/common/LinkBtn";
+import CallToActionBtn from "../../components/common/CallToActionBtn";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../constants";
+import TextInputField from "../../components/common/TextInputWrapper";
+import TextInputWrapper from "../../components/common/TextInputWrapper";
 
-export default function Login() {
+export default function LoginScreen() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handlePassword = (password: string) => {
+    setPassword(password);
+  };
+
   const [loading, setLoading] = useState(false);
-  const auth = FIREBASE_AUTH;
 
   const [toggleRemember, setToggleRemember] = useState(false);
   const handleToggleRemember = () => {
     setToggleRemember(!toggleRemember);
   };
 
+  const auth = FIREBASE_AUTH;
   const login = async () => {
     setLoading(true);
     try {
@@ -48,13 +59,11 @@ export default function Login() {
       router.replace("/(app)/(tabs)");
     } catch (error) {
       console.log(error);
-      alert("Login Failed:" + error.message);
+      Alert.alert("Login Failed:" + error.message);
     } finally {
       setLoading(false);
     }
   };
-
-  // const [isSignedIn, setIsSignedIn] = useContext(SignedInContext);
 
   return (
     <View style={styles.container}>
@@ -84,13 +93,47 @@ export default function Login() {
 
         <Text style={styles.header}>Log in</Text>
         <View style={{ gap: 10 }}>
-          <View style={styles.field}>
+          <View style={{ gap: 24 }}>
+            <TextInputWrapper label="Email">
+              <TextInput
+                style={styles.input}
+                value={email}
+                placeholder="Enter your email address..."
+                onChangeText={(email) => setEmail(email)}
+                autoCapitalize="none"
+                autoCorrect={true}
+                enablesReturnKeyAutomatically
+              />
+            </TextInputWrapper>
+
+            <TextInputWrapper label="Password">
+              <TextInput
+                style={styles.input}
+                value={password}
+                placeholder="Enter your password..."
+                onChangeText={(password) => setPassword(password)}
+                autoCapitalize="none"
+                autoCorrect={true}
+                enablesReturnKeyAutomatically
+                secureTextEntry={passwordVisibility}
+              />
+              <Pressable onPress={handlePasswordVisibility}>
+                <Ionicons
+                  name={rightIcon}
+                  size={SIZES.xLarge}
+                  color={COLORS.gray}
+                />
+              </Pressable>
+            </TextInputWrapper>
+          </View>
+
+          {/* <View style={styles.field}>
             <Text style={styles.formName}>Email Address</Text>
             <TextInput
               style={styles.formInput}
               placeholder="Enter your email address"
               value={email}
-              onChangeText={(email) => setEmail(email)}
+              onChangeText={}
               autoCapitalize="none"
               autoCorrect={false}
             />
@@ -115,8 +158,8 @@ export default function Login() {
                   color={COLORS.gray}
                 />
               </Pressable>
-            </View>
-          </View>
+          
+          </View> */}
 
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -130,26 +173,16 @@ export default function Login() {
               />
               <Text style={styles.formName}>Remember Me</Text>
             </View>
-            <Link asChild href="/forgot-password">
-              <TouchableOpacity>
-                <Text style={styles.link}>Forgot Password?</Text>
-              </TouchableOpacity>
-            </Link>
+            <LinkBtn label="Forgot Password?" href="/forgot-password" />
           </View>
         </View>
 
-        <TouchableHighlight style={styles.formCta} onPress={() => login()}>
-          <Text style={styles.formCtaText}>Log In</Text>
-        </TouchableHighlight>
+        <CallToActionBtn label="Login" onPress={() => login()} />
       </View>
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>
-        <Link asChild href="/register">
-          <TouchableOpacity>
-            <Text style={styles.link}>Register</Text>
-          </TouchableOpacity>
-        </Link>
+        <LinkBtn label="Register" href="/register" />
       </View>
     </View>
   );
@@ -161,7 +194,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingBottom: SIZES.xxxLarge,
-    paddingHorizontal: SIZES.large,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     justifyContent: "space-between",
     alignContent: "center",
@@ -197,38 +230,8 @@ const styles = StyleSheet.create({
     fontSize: SIZES.xxLarge,
     textTransform: "capitalize",
   },
-  field: {
-    gap: SIZES.xxxSmall,
-  },
   formName: {
     fontWeight: "bold",
   },
-  formInput: {
-    width: "100%",
-    padding: SIZES.xSmall,
-    borderWidth: 1,
-    borderRadius: SIZES.xSmall,
-    borderColor: COLORS.gray,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  formCta: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: SIZES.medium,
-    color: COLORS.white,
-    backgroundColor: COLORS.primary,
-    borderRadius: SIZES.xSmall,
-  },
-  formCtaText: {
-    fontSize: SIZES.medium,
-    textTransform: "capitalize",
-    color: COLORS.white,
-  },
-  link: {
-    fontWeight: "bold",
-    textDecorationLine: "underline",
-  },
+  input: {},
 });

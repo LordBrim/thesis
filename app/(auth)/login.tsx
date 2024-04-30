@@ -11,7 +11,7 @@ import {
   Alert,
 } from "react-native";
 
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { Ionicons } from "react-native-vector-icons";
@@ -30,6 +30,8 @@ import { FIREBASE_AUTH } from "../../firebase-config";
 import LinkBtn from "../../components/common/LinkBtn";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../constants";
+import TextInputField from "../../components/common/TextInputWrapper";
+import TextInputWrapper from "../../components/common/TextInputWrapper";
 
 export default function LoginScreen() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
@@ -37,14 +39,18 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handlePassword = (password: string) => {
+    setPassword(password);
+  };
+
   const [loading, setLoading] = useState(false);
-  const auth = FIREBASE_AUTH;
 
   const [toggleRemember, setToggleRemember] = useState(false);
   const handleToggleRemember = () => {
     setToggleRemember(!toggleRemember);
   };
 
+  const auth = FIREBASE_AUTH;
   const login = async () => {
     setLoading(true);
     try {
@@ -87,13 +93,47 @@ export default function LoginScreen() {
 
         <Text style={styles.header}>Log in</Text>
         <View style={{ gap: 10 }}>
-          <View style={styles.field}>
+          <View style={{ gap: 24 }}>
+            <TextInputWrapper label="Email">
+              <TextInput
+                style={styles.input}
+                value={email}
+                placeholder="Enter your email address..."
+                onChangeText={(email) => setEmail(email)}
+                autoCapitalize="none"
+                autoCorrect={true}
+                enablesReturnKeyAutomatically
+              />
+            </TextInputWrapper>
+
+            <TextInputWrapper label="Password">
+              <TextInput
+                style={styles.input}
+                value={password}
+                placeholder="Enter your password..."
+                onChangeText={(password) => setPassword(password)}
+                autoCapitalize="none"
+                autoCorrect={true}
+                enablesReturnKeyAutomatically
+                secureTextEntry={passwordVisibility}
+              />
+              <Pressable onPress={handlePasswordVisibility}>
+                <Ionicons
+                  name={rightIcon}
+                  size={SIZES.xLarge}
+                  color={COLORS.gray}
+                />
+              </Pressable>
+            </TextInputWrapper>
+          </View>
+
+          {/* <View style={styles.field}>
             <Text style={styles.formName}>Email Address</Text>
             <TextInput
               style={styles.formInput}
               placeholder="Enter your email address"
               value={email}
-              onChangeText={(email) => setEmail(email)}
+              onChangeText={}
               autoCapitalize="none"
               autoCorrect={false}
             />
@@ -118,8 +158,8 @@ export default function LoginScreen() {
                   color={COLORS.gray}
                 />
               </Pressable>
-            </View>
-          </View>
+          
+          </View> */}
 
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -190,20 +230,8 @@ const styles = StyleSheet.create({
     fontSize: SIZES.xxLarge,
     textTransform: "capitalize",
   },
-  field: {
-    gap: SIZES.xxxSmall,
-  },
   formName: {
     fontWeight: "bold",
   },
-  formInput: {
-    width: "100%",
-    padding: SIZES.xSmall,
-    borderWidth: 1,
-    borderRadius: SIZES.xSmall,
-    borderColor: COLORS.gray,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
+  input: {},
 });

@@ -9,7 +9,7 @@ export default function StackLayout() {
       screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
     >
       {/* Authentication Screens */}
-      <Stack.Screen name="(auth)/login" />
+      <Stack.Screen name="(auth)/no-internet" />
       <Stack.Screen name="(auth)/register" />
       <Stack.Screen name="(auth)/forgot-password" />
       {/* Home Screens */}
@@ -38,6 +38,9 @@ export default function StackLayout() {
       <Stack.Screen name="(app)/(account)/settings" />
       {/* QR Code Screens */}
       <Stack.Screen name="(app)/(qr)/qr-scanner" />
+      {/* Other Screens */}
+      <Stack.Screen name="(aux)/empty" />
+      <Stack.Screen name="(aux)/no-internet" />
     </Stack>
   );
 }

@@ -46,7 +46,7 @@ export default function LoginScreen() {
     Grotesk_regular: require("../../assets/fonts/Grotesk_Reg.ttf"),
     BakbakOne: require("../../assets/fonts/BakbakOne.ttf"),
   });
-  
+
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
 
@@ -158,7 +158,7 @@ export default function LoginScreen() {
 
         <CallToActionBtn label="Login" onPress={() => login()} />
       </View>
-      <View style={styles.signUpWith}>
+      {/* <View style={styles.signUpWith}>
         <Text style={{ fontSize: 15, fontWeight: "bold" }}>
           - Or sign in with -
         </Text>
@@ -189,7 +189,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </Link>
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>

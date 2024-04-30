@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@expo-google-fonts/raleway": "^0.2.3",
-    "@react-native-community/datetimepicker": "7.2.0",
+    "@react-native-async-storage/async-storage": "1.18.2",
+    "@react-native-community/datetimepicker": "^7.2.0",
+    "@react-native-community/netinfo": "9.3.10",
     "@react-native-picker/picker": "^2.7.2",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
@@ -22,6 +24,7 @@
     "expo": "~49.0.15",
     "expo-app-loading": "^2.1.1",
     "expo-barcode-scanner": "^12.9.3",
+    "expo-camera": "~13.4.4",
     "expo-constants": "~14.4.2",
     "expo-font": "~11.4.0",
     "expo-linking": "~5.0.2",
@@ -29,8 +32,8 @@
     "expo-router": "^2.0.0",
     "expo-splash-screen": "~0.20.4",
     "expo-status-bar": "~1.6.0",
-    "geolib": "^3.3.4",
     "firebase": "^10.11.0",
+    "geolib": "^3.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.10",
@@ -50,10 +53,7 @@
     "react-native-web": "~0.19.6",
     "realm": "^12.6.2",
     "realm-js": "^1.1.97",
-    "typescript": "^5.1.3",
-    "expo-camera": "~13.4.4"
-    "@react-native-async-storage/async-storage": "1.18.2",
-    "@react-native-community/netinfo": "9.3.10"
+    "typescript": "^5.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

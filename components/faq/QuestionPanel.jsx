@@ -6,34 +6,23 @@ import { icons } from "../../constants";
 const QuestionPanel = ({ question, answer, isActive, onShow, onHide }) => {
   return (
     <View style={styles.container}>
-      <Text>Hello World</Text>
       <View style={styles.questionBody}>
-        <Text style={styles.questionTitle}>{question}</Text>
-        {isActive ? (
-          <TouchableWithoutFeedback onPress={onHide}>
+        <TouchableWithoutFeedback onPress={isActive ? onHide : onShow}>
+          <View style={styles.questionContainer}>
+            <Text style={styles.questionTitle}>{question}</Text>
             <Image
-              source={icons.arrowDownBold}
+              source={isActive ? icons.arrowDownBold : icons.arrowUpBold}
               resizeMode="cover"
               style={styles.iconToggle}
             />
-          </TouchableWithoutFeedback>
-        ) : (
-          <TouchableWithoutFeedback onPress={onShow}>
-            <Image
-              source={icons.arrowUpBold}
-              resizeMode="cover"
-              style={styles.iconToggle}
-            />
-          </TouchableWithoutFeedback>
-        )}
+          </View>
+        </TouchableWithoutFeedback>
       </View>
       {isActive ? (
         <View style={styles.answerBody}>
           <Text style={styles.answerText}>{answer}</Text>
         </View>
-      ) : (
-        <Text>Hidden</Text>
-      )}
+      ) : null}
     </View>
   );
 };

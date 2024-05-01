@@ -125,49 +125,33 @@ export default function RegisterScreen() {
         </TextInputWrapper>
       </View>
 
-      <View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 10,
-            alignContent: "center",
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 30,
-            marginBottom: 20,
-          }}
-        >
-          <CheckBox
-            checked={toggleTerms}
-            color="#FF3642"
-            borderRadius={3}
-            onPress={() => handleToggleTerms()}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 10,
+        }}
+      >
+        <CheckBox
+          checked={toggleTerms}
+          color="#FF3642"
+          borderRadius={3}
+          onPress={() => handleToggleTerms()}
+        />
+        <View style={{ flexDirection: "row" }}>
+          <Text>Accept </Text>
+          <LinkBtn
+            label="Terms and Conditions"
+            href="(aux)/terms-and-conditions"
           />
-          <Text style={{ fontSize: 17 }}>
-            Accept{" "}
-            <LinkBtn
-              label="Terms and Conditions"
-              href="(aux)/terms-and-conditions"
-            />
-            ?
-          </Text>
+          <Text>?</Text>
         </View>
       </View>
 
       <CallToActionBtn label="Register" onPress={() => register()} />
-      {/* 
-      <View style={{}}>
-        <Text
-          style={{
-            fontSize: 15,
-            fontWeight: "bold",
-            height: 1,
-            backgroundColor: "gray",
-          }}
-        >
-          Or sign up with
-        </Text>
-      </View> */}
+
+      <View />
     </View>
   );
 }
@@ -175,12 +159,23 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    backgroundColor: "white",
+    width: "100%",
+    height: "100%",
+    paddingBottom: SIZES.xxxLarge,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    backgroundColor: COLORS.white,
+    justifyContent: "space-between",
+    alignContent: "center",
   },
   inputContainer: {
     margin: 5,
+  },
+  cBottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    padding: SIZES.xSmall,
   },
   input: {
     flex: 1,

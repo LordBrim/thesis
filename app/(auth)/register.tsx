@@ -74,98 +74,96 @@ export default function RegisterScreen() {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <LifelineLogo />
+        <LifelineLogo />
 
-          <View style={styles.cTop}>
-            <Title title="Register" />
+        <View style={styles.cTop}>
+          <Title title="Register" />
 
-            <View style={{ gap: 12 }}>
-              <View style={{ gap: 24 }}>
-                <TextInputWrapper label="Email">
-                  <TextInput
-                    style={styles.input}
-                    value={email}
-                    placeholder="Enter your email address..."
-                    onChangeText={(email) => setEmail(email)}
-                    autoCapitalize="none"
-                    autoCorrect={true}
-                    enablesReturnKeyAutomatically
-                  />
-                </TextInputWrapper>
-                <TextInputWrapper label="Password">
-                  <TextInput
-                    style={styles.input}
-                    value={password}
-                    placeholder="Enter your password..."
-                    onChangeText={(password) => setPassword(password)}
-                    autoCapitalize="none"
-                    autoCorrect={true}
-                    enablesReturnKeyAutomatically
-                    secureTextEntry={pToggle.passwordVisibility}
-                  />
-                  <Pressable onPress={pToggle.handlePasswordVisibility}>
-                    <Ionicons
-                      name={pToggle.rightIcon}
-                      size={SIZES.xLarge}
-                      color={COLORS.gray}
-                    />
-                  </Pressable>
-                </TextInputWrapper>
-                <TextInputWrapper label="Confirm Password">
-                  <TextInput
-                    style={styles.input}
-                    value={confirmPassword}
-                    placeholder="Confirm your password..."
-                    onChangeText={(confirmPassword) =>
-                      setConfirmPassword(confirmPassword)
-                    }
-                    autoCapitalize="none"
-                    autoCorrect={true}
-                    enablesReturnKeyAutomatically
-                    secureTextEntry={cpToggle.passwordVisibility}
-                  />
-                  <Pressable onPress={cpToggle.handlePasswordVisibility}>
-                    <Ionicons
-                      name={cpToggle.rightIcon}
-                      size={SIZES.xLarge}
-                      color={COLORS.gray}
-                    />
-                  </Pressable>
-                </TextInputWrapper>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 10,
-                }}
-              >
-                <CheckBox
-                  checked={toggleTerms}
-                  color="#FF3642"
-                  borderRadius={3}
-                  onPress={() => handleToggleTerms()}
+          <View style={{ gap: 12 }}>
+            <View style={{ gap: 24 }}>
+              <TextInputWrapper label="Email">
+                <TextInput
+                  style={styles.input}
+                  value={email}
+                  placeholder="Enter your email address..."
+                  onChangeText={(email) => setEmail(email)}
+                  autoCapitalize="none"
+                  autoCorrect={true}
+                  enablesReturnKeyAutomatically
                 />
-                <View style={{ flexDirection: "row" }}>
-                  <Text>Accept </Text>
-                  <LinkBtn
-                    label="Terms and Conditions"
-                    href="(aux)/terms-and-conditions"
+              </TextInputWrapper>
+              <TextInputWrapper label="Password">
+                <TextInput
+                  style={styles.input}
+                  value={password}
+                  placeholder="Enter your password..."
+                  onChangeText={(password) => setPassword(password)}
+                  autoCapitalize="none"
+                  autoCorrect={true}
+                  enablesReturnKeyAutomatically
+                  secureTextEntry={pToggle.passwordVisibility}
+                />
+                <Pressable onPress={pToggle.handlePasswordVisibility}>
+                  <Ionicons
+                    name={pToggle.rightIcon}
+                    size={SIZES.xLarge}
+                    color={COLORS.gray}
                   />
-                  <Text>?</Text>
-                </View>
+                </Pressable>
+              </TextInputWrapper>
+              <TextInputWrapper label="Confirm Password">
+                <TextInput
+                  style={styles.input}
+                  value={confirmPassword}
+                  placeholder="Confirm your password..."
+                  onChangeText={(confirmPassword) =>
+                    setConfirmPassword(confirmPassword)
+                  }
+                  autoCapitalize="none"
+                  autoCorrect={true}
+                  enablesReturnKeyAutomatically
+                  secureTextEntry={cpToggle.passwordVisibility}
+                />
+                <Pressable onPress={cpToggle.handlePasswordVisibility}>
+                  <Ionicons
+                    name={cpToggle.rightIcon}
+                    size={SIZES.xLarge}
+                    color={COLORS.gray}
+                  />
+                </Pressable>
+              </TextInputWrapper>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <CheckBox
+                checked={toggleTerms}
+                color="#FF3642"
+                borderRadius={3}
+                onPress={() => handleToggleTerms()}
+              />
+              <View style={{ flexDirection: "row" }}>
+                <Text>Accept </Text>
+                <LinkBtn
+                  label="Terms and Conditions"
+                  href="(aux)/terms-and-conditions"
+                />
+                <Text>?</Text>
               </View>
             </View>
-            <CallToActionBtn label="Register" onPress={() => register()} />
           </View>
-
-          <Text style={{ color: "transparent" }}>Invisible Placeholder</Text>
+          <CallToActionBtn label="Register" onPress={() => register()} />
         </View>
+
+        <Text style={{ color: "transparent" }}>Invisible Placeholder</Text>
       </ScrollView>
     </SafeAreaView>
   );
@@ -181,6 +179,7 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   cTop: {
+    marginTop: SIZES.xxxLarge,
     gap: SIZES.xxxLarge,
   },
   cBottom: {

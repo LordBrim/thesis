@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   title: {
-    fontSize: SIZES.xxLarge,
+    fontSize: SIZES.xLarge,
     fontWeight: "bold",
     textTransform: "capitalize",
   },

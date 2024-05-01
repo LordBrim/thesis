@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { SIZES, FONT, COLORS } from "../../../constants";
+import { SIZES } from "../../../constants";
 
 type ITitle = {
   title: string;

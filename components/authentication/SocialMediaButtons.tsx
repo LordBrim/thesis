@@ -1,10 +1,24 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-export default function SocialMediaButtons() {
+export default function SignUpOptions() {
   return (
     <View>
-      <Text>SocialMediaButtons</Text>
+      <Text>SignUpOptions</Text>
+
+      {/* 
+      <View style={{}}>
+        <Text
+          style={{
+            fontSize: 15,
+            fontWeight: "bold",
+            height: 1,
+            backgroundColor: "gray",
+          }}
+        >
+          Or sign up with
+        </Text>
+      </View> */}
 
       {/* <View
         style={{

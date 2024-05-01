@@ -36,6 +36,7 @@ import LinkBtn from "../../components/common/LinkBtn";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
+import Title from "components/common/texts/Title";
 
 export default function LoginScreen() {
   const [fontsLoaded] = useFonts({
@@ -103,7 +104,8 @@ export default function LoginScreen() {
           <Text style={styles.subtitle}>Bloodbank management system</Text>
         </View>
 
-        <Text style={styles.header}>Log in</Text>
+        <Title title="Log In" />
+
         <View style={{ gap: 10 }}>
           <View style={{ gap: 24 }}>
             <TextInputWrapper label="Email">
@@ -202,11 +204,6 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     fontWeight: "500",
     textTransform: "uppercase",
-  },
-  header: {
-    fontWeight: "bold",
-    fontSize: SIZES.xxLarge,
-    textTransform: "capitalize",
   },
   formName: {
     fontWeight: "bold",

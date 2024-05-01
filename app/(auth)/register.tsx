@@ -12,6 +12,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import LinkBtn from "components/common/LinkBtn";
 import LifelineLogo from "components/common/LifelineLogo";
+import Title from "components/common/texts/Title";
 
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
@@ -68,16 +69,7 @@ export default function RegisterScreen() {
     <View style={styles.container}>
       <LifelineLogo />
 
-      <Text
-        style={{
-          fontSize: SIZES.xLarge,
-          fontWeight: "bold",
-          fontFamily: FONT.BakbakOne,
-          marginTop: 20,
-        }}
-      >
-        Register an <Text style={{ color: COLORS.primary }}>Account</Text>
-      </Text>
+      <Title title="Register" />
 
       <View style={{ gap: 24 }}>
         <TextInputWrapper label="Email">

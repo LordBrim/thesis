@@ -31,9 +31,7 @@ import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { Alert } from "react-native";
 import NoInternetScreen from "./(aux)/no-internet";
-import { ExpoRoot } from "expo-router";
-
-const Stack = createNativeStackNavigator();
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export default function Authentication() {
   const [role, setRole] = useState<UserRoleType>("client");
@@ -74,8 +72,10 @@ export default function Authentication() {
   };
 
   return (
-    <UserRoleContext.Provider value={role}>
-      {isConnected ? <Login /> : <NoInternetScreen />}
-    </UserRoleContext.Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <UserRoleContext.Provider value={role}>
+        {isConnected ? <Login /> : <NoInternetScreen />}
+      </UserRoleContext.Provider>
+    </GestureHandlerRootView>
   );
 }

@@ -38,7 +38,7 @@ export default function StackLayout() {
       <Stack.Screen name="(app)/(account)/settings" />
       {/* QR Code Screens */}
       <Stack.Screen name="(app)/(qr)/qr-scanner" />
-      {/* Other Screens */}
+      {/* Auxilary Screens */}
       <Stack.Screen name="(aux)/empty" />
       <Stack.Screen name="(aux)/no-internet" />
     </Stack>

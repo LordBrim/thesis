@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Button } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import QRCode from "react-native-qrcode-svg";
 
-export default function App() {
+export default function QRScannerScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [data, setData] = useState(

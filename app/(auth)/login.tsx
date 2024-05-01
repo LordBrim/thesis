@@ -37,6 +37,7 @@ import CallToActionBtn from "../../components/common/CallToActionBtn";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import Title from "components/common/texts/Title";
+import LifelineLogo from "components/common/LifelineLogo";
 
 export default function LoginScreen() {
   const [fontsLoaded] = useFonts({
@@ -80,29 +81,8 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.containerTop}>
-        <View
-          style={{
-            gap: 8,
-            alignItems: "flex-end",
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              gap: 10,
-            }}
-          >
-            <Text style={styles.title}>Lifeline</Text>
-            <Image
-              style={styles.icon}
-              source={require("../../assets/splash/icon.png")}
-            />
-          </View>
-          <Text style={styles.subtitle}>Bloodbank management system</Text>
-        </View>
+      <View style={styles.cTop}>
+        <LifelineLogo />
 
         <Title title="Log In" />
 
@@ -110,7 +90,6 @@ export default function LoginScreen() {
           <View style={{ gap: 24 }}>
             <TextInputWrapper label="Email">
               <TextInput
-                style={styles.input}
                 value={email}
                 placeholder="Enter your email address..."
                 onChangeText={(email) => setEmail(email)}
@@ -122,7 +101,6 @@ export default function LoginScreen() {
 
             <TextInputWrapper label="Password">
               <TextInput
-                style={styles.input}
                 value={password}
                 placeholder="Enter your password..."
                 onChangeText={(password) => setPassword(password)}
@@ -151,7 +129,13 @@ export default function LoginScreen() {
                 borderRadius={3}
                 onPress={() => handleToggleRemember()}
               />
-              <Text style={styles.formName}>Remember Me</Text>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                }}
+              >
+                Remember Me
+              </Text>
             </View>
             <LinkBtn label="Forgot Password?" href="/forgot-password" />
           </View>
@@ -160,7 +144,7 @@ export default function LoginScreen() {
         <CallToActionBtn label="Login" onPress={() => login()} />
       </View>
 
-      <View style={styles.containerBottom}>
+      <View style={styles.cBottom}>
         <Text>Don't have an account? </Text>
         <LinkBtn label="Register" href="/register" />
       </View>
@@ -179,34 +163,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
   },
-  containerTop: {
+  cTop: {
     gap: SIZES.xxxLarge,
   },
-  containerBottom: {
+  cBottom: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     alignContent: "center",
     padding: SIZES.xSmall,
   },
-  icon: {
-    width: 50,
-    height: 50,
-    borderRadius: 100,
-  },
-  title: {
-    fontSize: SIZES.xxLarge,
-    fontWeight: "900",
-    textTransform: "uppercase",
-    color: COLORS.primary,
-  },
-  subtitle: {
-    fontSize: SIZES.medium,
-    fontWeight: "500",
-    textTransform: "uppercase",
-  },
-  formName: {
-    fontWeight: "bold",
-  },
-  input: {},
 });

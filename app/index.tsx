@@ -31,10 +31,13 @@ import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { Alert } from "react-native";
 import NoInternetScreen from "./(aux)/no-internet";
+import { ExpoRoot } from "expo-router";
 
 const Stack = createNativeStackNavigator();
 
 export default function Authentication() {
+  const ctx = require.context("./app");
+
   const [role, setRole] = useState<UserRoleType>("client");
   const [user, setUser] = useState<User | null>(null);
 

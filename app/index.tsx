@@ -36,8 +36,6 @@ import { ExpoRoot } from "expo-router";
 const Stack = createNativeStackNavigator();
 
 export default function Authentication() {
-  const ctx = require.context("./app");
-
   const [role, setRole] = useState<UserRoleType>("client");
   const [user, setUser] = useState<User | null>(null);
 

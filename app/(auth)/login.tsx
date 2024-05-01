@@ -35,7 +35,6 @@ import { FIREBASE_AUTH } from "../../firebase-config";
 import LinkBtn from "../../components/common/LinkBtn";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import TextInputField from "../../components/common/TextInputWrapper";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 
 export default function LoginScreen() {

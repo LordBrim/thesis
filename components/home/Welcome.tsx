@@ -1,5 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import { Link } from "expo-router";
 

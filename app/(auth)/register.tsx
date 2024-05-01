@@ -1,18 +1,6 @@
 // <<<<<<< QRCode
 import React, { useState } from "react";
-import { Link } from "expo-router";
-
-import {
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Pressable,
-  StyleSheet,
-  TouchableHighlight,
-} from "react-native";
+import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { CheckBox } from "react-native-btr";
 import { Ionicons } from "react-native-vector-icons";
 import { SIZES, FONT, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
@@ -22,6 +10,8 @@ import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility
 import { FIREBASE_AUTH } from "../../firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
+import LinkBtn from "components/common/LinkBtn";
+import LifelineLogo from "components/common/LifelineLogo";
 
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
@@ -76,30 +66,7 @@ export default function RegisterScreen() {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 10,
-          marginTop: 30,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: SIZES.xxxLarge,
-            fontWeight: "900",
-            textTransform: "uppercase",
-            color: COLORS.primary,
-          }}
-        >
-          Lifeline
-        </Text>
-        <Image
-          style={{ width: 50, height: 50, borderRadius: 100 }}
-          source={require("../../assets/splash/icon.png")}
-        />
-      </View>
+      <LifelineLogo />
 
       <Text
         style={{
@@ -186,66 +153,37 @@ export default function RegisterScreen() {
           />
           <Text style={{ fontSize: 17 }}>
             Accept{" "}
-            <Text
-              style={{ color: COLORS.red, textDecorationLine: "underline" }}
-            >
-              Terms and Conditions?
-            </Text>
+            <LinkBtn
+              label="Terms and Conditions"
+              href="(aux)/terms-and-conditions"
+            />
+            ?
           </Text>
         </View>
       </View>
 
       <CallToActionBtn label="Register" onPress={() => register()} />
-
-      <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-        - Or sign up with -
-      </Text>
-
-      {/* Cut Off */}
-
-      <View
-        style={{
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <View style={styles.signUpWith}>
-          <View style={{ flexDirection: "row", gap: 20 }}>
-            <Link asChild href="/(tabs)">
-              <TouchableOpacity
-                style={{
-                  borderWidth: 1,
-                  borderRadius: 50,
-                  padding: 10,
-                  borderColor: COLORS.red,
-                }}
-              >
-                <Ionicons name="logo-google" size={30} color={COLORS.red} />
-              </TouchableOpacity>
-            </Link>
-            <Link asChild href="/(tabs)">
-              <TouchableOpacity
-                style={{
-                  borderWidth: 1,
-                  borderRadius: 50,
-                  padding: 10,
-                  borderColor: COLORS.red,
-                }}
-              >
-                <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
-              </TouchableOpacity>
-            </Link>
-          </View>
-        </View>
-      </View>
+      {/* 
+      <View style={{}}>
+        <Text
+          style={{
+            fontSize: 15,
+            fontWeight: "bold",
+            height: 1,
+            backgroundColor: "gray",
+          }}
+        >
+          Or sign up with
+        </Text>
+      </View> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
+    justifyContent: "space-between",
     backgroundColor: "white",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },

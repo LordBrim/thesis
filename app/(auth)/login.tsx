@@ -157,38 +157,6 @@ export default function LoginScreen() {
 
         <CallToActionBtn label="Login" onPress={() => login()} />
       </View>
-      {/* <View style={styles.signUpWith}>
-        <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-          - Or sign in with -
-        </Text>
-
-        <View style={{ flexDirection: "row", gap: 20 }}>
-          <Link asChild href="/(tabs)">
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderRadius: 50,
-                padding: 10,
-                borderColor: COLORS.red,
-              }}
-            >
-              <Ionicons name="logo-google" size={30} color={COLORS.red} />
-            </TouchableOpacity>
-          </Link>
-          <Link asChild href="/(tabs)">
-            <TouchableOpacity
-              style={{
-                borderWidth: 1,
-                borderRadius: 50,
-                padding: 10,
-                borderColor: COLORS.red,
-              }}
-            >
-              <Ionicons name="logo-facebook" size={30} color={COLORS.red} />
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </View> */}
 
       <View style={styles.containerBottom}>
         <Text>Don't have an account? </Text>

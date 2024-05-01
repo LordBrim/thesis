@@ -1,21 +1,9 @@
-import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-} from "react-native";
-import React, { Children, ReactNode, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 import { MINOR_COMPONENT_HEIGHT } from "../../constants/measurements";
-import { Ionicons } from "react-native-vector-icons";
-import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
 
 type TextInputWrapper = {
   label: string;
-  isPassword?: boolean;
   children: React.ReactNode;
 };
 

@@ -1,17 +1,18 @@
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { Stack } from "expo-router/stack";
 import QRHeaderBtn from "../components/common/QRHeaderBtn";
 
 export default function StackLayout() {
   return (
     <Stack
-      initialRouteName="Login"
+      initialRouteName="(auth)/login"
       screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
     >
       {/* Authentication Screens */}
-      <Stack.Screen name="(auth)/no-internet" />
+      <Stack.Screen name="(auth)/login" />
       <Stack.Screen name="(auth)/register" />
       <Stack.Screen name="(auth)/forgot-password" />
+      <Stack.Screen name="(auth)/new-password" />
+      <Stack.Screen name="(auth)/confirm-email" />
       {/* Home Screens */}
       <Stack.Screen
         name="(app)/(tabs)"
@@ -41,6 +42,7 @@ export default function StackLayout() {
       {/* Auxilary Screens */}
       <Stack.Screen name="(aux)/empty" />
       <Stack.Screen name="(aux)/no-internet" />
+      <Stack.Screen name="(aux)/terms-and-conditions" />
     </Stack>
   );
 }

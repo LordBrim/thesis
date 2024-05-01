@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-btr";
 import { Ionicons } from "react-native-vector-icons";
-import { SIZES, FONT, COLORS } from "../../constants";
+import { SIZES, FONT, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 
@@ -24,14 +24,13 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 
 export default function RegisterScreen() {
-  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
-    useTogglePasswordVisibility();
+  const pToggle = useTogglePasswordVisibility();
+  const cpToggle = useTogglePasswordVisibility();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [form, setForm] = useState({});
   const [toggleTerms, setToggleTerms] = useState(false);
   const [toggleAlerts, setToggleAlerts] = useState(false);
 
@@ -134,11 +133,11 @@ export default function RegisterScreen() {
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
-            secureTextEntry={passwordVisibility}
+            secureTextEntry={pToggle.passwordVisibility}
           />
-          <Pressable onPress={handlePasswordVisibility}>
+          <Pressable onPress={pToggle.handlePasswordVisibility}>
             <Ionicons
-              name={rightIcon}
+              name={pToggle.rightIcon}
               size={SIZES.xLarge}
               color={COLORS.gray}
             />
@@ -147,17 +146,19 @@ export default function RegisterScreen() {
         <TextInputWrapper label="Confirm Password">
           <TextInput
             style={styles.input}
-            value={password}
+            value={confirmPassword}
             placeholder="Confirm your password..."
-            onChangeText={(password) => setPassword(password)}
+            onChangeText={(confirmPassword) =>
+              setConfirmPassword(confirmPassword)
+            }
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
-            secureTextEntry={passwordVisibility}
+            secureTextEntry={cpToggle.passwordVisibility}
           />
-          <Pressable onPress={handlePasswordVisibility}>
+          <Pressable onPress={cpToggle.handlePasswordVisibility}>
             <Ionicons
-              name={rightIcon}
+              name={cpToggle.rightIcon}
               size={SIZES.xLarge}
               color={COLORS.gray}
             />
@@ -245,8 +246,8 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    marginHorizontal: 20,
     backgroundColor: "white",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   inputContainer: {
     margin: 5,

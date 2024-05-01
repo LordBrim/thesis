@@ -1,43 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
-  Image,
   Text,
   TextInput,
-  TouchableOpacity,
-  TouchableHighlight,
   Pressable,
-  ActivityIndicator,
   Alert,
+  StyleSheet,
 } from "react-native";
+import { router } from "expo-router";
+
+import { useFonts } from "expo-font";
 import {
   Raleway_400Regular,
   Raleway_500Medium,
 } from "@expo-google-fonts/raleway";
 
-import { useFonts } from "expo-font";
-import { router } from "expo-router";
-
-import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { Ionicons } from "react-native-vector-icons";
 import { CheckBox } from "react-native-btr";
 
-import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../constants/theme";
+import LinkBtn from "../../components/common/LinkBtn";
+import CallToActionBtn from "../../components/common/CallToActionBtn";
+import TextInputWrapper from "../../components/common/TextInputWrapper";
+import Title from "components/common/texts/Title";
+import LifelineLogo from "components/common/LifelineLogo";
+import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
+import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 
 import {
-  createUserWithEmailAndPassword,
+  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   User,
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebase-config";
-import LinkBtn from "../../components/common/LinkBtn";
-import CallToActionBtn from "../../components/common/CallToActionBtn";
-import { HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import TextInputWrapper from "../../components/common/TextInputWrapper";
-import Title from "components/common/texts/Title";
-import LifelineLogo from "components/common/LifelineLogo";
 
 export default function LoginScreen() {
   const [fontsLoaded] = useFonts({
@@ -64,11 +59,14 @@ export default function LoginScreen() {
     setToggleRemember(!toggleRemember);
   };
 
-  const auth = FIREBASE_AUTH;
   const login = async () => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(
+        FIREBASE_AUTH,
+        email,
+        password
+      );
       console.log(response);
       router.replace("/(app)/(tabs)");
     } catch (error) {

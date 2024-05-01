@@ -1,25 +1,6 @@
 import { UserRoleContext, UserRoleType } from "../context/UserRoleContext";
-import {
-  ForgotPassword,
-  Login,
-  Register,
-  Donate,
-  EventDetails,
-  HomeTab,
-  ManageBloodUnits,
-  ManageEvents,
-  ManageStaff,
-  ManageUsers,
-  Request,
-  QRScanner,
-  About,
-  Help,
-  Profile,
-  Settings,
-  DonationHistory,
-} from "./screens";
-import { FIREBASE_APP, FIREBASE_AUTH } from "../firebase-config";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Login } from "./screens";
+import { FIREBASE_AUTH } from "../firebase-config";
 import { useEffect, useState } from "react";
 import {
   User,

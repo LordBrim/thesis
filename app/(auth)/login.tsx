@@ -84,9 +84,9 @@ export default function LoginScreen() {
       <View style={styles.cTop}>
         <LifelineLogo />
 
-        <Title title="Log In" />
+        <Title title="Login" />
 
-        <View style={{ gap: 10 }}>
+        <View style={{ gap: 12 }}>
           <View style={{ gap: 24 }}>
             <TextInputWrapper label="Email">
               <TextInput

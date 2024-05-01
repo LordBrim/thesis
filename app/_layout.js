@@ -1,5 +1,6 @@
 import { Stack } from "expo-router/stack";
 import QRHeaderBtn from "../components/common/QRHeaderBtn";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 export default function StackLayout() {
   return (

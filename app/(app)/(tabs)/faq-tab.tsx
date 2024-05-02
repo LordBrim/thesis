@@ -1,15 +1,14 @@
-import { View, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
+import { View, ScrollView, FlatList, SafeAreaView } from "react-native";
 import { useState } from "react";
+import { FontAwesome6 } from "@expo/vector-icons";
 import { FAQuestions, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 import QuestionPanel from "../../../components/faq/QuestionPanel";
 import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../../constants/theme";
-import Divider from "../../../constants/divider";
+import { COLORS } from "../../../constants/theme";
 import Title from "../../../components/common/texts/Title";
 import Description from "../../../components/common/texts/Description";
 import TextInputWrapper from "../../../components/common/TextInputWrapper";
-import QuestionCard from "../../../components/faq/QuestionCard";
 
 export default function FAQTab() {
   const [searchText, setSearchText] = useState("");
@@ -19,6 +18,7 @@ export default function FAQTab() {
       title: "Blood Donation",
     },
     { id: 2, title: "Blood" },
+    { id: 3, title: "Other Questions" },
   ]);
 
   // Sorry nasira ko search function mo. Inuna ko muna redesign.
@@ -31,6 +31,8 @@ export default function FAQTab() {
   //   );
   //   setFilteredData(filtered);
   // };
+
+  const handleSearch = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,7 +48,7 @@ export default function FAQTab() {
           </View>
 
           <TextInputWrapper>
-            <MaterialCommunityIcons name="magnify" size={24} color={"black"} />
+            <FontAwesome6 name="magnify" size={24} color={"black"} />
             <TextInput
               placeholder="Find a question..."
               onChangeText={handleSearch}
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   panels: {
-    gap: 12,
+    gap: 20,
     marginTop: 12,
   },
 });

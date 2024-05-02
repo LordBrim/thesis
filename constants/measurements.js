@@ -1,2 +1,2 @@
-export const HORIZONTAL_SCREEN_MARGIN = 8;
+export const HORIZONTAL_SCREEN_MARGIN = 16;
 export const MINOR_COMPONENT_HEIGHT = 55;

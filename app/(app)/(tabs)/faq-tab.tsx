@@ -87,6 +87,5 @@ const styles = StyleSheet.create({
   },
   panels: {
     gap: 20,
-    marginTop: 12,
   },
 });

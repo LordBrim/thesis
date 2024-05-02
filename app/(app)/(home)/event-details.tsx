@@ -27,7 +27,7 @@ export default function EventDetailsScreen() {
             source={image}
             resizeMode="cover"
             style={styles.image}
-          ></ImageBackground>
+          />
         </View>
         <View style={styles.cTop}>
           <Title title={"Event Details 1"} />

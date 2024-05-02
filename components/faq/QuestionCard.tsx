@@ -6,8 +6,7 @@ import {
   Pressable,
 } from "react-native";
 import React from "react";
-import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import Ionicons from "react-native-vector-icons";
+import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import IconBtn from "components/common/IconButton";
 
 type IQuestionCard = {

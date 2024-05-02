@@ -1,6 +1,5 @@
 import { View, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
 import { useState } from "react";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { FAQuestions, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 import QuestionPanel from "../../../components/faq/QuestionPanel";
 import { TextInput } from "react-native";
@@ -14,17 +13,24 @@ import QuestionCard from "../../../components/faq/QuestionCard";
 
 export default function FAQTab() {
   const [searchText, setSearchText] = useState("");
-  const [filteredData, setFilteredData] = useState(FAQuestions);
+  const [filteredData, setFilteredData] = useState([
+    {
+      id: 1,
+      title: "Blood Donation",
+    },
+    { id: 2, title: "Blood" },
+  ]);
 
-  const handleSearch = (text) => {
-    setSearchText(text);
-    const filtered = FAQuestions.filter(
-      (item) =>
-        item.question.toLowerCase().includes(text.toLowerCase()) ||
-        item.answer.toLowerCase().includes(text.toLowerCase())
-    );
-    setFilteredData(filtered);
-  };
+  // Sorry nasira ko search function mo. Inuna ko muna redesign.
+  // const handleSearch = (text) => {
+  //   setSearchText(text);
+  //   const filtered = FAQuestions.filter(
+  //     (item) =>
+  //       item.question.toLowerCase().includes(text.toLowerCase()) ||
+  //       item.answer.toLowerCase().includes(text.toLowerCase())
+  //   );
+  //   setFilteredData(filtered);
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,28 +57,11 @@ export default function FAQTab() {
         </View>
 
         <View style={styles.panels}>
-          <QuestionPanel title="Blood" />
-          <QuestionPanel title="Blood" />
-
-          {/* <FlatList
+          <FlatList
             data={filteredData}
-            renderItem={({ item }) => (
-              <View>
-                <QuestionPanel
-                  question={item.question}
-                  answer={item.answer}
-                  isActive={isActiveIndex === item.id + 1}
-                  onShow={() => {
-                    setActiveIndex(item.id + 1);
-                  }}
-                  onHide={() => {
-                    setActiveIndex(0);
-                  }}
-                />
-              </View>
-            )}
+            renderItem={({ item }) => <QuestionPanel title={item.title} />}
             keyExtractor={(item) => item.id.toString()}
-          /> */}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

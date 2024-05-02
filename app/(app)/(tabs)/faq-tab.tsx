@@ -1,14 +1,17 @@
 import { View, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
 import { useState } from "react";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import { FAQuestions } from "../../../constants";
+import { FAQuestions, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 import QuestionPanel from "../../../components/faq/QuestionPanel";
 import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../../constants/theme";
 import Divider from "../../../constants/divider";
+import Title from "components/common/texts/Title";
+import Description from "components/common/texts/Description";
+import TextInputWrapper from "components/common/TextInputWrapper";
 
-const FAQ = () => {
+export default function FAQTab() {
   const [searchText, setSearchText] = useState("");
   const [isActiveIndex, setActiveIndex] = useState(0);
   const [filteredData, setFilteredData] = useState(FAQuestions);
@@ -25,104 +28,96 @@ const FAQ = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>
-          We're here to help you with anything and everything on Lifeline!
-        </Text>
-        <Text style={styles.subText}>
-          At Lifeline we like to help you to easily understand our app and how
-          you can use it properly without any worries! Feel free to check
-          answers for your questions.
-        </Text>
-
-        <View style={styles.searchBar}>
-          <MaterialCommunityIcons
-            name="magnify"
-            size={24}
-            color={COLORS.redTop}
-            // style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search..."
-            onChangeText={handleSearch}
-            value={searchText}
-          />
-        </View>
-      </View>
-
-      <Text style={styles.titleHeader}>Help Desk</Text>
-      {/* <Divider margin={5} /> */}
-
-      <FlatList
-        data={filteredData}
-        renderItem={({ item }) => (
-          <View>
-            <QuestionPanel
-              question={item.question}
-              answer={item.answer}
-              isActive={isActiveIndex === item.id + 1}
-              onShow={() => {
-                setActiveIndex(item.id + 1);
-              }}
-              onHide={() => {
-                setActiveIndex(0);
-              }}
+      <ScrollView>
+        <View style={styles.cTop}>
+          <View style={{ gap: 8 }}>
+            <Title title="If you have any questions on Lifeline, We're here to answer them the best we can! " />
+            <Description
+              description="At Lifeline we like to help you to easily understand our app and how
+            you can use it properly without any worries! Feel free to check
+            answers for your questions."
             />
           </View>
-        )}
-        keyExtractor={(item) => item.id.toString()}
-      />
+
+          <TextInputWrapper>
+            <MaterialCommunityIcons name="magnify" size={24} color={"black"} />
+            <TextInput
+              placeholder="Find a question..."
+              onChangeText={handleSearch}
+              value={searchText}
+              style={{ flex: 1 }}
+            />
+          </TextInputWrapper>
+        </View>
+
+        <View>
+          {/* <Text style={styles.titleHeader}>Help Desk</Text> */}
+          <FlatList
+            data={filteredData}
+            renderItem={({ item }) => (
+              <View>
+                <QuestionPanel
+                  question={item.question}
+                  answer={item.answer}
+                  isActive={isActiveIndex === item.id + 1}
+                  onShow={() => {
+                    setActiveIndex(item.id + 1);
+                  }}
+                  onHide={() => {
+                    setActiveIndex(0);
+                  }}
+                />
+              </View>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
-};
-
-export default FAQ;
+}
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
     flex: 1,
-    padding: SIZES.medium,
+    padding: HORIZONTAL_SCREEN_MARGIN,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORS.white,
   },
-  titleHeader: {
-    // alignSelf: "flex-start",
-    width: "90%",
-    padding: 10,
-    fontSize: SIZES.large,
-  },
-  headerContainer: {
+  cTop: {
     width: "100%",
-    padding: SIZES.medium,
     backgroundColor: COLORS.white,
     fontWeight: "bold",
+    gap: 16,
   },
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#ffffff",
-    borderColor: "#a8a7a7",
-    borderWidth: 1,
-    padding: 10,
-    margin: 10,
-    marginBottom: -10,
-    borderRadius: 30,
-  },
-  headerText: {
-    fontSize: SIZES.xLarge,
-    textAlign: "justify",
-    fontWeight: "bold",
-  },
-  subText: {
-    fontSize: SIZES.medium,
-    textAlign: "justify",
-    color: COLORS.gray,
-  },
-  searchInput: {
-    // backgroundColor: "#f5f5f5",
-    // marginBottom: 10,
-  },
+  // titleHeader: {
+  //   // alignSelf: "flex-start",
+  //   width: "90%",
+  //   padding: 10,
+  //   fontSize: SIZES.large,
+  // },
+  // headerContainer: {},
+  // searchBar: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   backgroundColor: "#ffffff",
+  //   borderColor: "#a8a7a7",
+  //   borderWidth: 1,
+  //   padding: 10,
+  //   margin: 10,
+  //   marginBottom: -10,
+  //   borderRadius: 30,
+  // },
+  // headerText: {
+  //   fontSize: SIZES.xLarge,
+  //   textAlign: "justify",
+  //   fontWeight: "bold",
+  // },
+  // subText: {},
+  // searchInput: {
+  //   // backgroundColor: "#f5f5f5",
+  //   // marginBottom: 10,
+  // },
 });

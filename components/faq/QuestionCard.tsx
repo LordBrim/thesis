@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontWeight: "bold",
+    fontWeight: "400",
   },
   answer: {
     flex: 1,

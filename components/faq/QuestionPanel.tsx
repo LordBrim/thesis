@@ -6,11 +6,43 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
-import { COLORS, FONT, SIZES, SHADOWS } from "../../constants";
+import {
+  COLORS,
+  FONT,
+  SIZES,
+  SHADOWS,
+  HORIZONTAL_SCREEN_MARGIN,
+} from "../../constants";
+import QuestionCard from "./QuestionCard";
+import { useState } from "react";
 
-export default function QuestionPanel({}) {
+type IQuestionPanel = {
+  title: string;
+};
+
+export default function QuestionPanel({ title }: IQuestionPanel) {
+  const [isActiveIndex, setActiveIndex] = useState(0);
+
   return (
-    <View>
+    <View style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
+
+      <View style={styles.questions}>
+        <QuestionCard
+          question="What is blood?"
+          answer="Blood is blood"
+          isActive={isActiveIndex}
+          onShow={() => setActiveIndex(1)}
+          onHide={() => setActiveIndex(0)}
+        />
+        <QuestionCard
+          question="What is blood?"
+          answer="Blood is blood"
+          isActive={isActiveIndex}
+          onShow={() => setActiveIndex(2)}
+          onHide={() => setActiveIndex(0)}
+        />
+      </View>
       {/* <Text style={styles.titleHeader}>Help Desk</Text> */}
 
       {/* <FlatList
@@ -39,37 +71,14 @@ export default function QuestionPanel({}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: SIZES.medium,
-    borderWidth: 1,
-    marginBottom: SIZES.large,
-    borderRadius: 15,
     borderColor: COLORS.gray2,
+    borderBottomWidth: 1,
   },
-  questionBody: {
-    flexDirection: "row",
+  title: {
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 8,
+    fontSize: SIZES.large,
+    fontWeight: "600",
   },
-  questionContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  questionTitle: {
-    // fontFamily: FONT.Grotesk,
-    fontWeight: "bold",
-    color: COLORS.redWhite,
-  },
-  iconToggle: {
-    marginLeft: SIZES.small,
-    width: 20,
-    height: 20,
-  },
-  answerBody: {
-    marginTop: SIZES.small,
-    padding: SIZES.small,
-    borderRadius: 15,
-    backgroundColor: COLORS.redWhite,
-  },
-  answerText: {
-    color: COLORS.white,
-  },
+  questions: {},
 });

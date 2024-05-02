@@ -14,7 +14,6 @@ import QuestionCard from "../../../components/faq/QuestionCard";
 
 export default function FAQTab() {
   const [searchText, setSearchText] = useState("");
-  const [isActiveIndex, setActiveIndex] = useState(0);
   const [filteredData, setFilteredData] = useState(FAQuestions);
 
   const handleSearch = (text) => {
@@ -51,15 +50,8 @@ export default function FAQTab() {
           </TextInputWrapper>
         </View>
 
-        <View style={styles.questions}>
-          <QuestionCard
-            question="What is blood?"
-            answer="Blood is blood"
-            isActive={isActiveIndex}
-            onShow={() => setActiveIndex(1)}
-            onHide={() => setActiveIndex(0)}
-          />
-          {/* <Text style={styles.titleHeader}>Help Desk</Text> */}
+        <View style={styles.panels}>
+          <QuestionPanel title="Blood" />
           {/* <FlatList
             data={filteredData}
             renderItem={({ item }) => (
@@ -100,8 +92,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     gap: 16,
   },
-  questions: {
-    gap: 8,
+  panels: {
+    gap: 12,
     marginTop: 12,
   },
 });

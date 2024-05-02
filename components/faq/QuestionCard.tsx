@@ -12,7 +12,7 @@ import IconBtn from "components/common/IconButton";
 type IQuestionCard = {
   question: string;
   answer: string;
-  isActive: number;
+  isActive: boolean;
   onShow: () => void;
   onHide: () => void;
 };
@@ -29,9 +29,9 @@ export default function QuestionCard({
       <View style={styles.cQuestion}>
         <Text style={styles.question}>{question}</Text>
         {isActive ? (
-          <IconBtn icon="minus" size={20} onPress={onHide} />
+          <IconBtn icon="minus" size={18} onPress={onHide} />
         ) : (
-          <IconBtn icon="plus" size={20} onPress={onShow} />
+          <IconBtn icon="plus" size={18} onPress={onShow} />
         )}
       </View>
       {isActive ? <Text style={styles.answer}>{answer}</Text> : null}

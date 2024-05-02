@@ -52,6 +52,8 @@ export default function FAQTab() {
 
         <View style={styles.panels}>
           <QuestionPanel title="Blood" />
+          <QuestionPanel title="Blood" />
+
           {/* <FlatList
             data={filteredData}
             renderItem={({ item }) => (

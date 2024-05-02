@@ -1,13 +1,44 @@
-import { StyleSheet, Dimensions } from "react-native";
-
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+} from "react-native";
 import { COLORS, FONT, SIZES, SHADOWS } from "../../constants";
 
-const screenWidth = Dimensions.get("window").width;
+export default function QuestionPanel({}) {
+  return (
+    <View>
+      {/* <Text style={styles.titleHeader}>Help Desk</Text> */}
+
+      {/* <FlatList
+        data={filteredData}
+        renderItem={({ item }) => (
+          <View>
+            <QuestionPanel
+              question={item.question}
+              answer={item.answer}
+              isActive={isActiveIndex === item.id + 1}
+              onShow={() => {
+                setActiveIndex(item.id + 1);
+              }}
+              onHide={() => {
+                setActiveIndex(0);
+              }}
+            />
+          </View>
+        )}
+        keyExtractor={(item) => item.id.toString()}
+      /> */}
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: (screenWidth * 80) / 100,
     padding: SIZES.medium,
     borderWidth: 1,
     marginBottom: SIZES.large,
@@ -42,5 +73,3 @@ const styles = StyleSheet.create({
     color: COLORS.white,
   },
 });
-
-export default styles;

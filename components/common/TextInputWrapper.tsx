@@ -3,7 +3,7 @@ import { COLORS, SIZES } from "../../constants/theme";
 import { MINOR_COMPONENT_HEIGHT } from "../../constants/measurements";
 
 type TextInputWrapper = {
-  label: string;
+  label?: string;
   children: React.ReactNode;
 };
 
@@ -13,7 +13,7 @@ export default function TextInputWrapper({
 }: TextInputWrapper) {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+      {label && <Text style={styles.label}>{label}</Text>}
       {children}
     </View>
   );

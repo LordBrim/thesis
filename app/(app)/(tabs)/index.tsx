@@ -3,6 +3,7 @@ import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import { RecentDonations, Events, Welcome } from "../../../components";
 import { COLORS, SPACES } from "../../../constants/theme";
 import AdminDashboard from "../../../components/home/AdminDashboard";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 
 export default function HomeTab() {
   return (
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    padding: SPACES.lg,
+    padding: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
   },
   scrollView: { rowGap: SPACES.xxl },

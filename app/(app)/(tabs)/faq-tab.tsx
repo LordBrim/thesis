@@ -48,13 +48,13 @@ export default function FAQTab() {
           </View>
 
           <TextInputWrapper>
-            <FontAwesome6 name="magnify" size={24} color={"black"} />
             <TextInput
               placeholder="Find a question..."
               onChangeText={handleSearch}
               value={searchText}
               style={{ flex: 1 }}
             />
+            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
           </TextInputWrapper>
         </View>
 

@@ -5,7 +5,19 @@ import { Link } from "expo-router";
 
 export default function EventCard({ toEvent, image, title, date }) {
   return (
-    <Link asChild push href={toEvent}>
+    <Link
+      asChild
+      push
+      href={{
+        pathname: "/(app)/(home)/event-details",
+        params: {
+          image: image,
+          title: title,
+          description: "description",
+          toMaps: "path",
+        },
+      }}
+    >
       <TouchableOpacity style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
           <View style={styles.details}>

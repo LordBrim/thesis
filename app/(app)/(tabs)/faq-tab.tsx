@@ -7,9 +7,10 @@ import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../../constants/theme";
 import Divider from "../../../constants/divider";
-import Title from "components/common/texts/Title";
-import Description from "components/common/texts/Description";
-import TextInputWrapper from "components/common/TextInputWrapper";
+import Title from "../../../components/common/texts/Title";
+import Description from "../../../components/common/texts/Description";
+import TextInputWrapper from "../../../components/common/TextInputWrapper";
+import QuestionCard from "../../../components/faq/QuestionCard";
 
 export default function FAQTab() {
   const [searchText, setSearchText] = useState("");
@@ -50,9 +51,16 @@ export default function FAQTab() {
           </TextInputWrapper>
         </View>
 
-        <View>
+        <View style={styles.questions}>
+          <QuestionCard
+            question="What is blood?"
+            answer="Blood is blood"
+            isActive={isActiveIndex}
+            onShow={() => setActiveIndex(1)}
+            onHide={() => setActiveIndex(0)}
+          />
           {/* <Text style={styles.titleHeader}>Help Desk</Text> */}
-          <FlatList
+          {/* <FlatList
             data={filteredData}
             renderItem={({ item }) => (
               <View>
@@ -70,7 +78,7 @@ export default function FAQTab() {
               </View>
             )}
             keyExtractor={(item) => item.id.toString()}
-          />
+          /> */}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -81,15 +89,19 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flex: 1,
-    padding: HORIZONTAL_SCREEN_MARGIN,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORS.white,
   },
   cTop: {
     width: "100%",
+    padding: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     fontWeight: "bold",
     gap: 16,
+  },
+  questions: {
+    gap: 8,
+    marginTop: 12,
   },
 });

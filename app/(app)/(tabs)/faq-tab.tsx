@@ -92,32 +92,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     gap: 16,
   },
-  // titleHeader: {
-  //   // alignSelf: "flex-start",
-  //   width: "90%",
-  //   padding: 10,
-  //   fontSize: SIZES.large,
-  // },
-  // headerContainer: {},
-  // searchBar: {
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   backgroundColor: "#ffffff",
-  //   borderColor: "#a8a7a7",
-  //   borderWidth: 1,
-  //   padding: 10,
-  //   margin: 10,
-  //   marginBottom: -10,
-  //   borderRadius: 30,
-  // },
-  // headerText: {
-  //   fontSize: SIZES.xLarge,
-  //   textAlign: "justify",
-  //   fontWeight: "bold",
-  // },
-  // subText: {},
-  // searchInput: {
-  //   // backgroundColor: "#f5f5f5",
-  //   // marginBottom: 10,
-  // },
 });

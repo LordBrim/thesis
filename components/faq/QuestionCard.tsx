@@ -43,9 +43,7 @@ const styles = StyleSheet.create({
   container: {
     borderColor: COLORS.gray2,
     borderTopWidth: 1,
-    borderBottomWidth: 1,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingVertical: 4,
   },
   cQuestion: {
     width: "100%",

@@ -40,11 +40,7 @@ export default function FAQTab() {
         <View style={styles.cTop}>
           <View style={{ gap: 8 }}>
             <Title title="If you have any questions on Lifeline, We're here to answer them the best we can! " />
-            <Description
-              description="At Lifeline we like to help you to easily understand our app and how
-            you can use it properly without any worries! Feel free to check
-            answers for your questions."
-            />
+            <Description description="At Lifeline we like to help you to easily understand our app and how you can use it properly without any worries! Feel free to check answers for your questions." />
           </View>
 
           <TextInputWrapper>

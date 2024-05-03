@@ -16,6 +16,8 @@ const COLORS = {
 
   enabled: "#bf2831",
   disabled: "#8a8a8a",
+
+  warning: "#cc3300",
 };
 
 const FONT = {

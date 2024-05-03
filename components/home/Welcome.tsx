@@ -5,7 +5,6 @@ import { Link } from "expo-router";
 export default function Welcome({ toDonate, toRequest }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome To Lifeline, User</Text>
       <View style={styles.buttons}>
         <Link asChild href={toDonate} style={[styles.button, styles.btnDonate]}>
           <TouchableOpacity>

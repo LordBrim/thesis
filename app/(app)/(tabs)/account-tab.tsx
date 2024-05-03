@@ -1,8 +1,15 @@
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import { COLORS, SIZES } from "../../../constants/theme";
 import { Link } from "expo-router";
 import Avatar from "components/common/Avatar";
 import AccountCard from "components/account/AccountCard";
+import { FlatList } from "react-native";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -41,45 +48,22 @@ export default function AccountTab({
         </View>
       </View>
 
-      <Link asChild href="/donation-history">
-        <TouchableOpacity>
-          <Text>Donation History</Text>
-        </TouchableOpacity>
-      </Link>
-
-      <Link asChild href="/profile">
-        <TouchableOpacity>
-          <Text>Profile</Text>
-        </TouchableOpacity>
-      </Link>
-
-      <Link asChild href="/settings">
-        <TouchableOpacity>
-          <Text>Settings</Text>
-        </TouchableOpacity>
-      </Link>
-
-      <Link asChild href="/about">
-        <TouchableOpacity>
-          <Text>About</Text>
-        </TouchableOpacity>
-      </Link>
-
-      <Link asChild href="/help">
-        <TouchableOpacity>
-          <Text>Help</Text>
-        </TouchableOpacity>
-      </Link>
-
-      <Link asChild replace href="/login">
-        <TouchableOpacity>
-          <Text>Logout</Text>
-        </TouchableOpacity>
-      </Link>
-
-      <AccountCard href="login" icon="power-off" label="logout" />
-
-      <AccountCard href="login" icon="power-off" label="logout" />
+      <AccountCard
+        href="/donation-history"
+        icon="history"
+        label="donation-history"
+      />
+      <AccountCard href="/profile" icon="person" label="profile" />
+      <AccountCard href="/settings" icon="gear" label="settings" />
+      <AccountCard href="/about" icon="info-circle" label="about" />
+      <AccountCard href="/help" icon="question-circle" label="help" />
+      <AccountCard
+        href="/login"
+        icon="power-off"
+        label="logout"
+        iconColor={COLORS.warning}
+        labelColor={COLORS.warning}
+      />
     </View>
   );
 }
@@ -87,9 +71,6 @@ export default function AccountTab({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "center",
-    // alignItems: "center",
-    padding: SIZES.medium,
     backgroundColor: COLORS.white,
   },
   cProfile: {

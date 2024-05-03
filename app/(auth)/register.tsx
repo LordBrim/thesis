@@ -15,6 +15,7 @@ import { SIZES, FONT, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 
+import { firestoreOperations } from "../../firestore-services";
 import { FIREBASE_AUTH } from "../../firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
@@ -45,6 +46,15 @@ export default function RegisterScreen() {
         password
       );
       console.log(response);
+
+      // Add user data to the Firestore in "User" collection with auto-generated document ID
+      const displayName = response.user.displayName;
+      const documentData = {
+        email: email,
+        password: password,
+        displayName: displayName,
+      };
+      await firestoreOperations.addDocument("User", documentData);
     } catch (error) {
       console.log(error);
       alert("Registration Failed:" + error.message);

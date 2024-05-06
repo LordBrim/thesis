@@ -15,7 +15,7 @@
 |         | role        | string   | The role determines the access level of the user. Whether the account is for an admin, staff, or client. |
 |         | username    | string   | The username of the user.                                                                                |
 |         | email       | string   | The email used by the user.                                                                              |
-|         | phoneNumber |          | The phone number used by the user.                                                                       |
+|         | phoneNumber | string   | The phone number used by the user.                                                                       |
 |         | avatarUrl   | string   | The avatar picture of the user.                                                                          |
 
 

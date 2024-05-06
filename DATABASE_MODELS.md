@@ -7,7 +7,7 @@
 
 ## User
 
-| key     | Field       | Type     | Description / Value                                                                                      |
+| Key     | Field       | Type     | Description / Value                                                                                      |
 | ------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------- |
 | Primary | id          | string   | The unique id of the user. The id is the username by default and can be changed later.                   |
 |         | createdAt   | datetime | The date when the user is created.                                                                       |
@@ -21,7 +21,7 @@
 
 ## Blood Unit Donation
 
-| key     | Field      | Type     | Description / Value                                                             |
+| Key     | Field      | Type     | Description / Value                                                             |
 | ------- | ---------- | -------- | ------------------------------------------------------------------------------- |
 | Primary | id         | string   | The unique id of blood unit.                                                    |
 | Foreign | facilityId | id       | The reference to the facility where the blood unit is stored.                   |
@@ -35,7 +35,7 @@
 
 ## Blood Unit/s Request
 
-| key     | Field        | Type     | Description / Value                                                         |
+| Key     | Field        | Type     | Description / Value                                                         |
 | ------- | ------------ | -------- | --------------------------------------------------------------------------- |
 | Primary | id           | string   | The unique id of the request.                                               |
 |         | createdAt    | datetime | The datetime when the blood unit/s was requested.                           |
@@ -47,7 +47,7 @@
 
 ## Facility
 
-| key     | Field     | Type     | Description / Value                           |
+| Key     | Field     | Type     | Description / Value                           |
 | ------- | --------- | -------- | --------------------------------------------- |
 | Primary | id        | string   | The unique id of the facility.                |
 |         | createdAt | datetime | The datetime when the facility is registered. |
@@ -56,7 +56,7 @@
 
 ## Event
 
-| key     | Field       | Type     | Description / Value                                                                          |
+| Key     | Field       | Type     | Description / Value                                                                          |
 | ------- | ----------- | -------- | -------------------------------------------------------------------------------------------- |
 | Primary | id          | string   | The unique id of the event.                                                                  |
 | Foreign | facilityId? | id       | The reference to the facility holding the event. (optional)                                  |
@@ -69,7 +69,7 @@
 
 ## Question
 
-| key     | Field    | Type   | Description / Value            |
+| Key     | Field    | Type   | Description / Value            |
 | ------- | -------- | ------ | ------------------------------ |
 | Primary | id       | string | The unique id of the question. |
 |         | category | string | The category of the question.  |

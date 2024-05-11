@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, FlatList, SafeAreaView } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
-import RecentDonationCard from "./RecentDonationCard";
+import AppointmentCard from "./AppointmentCard";
 
 export default function UpcomingAppointments() {
   return (
@@ -8,12 +8,16 @@ export default function UpcomingAppointments() {
       <View style={styles.bar}>
         <Text style={styles.title}>Upcoming Appointments</Text>
       </View>
-      {sampleData ? (
+      {sampleAppointments ? (
         <SafeAreaView>
           <FlatList
-            data={sampleData}
+            data={sampleAppointments}
             renderItem={({ item }) => (
-              <RecentDonationCard location={item.location} date={item.date} />
+              <AppointmentCard
+                location={item.location}
+                date={item.date}
+                time={item.time}
+              />
             )}
             keyExtractor={(item) => item.id}
             numColumns={1}
@@ -46,6 +50,7 @@ const styles = StyleSheet.create({
   flatlist: {
     flex: 1,
     gap: SPACES.sm,
+    padding: 2,
   },
   empty: {
     height: 120,
@@ -54,30 +59,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const sampleData = [
+const sampleAppointments = [
   {
     id: 1,
     location: "Location 1",
-    date: "February 15, 2024",
+    date: "Feb 15, 2024",
+    time: "5:00pm-5:30pm",
   },
   {
     id: 2,
     location: "Location 2",
-    date: "February 16, 2024",
-  },
-  {
-    id: 3,
-    location: "Location 3",
-    date: "February 17, 2024",
-  },
-  {
-    id: 4,
-    location: "Location 4",
-    date: "February 15, 2024",
-  },
-  {
-    id: 5,
-    location: "",
-    date: "",
+    date: "May 15, 2024",
+    time: "5:00pm-5:30pm",
   },
 ];

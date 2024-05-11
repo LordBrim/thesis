@@ -38,9 +38,10 @@ const styles = StyleSheet.create({
   bar: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
-    fontSize: SIZES.medium,
+    fontSize: SIZES.large,
     fontWeight: "bold",
   },
   flatlist: {

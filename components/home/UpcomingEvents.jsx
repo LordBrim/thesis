@@ -7,7 +7,7 @@ export default function UpcomingEvents({ toEvent }) {
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
-        <Text style={styles.title}>Upcoming Blood Donation Events</Text>
+        <Text style={styles.title}>Upcoming Events</Text>
         <LinkBtn
           label="View All"
           href="/all-events"
@@ -40,17 +40,18 @@ export default function UpcomingEvents({ toEvent }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: SPACES.sm,
+    gap: SPACES.md,
   },
   bar: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   flatlist: {
     gap: SPACES.md,
   },
   title: {
-    fontSize: SIZES.medium,
+    fontSize: SIZES.large,
     fontWeight: "bold",
   },
 });

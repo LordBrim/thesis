@@ -18,12 +18,12 @@ export default function HomeTab() {
         <RecentDonations />
         <Events toEvent={"/event-details"} />
         {/* Temporary Admin Controls */}
-        <AdminDashboard
+        {/* <AdminDashboard
           toManageBloodUnits={"/manage-blood-units"}
           toManageEvents={"/manage-events"}
           toManageStaff={"/manage-staff"}
           toManageUsers={"/manage-users"}
-        />
+        /> */}
       </ScrollView>
     </SafeAreaView>
   );

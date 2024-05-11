@@ -19,8 +19,10 @@ export default function UpcomingEvents({ toEvent }) {
           renderItem={({ item }) => (
             <EventCard
               toEvent={toEvent}
-              title={item.title}
               image={item.image}
+              title={item.title}
+              date={item.date}
+              time={item.time}
             />
           )}
           keyExtractor={(item) => item.id}
@@ -52,16 +54,22 @@ const sampleData = [
   {
     id: 1,
     image: require("../../assets/images/location1.jpg"),
-    title: "Event Card 1",
+    title: "Medical Center Parañaque",
+    time: "8:00am-5:00pm",
+    date: "April 25, 2024",
   },
   {
     id: 2,
-    image: require("../../assets/images/location2.jpg"),
-    title: "Event Card 2",
+    image: require("../../assets/images/location3.jpg"),
+    title: "Madugong Mandaluyong: Halloween Blood Donation",
+    time: "10:00am-8:00pm",
+    date: "Oct 31, 2024",
   },
   {
     id: 3,
-    image: require("../../assets/images/location3.jpg"),
-    title: "Event Card 3",
+    image: require("../../assets/images/location2.jpg"),
+    title: "Panahon Ng Pasko: Blood Donation Para Sa Nangangailangan",
+    time: "12:00am-4:00pm",
+    date: "Nov 29, 2024 - Dec 20, 2024",
   },
 ];

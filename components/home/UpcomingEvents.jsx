@@ -1,11 +1,20 @@
 import { StyleSheet, SafeAreaView, View, Text, FlatList } from "react-native";
-import { SIZES, SPACES } from "../../constants/theme";
+import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
+import LinkBtn from "components/common/LinkBtn";
 
 export default function UpcomingEvents({ toEvent }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Upcoming Blood Donation Events</Text>
+      <View style={styles.bar}>
+        <Text style={styles.title}>Upcoming Blood Donation Events</Text>
+        <LinkBtn
+          label="View All"
+          href="/all-events"
+          linkStyle={{ color: COLORS.gray, textDecorationLine: "none" }}
+        />
+      </View>
+
       <SafeAreaView>
         <FlatList
           data={sampleData}
@@ -32,6 +41,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: SPACES.sm,
+  },
+  bar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   flatlist: {
     flex: 1,

@@ -1,9 +1,9 @@
 import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
-
 import { RecentDonations, Events, Welcome } from "../../../components";
-import { COLORS, SPACES } from "../../../constants/theme";
-import AdminDashboard from "../../../components/home/AdminDashboard";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import UpcomingAppointments from "components/home/UpcomingAppointments";
+
+import { COLORS, SPACES } from "../../../constants/theme";
 
 export default function HomeTab() {
   return (
@@ -15,15 +15,9 @@ export default function HomeTab() {
       >
         <Welcome toDonate="/donate" toRequest="/request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
-        <RecentDonations />
-        <Events toEvent={"/event-details"} />
-        {/* Temporary Admin Controls */}
-        {/* <AdminDashboard
-          toManageBloodUnits={"/manage-blood-units"}
-          toManageEvents={"/manage-events"}
-          toManageStaff={"/manage-staff"}
-          toManageUsers={"/manage-users"}
-        /> */}
+        <UpcomingAppointments />
+        {/* <RecentDonations /> */}
+        <Events />
       </ScrollView>
     </SafeAreaView>
   );
@@ -33,8 +27,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    padding: HORIZONTAL_SCREEN_MARGIN,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
   },
-  scrollView: { rowGap: SPACES.xxl },
+  scrollView: { gap: SPACES.xxl },
 });

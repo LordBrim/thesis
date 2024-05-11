@@ -1,38 +1,31 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
-import { SIZES, SPACES } from "../../constants/theme";
+import { StyleSheet, View, Text, FlatList, SafeAreaView } from "react-native";
+import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import RecentDonationCard from "./RecentDonationCard";
-import { Link } from "expo-router";
 
-export default function RecentDonations({}) {
+export default function UpcomingAppointments() {
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
-        <Text style={styles.title}>Recent Donations</Text>
-        <Link asChild href="/donation-history">
-          <TouchableOpacity>
-            <Text>View All</Text>
-          </TouchableOpacity>
-        </Link>
+        <Text style={styles.title}>Upcoming Appointments</Text>
       </View>
-      <SafeAreaView>
-        <FlatList
-          data={sampleData}
-          renderItem={({ item }) => (
-            <RecentDonationCard location={item.location} date={item.date} />
-          )}
-          keyExtractor={(item) => item.id}
-          numColumns={1}
-          scrollEnabled={false}
-          contentContainerStyle={styles.flatlist}
-        />
-      </SafeAreaView>
+      {sampleData ? (
+        <SafeAreaView>
+          <FlatList
+            data={sampleData}
+            renderItem={({ item }) => (
+              <RecentDonationCard location={item.location} date={item.date} />
+            )}
+            keyExtractor={(item) => item.id}
+            numColumns={1}
+            scrollEnabled={false}
+            contentContainerStyle={styles.flatlist}
+          />
+        </SafeAreaView>
+      ) : (
+        <View style={styles.empty}>
+          <Text style={{ color: COLORS.gray }}>No Scheduled Appointments</Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -53,7 +46,11 @@ const styles = StyleSheet.create({
   flatlist: {
     flex: 1,
     gap: SPACES.sm,
-    padding: 2,
+  },
+  empty: {
+    height: 120,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

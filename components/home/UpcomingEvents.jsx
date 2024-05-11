@@ -3,7 +3,7 @@ import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
 import LinkBtn from "components/common/LinkBtn";
 
-export default function UpcomingEvents({ toEvent }) {
+export default function UpcomingEvents() {
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
@@ -20,7 +20,6 @@ export default function UpcomingEvents({ toEvent }) {
           data={sampleData}
           renderItem={({ item }) => (
             <EventCard
-              toEvent={toEvent}
               image={item.image}
               title={item.title}
               date={item.date}

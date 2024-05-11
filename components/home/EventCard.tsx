@@ -53,7 +53,6 @@ export default function EventCard({ image, title, date, time }: IEventCard) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minWidth: "100%",
     aspectRatio: 16 / 7.5,
     backgroundColor: COLORS.primary,
     borderRadius: SIZES.small,

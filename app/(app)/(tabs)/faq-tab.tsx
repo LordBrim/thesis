@@ -21,18 +21,15 @@ export default function FAQTab() {
     { id: 3, title: "Other Questions" },
   ]);
 
-  // Sorry nasira ko search function mo. Inuna ko muna redesign.
-  // const handleSearch = (text) => {
-  //   setSearchText(text);
-  //   const filtered = FAQuestions.filter(
-  //     (item) =>
-  //       item.question.toLowerCase().includes(text.toLowerCase()) ||
-  //       item.answer.toLowerCase().includes(text.toLowerCase())
-  //   );
-  //   setFilteredData(filtered);
-  // };
-
-  const handleSearch = () => {};
+  const handleSearch = (text) => {
+    setSearchText(text);
+    const filtered = FAQuestions.filter(
+      (item) =>
+        item.question.toLowerCase().includes(text.toLowerCase()) ||
+        item.answer.toLowerCase().includes(text.toLowerCase())
+    ).map((item) => ({ id: item.id, title: item.question }));
+    setFilteredData(filtered);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,6 +56,7 @@ export default function FAQTab() {
             data={filteredData}
             renderItem={({ item }) => <QuestionPanel title={item.title} />}
             keyExtractor={(item) => item.id.toString()}
+            scrollEnabled={false} // Disable scrolling for FlatList
           />
         </View>
       </ScrollView>

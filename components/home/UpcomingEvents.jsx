@@ -49,7 +49,7 @@ const sampleData = [
     image: require("../../assets/images/location1.jpg"),
     title: "Medical Center Parañaque",
     time: "8:00am-5:00pm",
-    date: "April 25, 2024",
+    date: "Apr 25, 2024",
   },
   {
     id: 2,

@@ -14,6 +14,7 @@ import AccountTab from "./(app)/(tabs)/account-tab";
 import Donate from "./(app)/(home)/donate";
 import Request from "./(app)/(home)/request";
 import EventDetails from "./(app)/(home)/event-details";
+import AllEventsScreen from "./(app)/(home)/all-events";
 import ManageBloodUnits from "./(app)/(home)/manage-blood-units";
 import ManageEvents from "./(app)/(home)/manage-events";
 import ManageStaff from "./(app)/(home)/manage-staff";
@@ -43,6 +44,7 @@ export {
   Donate,
   Request,
   EventDetails,
+  AllEventsScreen,
   ManageBloodUnits,
   ManageEvents,
   ManageStaff,

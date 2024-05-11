@@ -19,7 +19,9 @@ export default function AppointmentCard({
         style={styles.image}
       />
       <View style={styles.text}>
-        <Text style={styles.location}>{location || "Medical Institution"}</Text>
+        <Text style={styles.location} numberOfLines={1}>
+          {location || "Medical Institution"}
+        </Text>
         <View style={{ flexDirection: "row" }}>
           <Text style={styles.details}>{date}</Text>
           <Text style={styles.details}> | {time}</Text>

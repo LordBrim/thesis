@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Text,
-  FlatList,
-  Image,
-} from "react-native";
+import { StyleSheet, SafeAreaView, View, Text, FlatList } from "react-native";
 import { SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
 

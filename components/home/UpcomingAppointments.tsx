@@ -62,13 +62,13 @@ const styles = StyleSheet.create({
 const sampleAppointments = [
   {
     id: 1,
-    location: "Location 1",
+    location: "Makati Medical Center",
     date: "Feb 15, 2024",
     time: "5:00pm-5:30pm",
   },
   {
     id: 2,
-    location: "Location 2",
+    location: "Mandaluyong Health Care Center",
     date: "May 15, 2024",
     time: "5:00pm-5:30pm",
   },

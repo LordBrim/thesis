@@ -1,9 +1,22 @@
-import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import {
+  ImageBackground,
+  ImageSourcePropType,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import { Link } from "expo-router";
 
-export default function EventCard({ toEvent, image, title, date }) {
+type IEventCard = {
+  image: ImageSourcePropType;
+  title: string;
+  date?: string;
+  time?: string;
+};
+
+export default function EventCard({ image, title, date, time }: IEventCard) {
   return (
     <Link
       asChild
@@ -11,8 +24,9 @@ export default function EventCard({ toEvent, image, title, date }) {
       href={{
         pathname: "/(app)/(home)/event-details",
         params: {
-          image: image,
+          image: image.toString(),
           title: title,
+          time: time,
           description: "description",
           toMaps: "path",
         },
@@ -21,8 +35,14 @@ export default function EventCard({ toEvent, image, title, date }) {
       <TouchableOpacity style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
           <View style={styles.details}>
-            <Text style={styles.date}>{date || "April 20, 2024"}</Text>
-            <Text style={styles.title}>{title || "Blood Donation Event"}</Text>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.subtitle}>{date}</Text>
+              {time && <Text style={styles.subtitle}> | {time}</Text>}
+            </View>
+
+            <Text numberOfLines={1} style={styles.title}>
+              {title}
+            </Text>
           </View>
         </ImageBackground>
       </TouchableOpacity>
@@ -34,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     minWidth: "100%",
-    aspectRatio: 16 / 7,
+    aspectRatio: 16 / 7.5,
     backgroundColor: COLORS.primary,
     borderRadius: SIZES.small,
     overflow: "hidden",
@@ -51,5 +71,5 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   title: { fontSize: SIZES.xLarge, color: COLORS.white },
-  date: { fontSize: SIZES.small, color: COLORS.white },
+  subtitle: { fontSize: 14, color: COLORS.white },
 });

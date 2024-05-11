@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     width: 2,
     height: "100%",
     position: "absolute",
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.line,
     left: 43.3,
     bottom: 0,
   },

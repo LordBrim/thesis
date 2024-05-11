@@ -26,6 +26,13 @@ export default function StackLayout() {
       <Stack.Screen name="(app)/(home)/donate" />
       <Stack.Screen name="(app)/(home)/request" />
       <Stack.Screen name="(app)/(home)/event-details" />
+      <Stack.Screen
+        name="(app)/(home)/all-events"
+        options={{
+          headerTitle: "All Upcoming Events",
+          headerTitleAlign: "center",
+        }}
+      />
       {/* Staff Level Home Screens */}
       <Stack.Screen name="(app)/(home)/manage-blood-units" />
       <Stack.Screen name="(app)/(home)/manage-events" />

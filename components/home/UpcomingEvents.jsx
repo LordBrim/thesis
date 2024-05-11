@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   flatlist: {
-    flex: 1,
     gap: SPACES.md,
   },
   title: {

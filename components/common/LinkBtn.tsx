@@ -1,17 +1,24 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  StyleProp,
+  TextStyle,
+} from "react-native";
 import React from "react";
 import { type Href, Link } from "expo-router";
 
 type ILinkBtn = {
   label: string;
   href: Href<string>;
+  linkStyle: StyleProp<TextStyle>;
 };
 
-export default function LinkBtn({ label, href }: ILinkBtn) {
+export default function LinkBtn({ label, href, linkStyle }: ILinkBtn) {
   return (
     <Link asChild href={href}>
       <TouchableOpacity>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={linkStyle || styles.label}>{label}</Text>
       </TouchableOpacity>
     </Link>
   );

@@ -15,7 +15,7 @@ export default function EventDetailsScreen() {
   const { image, title, description, toMaps } = useLocalSearchParams();
 
   const navigateToMaps = () => {
-    router.push("/(app)/(tabs)/maps-tab");
+    router.replace("/(app)/(tabs)/maps-tab");
   };
 
   return (

@@ -23,7 +23,13 @@ export default function StackLayout() {
         })}
       />
       {/* User Level Home Screens */}
-      <Stack.Screen name="(app)/(home)/donate" />
+      <Stack.Screen
+        name="(app)/(home)/donate"
+        options={{
+          headerTitle: "Donate",
+          headerTitleAlign: "center",
+        }}
+      />
       <Stack.Screen name="(app)/(home)/request" />
       <Stack.Screen name="(app)/(home)/event-details" />
       <Stack.Screen

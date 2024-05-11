@@ -1,25 +1,18 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
-import { SIZES, SPACES } from "../../constants/theme";
+import { StyleSheet, View, Text, FlatList, SafeAreaView } from "react-native";
+import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import RecentDonationCard from "./RecentDonationCard";
-import { Link } from "expo-router";
+import LinkBtn from "components/common/LinkBtn";
 
 export default function RecentDonations({}) {
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Recent Donations</Text>
-        <Link asChild href="/donation-history">
-          <TouchableOpacity>
-            <Text>View All</Text>
-          </TouchableOpacity>
-        </Link>
+        <LinkBtn
+          label="View All"
+          href="/donation-history"
+          linkStyle={{ color: COLORS.gray, textDecorationLine: "none" }}
+        />
       </View>
       <SafeAreaView>
         <FlatList

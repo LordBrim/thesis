@@ -22,7 +22,7 @@
     "@realm/react": "^0.6.2",
     "@types/react": "~18.2.14",
     "axios": "^1.6.2",
-    "expo": "^50.0.17",
+    "expo": "^51.0.2",
     "expo-app-loading": "^2.1.1",
     "expo-barcode-scanner": "~12.9.3",
     "expo-camera": "~14.1.3",

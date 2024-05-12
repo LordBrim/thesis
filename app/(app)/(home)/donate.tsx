@@ -2,6 +2,7 @@ import { RecentDonations } from "components";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN, SPACES } from "../../../constants";
 import { ScrollView, StyleSheet, View } from "react-native";
 import ActionBtn from "components/home/ActionBtn";
+import DonationIncentives from "components/home/DonationIncentives";
 
 export default function Donate() {
   return (
@@ -19,6 +20,7 @@ export default function Donate() {
             cta
           />
         </View>
+        <DonationIncentives />
         <RecentDonations />
       </ScrollView>
     </View>

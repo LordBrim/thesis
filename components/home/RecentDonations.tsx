@@ -1,7 +1,6 @@
 import { StyleSheet, View, Text, FlatList, SafeAreaView } from "react-native";
-import { COLORS, SIZES, SPACES } from "../../constants/theme";
+import { SIZES, SPACES } from "../../constants/theme";
 import RecentDonationCard from "./RecentDonationCard";
-import LinkBtn from "components/common/LinkBtn";
 
 export default function RecentDonations({}) {
   return (

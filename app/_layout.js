@@ -39,6 +39,13 @@ export default function StackLayout() {
           headerTitleAlign: "center",
         }}
       />
+      <Stack.Screen
+        name="(app)/(home)/preliminary-checklist"
+        options={{
+          headerTitle: "Donate",
+          headerTitleAlign: "center",
+        }}
+      />
       {/* Staff Level Home Screens */}
       <Stack.Screen name="(app)/(home)/manage-blood-units" />
       <Stack.Screen name="(app)/(home)/manage-events" />

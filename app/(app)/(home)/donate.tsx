@@ -14,7 +14,7 @@ export default function Donate() {
       >
         <View style={styles.buttons}>
           <ActionBtn
-            href="/index"
+            href="/(app)/(home)/preliminary-checklist"
             title="Set An Appointment"
             subtitle="Schedule a date."
             cta

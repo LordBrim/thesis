@@ -4,6 +4,7 @@ import {
   FlatList,
   StyleSheet,
   ScrollView,
+  View,
 } from "react-native";
 import React from "react";
 import ChecklistItem from "components/home/ChecklistItem";
@@ -13,14 +14,21 @@ export default function PreliminaryChecklistScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <Text>Preliminary Checklist</Text>
-        <Text>Please answer the questions as truthfully as possible.</Text>
+        <Text style={styles.title}>Preliminary Checklist</Text>
+        <Text style={styles.subtitle}>
+          Please answer the questions as truthfully as possible.
+        </Text>
+        <View style={styles.bar}>
+          <Text>Questions</Text>
+          <Text>Yes / No</Text>
+        </View>
 
         <FlatList
+          contentContainerStyle={styles.flatlist}
           data={checklistQuestions}
           renderItem={({ item }) => <ChecklistItem question={item.question} />}
-          keyExtractor={(item) => item.id.toString()}
-          scrollEnabled={false} // Disable scrolling for FlatList
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
         />
       </ScrollView>
     </SafeAreaView>
@@ -35,6 +43,12 @@ const styles = StyleSheet.create({
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
   },
+  flatlist: {
+    rowGap: 8,
+  },
+  title: {},
+  subtitle: {},
+  bar: {},
 });
 
 const checklistQuestions = [

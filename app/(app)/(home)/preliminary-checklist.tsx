@@ -18,7 +18,7 @@ export default function PreliminaryChecklistScreen() {
 
         <FlatList
           data={checklistQuestions}
-          renderItem={({ item }) => <ChecklistItem />}
+          renderItem={({ item }) => <ChecklistItem question={item.question} />}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false} // Disable scrolling for FlatList
         />
@@ -41,5 +41,13 @@ const checklistQuestions = [
   {
     id: 1,
     question: "What is this?",
+  },
+  {
+    question:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut purus risus. Duis vel lobortis libero. Aenean a sollicitudin lorem, sed dapibus felis.",
+  },
+  {
+    question:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut purus risus. Duis vel lobortis libero. Aenean a sollicitudin lorem, sed dapibus felis. Donec eros libero, convallis et arcu ut, vehicula egestas tortor. Donec dictum lorem in eleifend aliquam.",
   },
 ];

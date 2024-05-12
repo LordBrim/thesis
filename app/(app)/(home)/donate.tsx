@@ -1,12 +1,13 @@
 import { RecentDonations } from "components";
-import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import { COLORS, HORIZONTAL_SCREEN_MARGIN, SPACES } from "../../../constants";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Donate() {
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={styles.scrollView}>
         <Text>Donate Screen</Text>
+
         <RecentDonations />
       </ScrollView>
     </View>
@@ -21,4 +22,5 @@ const styles = StyleSheet.create({
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
   },
+  scrollView: { gap: SPACES.xxl },
 });

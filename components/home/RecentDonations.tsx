@@ -8,11 +8,6 @@ export default function RecentDonations({}) {
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Recent Donations</Text>
-        <LinkBtn
-          label="View All"
-          href="/donation-history"
-          linkStyle={{ color: COLORS.gray, textDecorationLine: "none" }}
-        />
       </View>
       <SafeAreaView>
         <FlatList
@@ -20,7 +15,7 @@ export default function RecentDonations({}) {
           renderItem={({ item }) => (
             <RecentDonationCard location={item.location} date={item.date} />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           numColumns={1}
           scrollEnabled={false}
           contentContainerStyle={styles.flatlist}

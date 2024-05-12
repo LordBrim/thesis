@@ -16,7 +16,6 @@ export default function HomeTab() {
         <Welcome toDonate="/donate" toRequest="/request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
         <UpcomingAppointments />
-        <RecentDonations />
         <Events />
       </ScrollView>
     </SafeAreaView>

@@ -7,18 +7,16 @@ type IChecklistItem = {
   question: string;
 };
 
-export default function ChecklistItem() {
+export default function ChecklistItem({ question }: IChecklistItem) {
   const radioButtons: RadioButtonProps[] = useMemo(
     () => [
       {
         id: "1", // acts as primary key, should be unique and non-empty string
-        label: "Option 1",
-        value: "option1",
+        value: true,
       },
       {
         id: "2",
-        label: "Option 2",
-        value: "option2",
+        value: false,
       },
     ],
     []
@@ -27,16 +25,25 @@ export default function ChecklistItem() {
 
   return (
     <View style={styles.container}>
-      <Text>Checklist Item</Text>
-      {/* <RadioGroup
+      <Text style={styles.question}>{question}</Text>
+      <RadioGroup
         radioButtons={radioButtons}
         onPress={setSelectedId}
         selectedId={selectedId}
-      /> */}
+        layout="row"
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+  },
+  question: {
+    flex: 1,
+  },
 });

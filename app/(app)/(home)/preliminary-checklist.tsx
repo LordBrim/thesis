@@ -8,21 +8,31 @@ import {
 } from "react-native";
 import React from "react";
 import ChecklistItem from "components/home/ChecklistItem";
-import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import { COLORS, HORIZONTAL_SCREEN_MARGIN, SIZES } from "../../../constants";
+import CallToActionBtn from "components/common/CallToActionBtn";
+import { router } from "expo-router";
+import Title from "components/common/texts/Title";
+import Description from "components/common/texts/Description";
 
 export default function PreliminaryChecklistScreen() {
+  const cancel = () => {
+    router.replace("(app)/(tabs)/index");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Text style={styles.title}>Preliminary Checklist</Text>
-        <Text style={styles.subtitle}>
-          Please answer the questions as truthfully as possible.
-        </Text>
-        <View style={styles.bar}>
-          <Text>Questions</Text>
-          <Text>Yes / No</Text>
-        </View>
+      <View>
+        <Title title="Preliminary Checklist" />
+        <Description description="Please answer the questions truthfully as you can possibly can." />
+      </View>
 
+      <ScrollView contentContainerStyle={{ gap: 8 }}>
+        <View style={styles.bar}>
+          <Text style={styles.header}>Questions</Text>
+          <Text style={[styles.header, { paddingHorizontal: 8 }]}>
+            Yes / No
+          </Text>
+        </View>
         <FlatList
           contentContainerStyle={styles.flatlist}
           data={checklistQuestions}
@@ -31,6 +41,18 @@ export default function PreliminaryChecklistScreen() {
           scrollEnabled={false}
         />
       </ScrollView>
+      <View style={styles.fixed}>
+        <CallToActionBtn
+          label="cancel"
+          onPress={() => cancel}
+          style={{ flex: 1 }}
+        />
+        <CallToActionBtn
+          label="next"
+          onPress={() => cancel}
+          style={{ flex: 1 }}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -42,13 +64,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
+    gap: SIZES.xLarge,
   },
   flatlist: {
     rowGap: 8,
   },
-  title: {},
-  subtitle: {},
-  bar: {},
+  bar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  header: {
+    color: COLORS.primary,
+    fontSize: SIZES.large,
+    fontWeight: "600",
+  },
+  fixed: {
+    flexDirection: "row",
+    gap: 8,
+  },
 });
 
 const checklistQuestions = [

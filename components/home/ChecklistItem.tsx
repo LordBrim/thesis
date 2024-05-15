@@ -31,7 +31,7 @@ export default function ChecklistItem({ question }: IChecklistItem) {
         onPress={setSelectedId}
         selectedId={selectedId}
         layout="row"
-        containerStyle={{ borderWidth: 1 }}
+        containerStyle={{}}
       />
     </View>
   );
@@ -46,6 +46,5 @@ const styles = StyleSheet.create({
   },
   question: {
     flex: 1,
-    borderWidth: 1,
   },
 });

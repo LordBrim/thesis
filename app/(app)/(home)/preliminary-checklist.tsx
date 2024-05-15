@@ -27,7 +27,7 @@ export default function PreliminaryChecklistScreen() {
           contentContainerStyle={styles.flatlist}
           data={checklistQuestions}
           renderItem={({ item }) => <ChecklistItem question={item.question} />}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
         />
       </ScrollView>
@@ -57,10 +57,12 @@ const checklistQuestions = [
     question: "What is this?",
   },
   {
+    id: 2,
     question:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut purus risus. Duis vel lobortis libero. Aenean a sollicitudin lorem, sed dapibus felis.",
   },
   {
+    id: 3,
     question:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut purus risus. Duis vel lobortis libero. Aenean a sollicitudin lorem, sed dapibus felis. Donec eros libero, convallis et arcu ut, vehicula egestas tortor. Donec dictum lorem in eleifend aliquam.",
   },

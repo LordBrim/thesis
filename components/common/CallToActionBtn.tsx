@@ -13,20 +13,37 @@ type ICallToActionBtn = {
   label: string;
   onPress: () => void;
   style?: StyleProp<TextStyle>;
+  secondary?: boolean;
 };
 
 export default function CallToActionBtn({
   label,
   onPress,
   style,
+  secondary,
 }: ICallToActionBtn) {
   return (
     <Pressable
-      style={[styles.container, style]}
+      style={({ pressed }) => [
+        styles.container,
+        style,
+        secondary ? styles.secondaryContainer : styles.defaultContainer,
+        secondary && pressed && styles.secondaryContainerPressed,
+      ]}
       onPress={onPress}
       android_ripple={{ radius: 200 }}
     >
-      <Text style={styles.label}>{label}</Text>
+      {({ pressed }) => (
+        <Text
+          style={[
+            styles.label,
+            secondary ? styles.secondaryLabel : styles.defaultContainer,
+            secondary && pressed && styles.secondaryLabelPressed,
+          ]}
+        >
+          {label}
+        </Text>
+      )}
     </Pressable>
   );
 }
@@ -38,14 +55,32 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: SIZES.medium,
+    borderRadius: SIZES.xSmall,
+  },
+  defaultContainer: {
     color: COLORS.white,
     backgroundColor: COLORS.primary,
-    borderRadius: SIZES.xSmall,
+  },
+  secondaryContainer: {
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.gray,
+  },
+  secondaryContainerPressed: {
+    borderColor: COLORS.primary,
   },
   label: {
     fontSize: SIZES.medium,
     textTransform: "capitalize",
     fontWeight: "bold",
+  },
+  defaultLabel: {
     color: COLORS.white,
+  },
+  secondaryLabel: {
+    color: COLORS.gray,
+  },
+  secondaryLabelPressed: {
+    color: COLORS.primary,
   },
 });

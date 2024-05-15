@@ -46,6 +46,7 @@ export default function PreliminaryChecklistScreen() {
           label="cancel"
           onPress={() => cancel}
           style={{ flex: 1 }}
+          secondary
         />
         <CallToActionBtn
           label="next"

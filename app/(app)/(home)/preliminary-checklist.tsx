@@ -13,11 +13,14 @@ import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
+import StepsIndicator from "components/common/StepsIndicator";
 
 export default function PreliminaryChecklistScreen() {
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
   };
+
+  const labels = ["Checklist", "Schedule"];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,8 +28,12 @@ export default function PreliminaryChecklistScreen() {
         <Title title="Preliminary Checklist" />
         <Description description="Please answer the questions truthfully as you can possibly can." />
       </View>
-
-      <ScrollView contentContainerStyle={{ gap: 8 }}>
+      <ScrollView
+        contentContainerStyle={{ gap: 8, paddingVertical: SIZES.xLarge }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+      >
         <View style={styles.bar}>
           <Text style={styles.header}>Questions</Text>
           <Text style={[styles.header, { paddingHorizontal: 8 }]}>
@@ -41,6 +48,8 @@ export default function PreliminaryChecklistScreen() {
           scrollEnabled={false}
         />
       </ScrollView>
+
+      <StepsIndicator labels={labels} />
       <View style={styles.fixed}>
         <CallToActionBtn
           label="cancel"
@@ -65,7 +74,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
-    gap: SIZES.xLarge,
   },
   flatlist: {
     rowGap: 8,
@@ -98,6 +106,20 @@ const checklistQuestions = [
   },
   {
     id: 3,
+    question:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut purus risus. Duis vel lobortis libero. Aenean a sollicitudin lorem, sed dapibus felis. Donec eros libero, convallis et arcu ut, vehicula egestas tortor. Donec dictum lorem in eleifend aliquam.",
+  },
+  {
+    id: 4,
+    question: "What is this?",
+  },
+  {
+    id: 5,
+    question:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut purus risus. Duis vel lobortis libero. Aenean a sollicitudin lorem, sed dapibus felis.",
+  },
+  {
+    id: 6,
     question:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut purus risus. Duis vel lobortis libero. Aenean a sollicitudin lorem, sed dapibus felis. Donec eros libero, convallis et arcu ut, vehicula egestas tortor. Donec dictum lorem in eleifend aliquam.",
   },

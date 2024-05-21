@@ -20,7 +20,11 @@ export default function PreliminaryChecklistScreen() {
     router.replace("(app)/(tabs)/index");
   };
 
-  const labels = ["Checklist", "Schedule"];
+  const labels = [
+    "Preliminary Checklist",
+    "Schedule Appointment",
+    "Appointment Confimation",
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,25 +47,29 @@ export default function PreliminaryChecklistScreen() {
         <FlatList
           contentContainerStyle={styles.flatlist}
           data={checklistQuestions}
-          renderItem={({ item }) => <ChecklistItem question={item.question} />}
+          renderItem={({ item }) => (
+            <ChecklistItem number={item.id} question={item.question} />
+          )}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
         />
       </ScrollView>
 
-      <StepsIndicator labels={labels} />
       <View style={styles.fixed}>
-        <CallToActionBtn
-          label="cancel"
-          onPress={() => cancel}
-          style={{ flex: 1 }}
-          secondary
-        />
-        <CallToActionBtn
-          label="next"
-          onPress={() => cancel}
-          style={{ flex: 1 }}
-        />
+        <StepsIndicator labels={labels} />
+        <View style={styles.buttons}>
+          <CallToActionBtn
+            label="cancel"
+            onPress={() => cancel}
+            style={{ flex: 1 }}
+            secondary
+          />
+          <CallToActionBtn
+            label="next"
+            onPress={() => cancel}
+            style={{ flex: 1 }}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -89,6 +97,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   fixed: {
+    paddingTop: 8,
+    gap: 8,
+  },
+  buttons: {
     flexDirection: "row",
     gap: 8,
   },

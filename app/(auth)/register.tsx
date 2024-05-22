@@ -1,5 +1,8 @@
 // <<<<<<< QRCode
 import React, { useState } from "react";
+import { router } from "expo-router";
+import { Alert } from "react-native";
+
 import {
   View,
   Text,
@@ -38,6 +41,13 @@ export default function RegisterScreen() {
 
   const auth = FIREBASE_AUTH;
   const register = async () => {
+    if (!toggleTerms) {
+      Alert.alert(
+        "Terms and Conditions",
+        "You must agree to the terms and conditions to use the app."
+      );
+      return;
+    }
     setLoading(true);
     try {
       const response = await createUserWithEmailAndPassword(
@@ -55,6 +65,7 @@ export default function RegisterScreen() {
         displayName: displayName,
       };
       await firestoreOperations.addDocument("User", documentData);
+      router.replace("/(app)/(tabs)");
     } catch (error) {
       console.log(error);
       alert("Registration Failed:" + error.message);

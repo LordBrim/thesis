@@ -11,6 +11,9 @@ import Avatar from "components/common/Avatar";
 import AccountCard from "components/account/AccountCard";
 import { FlatList } from "react-native";
 
+import { FIREBASE_AUTH } from "../../../firebase-config";
+import React, { useEffect, useState } from "react";
+
 type IAccountTab = {
   avatarUrl: string;
   username: string;
@@ -21,14 +24,22 @@ type IAccountTab = {
 export default function AccountTab({
   avatarUrl,
   username,
-  email,
   phoneNumber,
 }: IAccountTab) {
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      setEmail(user.email);
+    }
+  }, []);
+
   // Temporary Data for front-end only. Remove later on firebase integration
   const temporaryData = {
     avaterUrl: "",
     username: "Username",
-    email: "developer@gmail.com",
+    email: email,
     phoneNumber: "+63 (212)-555-1234",
   };
   // Temporary Data for front-end only. Remove later on firebase integration

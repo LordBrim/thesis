@@ -4,11 +4,10 @@ import { RadioGroup } from "react-native-radio-buttons-group";
 import { RadioButtonProps } from "react-native-paper";
 
 type IChecklistItem = {
-  number: number;
   question: string;
 };
 
-export default function ChecklistItem({ number, question }: IChecklistItem) {
+export default function ChecklistItem({ question }: IChecklistItem) {
   const radioButtons: RadioButtonProps[] = useMemo(
     () => [
       {
@@ -26,9 +25,7 @@ export default function ChecklistItem({ number, question }: IChecklistItem) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.question}>
-        {number}.) {question}
-      </Text>
+      <Text style={styles.question}>{question}</Text>
       <RadioGroup
         radioButtons={radioButtons}
         onPress={setSelectedId}

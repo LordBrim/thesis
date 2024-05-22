@@ -61,7 +61,7 @@ export default function PreliminaryChecklistScreen() {
         />
         <CallToActionBtn
           label="next"
-          onPress={() => cancel}
+          onPress={() => router.push("(app)/(home)/schedule-appointment")}
           style={{ flex: 1 }}
         />
       </View>

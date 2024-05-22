@@ -17,6 +17,7 @@ import {
 
 import { Ionicons } from "react-native-vector-icons";
 import { CheckBox } from "react-native-btr";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import LinkBtn from "../../components/common/LinkBtn";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
@@ -67,6 +68,8 @@ export default function LoginScreen() {
         email,
         password
       );
+      console.log("User ID:", response.user.uid);
+      console.log("Email:", response.user.email);
       console.log(response);
       router.replace("/(app)/(tabs)");
     } catch (error) {
@@ -76,7 +79,16 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
+  React.useEffect(() => {
+    const checkLoginState = async () => {
+      const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
+      if (userLoggedIn === "true") {
+        router.replace("/(app)/(tabs)");
+      }
+    };
 
+    checkLoginState();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.cTop}>

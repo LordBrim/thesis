@@ -32,7 +32,7 @@ export default function StepsIndicator({ labels }: IStepsIndicator) {
     stepIndicatorLabelFinishedColor: "#ffffff",
     stepIndicatorLabelUnFinishedColor: "#aaaaaa",
 
-    labelColor: COLORS.primary,
+    labelColor: "#aaaaaa",
     labelSize: 13,
     currentStepLabelColor: COLORS.primary,
   };

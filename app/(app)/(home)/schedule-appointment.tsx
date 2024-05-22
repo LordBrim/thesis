@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React from "react";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
@@ -26,11 +26,18 @@ export default function ScheduleAppointmentScreen() {
         <Description description="Feel free to select a date and time that’s most convenient for you!" />
       </View>
 
-      <Text style={styles.header}>Preferred Hospital</Text>
+      <ScrollView
+        contentContainerStyle={{ gap: 8 }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+      >
+        <Text style={styles.header}>Preferred Hospital</Text>
 
-      <Text style={styles.header}>Preferred Date</Text>
+        <Text style={styles.header}>Preferred Date</Text>
 
-      <Text style={styles.header}>Preferred Time</Text>
+        <Text style={styles.header}>Preferred Time</Text>
+      </ScrollView>
 
       <View style={styles.fixed}>
         <CallToActionBtn
@@ -64,6 +71,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   fixed: {
+    position: "relative",
+    bottom: 0,
     flexDirection: "row",
     gap: 8,
   },

@@ -1,4 +1,3 @@
-// <<<<<<< QRCode
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { Alert } from "react-native";
@@ -64,8 +63,10 @@ export default function RegisterScreen() {
         password: password,
         displayName: displayName,
       };
+
       await firestoreOperations.addDocument("User", documentData);
-      router.replace("/(app)/(tabs)");
+      router.back();
+      router.replace("/(app)/(tabs)/");
     } catch (error) {
       console.log(error);
       alert("Registration Failed:" + error.message);

@@ -47,9 +47,7 @@ export default function PreliminaryChecklistScreen() {
         <FlatList
           contentContainerStyle={styles.flatlist}
           data={checklistQuestions}
-          renderItem={({ item }) => (
-            <ChecklistItem number={item.id} question={item.question} />
-          )}
+          renderItem={({ item }) => <ChecklistItem question={item.question} />}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
         />

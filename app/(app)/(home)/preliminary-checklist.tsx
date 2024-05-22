@@ -28,22 +28,21 @@ export default function PreliminaryChecklistScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StepsIndicator labels={labels} />
       <View>
         <Title title="Preliminary Checklist" />
         <Description description="Please answer the questions truthfully as you can possibly can." />
       </View>
+      <View style={styles.bar}>
+        <Text style={styles.header}>Questions</Text>
+        <Text style={[styles.header, { paddingHorizontal: 8 }]}>Yes / No</Text>
+      </View>
       <ScrollView
-        contentContainerStyle={{ gap: 8, paddingVertical: SIZES.xLarge }}
+        contentContainerStyle={{ gap: 8 }}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         bounces={false}
       >
-        <View style={styles.bar}>
-          <Text style={styles.header}>Questions</Text>
-          <Text style={[styles.header, { paddingHorizontal: 8 }]}>
-            Yes / No
-          </Text>
-        </View>
         <FlatList
           contentContainerStyle={styles.flatlist}
           data={checklistQuestions}
@@ -54,20 +53,17 @@ export default function PreliminaryChecklistScreen() {
       </ScrollView>
 
       <View style={styles.fixed}>
-        <StepsIndicator labels={labels} />
-        <View style={styles.buttons}>
-          <CallToActionBtn
-            label="cancel"
-            onPress={() => cancel}
-            style={{ flex: 1 }}
-            secondary
-          />
-          <CallToActionBtn
-            label="next"
-            onPress={() => cancel}
-            style={{ flex: 1 }}
-          />
-        </View>
+        <CallToActionBtn
+          label="cancel"
+          onPress={() => cancel}
+          style={{ flex: 1 }}
+          secondary
+        />
+        <CallToActionBtn
+          label="next"
+          onPress={() => cancel}
+          style={{ flex: 1 }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -80,6 +76,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
+    gap: 12,
   },
   flatlist: {
     rowGap: 8,
@@ -95,10 +92,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   fixed: {
-    paddingTop: 8,
-    gap: 8,
-  },
-  buttons: {
     flexDirection: "row",
     gap: 8,
   },

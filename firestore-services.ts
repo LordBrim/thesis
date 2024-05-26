@@ -7,6 +7,7 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
+  setDoc,
 } from "firebase/firestore";
 
 // Import the Firebase app instance
@@ -64,6 +65,17 @@ export const firestoreOperations = {
       console.log(`Document deleted successfully`);
     } catch (error) {
       console.error(`Error deleting document from ${collectionName}: `, error);
+      throw error;
+    }
+  },
+  createDocument: async (collectionName, documentData) => {
+    try {
+      const collectionRef = collection(FIRESTORE_DB, collectionName);
+      const docRef = await addDoc(collectionRef, documentData); // Use addDoc
+      console.log(`Document written with ID: ${docRef.id}`);
+      return docRef.id;
+    } catch (error) {
+      console.error(`Error adding document to ${collectionName}: `, error);
       throw error;
     }
   },

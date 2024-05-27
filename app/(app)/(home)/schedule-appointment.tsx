@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 // import { Picker } from "@react-native-picker/picker"; not used delete this after final build
 import React, { useState, useRef } from "react";
@@ -18,9 +19,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 // import WheelPicker from "react-native-wheel-picker-android"; remove this after final build not working
 import { firestoreOperations } from "firestore-services";
 import { getAuth } from "firebase/auth";
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, Timestamp } from "firebase/firestore";
-import { FIREBASE_AUTH } from "../../../firebase-config";
+import { generateUniqueTicketCode } from "../../../utils/helperFunction";
 export default function ScheduleAppointmentScreen() {
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
@@ -30,6 +29,8 @@ export default function ScheduleAppointmentScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [ticketNumber, setTicketNumber] = useState(null);
   // State for selected hospital
   const [selectedHospital, setSelectedHospital] = useState(null);
 
@@ -54,6 +55,10 @@ export default function ScheduleAppointmentScreen() {
     setSelectedTime(currentTime);
     setShowTimePicker(false);
   };
+  const handleModalClose = () => {
+    setShowModal(false);
+    router.push("(app)/(home)/schedule-appointment");
+  };
 
   const handleNextButtonPress = async () => {
     console.log("Selected Hospital:", selectedHospital);
@@ -68,7 +73,7 @@ export default function ScheduleAppointmentScreen() {
 
     const auth = getAuth();
     const user = auth.currentUser;
-
+    const ticketCode = await generateUniqueTicketCode();
     if (user) {
       console.log("Current User Email:", user.email);
       console.log("Current User UID:", user.uid);
@@ -81,11 +86,14 @@ export default function ScheduleAppointmentScreen() {
           selectedTime: formattedTime, // Time as string
           userEmail: user.email,
           userUID: user.uid,
+          ticketNumber: ticketCode,
+          status: "pending",
         };
         await firestoreOperations.createDocument("ticketRequest", ticketData);
 
         console.log("Ticket request saved successfully!");
-        router.push("(app)/(home)/schedule-appointment");
+        setShowModal(true);
+        setTicketNumber(ticketData.ticketNumber);
       } catch (error) {
         console.error("Error saving ticket request:", error);
       }
@@ -179,6 +187,33 @@ export default function ScheduleAppointmentScreen() {
           )}
         </View>
       </View>
+      {/* Modal for success message */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showModal}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={[styles.modalText, styles.modalHeader]}>Success!</Text>
+            <Text style={styles.modalText}>
+              Please show the code included in this message to the hospital
+              staff to confirm your attendance.
+            </Text>
+            <Text style={[styles.modalText, styles.modalCodeText]}>
+              Here's your code:{" "}
+              <Text style={styles.modalCode}>{ticketNumber}</Text>
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleModalClose}
+            >
+              <Text style={styles.modalButtonText}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.fixed}>
         <CallToActionBtn
@@ -224,4 +259,52 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   contentContainer: { flex: 1, flexDirection: "column", gap: 8 },
+
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "80%",
+  },
+  modalHeader: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "red",
+    marginBottom: 10,
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  modalSubtext: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  modalCodeText: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "red",
+  },
+  modalCode: {
+    fontWeight: "bold",
+  },
+  modalButton: {
+    backgroundColor: COLORS.primary,
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  modalButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });

@@ -5,6 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  Pressable,
+  TouchableHighlight,
 } from "react-native";
 // import { Picker } from "@react-native-picker/picker"; not used delete this after final build
 import React, { useState, useRef } from "react";
@@ -20,6 +22,9 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { firestoreOperations } from "firestore-services";
 import { getAuth } from "firebase/auth";
 import { generateUniqueTicketCode } from "../../../utils/helperFunction";
+import TextInputWrapper from "components/common/TextInputWrapper";
+import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
+
 export default function ScheduleAppointmentScreen() {
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
@@ -140,19 +145,16 @@ export default function ScheduleAppointmentScreen() {
           setOpen={setOpen}
           setValue={setSelectedHospital}
           placeholder="Select a hospital"
-          style={{
-            backgroundColor: "#ffffff",
-            borderColor: "#cccccc",
-            borderWidth: 1,
-            borderRadius: 8,
-          }}
+          style={styles.inputContainer}
+          labelStyle={styles.inputLabel}
         />
 
         <Text style={styles.header}>Preferred Date</Text>
-        <TouchableOpacity onPress={toggleDatePicker}>
-          <Text style={styles.dateText}>
-            {selectedDate.toLocaleDateString()}
-          </Text>
+        <TouchableOpacity
+          onPress={toggleDatePicker}
+          style={styles.inputContainer}
+        >
+          <Text>{selectedDate.toLocaleDateString()}</Text>
         </TouchableOpacity>
         {showDatePicker && (
           <DateTimePicker
@@ -165,27 +167,28 @@ export default function ScheduleAppointmentScreen() {
           />
         )}
 
-        <View>
-          <Text style={styles.header}>Preferred Time</Text>
-          <TouchableOpacity onPress={toggleTimePicker}>
-            <Text style={styles.dateText}>
-              {selectedTime.toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </Text>
-          </TouchableOpacity>
-          {showTimePicker && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={selectedTime}
-              mode="time"
-              is24Hour={false}
-              display="spinner"
-              onChange={handleTimeChange}
-            />
-          )}
-        </View>
+        <Text style={styles.header}>Preferred Time</Text>
+        <TouchableOpacity
+          onPress={toggleTimePicker}
+          style={styles.inputContainer}
+        >
+          <Text>
+            {selectedTime.toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Text>
+        </TouchableOpacity>
+        {showTimePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={selectedTime}
+            mode="time"
+            is24Hour={false}
+            display="spinner"
+            onChange={handleTimeChange}
+          />
+        )}
       </View>
       {/* Modal for success message */}
       <Modal
@@ -306,5 +309,27 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  inputContainer: {
+    width: "100%",
+    height: MINOR_COMPONENT_HEIGHT,
+    padding: SIZES.xSmall,
+    borderWidth: 1,
+    borderRadius: SIZES.xSmall,
+    borderColor: COLORS.gray,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: SIZES.xxxSmall,
+  },
+  inputLabel: {
+    fontWeight: "bold",
+    textTransform: "capitalize",
+    position: "absolute",
+    left: 6,
+    top: -10.5,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 4,
+    borderRadius: 50,
   },
 });

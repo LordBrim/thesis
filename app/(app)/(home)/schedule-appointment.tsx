@@ -15,6 +15,7 @@ import { getAuth } from "firebase/auth";
 import { generateUniqueTicketCode } from "../../../utils/helperFunction";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
+import Modal from "components/common/modals/Modal";
 
 export default function ScheduleAppointmentScreen() {
   const cancel = () => {
@@ -51,9 +52,8 @@ export default function ScheduleAppointmentScreen() {
     setSelectedTime(currentTime);
     setShowTimePicker(false);
   };
-  const handleModalClose = () => {
+  const handleCloseModal = () => {
     setShowModal(false);
-    router.push("(app)/(home)/schedule-appointment");
   };
 
   const handleNextButtonPress = async () => {
@@ -70,6 +70,7 @@ export default function ScheduleAppointmentScreen() {
     const auth = getAuth();
     const user = auth.currentUser;
     const ticketCode = await generateUniqueTicketCode();
+
     if (user) {
       console.log("Current User Email:", user.email);
       console.log("Current User UID:", user.uid);
@@ -119,6 +120,7 @@ export default function ScheduleAppointmentScreen() {
   const toggleTimePicker = () => {
     setShowTimePicker(!showTimePicker);
   };
+
   return (
     <View style={styles.container}>
       <StepsIndicator labels={labels} />
@@ -184,6 +186,11 @@ export default function ScheduleAppointmentScreen() {
         )}
       </View>
       {/* Modal for success message */}
+      <Modal
+        visible={showModal}
+        onRequestClose={handleCloseModal}
+        ticketNumber={ticketNumber}
+      />
       <View style={styles.fixed}>
         <CallToActionBtn
           label="cancel"

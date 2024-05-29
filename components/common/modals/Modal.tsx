@@ -9,18 +9,22 @@ import React from "react";
 import { COLORS } from "../../../constants";
 
 interface IModal {
-  showModal: boolean;
-  closeModal: () => void;
+  visible: boolean;
+  onRequestClose: () => void;
   ticketNumber: string;
 }
 
-export default function Modal({ showModal, closeModal, ticketNumber }: IModal) {
+export default function Modal({
+  visible,
+  onRequestClose,
+  ticketNumber,
+}: IModal) {
   return (
     <RNModal
       animationType="slide"
       transparent={true}
-      visible={showModal}
-      onRequestClose={closeModal}
+      visible={visible}
+      onRequestClose={onRequestClose}
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
@@ -33,7 +37,7 @@ export default function Modal({ showModal, closeModal, ticketNumber }: IModal) {
             Here's your code:{" "}
             <Text style={styles.modalCode}>{ticketNumber}</Text>
           </Text>
-          <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
+          <TouchableOpacity style={styles.modalButton} onPress={onRequestClose}>
             <Text style={styles.modalButtonText}>OK</Text>
           </TouchableOpacity>
         </View>

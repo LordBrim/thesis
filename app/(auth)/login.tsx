@@ -34,7 +34,7 @@ import {
   User,
 } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebase-config";
-
+import { firestoreOperations } from "../../firestore-services";
 export default function LoginScreen() {
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
@@ -59,7 +59,10 @@ export default function LoginScreen() {
   const handleToggleRemember = () => {
     setToggleRemember(!toggleRemember);
   };
-
+  interface User {
+    id: string;
+    role: string;
+  }
   const login = async () => {
     setLoading(true);
     try {
@@ -71,7 +74,22 @@ export default function LoginScreen() {
       console.log("User ID:", response.user.uid);
       console.log("Email:", response.user.email);
       console.log(response);
-      router.replace("/(app)/(tabs)");
+      const userData = await firestoreOperations.getDocuments("User");
+      const userRole = userData.find(
+        (user) => user.id === response.user.uid
+      ).role;
+
+      console.log("User Role:", userRole);
+      await AsyncStorage.setItem("user_role", userRole);
+      if (userRole === "admin") {
+        Alert.alert(
+          "Success admin logged in",
+          "Admin dashboard is currently in develop"
+        );
+        // router.replace("/(app)/(admin-tabs)");
+      } else {
+        router.replace("/(app)/(tabs)");
+      }
     } catch (error) {
       console.log(error);
       Alert.alert("Login Failed:" + error.message);

@@ -18,10 +18,16 @@ const FIRESTORE_DB = getFirestore(FIREBASE_APP);
 
 // Function to perform CRUD operations on a given collection
 export const firestoreOperations = {
-  addDocument: async (collectionName, documentData) => {
+  addDocument: async (collectionName, documentData, documentId) => {
     try {
       const collectionRef = collection(FIRESTORE_DB, collectionName);
-      const docRef = await addDoc(collectionRef, documentData);
+      let docRef;
+      if (documentId) {
+        docRef = doc(collectionRef, documentId);
+        await setDoc(docRef, documentData);
+      } else {
+        docRef = await addDoc(collectionRef, documentData);
+      }
       console.log(`Document written with ID: ${docRef.id}`);
       return docRef.id;
     } catch (error) {

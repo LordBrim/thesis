@@ -24,7 +24,7 @@ import CallToActionBtn from "../../components/common/CallToActionBtn";
 import LinkBtn from "components/common/LinkBtn";
 import LifelineLogo from "components/common/LifelineLogo";
 import Title from "components/common/texts/Title";
-
+import { setDoc, doc } from "firebase/firestore";
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
   const cpToggle = useTogglePasswordVisibility();
@@ -62,9 +62,14 @@ export default function RegisterScreen() {
         email: email,
         password: password,
         displayName: displayName,
+        role: "user",
       };
 
-      await firestoreOperations.addDocument("User", documentData);
+      await firestoreOperations.addDocument(
+        "User",
+        documentData,
+        response.user.uid
+      );
       router.back();
       router.replace("/(app)/(tabs)/");
     } catch (error) {

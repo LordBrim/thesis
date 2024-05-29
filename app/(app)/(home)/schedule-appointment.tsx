@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 // import { Picker } from "@react-native-picker/picker"; not used delete this after final build
 import React, { useState, useRef } from "react";
 import Title from "components/common/texts/Title";
@@ -20,6 +13,10 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { firestoreOperations } from "firestore-services";
 import { getAuth } from "firebase/auth";
 import { generateUniqueTicketCode } from "../../../utils/helperFunction";
+import TextInputWrapper from "components/common/TextInputWrapper";
+import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
+import Modal from "components/common/modals/Modal";
+
 export default function ScheduleAppointmentScreen() {
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
@@ -55,9 +52,8 @@ export default function ScheduleAppointmentScreen() {
     setSelectedTime(currentTime);
     setShowTimePicker(false);
   };
-  const handleModalClose = () => {
+  const handleCloseModal = () => {
     setShowModal(false);
-    router.push("(app)/(home)/schedule-appointment");
   };
 
   const handleNextButtonPress = async () => {
@@ -74,6 +70,7 @@ export default function ScheduleAppointmentScreen() {
     const auth = getAuth();
     const user = auth.currentUser;
     const ticketCode = await generateUniqueTicketCode();
+
     if (user) {
       console.log("Current User Email:", user.email);
       console.log("Current User UID:", user.uid);
@@ -123,6 +120,7 @@ export default function ScheduleAppointmentScreen() {
   const toggleTimePicker = () => {
     setShowTimePicker(!showTimePicker);
   };
+
   return (
     <View style={styles.container}>
       <StepsIndicator labels={labels} />
@@ -140,17 +138,16 @@ export default function ScheduleAppointmentScreen() {
           setOpen={setOpen}
           setValue={setSelectedHospital}
           placeholder="Select a hospital"
-          style={{
-            backgroundColor: "#ffffff",
-            borderColor: "#cccccc",
-            borderWidth: 1,
-            borderRadius: 8,
-          }}
+          style={styles.inputContainer}
+          labelStyle={styles.inputLabel}
         />
 
         <Text style={styles.header}>Preferred Date</Text>
-        <TouchableOpacity onPress={toggleDatePicker}>
-          <Text style={styles.dateText}>
+        <TouchableOpacity
+          onPress={toggleDatePicker}
+          style={styles.inputContainer}
+        >
+          <Text style={styles.inputLabel}>
             {selectedDate.toLocaleDateString()}
           </Text>
         </TouchableOpacity>
@@ -165,56 +162,35 @@ export default function ScheduleAppointmentScreen() {
           />
         )}
 
-        <View>
-          <Text style={styles.header}>Preferred Time</Text>
-          <TouchableOpacity onPress={toggleTimePicker}>
-            <Text style={styles.dateText}>
-              {selectedTime.toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </Text>
-          </TouchableOpacity>
-          {showTimePicker && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={selectedTime}
-              mode="time"
-              is24Hour={false}
-              display="spinner"
-              onChange={handleTimeChange}
-            />
-          )}
-        </View>
+        <Text style={styles.header}>Preferred Time</Text>
+        <TouchableOpacity
+          onPress={toggleTimePicker}
+          style={styles.inputContainer}
+        >
+          <Text style={styles.inputLabel}>
+            {selectedTime.toLocaleTimeString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Text>
+        </TouchableOpacity>
+        {showTimePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={selectedTime}
+            mode="time"
+            is24Hour={false}
+            display="spinner"
+            onChange={handleTimeChange}
+          />
+        )}
       </View>
       {/* Modal for success message */}
       <Modal
-        animationType="slide"
-        transparent={true}
         visible={showModal}
-        onRequestClose={handleModalClose}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={[styles.modalText, styles.modalHeader]}>Success!</Text>
-            <Text style={styles.modalText}>
-              Please show the code included in this message to the hospital
-              staff to confirm your attendance.
-            </Text>
-            <Text style={[styles.modalText, styles.modalCodeText]}>
-              Here's your code:{" "}
-              <Text style={styles.modalCode}>{ticketNumber}</Text>
-            </Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={handleModalClose}
-            >
-              <Text style={styles.modalButtonText}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
+        onRequestClose={handleCloseModal}
+        ticketNumber={ticketNumber}
+      />
       <View style={styles.fixed}>
         <CallToActionBtn
           label="cancel"
@@ -259,52 +235,22 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   contentContainer: { flex: 1, flexDirection: "column", gap: 8 },
-
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
+  inputContainer: {
+    width: "100%",
+    height: MINOR_COMPONENT_HEIGHT,
+    padding: SIZES.xSmall,
+    borderWidth: 1,
+    borderRadius: SIZES.xSmall,
+    borderColor: COLORS.gray,
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    gap: SIZES.xxxSmall,
   },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 5,
-    alignItems: "center",
-    width: "80%",
-  },
-  modalHeader: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "red",
-    marginBottom: 10,
-  },
-  modalText: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  modalSubtext: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  modalCodeText: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: "red",
-  },
-  modalCode: {
-    fontWeight: "bold",
-  },
-  modalButton: {
-    backgroundColor: COLORS.primary,
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  modalButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+  inputLabel: {
+    textTransform: "capitalize",
+    backgroundColor: COLORS.white,
+    paddingHorizontal: 4,
+    borderRadius: 50,
   },
 });

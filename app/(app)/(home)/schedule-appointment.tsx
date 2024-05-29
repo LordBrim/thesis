@@ -154,7 +154,9 @@ export default function ScheduleAppointmentScreen() {
           onPress={toggleDatePicker}
           style={styles.inputContainer}
         >
-          <Text>{selectedDate.toLocaleDateString()}</Text>
+          <Text style={styles.inputLabel}>
+            {selectedDate.toLocaleDateString()}
+          </Text>
         </TouchableOpacity>
         {showDatePicker && (
           <DateTimePicker
@@ -172,7 +174,7 @@ export default function ScheduleAppointmentScreen() {
           onPress={toggleTimePicker}
           style={styles.inputContainer}
         >
-          <Text>
+          <Text style={styles.inputLabel}>
             {selectedTime.toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
@@ -191,33 +193,6 @@ export default function ScheduleAppointmentScreen() {
         )}
       </View>
       {/* Modal for success message */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showModal}
-        onRequestClose={handleModalClose}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={[styles.modalText, styles.modalHeader]}>Success!</Text>
-            <Text style={styles.modalText}>
-              Please show the code included in this message to the hospital
-              staff to confirm your attendance.
-            </Text>
-            <Text style={[styles.modalText, styles.modalCodeText]}>
-              Here's your code:{" "}
-              <Text style={styles.modalCode}>{ticketNumber}</Text>
-            </Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={handleModalClose}
-            >
-              <Text style={styles.modalButtonText}>OK</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
       <View style={styles.fixed}>
         <CallToActionBtn
           label="cancel"
@@ -262,54 +237,6 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   contentContainer: { flex: 1, flexDirection: "column", gap: 8 },
-
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 5,
-    alignItems: "center",
-    width: "80%",
-  },
-  modalHeader: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "red",
-    marginBottom: 10,
-  },
-  modalText: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  modalSubtext: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  modalCodeText: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: "red",
-  },
-  modalCode: {
-    fontWeight: "bold",
-  },
-  modalButton: {
-    backgroundColor: COLORS.primary,
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  modalButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   inputContainer: {
     width: "100%",
     height: MINOR_COMPONENT_HEIGHT,
@@ -323,11 +250,7 @@ const styles = StyleSheet.create({
     gap: SIZES.xxxSmall,
   },
   inputLabel: {
-    fontWeight: "bold",
     textTransform: "capitalize",
-    position: "absolute",
-    left: 6,
-    top: -10.5,
     backgroundColor: COLORS.white,
     paddingHorizontal: 4,
     borderRadius: 50,

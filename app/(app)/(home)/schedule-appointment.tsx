@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Modal,
-  Pressable,
-  TouchableHighlight,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 // import { Picker } from "@react-native-picker/picker"; not used delete this after final build
 import React, { useState, useRef } from "react";
 import Title from "components/common/texts/Title";

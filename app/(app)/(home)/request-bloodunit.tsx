@@ -2,8 +2,11 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../constants";
 import DropDownPicker from "react-native-dropdown-picker";
+import CallToActionBtn from "components/common/CallToActionBtn";
 
 export default function RequestBloodunitScreen() {
+  const handleSubmit = () => {};
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>File A Request</Text>
@@ -11,7 +14,7 @@ export default function RequestBloodunitScreen() {
       <Text style={styles.header}>I Am Requesting For...</Text>
 
       <Text style={styles.header}>Blood Type</Text>
-      <DropDownPicker
+      {/* <DropDownPicker
         open={open}
         value={selectedHospital}
         items={hospitals}
@@ -20,10 +23,10 @@ export default function RequestBloodunitScreen() {
         placeholder="Select a hospital"
         style={styles.inputContainer}
         labelStyle={styles.inputLabel}
-      />
+      /> */}
 
       <Text style={styles.header}>Patient's Name</Text>
-      <DropDownPicker
+      {/* <DropDownPicker
         open={open}
         value={selectedHospital}
         items={hospitals}
@@ -32,10 +35,10 @@ export default function RequestBloodunitScreen() {
         placeholder="Select a hospital"
         style={styles.inputContainer}
         labelStyle={styles.inputLabel}
-      />
+      /> */}
 
       <Text style={styles.header}>Relationship To Patient</Text>
-      <DropDownPicker
+      {/* <DropDownPicker
         open={open}
         value={selectedHospital}
         items={hospitals}
@@ -44,10 +47,10 @@ export default function RequestBloodunitScreen() {
         placeholder="Select a hospital"
         style={styles.inputContainer}
         labelStyle={styles.inputLabel}
-      />
+      /> */}
 
       <Text style={styles.header}>Contact Information</Text>
-      <DropDownPicker
+      {/* <DropDownPicker
         open={open}
         value={selectedHospital}
         items={hospitals}
@@ -56,9 +59,17 @@ export default function RequestBloodunitScreen() {
         placeholder="Select a hospital"
         style={styles.inputContainer}
         labelStyle={styles.inputLabel}
-      />
+      /> */}
 
       <Text style={styles.header}>Upload Blood Request Form</Text>
+
+      <View style={styles.fixed}>
+        <CallToActionBtn
+          label="submit"
+          onPress={handleSubmit}
+          style={{ flex: 1 }}
+        />
+      </View>
     </View>
   );
 }
@@ -80,5 +91,9 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontSize: 18,
     fontWeight: "600",
+  },
+  fixed: {
+    flexDirection: "row",
+    gap: 8,
   },
 });

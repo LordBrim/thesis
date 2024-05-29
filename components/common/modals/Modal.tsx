@@ -21,24 +21,26 @@ export default function Modal({
 }: IModal) {
   return (
     <RNModal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={onRequestClose}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={[styles.modalText, styles.modalHeader]}>Success!</Text>
-          <Text style={styles.modalText}>
+      <View style={styles.modal}>
+        <View style={styles.container}>
+          <Text style={styles.header}>Success!</Text>
+          <Text style={styles.description}>
             Please show the code included in this message to the hospital staff
             to confirm your attendance.
           </Text>
-          <Text style={[styles.modalText, styles.modalCodeText]}>
-            Here's your code:{" "}
-            <Text style={styles.modalCode}>{ticketNumber}</Text>
-          </Text>
-          <TouchableOpacity style={styles.modalButton} onPress={onRequestClose}>
-            <Text style={styles.modalButtonText}>OK</Text>
+
+          <View>
+            <Text style={styles.description}>Here's your code:</Text>
+            <Text style={styles.ticket}>{ticketNumber}</Text>
+          </View>
+
+          <TouchableOpacity style={styles.btn} onPress={onRequestClose}>
+            <Text style={styles.btnText}>OK</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -47,49 +49,43 @@ export default function Modal({
 }
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  modal: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  modalContent: {
-    backgroundColor: "#fff",
+  container: {
+    backgroundColor: COLORS.white,
     padding: 20,
-    borderRadius: 5,
+    borderRadius: 15,
+    justifyContent: "center",
     alignItems: "center",
-    width: "80%",
+    width: "75%",
+    height: "50%",
+    gap: 20,
   },
-  modalHeader: {
+  header: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "red",
-    marginBottom: 10,
+    color: COLORS.primary,
   },
-  modalText: {
+  description: {
     fontSize: 16,
-    marginBottom: 10,
-  },
-  modalSubtext: {
-    fontSize: 16,
-    marginBottom: 20,
     textAlign: "center",
   },
-  modalCodeText: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: "red",
-  },
-  modalCode: {
+  ticket: {
     fontWeight: "bold",
+    fontSize: 28,
+    color: COLORS.primary,
   },
-  modalButton: {
+  btn: {
     backgroundColor: COLORS.primary,
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
   },
-  modalButtonText: {
+  btnText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",

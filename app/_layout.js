@@ -19,7 +19,6 @@ export default function StackLayout() {
         name="(app)/(tabs)"
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
-          headerRight: () => <QRHeaderBtn />,
         })}
       />
       {/* User Level Home Screens */}

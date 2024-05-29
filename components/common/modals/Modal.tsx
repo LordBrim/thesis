@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { COLORS } from "../../../constants";
+import CallToActionBtn from "../CallToActionBtn";
 
 interface IModal {
   visible: boolean;
@@ -39,9 +40,9 @@ export default function Modal({
             <Text style={styles.ticket}>{ticketNumber}</Text>
           </View>
 
-          <TouchableOpacity style={styles.btn} onPress={onRequestClose}>
-            <Text style={styles.btnText}>OK</Text>
-          </TouchableOpacity>
+          <View style={{ width: "65%", marginTop: 24 }}>
+            <CallToActionBtn label="Ok" onPress={onRequestClose} secondary />
+          </View>
         </View>
       </View>
     </RNModal>

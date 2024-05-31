@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, View, Dimensions } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN, SIZES } from "../../../constants";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
@@ -12,7 +12,7 @@ import Carousel from "pinar";
 export default function PreliminaryChecklistScreen() {
   const stepCount = 2;
   let [screenIndex, setScreenIndex] = useState(0);
-
+  const scheduleAppointmentRef = useRef(null);
   const cancel = () => {
     router.navigate("(app)/(tabs)");
   };
@@ -32,7 +32,11 @@ export default function PreliminaryChecklistScreen() {
   };
 
   const submit = () => {
-    router.navigate("(app)/(tabs)");
+    if (scheduleAppointmentRef.current) {
+      scheduleAppointmentRef.current.handleNextButtonPress();
+    } else {
+      console.log("scheduleAppointmentRef is null");
+    }
   };
 
   return (
@@ -52,7 +56,7 @@ export default function PreliminaryChecklistScreen() {
         scrollEnabled={false}
       >
         <PreliminaryChecklist />
-        <ScheduleAppointmentScreen />
+        <ScheduleAppointmentScreen ref={scheduleAppointmentRef} />
       </Carousel>
 
       <View style={styles.fixed}>

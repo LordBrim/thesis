@@ -1,5 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useState, useRef } from "react";
+import React, {
+  useState,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
 import { router } from "expo-router";
@@ -13,7 +18,7 @@ import TextInputWrapper from "components/common/TextInputWrapper";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
 import Modal from "components/common/modals/Modal";
 
-export default function ScheduleAppointmentScreen() {
+const ScheduleAppointmentScreen = forwardRef((props, ref) => {
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
   };
@@ -47,6 +52,10 @@ export default function ScheduleAppointmentScreen() {
   };
 
   const handleNextButtonPress = async () => {
+    if (!selectedHospital) {
+      alert("Please select a hospital.");
+      return;
+    }
     console.log("Selected Hospital:", selectedHospital);
     const formattedDate = selectedDate.toISOString().slice(0, 10);
     const formattedTime = selectedTime.toLocaleTimeString("en-US", {
@@ -88,6 +97,9 @@ export default function ScheduleAppointmentScreen() {
       console.log("No user is signed in.");
     }
   };
+  useImperativeHandle(ref, () => ({
+    handleNextButtonPress,
+  }));
 
   // State for selected time (hour and minute)
 
@@ -182,7 +194,7 @@ export default function ScheduleAppointmentScreen() {
       />
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -225,3 +237,4 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
 });
+export default ScheduleAppointmentScreen;

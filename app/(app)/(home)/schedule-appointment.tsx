@@ -86,7 +86,7 @@ export default function ScheduleAppointmentScreen() {
           ticketNumber: ticketCode,
           status: "pending",
         };
-        await firestoreOperations.createDocument("ticketRequest", ticketData);
+        await firestoreOperations.createDocument("ticketDonate", ticketData);
 
         console.log("Ticket request saved successfully!");
         setShowModal(true);
@@ -106,8 +106,8 @@ export default function ScheduleAppointmentScreen() {
       value: "De los Santos Medical Center",
     },
     {
-      label: "Our Lady of Lourder Hospital",
-      value: "Our Lady of Lourder Hospital",
+      label: "Our Lady of Lourdes Hospital",
+      value: "Our Lady of Lourdes Hospital",
     },
     {
       label: "Quirino Memorial Medical Center",

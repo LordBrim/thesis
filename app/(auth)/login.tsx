@@ -82,11 +82,11 @@ export default function LoginScreen() {
       console.log("User Role:", userRole);
       await AsyncStorage.setItem("user_role", userRole);
       if (userRole === "admin") {
-        Alert.alert(
-          "Success admin logged in",
-          "Admin dashboard is currently in develop"
-        );
-        // router.replace("/(app)/(admin-tabs)");
+        // Alert.alert(
+        //   "Success admin logged in",
+        //   "Admin dashboard is currently in develop"
+        // );
+        router.replace("/(app)/(home)/admin");
       } else {
         router.replace("/(app)/(tabs)");
       }

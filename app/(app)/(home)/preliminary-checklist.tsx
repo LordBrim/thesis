@@ -14,17 +14,16 @@ import { router } from "expo-router";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
 import StepsIndicator from "components/common/StepsIndicator";
+import { DonationScreens } from "constants/database";
 
 export default function PreliminaryChecklistScreen() {
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
   };
 
-  const labels = ["Preliminary\nChecklist", "Schedule\nAppointment"];
-
   return (
     <SafeAreaView style={styles.container}>
-      <StepsIndicator labels={labels} step={0} />
+      <StepsIndicator labels={DonationScreens} step={0} />
       <View>
         <Title title="Preliminary Checklist" />
         <Description description="Please answer the questions truthfully as you can possibly can." />

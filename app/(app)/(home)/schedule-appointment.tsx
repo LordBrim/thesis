@@ -89,6 +89,12 @@ export default function ScheduleAppointmentScreen() {
     }
   };
 
+  // State for selected time (hour and minute)
+
+  const toggleTimePicker = () => {
+    setShowTimePicker(!showTimePicker);
+  };
+
   const hospitals = [
     { label: "UERM Hospital", value: "UERM Hospital" },
     {
@@ -104,12 +110,6 @@ export default function ScheduleAppointmentScreen() {
       value: "Quirino Memorial Medical Center",
     },
   ];
-
-  // State for selected time (hour and minute)
-
-  const toggleTimePicker = () => {
-    setShowTimePicker(!showTimePicker);
-  };
 
   return (
     <View style={styles.container}>

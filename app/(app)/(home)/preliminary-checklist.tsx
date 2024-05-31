@@ -31,7 +31,7 @@ export default function PreliminaryChecklistScreen() {
     <SafeAreaView style={styles.container}>
       <StepsIndicator labels={DonationScreens} step={0} />
 
-      <SwiperFlatList index={0} showPagination>
+      <SwiperFlatList index={0} showPagination={false} disableGesture={true}>
         <View style={styles.child}>
           <PreliminaryChecklist />
         </View>
@@ -39,6 +39,20 @@ export default function PreliminaryChecklistScreen() {
           <ScheduleAppointmentScreen />
         </View>
       </SwiperFlatList>
+
+      <View style={styles.fixed}>
+        <CallToActionBtn
+          label="cancel"
+          onPress={() => cancel}
+          style={{ flex: 1 }}
+          secondary
+        />
+        <CallToActionBtn
+          label="next"
+          onPress={() => router.push("(app)/(home)/schedule-appointment")}
+          style={{ flex: 1 }}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -48,14 +62,18 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    // paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     gap: 12,
   },
   child: {
-    width,
+    width: width,
     justifyContent: "center",
+  },
+  fixed: {
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    flexDirection: "row",
+    gap: 8,
   },
 });

@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 // import { Picker } from "@react-native-picker/picker"; not used delete this after final build
 import React, { useState, useRef } from "react";
 import Title from "components/common/texts/Title";
@@ -118,7 +124,6 @@ export default function ScheduleAppointmentScreen() {
 
   return (
     <View style={styles.container}>
-      <StepsIndicator labels={DonationScreens} step={1} />
       <View>
         <Title title="Schedule Appointment" />
         <Description description="Feel free to select a date and time that’s most convenient for you!" />
@@ -186,22 +191,10 @@ export default function ScheduleAppointmentScreen() {
         onRequestClose={handleCloseModal}
         ticketNumber={ticketNumber}
       />
-      <View style={styles.fixed}>
-        <CallToActionBtn
-          label="cancel"
-          onPress={() => cancel}
-          style={{ flex: 1 }}
-          secondary
-        />
-        <CallToActionBtn
-          label="next"
-          onPress={handleNextButtonPress}
-          style={{ flex: 1 }}
-        />
-      </View>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -215,12 +208,6 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontSize: SIZES.large,
     fontWeight: "600",
-  },
-  fixed: {
-    position: "relative",
-    bottom: 0,
-    flexDirection: "row",
-    gap: 8,
   },
   dateText: {
     padding: 10,

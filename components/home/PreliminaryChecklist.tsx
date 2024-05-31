@@ -5,6 +5,7 @@ import {
   ScrollView,
   FlatList,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 import React from "react";
 import StepsIndicator from "components/common/StepsIndicator";
@@ -15,8 +16,6 @@ import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
 import { DonationScreens, checklistQuestions } from "constants/database";
-import { SwiperFlatList } from "react-native-swiper-flatlist";
-import ScheduleAppointmentScreen from "app/(app)/(home)/schedule-appointment";
 
 export default function PreliminaryChecklist() {
   const cancel = () => {
@@ -47,20 +46,6 @@ export default function PreliminaryChecklist() {
           scrollEnabled={false}
         />
       </ScrollView>
-
-      <View style={styles.fixed}>
-        <CallToActionBtn
-          label="cancel"
-          onPress={() => cancel}
-          style={{ flex: 1 }}
-          secondary
-        />
-        <CallToActionBtn
-          label="next"
-          onPress={() => router.push("(app)/(home)/schedule-appointment")}
-          style={{ flex: 1 }}
-        />
-      </View>
     </SafeAreaView>
   );
 }
@@ -69,6 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     gap: 12,
@@ -87,6 +73,8 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   fixed: {
+    position: "relative",
+    bottom: 0,
     flexDirection: "row",
     gap: 8,
   },

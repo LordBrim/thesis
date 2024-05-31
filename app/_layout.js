@@ -32,6 +32,14 @@ export default function StackLayout() {
       <Stack.Screen name="(app)/(home)/request" />
       <Stack.Screen name="(app)/(home)/event-details" />
       <Stack.Screen
+        name="(app)/(home)/admin"
+        options={{
+          headerTitle: "Admin Dashboard",
+          headerTitleAlign: "center",
+        }}
+      />
+
+      <Stack.Screen
         name="(app)/(home)/all-events"
         options={{
           headerTitle: "All Upcoming Events",

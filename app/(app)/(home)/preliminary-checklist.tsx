@@ -20,15 +20,11 @@ export default function PreliminaryChecklistScreen() {
     router.replace("(app)/(tabs)/index");
   };
 
-  const labels = [
-    "Preliminary Checklist",
-    "Schedule Appointment",
-    "Appointment Confimation",
-  ];
+  const labels = ["Preliminary\nChecklist", "Schedule\nAppointment"];
 
   return (
     <SafeAreaView style={styles.container}>
-      <StepsIndicator labels={labels} />
+      <StepsIndicator labels={labels} step={0} />
       <View>
         <Title title="Preliminary Checklist" />
         <Description description="Please answer the questions truthfully as you can possibly can." />

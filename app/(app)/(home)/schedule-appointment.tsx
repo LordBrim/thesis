@@ -32,11 +32,7 @@ export default function ScheduleAppointmentScreen() {
   const [selectedHospital, setSelectedHospital] = useState(null);
 
   // State for selected date
-  const labels = [
-    "Preliminary Checklist",
-    "Schedule Appointment",
-    "Appointment Confimation",
-  ];
+  const labels = ["Preliminary Checklist", "Schedule Appointment"];
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -123,7 +119,7 @@ export default function ScheduleAppointmentScreen() {
 
   return (
     <View style={styles.container}>
-      <StepsIndicator labels={labels} />
+      <StepsIndicator labels={labels} step={1} />
       <View>
         <Title title="Schedule Appointment" />
         <Description description="Feel free to select a date and time that’s most convenient for you!" />

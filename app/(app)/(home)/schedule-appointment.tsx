@@ -1,28 +1,17 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
-// import { Picker } from "@react-native-picker/picker"; not used delete this after final build
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState, useRef } from "react";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
-import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
-import StepsIndicator from "components/common/StepsIndicator";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
-// import WheelPicker from "react-native-wheel-picker-android"; remove this after final build not working
 import { firestoreOperations } from "firestore-services";
 import { getAuth } from "firebase/auth";
 import { generateUniqueTicketCode } from "../../../utils/helperFunction";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
 import Modal from "components/common/modals/Modal";
-import { DonationScreens } from "constants/database";
 
 export default function ScheduleAppointmentScreen() {
   const cancel = () => {

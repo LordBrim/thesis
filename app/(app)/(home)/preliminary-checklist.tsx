@@ -19,6 +19,7 @@ import { DonationScreens, checklistQuestions } from "constants/database";
 import SwiperFlatList from "react-native-swiper-flatlist";
 import ScheduleAppointmentScreen from "./schedule-appointment";
 import PreliminaryChecklist from "components/home/PreliminaryChecklist";
+import Carousel from "pinar";
 
 export default function PreliminaryChecklistScreen() {
   let [screenIndex, setScreenIndex] = useState(0);
@@ -29,16 +30,17 @@ export default function PreliminaryChecklistScreen() {
   };
 
   const next = () => {
-    setAutoplay(true);
+    this.carousel.scrollToNext();
     setScreenIndex(++screenIndex);
-    setAutoplay(false);
   };
+
+  const PAGES = ["Page 1", "Page 2", "Page 3", "Page 4", "Page 5"];
 
   return (
     <SafeAreaView style={styles.container}>
       <StepsIndicator labels={DonationScreens} step={screenIndex} />
 
-      <SwiperFlatList
+      {/* <SwiperFlatList
         index={screenIndex}
         showPagination={false}
         disableGesture={true}
@@ -49,7 +51,18 @@ export default function PreliminaryChecklistScreen() {
         <View style={styles.child}>
           <ScheduleAppointmentScreen />
         </View>
-      </SwiperFlatList>
+      </SwiperFlatList> */}
+
+      <Carousel
+        ref={(carousel) => {
+          this.carousel = carousel;
+        }}
+        showsControls={false}
+        showsDots={false}
+      >
+        <PreliminaryChecklist />
+        <ScheduleAppointmentScreen />
+      </Carousel>
 
       <View style={styles.fixed}>
         <CallToActionBtn

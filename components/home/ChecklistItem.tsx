@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: 12,
   },
   question: {

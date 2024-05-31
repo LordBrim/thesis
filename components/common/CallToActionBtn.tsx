@@ -10,9 +10,21 @@ import { COLORS, SIZES } from "../../constants/theme";
 import { MINOR_COMPONENT_HEIGHT } from "../../constants/measurements";
 
 type ICallToActionBtn = {
+  /**
+   * The label of the button
+   */
   label: string;
+  /**
+   * The action when pressed
+   */
   onPress: () => void;
+  /**
+   * The style of the container.
+   */
   style?: StyleProp<TextStyle>;
+  /**
+   * Whether to use the secondary design.
+   */
   secondary?: boolean;
 };
 

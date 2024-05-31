@@ -1,13 +1,22 @@
 import { View, Text } from "react-native";
 import React from "react";
 import StepIndicator from "react-native-step-indicator";
-import { COLORS } from "constants";
+import { COLORS } from "../../constants";
 
 interface IStepsIndicator {
   labels: Array<string>;
+  step: number;
+  /**
+   * Count of steps
+   */
+  steps: number;
 }
 
-export default function StepsIndicator({ labels }: IStepsIndicator) {
+export default function StepsIndicator({
+  labels,
+  step,
+  steps,
+}: IStepsIndicator) {
   const customStyles = {
     stepIndicatorSize: 25,
     currentStepIndicatorSize: 30,
@@ -41,8 +50,8 @@ export default function StepsIndicator({ labels }: IStepsIndicator) {
     <StepIndicator
       customStyles={customStyles}
       labels={labels}
-      stepCount={3}
-      currentPosition={1}
+      stepCount={steps}
+      currentPosition={step}
     />
   );
 }

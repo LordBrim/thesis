@@ -35,7 +35,12 @@ export default function StackLayout() {
         name="(app)/(home)/admin"
         options={{
           headerTitle: "Admin Dashboard",
-          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="(app)/(home)/admin-donate"
+        options={{
+          headerTitle: "Admin Dashboard",
         }}
       />
 

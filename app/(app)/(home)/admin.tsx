@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Image,
 } from "react-native";
 import {
   getFirestore,
@@ -19,16 +20,20 @@ import {
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { router } from "expo-router";
-
+import ActionBtn from "components/home/ActionBtn";
 // Import your Firebase config
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../../firebase-config";
+import AdminDonate from "./admin-donate";
 
 export default function AdminTicketScreen() {
-  const [ticketRequests, setTicketRequests] = useState([]);
   const auth = getAuth();
   const db = getFirestore();
   const [adminHospital, setAdminHospital] = useState("");
-
+  const [appointments, setAppointments] = useState([]);
+  interface Appointment {
+    id: string;
+    selectedDate: string;
+  }
   useEffect(() => {
     // Get the user document from the "User" collection based on the logged-in user's email
     const fetchUser = async () => {
@@ -54,20 +59,30 @@ export default function AdminTicketScreen() {
   }, []);
 
   useEffect(() => {
-    const fetchTicketRequests = async () => {
+    const fetchticketDonates = async () => {
       try {
         // Get all ticket requests for the logged-in admin's hospital
         const q = query(
-          collection(db, "ticketRequest"),
-          where("selectedHospital", "==", adminHospital)
+          collection(db, "ticketDonate"),
+          where("selectedHospital", "==", adminHospital),
+          where("status", "==", "accepted")
         );
         const querySnapshot = await getDocs(q);
 
         const ticketData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }));
-        setTicketRequests(ticketData);
+        })) as Appointment[];
+
+        // Get current date in "yyyy-mm-dd" format
+        const currentDate = new Date().toISOString().split("T")[0];
+
+        // Filter appointments based on the current date
+        const filteredAppointments = ticketData.filter(
+          (appointment) => appointment.selectedDate === currentDate
+        );
+
+        setAppointments(filteredAppointments);
       } catch (error) {
         console.error("Error fetching ticket requests:", error);
         Alert.alert("Error", "Failed to load ticket requests.");
@@ -75,35 +90,10 @@ export default function AdminTicketScreen() {
     };
 
     if (adminHospital) {
-      fetchTicketRequests();
+      fetchticketDonates();
     }
   }, [adminHospital]);
 
-  const handleAccept = async (ticketId) => {
-    try {
-      // Update the ticket request status to "accepted"
-      const ticketDocRef = doc(db, "ticketRequest", ticketId);
-      await updateDoc(ticketDocRef, { status: "accepted" });
-      Alert.alert("Success", "Ticket request accepted.");
-      // You might want to refresh the list here
-    } catch (error) {
-      console.error("Error accepting ticket request:", error);
-      Alert.alert("Error", "Failed to accept ticket request.");
-    }
-  };
-
-  const handleReject = async (ticketId) => {
-    try {
-      // Update the ticket request status to "rejected"
-      const ticketDocRef = doc(db, "ticketRequest", ticketId);
-      await updateDoc(ticketDocRef, { status: "rejected" });
-      Alert.alert("Success", "Ticket request rejected.");
-      // You might want to refresh the list here
-    } catch (error) {
-      console.error("Error rejecting ticket request:", error);
-      Alert.alert("Error", "Failed to reject ticket request.");
-    }
-  };
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -113,58 +103,65 @@ export default function AdminTicketScreen() {
       Alert.alert("Error", "Failed to log out.");
     }
   };
+
+  const hospitalImages = {
+    "UERM Hospital": require("../../../assets/images/hospital/uerm.png"),
+    "Quirino Memorial Medical Center": require("../../../assets/images/hospital/quirino.png"),
+    "Our Lady of Lourdes Hospital": require("../../../assets/images/hospital/lourdes.png"),
+    "De los Santos Medical Center": require("../../../assets/images/hospital/santos.png"),
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.noRequests}>{adminHospital}</Text>
-      <Text style={styles.noRequests}>
-        Pending Ticket Requests: {ticketRequests.length}
+      <View
+        style={{
+          flexDirection: "row",
+          alignContent: "center",
+          alignItems: "center",
+          borderWidth: 1,
+          padding: 6,
+          borderRadius: 10,
+          margin: 10,
+        }}
+      >
+        <Image
+          source={hospitalImages[adminHospital]}
+          style={{ width: 60, height: 60, marginRight: 12 }}
+        />
+        <Text style={[styles.noRequests, { fontWeight: "bold" }]}>
+          {adminHospital}
+        </Text>
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <ActionBtn
+          href="/(app)/(home)/admin-donate"
+          title="Check Donation Appointment"
+          subtitle="Review appointments"
+          cta
+        />
+        <ActionBtn
+          href="/(app)/(home)/admin-request"
+          title="Check Request Tickets"
+          subtitle="Check all pending tickets."
+          cta
+        />
+      </View>
+      <Text style={{ fontWeight: "bold", fontSize: 20, margin: 15 }}>
+        Appointments For Today:
       </Text>
-      <ScrollView contentContainerStyle={styles.content}>
-        {ticketRequests.length === 0 && (
-          <Text style={styles.noRequests}>No pending ticket requests.</Text>
-        )}
-
-        {ticketRequests.map((request) => (
-          <View key={request.id} style={styles.requestItem}>
-            <View style={styles.requestDetails}>
-              <Text style={styles.label}>Ticket Number:</Text>
-              <Text style={styles.value}>{request.ticketNumber}</Text>
-            </View>
-            <View style={styles.requestDetails}>
-              <Text style={styles.label}>Hospital:</Text>
-              <Text style={styles.value}>{request.selectedHospital}</Text>
-            </View>
-            <View style={styles.requestDetails}>
-              <Text style={styles.label}>Date:</Text>
-              <Text style={styles.value}>{request.selectedDate}</Text>
-            </View>
-            <View style={styles.requestDetails}>
-              <Text style={styles.label}>Time:</Text>
-              <Text style={styles.value}>{request.selectedTime}</Text>
-            </View>
-            <View style={styles.requestDetails}>
-              <Text style={styles.label}>User Email:</Text>
-              <Text style={styles.value}>{request.userEmail}</Text>
-            </View>
-            <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleAccept(request.id)}
-              >
-                <Text style={styles.buttonText}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => handleReject(request.id)}
-              >
-                <Text style={styles.buttonText}>Reject</Text>
-              </TouchableOpacity>
-            </View>
+      <View style={{ flexDirection: "column" }}>
+        {appointments.map((appointment) => (
+          <View
+            key={appointment.id}
+            style={{ borderWidth: 1, borderRadius: 3, margin: 10, padding: 10 }}
+          >
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              {appointment.ticketNumber} - {appointment.selectedDate}{" "}
+              {appointment.selectedTime}
+            </Text>
           </View>
         ))}
-      </ScrollView>
+      </View>
       <View style={styles.container}>
-        {/* ...existing code... */}
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutButtonText}>Logout</Text>
         </TouchableOpacity>
@@ -185,17 +182,6 @@ const styles = StyleSheet.create({
   noRequests: {
     textAlign: "center",
     fontSize: 18,
-  },
-  requestItem: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 15,
-    borderRadius: 8,
-  },
-  requestDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 5,
   },
   label: {
     fontWeight: "bold",

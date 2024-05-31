@@ -31,6 +31,10 @@ export default function PreliminaryChecklistScreen() {
     }
   };
 
+  const submit = () => {
+    router.navigate("(app)/(tabs)");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StepsIndicator
@@ -66,7 +70,9 @@ export default function PreliminaryChecklistScreen() {
         />
         <CallToActionBtn
           label={screenIndex === stepCount - 1 ? "submit" : "next"}
-          onPress={() => next()}
+          onPress={
+            screenIndex === stepCount - 1 ? () => submit() : () => next()
+          }
           style={{ flex: 1 }}
         />
       </View>

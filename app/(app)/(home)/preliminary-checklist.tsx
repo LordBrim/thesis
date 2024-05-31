@@ -4,7 +4,7 @@ import { COLORS, HORIZONTAL_SCREEN_MARGIN, SIZES } from "../../../constants";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
 import StepsIndicator from "components/common/StepsIndicator";
-import { DonationScreens, checklistQuestions } from "constants/database";
+import { DonationScreens } from "constants/database";
 import ScheduleAppointmentScreen from "./schedule-appointment";
 import PreliminaryChecklist from "components/home/PreliminaryChecklist";
 import Carousel from "pinar";
@@ -20,8 +20,6 @@ export default function PreliminaryChecklistScreen() {
     this.carousel.scrollToNext();
     setScreenIndex(++screenIndex);
   };
-
-  const PAGES = ["Page 1", "Page 2", "Page 3", "Page 4", "Page 5"];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,7 +58,6 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     gap: 12,

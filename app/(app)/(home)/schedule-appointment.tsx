@@ -49,6 +49,7 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
   };
   const handleCloseModal = () => {
     setShowModal(false);
+    router.navigate("(app)/(tabs)");
   };
 
   const handleNextButtonPress = async () => {

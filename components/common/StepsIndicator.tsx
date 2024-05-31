@@ -6,9 +6,17 @@ import { COLORS } from "../../constants";
 interface IStepsIndicator {
   labels: Array<string>;
   step: number;
+  /**
+   * Count of steps
+   */
+  steps: number;
 }
 
-export default function StepsIndicator({ labels, step }: IStepsIndicator) {
+export default function StepsIndicator({
+  labels,
+  step,
+  steps,
+}: IStepsIndicator) {
   const customStyles = {
     stepIndicatorSize: 25,
     currentStepIndicatorSize: 30,
@@ -42,7 +50,7 @@ export default function StepsIndicator({ labels, step }: IStepsIndicator) {
     <StepIndicator
       customStyles={customStyles}
       labels={labels}
-      stepCount={2}
+      stepCount={steps}
       currentPosition={step}
     />
   );

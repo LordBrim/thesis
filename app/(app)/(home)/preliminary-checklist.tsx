@@ -21,17 +21,28 @@ import ScheduleAppointmentScreen from "./schedule-appointment";
 import PreliminaryChecklist from "components/home/PreliminaryChecklist";
 
 export default function PreliminaryChecklistScreen() {
+  let [screenIndex, setScreenIndex] = useState(0);
+  let [autoplay, setAutoplay] = useState(false);
+
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
   };
 
-  const [screen, setScreen] = useState(0);
+  const next = () => {
+    setAutoplay(true);
+    setScreenIndex(++screenIndex);
+    setAutoplay(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StepsIndicator labels={DonationScreens} step={0} />
+      <StepsIndicator labels={DonationScreens} step={screenIndex} />
 
-      <SwiperFlatList index={0} showPagination={false} disableGesture={true}>
+      <SwiperFlatList
+        index={screenIndex}
+        showPagination={false}
+        disableGesture={true}
+      >
         <View style={styles.child}>
           <PreliminaryChecklist />
         </View>
@@ -43,13 +54,13 @@ export default function PreliminaryChecklistScreen() {
       <View style={styles.fixed}>
         <CallToActionBtn
           label="cancel"
-          onPress={() => cancel}
+          onPress={() => cancel()}
           style={{ flex: 1 }}
           secondary
         />
         <CallToActionBtn
           label="next"
-          onPress={() => router.push("(app)/(home)/schedule-appointment")}
+          onPress={() => next()}
           style={{ flex: 1 }}
         />
       </View>

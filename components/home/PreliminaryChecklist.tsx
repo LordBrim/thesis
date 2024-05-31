@@ -18,10 +18,6 @@ import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
 import { DonationScreens, checklistQuestions } from "constants/database";
 
 export default function PreliminaryChecklist() {
-  const cancel = () => {
-    router.replace("(app)/(tabs)/index");
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <View>

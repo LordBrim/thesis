@@ -25,7 +25,7 @@ export default function PreliminaryChecklistScreen() {
   let [autoplay, setAutoplay] = useState(false);
 
   const cancel = () => {
-    router.replace("(app)/(tabs)/index");
+    router.navigate("(app)/(tabs)");
   };
 
   const next = () => {

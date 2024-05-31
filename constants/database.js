@@ -17,3 +17,10 @@ export const FAQuestions = [
       "Lorem ipsum fafas cxvv sfas fasj fak waek j sf a as vvsdfasfa  qweqw dasd czx askda ads",
   },
 ];
+
+export const DonationScreens = [
+  "Preliminary\nChecklist",
+  "Schedule\nAppointment",
+];
+
+export const RequestScreens = ["Request\nGuidelines", "File A\nRequest"];

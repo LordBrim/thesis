@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React from "react";
 import StepIndicator from "react-native-step-indicator";
-import { COLORS } from "constants";
+import { COLORS } from "../../constants";
 
 interface IStepsIndicator {
   labels: Array<string>;

@@ -10,20 +10,34 @@ import PreliminaryChecklist from "components/home/PreliminaryChecklist";
 import Carousel from "pinar";
 
 export default function PreliminaryChecklistScreen() {
+  const stepCount = 2;
   let [screenIndex, setScreenIndex] = useState(0);
 
   const cancel = () => {
     router.navigate("(app)/(tabs)");
   };
 
+  const prev = () => {
+    if (screenIndex > 0) {
+      this.carousel.scrollToPrev();
+      setScreenIndex(--screenIndex);
+    }
+  };
+
   const next = () => {
-    this.carousel.scrollToNext();
-    setScreenIndex(++screenIndex);
+    if (screenIndex < stepCount - 1) {
+      this.carousel.scrollToNext();
+      setScreenIndex(++screenIndex);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StepsIndicator labels={DonationScreens} step={screenIndex} />
+      <StepsIndicator
+        labels={DonationScreens}
+        step={screenIndex}
+        steps={stepCount}
+      />
 
       <Carousel
         ref={(carousel) => {
@@ -31,6 +45,7 @@ export default function PreliminaryChecklistScreen() {
         }}
         showsControls={false}
         showsDots={false}
+        scrollEnabled={false}
       >
         <PreliminaryChecklist />
         <ScheduleAppointmentScreen />
@@ -40,6 +55,12 @@ export default function PreliminaryChecklistScreen() {
         <CallToActionBtn
           label="cancel"
           onPress={() => cancel()}
+          style={{ flex: 1 }}
+          secondary
+        />
+        <CallToActionBtn
+          label="previous"
+          onPress={() => prev()}
           style={{ flex: 1 }}
           secondary
         />

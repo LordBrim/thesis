@@ -18,7 +18,7 @@ const FIRESTORE_DB = getFirestore(FIREBASE_APP);
 
 // Function to perform CRUD operations on a given collection
 export const firestoreOperations = {
-  addDocument: async (collectionName, documentData, documentId) => {
+  addDocument: async (collectionName, documentData, documentId?) => {
     try {
       const collectionRef = collection(FIRESTORE_DB, collectionName);
       let docRef;

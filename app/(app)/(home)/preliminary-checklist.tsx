@@ -65,7 +65,7 @@ export default function PreliminaryChecklistScreen() {
           secondary
         />
         <CallToActionBtn
-          label="next"
+          label={screenIndex === stepCount - 1 ? "submit" : "next"}
           onPress={() => next()}
           style={{ flex: 1 }}
         />

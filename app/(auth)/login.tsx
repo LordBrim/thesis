@@ -111,9 +111,9 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.cTop}>
         {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
-        <Pressable onPress={() => router.replace("/(app)/(tabs)")}>
-          <LifelineLogo />
-        </Pressable>
+
+        <LifelineLogo />
+
         {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
 
         <Title title="Login" />

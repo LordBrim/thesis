@@ -88,8 +88,27 @@ export default function RequestBloodunitScreen() {
       <Text style={styles.title}>File A Request</Text>
 
       <Text style={styles.header}>I Am Requesting For...</Text>
+      {/* <TextInputWrapper label="Password">
+              <TextInput
+                value={password}
+                placeholder="Enter your password..."
+                onChangeText={(password) => setPassword(password)}
+                autoCapitalize="none"
+                autoCorrect={true}
+                enablesReturnKeyAutomatically
+                secureTextEntry={passwordVisibility}
+              />
+              <Pressable onPress={handlePasswordVisibility}>
+                <Ionicons
+                  name={rightIcon}
+                  size={SIZES.xLarge}
+                  color={COLORS.gray}
+                />
+              </Pressable>
+            </TextInputWrapper> */}
 
       <Text style={styles.header}>Blood Type</Text>
+      {/* <<<<<<< Updated upstream
       <DropDownPicker
         open={openBloodType}
         value={selectedBloodType}
@@ -97,6 +116,16 @@ export default function RequestBloodunitScreen() {
         setOpen={setOpenBloodType}
         setValue={setSelectedBloodType}
         placeholder="Select the blood type"
+=======
+
+      {/* <DropDownPicker
+        open={open}
+        value={selectedHospital}
+        items={hospitals}
+        setOpen={setOpen}
+        setValue={setSelectedHospital}
+        placeholder="Select a hospital"
+>>>>>>> Stashed changes
         style={styles.inputContainer}
         labelStyle={styles.inputLabel}
       />
@@ -153,7 +182,7 @@ export default function RequestBloodunitScreen() {
           onPress={handleSubmit}
           style={{ flex: 1 }}
         />
-      </View>
+      </View> */}
     </View>
   );
 }

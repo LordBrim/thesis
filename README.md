@@ -41,7 +41,6 @@
 **Potential Mapping APIs:**
 
 - [react-native-maps](https://www.npmjs.com/package/react-native-maps)
-- [react-native-mapbox-gl/maps](https://www.npmjs.com/package/@react-native-mapbox-gl/maps)
 
 **Realm**
 

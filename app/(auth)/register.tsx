@@ -49,6 +49,7 @@ export default function RegisterScreen() {
     }
     setLoading(true);
     try {
+      // !TODO add confirmPassword and password entered are the same
       const response = await createUserWithEmailAndPassword(
         auth,
         email,

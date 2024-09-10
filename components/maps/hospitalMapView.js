@@ -225,6 +225,7 @@ const HospitalMapView = ({
       </Animated.View>
       {selectedHospital && selectedHospital.coordinates ? (
         <MapView
+          provider={PROVIDER_GOOGLE}
           style={styles.map}
           customMapStyle={mapStyle}
           // mapType="none"

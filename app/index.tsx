@@ -1,18 +1,12 @@
-import { UserRoleContext, UserRoleType } from "../context/UserRoleContext";
-import { Login } from "./screens";
-import { FIREBASE_AUTH } from "../firebase-config";
-import { useEffect, useState } from "react";
-import {
-  User,
-  onAuthStateChanged,
-  initializeAuth,
-  getReactNativePersistence,
-} from "firebase/auth";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
+import { User, onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { Alert } from "react-native";
-import NoInternetScreen from "./(aux)/no-internet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { UserRoleContext, UserRoleType } from "../context/UserRoleContext";
+import { FIREBASE_AUTH } from "../firebase-config";
+import NoInternetScreen from "./(aux)/no-internet";
+import { Login } from "./screens";
 
 export default function Authentication() {
   const [role, setRole] = useState<UserRoleType>("client");

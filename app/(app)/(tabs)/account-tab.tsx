@@ -1,18 +1,13 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
 import { COLORS, SIZES } from "../../../constants/theme";
 import { Link } from "expo-router";
-import Avatar from "components/common/Avatar";
-import AccountCard from "components/account/AccountCard";
-import { FlatList } from "react-native";
+import { FontAwesome6, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 
 import { FIREBASE_AUTH } from "../../../firebase-config";
-import React, { useEffect, useState } from "react";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import { IAccountCard } from "constants/Interfaces";
+import Avatar from "components/common/Avatar";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -37,67 +32,181 @@ export default function AccountTab({
 
   // Temporary Data for front-end only. Remove later on firebase integration
   const temporaryData = {
-    avaterUrl: "",
-    username: "Username",
-    email: email,
-    phoneNumber: "+63 (212)-555-1234",
+    avatarUrl: require("../../../assets/images/man.jpg"),
+    username: "Eldon Gray",
+    email: "lifelineisthebest@gmail.com",
+    donations: "25",
+    received: "3",
+    status: "Available",
   };
   // Temporary Data for front-end only. Remove later on firebase integration
 
+  const size = 22;
+  const [status, setStatus] = useState(true);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.cProfile}>
-        {/* <Avatar /> */}
+    <ScrollView style={styles.container}>
+      <View style={styles.profile}>
+        <Avatar avatarUrl={temporaryData.avatarUrl} />
         <View style={{ flex: 1, gap: 4 }}>
-          <Text style={styles.username}>{temporaryData.username}</Text>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.email}>{temporaryData.email}</Text>
-            {temporaryData.phoneNumber && (
-              <Text style={styles.number}> • {temporaryData.phoneNumber}</Text>
-            )}
-          </View>
+          <Text style={styles.title}>{temporaryData.username}</Text>
+          <Text style={styles.subtitle}>{temporaryData.email}</Text>
         </View>
       </View>
 
-      <AccountCard
-        href="/donation-history"
-        icon="history"
-        label="donation-history"
-      />
-      <AccountCard href="/profile" icon="person" label="profile" />
-      <AccountCard href="/settings" icon="gear" label="settings" />
-      <AccountCard href="/about" icon="info-circle" label="about" />
-      <AccountCard href="/help" icon="question-circle" label="help" />
-      <AccountCard
-        href="/login"
-        icon="power-off"
-        label="logout"
-        iconColor={COLORS.warning}
-        labelColor={COLORS.warning}
-      />
-    </View>
+      <View style={styles.donations}>
+        <Text
+          style={[
+            styles.title,
+            { color: COLORS.black, fontSize: SIZES.medium },
+          ]}
+        >
+          Donation Status:{" "}
+          {status ? (
+            <Text style={{ color: "green" }}>Available</Text>
+          ) : (
+            <Text style={{ color: "red" }}>Locked</Text>
+          )}
+        </Text>
+        <Text style={styles.subtitle}>
+          Units Donated:{" "}
+          <Text style={{ fontWeight: "400" }}>{temporaryData.donations}</Text>
+        </Text>
+        <Text style={styles.subtitle}>
+          Units Received:{" "}
+          <Text style={{ fontWeight: "400" }}>{temporaryData.received}</Text>
+        </Text>
+      </View>
+
+      <View style={styles.flatlist}>
+        <Card
+          href="/donation-history"
+          icon={
+            <FontAwesome5 name="history" size={size} color={COLORS.black} />
+          }
+          label="donation history"
+        />
+        <Card
+          href="/profile"
+          icon={
+            <MaterialIcons name="person" size={size} color={COLORS.black} />
+          }
+          label="profile"
+        />
+        <Card
+          href="/settings"
+          icon={<FontAwesome6 name="gear" size={size} color={COLORS.black} />}
+          label="settings"
+        />
+      </View>
+
+      <View style={styles.flatlist}>
+        <Card
+          href="/about"
+          icon={
+            <FontAwesome6 name="circle-info" size={size} color={COLORS.black} />
+          }
+          label="about"
+        />
+        <Card
+          href="/help"
+          icon={
+            <FontAwesome5
+              name="question-circle"
+              size={size}
+              color={COLORS.black}
+            />
+          }
+          label="help"
+        />
+      </View>
+
+      <View style={styles.flatlist}>
+        <Card
+          href="/login"
+          icon={
+            <FontAwesome6 name="power-off" size={size} color={COLORS.primary} />
+          }
+          label="logout"
+        />
+      </View>
+    </ScrollView>
   );
 }
+
+const Card = ({ href, icon, label, sublabel }: IAccountCard) => (
+  <Link asChild replace href={href}>
+    <Pressable style={styles.card} android_ripple={{ radius: 200 }}>
+      <View style={styles.icon}>{icon}</View>
+      <Text style={styles.label}>{label}</Text>
+      {sublabel && <Text style={styles.label}>{label}</Text>}
+    </Pressable>
+  </Link>
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
   },
-  cProfile: {
+  profile: {
     flexDirection: "row",
-    gap: 24,
+    padding: HORIZONTAL_SCREEN_MARGIN,
+    gap: 16,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
   },
-  cContact: {},
-  username: {
-    fontSize: SIZES.xLarge,
+  donations: {
+    margin: HORIZONTAL_SCREEN_MARGIN,
+    justifyContent: "center",
+    shadowColor: COLORS.shadow,
+    padding: 16,
+    elevation: 3,
+    overflow: "hidden",
+    borderRadius: SIZES.small,
+    flex: 1,
+    gap: 4,
+    backgroundColor: COLORS.white,
+    position: "relative",
+  },
+  title: {
+    fontSize: SIZES.large,
     fontWeight: "bold",
     textTransform: "capitalize",
     color: COLORS.primary,
   },
-  email: {},
-  number: {},
+  subtitle: {
+    fontSize: SIZES.small,
+    color: COLORS.black,
+    fontWeight: "500",
+  },
+  flatlist: {
+    flex: 1,
+    marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    marginTop: HORIZONTAL_SCREEN_MARGIN,
+    overflow: "hidden",
+    borderRadius: 12,
+    shadowRadius: 12,
+  },
+  card: {
+    flex: 1,
+    width: "100%",
+    maxHeight: 50,
+    flexDirection: "row",
+    paddingVertical: 12,
+    gap: 6,
+    alignItems: "center",
+  },
+  icon: {
+    width: 50,
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  label: {
+    width: "100%",
+    fontSize: 16,
+    fontWeight: "500",
+    textTransform: "capitalize",
+  },
 });

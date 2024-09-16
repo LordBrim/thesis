@@ -1,22 +1,30 @@
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  ImageSourcePropType,
+  ImageBackground,
+} from "react-native";
 import React from "react";
 
 type IAvater = {
-  avatarUrl: string;
+  avatarUrl: ImageSourcePropType;
 };
 
 export default function Avatar({ avatarUrl }: IAvater) {
   return (
-    <View style={styles.container}>
-      <Text>Avatar</Text>
-    </View>
+    <ImageBackground
+      style={styles.container}
+      source={avatarUrl}
+      resizeMode="cover"
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     borderRadius: 200,
     backgroundColor: "black",
     overflow: "hidden",

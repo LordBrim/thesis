@@ -16,10 +16,14 @@ const COLORS = {
   white: "#FFFFFF",
   lightWhite: "#FAFAFC",
 
+  black: "#333333",
+
   enabled: "#bf2831",
   disabled: "#8a8a8a",
 
   warning: "#cc3300",
+
+  shadow: "#52006A",
 };
 
 const FONT = {
@@ -33,10 +37,8 @@ const FONT = {
 };
 
 const SIZES = {
-  xxxSmall: 6,
-  xxSmall: 8,
-  xSmall: 10,
-  small: 12,
+  xSmall: 12,
+  small: 14,
   medium: 16,
   large: 20,
   xLarge: 24,

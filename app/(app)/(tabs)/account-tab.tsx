@@ -1,13 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 import { COLORS, SIZES } from "../../../constants/theme";
 import { Link } from "expo-router";
 import { FontAwesome6, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 
-import { FIREBASE_AUTH } from "../../../firebase-config";
+import {
+  FIREBASE_AUTH,
+  FIREBASE_STORAGE,
+  FIRESTORE_DB,
+} from "../../../firebase-config";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 import { IAccountCard } from "constants/Interfaces";
 import Avatar from "components/common/Avatar";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -22,114 +40,258 @@ export default function AccountTab({
   phoneNumber,
 }: IAccountTab) {
   const [email, setEmail] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [avatar, setAvatar] = useState(avatarUrl);
+  const [status, setStatus] = useState(true);
+  const [loading, setLoading] = useState(true); // Loading state
+
+  const signOutUser = async () => {
+    try {
+      const auth = getAuth();
+      await auth.signOut();
+      console.log("User signed out successfully");
+
+      // Clear any local storage or state related to the user
+      await AsyncStorage.removeItem("user_logged_in");
+      await AsyncStorage.removeItem("user_email");
+      await AsyncStorage.removeItem("user_password");
+      await AsyncStorage.removeItem("user_role");
+
+      router.replace("/login"); // Navigate to login screen after successful logout
+    } catch (error) {
+      console.error("Error signing out:", error.message);
+    }
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Confirm Logout",
+      "Are you sure you want to log out?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "OK", onPress: signOutUser },
+      ],
+      { cancelable: false }
+    );
+  };
 
   useEffect(() => {
-    const user = FIREBASE_AUTH.currentUser;
-    if (user) {
-      setEmail(user.email);
-    }
+    const fetchUserData = async () => {
+      setLoading(true); // Start loading
+      const user = FIREBASE_AUTH.currentUser;
+      if (user) {
+        const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setEmail(userData.email);
+          setDisplayName(userData.displayName);
+        } else {
+          console.log("No such document!");
+        }
+      }
+
+      // Get the download URL for the avatar
+      const fileRef = ref(
+        FIREBASE_STORAGE,
+        `gs://lifeline-eb7f0.appspot.com/avatars/${user.uid}.jpg`
+      );
+      getDownloadURL(fileRef)
+        .then((url) => {
+          console.log("Avatar URL:", url); // Log the URL
+          setAvatar(url);
+        })
+        .catch((error) => {
+          console.error("Error getting avatar URL:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Stop loading
+        });
+    };
+
+    fetchUserData();
   }, []);
 
-  // Temporary Data for front-end only. Remove later on firebase integration
-  const temporaryData = {
-    avatarUrl: require("../../../assets/images/man.jpg"),
-    username: "Eldon Gray",
-    email: "lifelineisthebest@gmail.com",
-    donations: "25",
-    received: "3",
-    status: "Available",
-  };
-  // Temporary Data for front-end only. Remove later on firebase integration
+  const pickImage = async () => {
+    Alert.alert(
+      "Edit Profile Picture",
+      "Do you want to change your profile picture?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            // Ask for permission to access the camera roll
+            const permissionResult =
+              await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-  const size = 22;
-  const [status, setStatus] = useState(true);
+            if (permissionResult.granted === false) {
+              alert("Permission to access camera roll is required!");
+              return;
+            }
+
+            const result = await ImagePicker.launchImageLibraryAsync({
+              mediaTypes: ImagePicker.MediaTypeOptions.Images,
+              allowsEditing: true,
+              aspect: [1, 1],
+              quality: 1,
+            });
+
+            if (!result.canceled && result.assets && result.assets.length > 0) {
+              const source = { uri: result.assets[0].uri };
+              console.log(source);
+              uploadImage(source.uri);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const user = FIREBASE_AUTH.currentUser;
+    const storageRef = ref(FIREBASE_STORAGE, `avatars/${user.uid}.jpg`);
+
+    uploadBytes(storageRef, blob).then(async (snapshot) => {
+      console.log("Uploaded a blob or file!");
+      const downloadURL = await getDownloadURL(storageRef);
+      setAvatar(downloadURL);
+
+      // Update the user's avatar URL in Firestore
+      const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        await updateDoc(userDocRef, {
+          avatarUrl: downloadURL,
+        });
+      } else {
+        await setDoc(userDocRef, {
+          avatarUrl: downloadURL,
+          email: user.email,
+          displayName: user.displayName,
+          role: "user", // or any default role you want to set
+        });
+      }
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.profile}>
-        <Avatar avatarUrl={temporaryData.avatarUrl} />
-        <View style={{ flex: 1, gap: 4 }}>
-          <Text style={styles.title}>{temporaryData.username}</Text>
-          <Text style={styles.subtitle}>{temporaryData.email}</Text>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
-      </View>
+      ) : (
+        <>
+          <View style={styles.profile}>
+            <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
+            <View style={{ flex: 1, gap: 4 }}>
+              <Text style={styles.title}>{displayName || "Eldon Gray"}</Text>
+              <Text style={styles.subtitle}>
+                {email || "lifelineisthebest@gmail.com"}
+              </Text>
+            </View>
+          </View>
 
-      <View style={styles.donations}>
-        <Text
-          style={[
-            styles.title,
-            { color: COLORS.black, fontSize: SIZES.medium },
-          ]}
-        >
-          Donation Status:{" "}
-          {status ? (
-            <Text style={{ color: "green" }}>Available</Text>
-          ) : (
-            <Text style={{ color: "red" }}>Locked</Text>
-          )}
-        </Text>
-        <Text style={styles.subtitle}>
-          Units Donated:{" "}
-          <Text style={{ fontWeight: "400" }}>{temporaryData.donations}</Text>
-        </Text>
-        <Text style={styles.subtitle}>
-          Units Received:{" "}
-          <Text style={{ fontWeight: "400" }}>{temporaryData.received}</Text>
-        </Text>
-      </View>
+          <View style={styles.donations}>
+            <Text
+              style={[
+                styles.title,
+                { color: COLORS.black, fontSize: SIZES.medium },
+              ]}
+            >
+              Donation Status:{" "}
+              {status ? (
+                <Text style={{ color: "green" }}>Available</Text>
+              ) : (
+                <Text style={{ color: "red" }}>Locked</Text>
+              )}
+            </Text>
+            <Text style={styles.subtitle}>
+              Units Donated: <Text style={{ fontWeight: "400" }}>25</Text>
+            </Text>
+            <Text style={styles.subtitle}>
+              Units Received: <Text style={{ fontWeight: "400" }}>3</Text>
+            </Text>
+          </View>
 
-      <View style={styles.flatlist}>
-        <Card
-          href="/donation-history"
-          icon={
-            <FontAwesome5 name="history" size={size} color={COLORS.black} />
-          }
-          label="donation history"
-        />
-        <Card
-          href="/profile"
-          icon={
-            <MaterialIcons name="person" size={size} color={COLORS.black} />
-          }
-          label="profile"
-        />
-        <Card
-          href="/settings"
-          icon={<FontAwesome6 name="gear" size={size} color={COLORS.black} />}
-          label="settings"
-        />
-      </View>
-
-      <View style={styles.flatlist}>
-        <Card
-          href="/about"
-          icon={
-            <FontAwesome6 name="circle-info" size={size} color={COLORS.black} />
-          }
-          label="about"
-        />
-        <Card
-          href="/help"
-          icon={
-            <FontAwesome5
-              name="question-circle"
-              size={size}
-              color={COLORS.black}
+          <View style={styles.flatlist}>
+            <Card
+              href="/donation-history"
+              icon={
+                <FontAwesome5 name="history" size={22} color={COLORS.black} />
+              }
+              label="donation history"
             />
-          }
-          label="help"
-        />
-      </View>
+            <Card
+              href="/profile"
+              icon={
+                <MaterialIcons name="person" size={22} color={COLORS.black} />
+              }
+              label="profile"
+            />
+            <Card
+              href="/settings"
+              icon={<FontAwesome6 name="gear" size={22} color={COLORS.black} />}
+              label="settings"
+            />
+          </View>
 
-      <View style={styles.flatlist}>
-        <Card
-          href="/login"
-          icon={
-            <FontAwesome6 name="power-off" size={size} color={COLORS.primary} />
-          }
-          label="logout"
-        />
-      </View>
+          <View style={styles.flatlist}>
+            <Card
+              href="/about"
+              icon={
+                <FontAwesome6
+                  name="circle-info"
+                  size={22}
+                  color={COLORS.black}
+                />
+              }
+              label="about"
+            />
+            <Card
+              href="/help"
+              icon={
+                <FontAwesome5
+                  name="question-circle"
+                  size={22}
+                  color={COLORS.black}
+                />
+              }
+              label="help"
+            />
+          </View>
+
+          <View style={styles.flatlist}>
+            <Pressable
+              style={styles.card}
+              android_ripple={{ radius: 200 }}
+              onPress={handleLogout}
+            >
+              <View style={styles.icon}>
+                <FontAwesome6
+                  name="power-off"
+                  size={22}
+                  color={COLORS.primary}
+                />
+              </View>
+              <Text style={styles.label}>logout</Text>
+            </Pressable>
+          </View>
+        </>
+      )}
     </ScrollView>
   );
 }
@@ -208,5 +370,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     textTransform: "capitalize",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

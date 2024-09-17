@@ -15,6 +15,7 @@
     "@expo/config-plugins": "~8.0.0",
     "@expo/metro-config": "^0.18.1",
     "@expo/prebuild-config": "~7.0.0",
+    "@firebase/storage": "^0.13.1",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-community/netinfo": "11.3.1",
@@ -61,7 +62,8 @@
     "react-native-wheel-picker-android": "^2.0.6",
     "realm": "^12.6.2",
     "realm-js": "^1.1.97",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "expo-image-picker": "~15.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

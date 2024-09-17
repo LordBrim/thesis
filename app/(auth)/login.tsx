@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import {
   Raleway_500Medium,
 } from "@expo-google-fonts/raleway";
 
-import { Ionicons } from "react-native-vector-icons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { CheckBox } from "react-native-btr";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -31,10 +31,13 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  User,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "../../firebase-config";
-import { firestoreOperations } from "../../firestore-services";
+
+interface User {
+  id: string;
+  role: string;
+}
+
 export default function LoginScreen() {
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
@@ -59,54 +62,69 @@ export default function LoginScreen() {
   const handleToggleRemember = () => {
     setToggleRemember(!toggleRemember);
   };
-  interface User {
-    id: string;
-    role: string;
-  }
+
+  const storeUserCredentials = async (email, password) => {
+    try {
+      await AsyncStorage.setItem("user_email", email);
+      await AsyncStorage.setItem("user_password", password);
+      console.log("User credentials stored successfully");
+    } catch (error) {
+      console.error("Error storing user credentials:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("User logged in:", user.email);
+        router.replace("/(app)/(tabs)");
+      } else {
+        console.log("No user logged in");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
   const login = async () => {
     setLoading(true);
     try {
-      const response = await signInWithEmailAndPassword(
-        FIREBASE_AUTH,
-        email,
-        password
-      );
-      console.log("User ID:", response.user.uid);
-      console.log("Email:", response.user.email);
-      console.log(response);
-      const userData = await firestoreOperations.getDocuments("User");
-      const userRole = userData.find(
-        (user) => user.id === response.user.uid
-      ).role;
-
-      console.log("User Role:", userRole);
-      await AsyncStorage.setItem("user_role", userRole);
-      if (userRole === "admin") {
-        // Alert.alert(
-        //   "Success admin logged in",
-        //   "Admin dashboard is currently in develop"
-        // );
-        router.replace("/(app)/(home)/admin");
-      } else {
-        router.replace("/(app)/(tabs)");
-      }
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("User logged in successfully");
+      router.replace("/(app)/(tabs)");
     } catch (error) {
-      console.log(error);
-      Alert.alert("Login Failed:" + error.message);
+      Alert.alert("Login Failed", error.message);
     } finally {
       setLoading(false);
     }
   };
-  React.useEffect(() => {
+
+  useEffect(() => {
     const checkLoginState = async () => {
-      const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
-      if (userLoggedIn === "true") {
-        router.replace("/(app)/(tabs)");
+      try {
+        const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
+        if (userLoggedIn === "true") {
+          const storedEmail = await AsyncStorage.getItem("user_email");
+          const storedPassword = await AsyncStorage.getItem("user_password");
+
+          if (storedEmail && storedPassword) {
+            setEmail(storedEmail);
+            setPassword(storedPassword);
+            login();
+          } else {
+            console.log("No valid credentials found");
+          }
+        }
+      } catch (error) {
+        console.error("Error retrieving user credentials:", error.message);
       }
     };
 
     checkLoginState();
   }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.cTop}>

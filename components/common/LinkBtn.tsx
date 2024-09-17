@@ -11,7 +11,7 @@ import { type Href, Link } from "expo-router";
 type ILinkBtn = {
   label: string;
   href: Href<string>;
-  linkStyle: StyleProp<TextStyle>;
+  linkStyle?: StyleProp<TextStyle>;
 };
 
 export default function LinkBtn({ label, href, linkStyle }: ILinkBtn) {

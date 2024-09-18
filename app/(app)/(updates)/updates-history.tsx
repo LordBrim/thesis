@@ -23,29 +23,29 @@ export default function UpdatesHistory() {
           date="Sept 18, 2024"
           time="1:01pm"
         />
-      </View>
-      <FlatList
-        data={sampleData}
-        renderItem={({ item }) => (
-          <View style={styles.cContainer}>
-            <Image
-              source={require("../../../assets/images/bloodbag.png")}
-              style={styles.image}
-            />
-            <View style={styles.text}>
-              <Text style={styles.location}>
-                {item.location || "Medical Institution"}
-              </Text>
-              <Text style={styles.date}>
-                {item.date || "February 14, 2024"}
-              </Text>
+        <FlatList
+          data={sampleData}
+          renderItem={({ item }) => (
+            <View style={styles.cContainer}>
+              <Image
+                source={require("../../../assets/images/bloodbag.png")}
+                style={styles.image}
+              />
+              <View style={styles.text}>
+                <Text style={styles.location}>
+                  {item.location || "Medical Institution"}
+                </Text>
+                <Text style={styles.date}>
+                  {item.date || "February 14, 2024"}
+                </Text>
+              </View>
+              <View style={styles.line} />
             </View>
-            <View style={styles.line} />
-          </View>
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.flatlist}
-      />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.flatlist}
+        />
+      </View>
     </View>
   );
 }
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   cContainer: {
-    flex: 1,
     width: "100%",
     flexDirection: "row",
     paddingHorizontal: 32,

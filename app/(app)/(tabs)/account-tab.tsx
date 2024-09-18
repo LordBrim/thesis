@@ -12,7 +12,7 @@ import { COLORS, SIZES } from "../../../constants/theme";
 import { Link } from "expo-router";
 import { FontAwesome6, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-
+import SkeletonText from "components/common/SkeletonText";
 import {
   FIREBASE_AUTH,
   FIREBASE_STORAGE,
@@ -189,24 +189,53 @@ export default function AccountTab({
 
   return (
     <ScrollView style={styles.container}>
-      {loading ? (
-        <View style={styles.loadingContainer}>
+      <View style={styles.profile}>
+        {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} />
+        ) : (
+          <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
+        )}
+        <View style={{ flex: 1, gap: 4 }}>
+          {/* Skeleton loader for display name and email */}
+          {loading ? (
+            <>
+              <Text>
+                <SkeletonText width={150} /> {/* Simulates the display name */}
+              </Text>
+              <Text>
+                <SkeletonText width={220} /> {/* Simulates the email */}
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.title}>{displayName}</Text>
+              <Text style={styles.subtitle}>{email}</Text>
+            </>
+          )}
         </View>
-      ) : (
-        <>
-          <View style={styles.profile}>
-            <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
-            <View style={{ flex: 1, gap: 4 }}>
-              <Text style={[styles.title, { fontSize: SIZES.xLarge }]}>
-                {displayName || "Eldon Gray"}
-              </Text>
-              <Text style={styles.subtitle}>
-                {email || "lifelineisthebest@gmail.com"}
-              </Text>
-            </View>
-          </View>
+      </View>
 
+      <View style={styles.donations}>
+        <Text
+          style={[
+            styles.title,
+            { color: COLORS.black, fontSize: SIZES.medium },
+          ]}
+        >
+          Donation Status:{" "}
+          {status ? (
+            <Text style={{ color: "green" }}>Available</Text>
+          ) : (
+            <Text style={{ color: "red" }}>Locked</Text>
+          )}
+        </Text>
+        <Text style={styles.subtitle}>
+          Units Donated: <Text style={{ fontWeight: "400" }}>25</Text>
+        </Text>
+        <Text style={styles.subtitle}>
+          Units Received: <Text style={{ fontWeight: "400" }}>3</Text>
+        </Text>
+      </View>
           <View style={styles.donations}>
             <View style={styles.donation}>
               <Text

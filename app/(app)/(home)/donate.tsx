@@ -21,7 +21,6 @@ export default function Donate() {
           />
         </View>
         <DonationIncentives />
-        <RecentDonations />
       </ScrollView>
     </View>
   );

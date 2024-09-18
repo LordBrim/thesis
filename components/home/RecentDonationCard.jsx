@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     gap: SPACES.md,
     backgroundColor: COLORS.white,
     position: "relative",
+    minHeight: 80,
   },
   image: { height: 45, width: 25 },
   text: {

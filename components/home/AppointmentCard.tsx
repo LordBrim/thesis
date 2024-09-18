@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     position: "relative",
     maxHeight: 70,
+    minHeight: 70,
   },
   image: { height: 45, width: 25 },
   text: {

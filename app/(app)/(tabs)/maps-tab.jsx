@@ -142,13 +142,20 @@ function Maps({ setMapBackground, setMapHeader }) {
           <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
         </TextInputWrapper>
       </View>
-      <FlatList
+      {/* <FlatList
         data={HospitalsData}
         renderItem={({ item }) => <Hospital name={item.name} />}
         keyExtractor={(item) => item.id.toString()}
         scrollEnabled={false} // Disable scrolling for FlatList
         overScrollMode="never"
-      />
+      /> */}
+
+      {HospitalsData &&
+        HospitalsData.map((hospital) => (
+          <View key={hospital.id}>
+            <Hospital name={hospital.name} />
+          </View>
+        ))}
       {/* {!selectedHospital &&
         hospitals.map((hospital) => (
           <TouchableWithoutFeedback
@@ -181,10 +188,10 @@ function Maps({ setMapBackground, setMapHeader }) {
   );
 }
 
-function Hospital(name) {
+function Hospital(item) {
   return (
     <View style={styles.hContainer}>
-      <Text style={styles.hName}>{name}</Text>
+      <Text style={styles.hName}>{item.name}</Text>
       <View style={styles.icon}>
         <FontAwesome6 name="chevron-right" size={18} color={COLORS.slate400} />
       </View>

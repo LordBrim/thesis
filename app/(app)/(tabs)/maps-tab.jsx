@@ -125,32 +125,30 @@ function Maps({ setMapBackground, setMapHeader }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView overScrollMode="never">
-        {/* TODO: Add search function for multiple hospitals */}
-        <View style={styles.cTop}>
-          <View style={{ gap: 8 }}>
-            <Title title="Find a medical institution" />
-            <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
-          </View>
-
-          <TextInputWrapper>
-            <TextInput
-              placeholder="Find a medical institution..."
-              // onChangeText={() => void}
-              // value={searchText}
-              style={{ flex: 1 }}
-            />
-            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
-          </TextInputWrapper>
+      {/* TODO: Add search function for multiple hospitals */}
+      <View style={styles.cTop}>
+        <View style={{ gap: 8 }}>
+          <Title title="Find a medical institution" />
+          <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
         </View>
-        <FlatList
-          data={HospitalsData}
-          renderItem={({ item }) => <Hospital name={item.name} />}
-          keyExtractor={(item) => item.id.toString()}
-          scrollEnabled={false} // Disable scrolling for FlatList
-          overScrollMode="never"
-        />
-      </ScrollView>
+
+        <TextInputWrapper>
+          <TextInput
+            placeholder="Find a medical institution..."
+            // onChangeText={() => void}
+            // value={searchText}
+            style={{ flex: 1 }}
+          />
+          <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+        </TextInputWrapper>
+      </View>
+      <FlatList
+        data={HospitalsData}
+        renderItem={({ item }) => <Hospital name={item.name} />}
+        keyExtractor={(item) => item.id.toString()}
+        scrollEnabled={false} // Disable scrolling for FlatList
+        overScrollMode="never"
+      />
       {/* {!selectedHospital &&
         hospitals.map((hospital) => (
           <TouchableWithoutFeedback

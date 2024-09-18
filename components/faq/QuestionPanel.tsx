@@ -13,7 +13,6 @@ type IQuestionPanel = {
 };
 
 export default function QuestionPanel({ title }: IQuestionPanel) {
-  const [isActiveIndex, setActiveIndex] = useState(0);
   const [filteredData, setFilteredData] = useState(FAQuestions);
 
   return (
@@ -23,17 +22,7 @@ export default function QuestionPanel({ title }: IQuestionPanel) {
         contentContainerStyle={styles.container}
         data={filteredData}
         renderItem={({ item }) => (
-          <QuestionCard
-            question={item.question}
-            answer={item.answer}
-            isActive={isActiveIndex === item.id + 1}
-            onShow={() => {
-              setActiveIndex(item.id + 1);
-            }}
-            onHide={() => {
-              setActiveIndex(0);
-            }}
-          />
+          <QuestionCard question={item.question} answer={item.answer} />
         )}
         keyExtractor={(item) => item.id.toString()}
       />
@@ -44,7 +33,7 @@ export default function QuestionPanel({ title }: IQuestionPanel) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderColor: COLORS.gray2,
+    borderColor: COLORS.slate100,
   },
   title: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,

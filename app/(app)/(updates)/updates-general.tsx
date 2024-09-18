@@ -8,7 +8,7 @@ export default function UpdatesGeneral() {
     <View style={styles.container}>
       <View style={styles.filters}>
         {Filters.map((filter) => (
-          <Pressable>
+          <Pressable key={filter.id}>
             <Text style={styles.filter}>{filter.title}</Text>
           </Pressable>
         ))}

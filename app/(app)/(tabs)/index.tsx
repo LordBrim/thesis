@@ -14,7 +14,10 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
-        <Welcome toDonate="/donate" toRequest="/request" />
+        <Welcome
+          toDonate="/(app)/(home)/preliminary-checklist"
+          toRequest="/request"
+        />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
         <UpcomingAppointments />
         <Events />

@@ -39,6 +39,7 @@ function DonationIncentives() {
       keyExtractor={(item) => item.id.toString()}
       scrollEnabled={false}
       contentContainerStyle={styles.disContainer}
+      style={styles.disContainer}
       overScrollMode="never"
     />
   );
@@ -73,31 +74,26 @@ const styles = StyleSheet.create({
     padding: HORIZONTAL_SCREEN_MARGIN,
     gap: HORIZONTAL_SCREEN_MARGIN,
     alignItems: "center",
-    borderWidth: 1,
   },
   disContainer: {
-    flex: 1,
     gap: HORIZONTAL_SCREEN_MARGIN,
-    borderWidth: 1,
     maxHeight: 70,
-    flexDirection: "row-reverse",
-    width: "100%",
+    flexDirection: "row",
   },
   dsContainer: {
-    width: 70,
-    maxWidth: 70,
-    maxHeight: 70,
+    width: 50,
+    maxWidth: 50,
+    maxHeight: 50,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1,
   },
   bloodbag: {
-    height: 55,
-    width: 30,
+    height: 45,
+    width: 25,
   },
   checkmark: {
-    height: 70,
-    width: 70,
+    height: 50,
+    width: 50,
     aspectRatio: 1 / 1,
     position: "absolute",
     opacity: 1,

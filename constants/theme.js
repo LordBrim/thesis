@@ -5,6 +5,9 @@ const COLORS = {
 
   line: "#FF3642",
 
+  slate50: "#f8fafc",
+  slate100: "#f1f5f9",
+
   gray: "#83829A",
   gray2: "#C1C0C8",
   gray3: "#a5a4ab",

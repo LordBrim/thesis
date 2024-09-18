@@ -9,6 +9,7 @@ import {
   FlatList,
   TextInput,
   SafeAreaView,
+  Pressable,
 } from "react-native";
 // import Divider from "../../../components/Divider";
 import { useNavigation } from "@react-navigation/native";
@@ -152,9 +153,20 @@ function Maps({ setMapBackground, setMapHeader }) {
 
       {HospitalsData &&
         HospitalsData.map((hospital) => (
-          <View key={hospital.id}>
-            <Hospital name={hospital.name} />
-          </View>
+          <Pressable
+            style={styles.hContainer}
+            key={hospital.id}
+            android_ripple={{ radius: 200 }}
+          >
+            <Text style={styles.hName}>{hospital.name}</Text>
+            <View style={styles.icon}>
+              <FontAwesome6
+                name="chevron-right"
+                size={18}
+                color={COLORS.slate400}
+              />
+            </View>
+          </Pressable>
         ))}
       {/* {!selectedHospital &&
         hospitals.map((hospital) => (
@@ -185,17 +197,6 @@ function Maps({ setMapBackground, setMapHeader }) {
         />
       )} */}
     </SafeAreaView>
-  );
-}
-
-function Hospital(item) {
-  return (
-    <View style={styles.hContainer}>
-      <Text style={styles.hName}>{item.name}</Text>
-      <View style={styles.icon}>
-        <FontAwesome6 name="chevron-right" size={18} color={COLORS.slate400} />
-      </View>
-    </View>
   );
 }
 
@@ -334,15 +335,17 @@ const styles = StyleSheet.create({
   },
   hContainer: {
     flex: 1,
-    borderColor: COLORS.gray2,
+    width: "100%",
+    borderColor: COLORS.slate100,
     borderWidth: 1,
     flexDirection: "row",
+    alignItems: "center",
+    maxHeight: 50,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 12,
   },
   hName: {
     flex: 1,
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingVertical: 8,
-    fontSize: SIZES.large,
     fontWeight: "600",
   },
   icon: {

@@ -8,18 +8,16 @@ export default function RecentDonations({}) {
       <View style={styles.bar}>
         <Text style={styles.title}>Recent Donations</Text>
       </View>
-      <SafeAreaView>
-        <FlatList
-          data={sampleData}
-          renderItem={({ item }) => (
-            <RecentDonationCard location={item.location} date={item.date} />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={1}
-          scrollEnabled={false}
-          contentContainerStyle={styles.flatlist}
-        />
-      </SafeAreaView>
+      <FlatList
+        data={sampleData}
+        renderItem={({ item }) => (
+          <RecentDonationCard location={item.location} date={item.date} />
+        )}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={1}
+        scrollEnabled={false}
+        contentContainerStyle={styles.flatlist}
+      />
     </View>
   );
 }

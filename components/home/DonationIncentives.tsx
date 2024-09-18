@@ -8,17 +8,13 @@ export default function DonationIncentives() {
       <View style={styles.bar}>
         <Text style={styles.title}>Incentive Progress</Text>
       </View>
-      <SafeAreaView>
-        <FlatList
-          data={sampleData}
-          renderItem={({ item }) => (
-            <DonationIncentive checked={item.checked} />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          scrollEnabled={false}
-          contentContainerStyle={styles.flatlist}
-        />
-      </SafeAreaView>
+      <FlatList
+        data={sampleData}
+        renderItem={({ item }) => <DonationIncentive checked={item.checked} />}
+        keyExtractor={(item) => item.id.toString()}
+        scrollEnabled={false}
+        contentContainerStyle={styles.flatlist}
+      />
     </View>
   );
 }

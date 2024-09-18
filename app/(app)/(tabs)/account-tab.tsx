@@ -227,68 +227,78 @@ export default function AccountTab({
             </Text>
           </View>
 
-          <View style={styles.flatlist}>
-            <Card
-              href="/donation-history"
-              icon={
-                <FontAwesome5 name="history" size={22} color={COLORS.black} />
-              }
-              label="donation history"
-            />
-            <Card
-              href="/profile"
-              icon={
-                <MaterialIcons name="person" size={22} color={COLORS.black} />
-              }
-              label="profile"
-            />
-            <Card
-              href="/settings"
-              icon={<FontAwesome6 name="gear" size={22} color={COLORS.black} />}
-              label="settings"
-            />
+          <View style={styles.section}>
+            <Text style={styles.sectionHeading}>Account</Text>
+            <View style={styles.flatlist}>
+              <Card
+                href="/donation-history"
+                icon={
+                  <FontAwesome5 name="history" size={22} color={COLORS.black} />
+                }
+                label="donation history"
+              />
+              <Card
+                href="/profile"
+                icon={
+                  <MaterialIcons name="person" size={22} color={COLORS.black} />
+                }
+                label="profile"
+              />
+              <Card
+                href="/settings"
+                icon={
+                  <FontAwesome6 name="gear" size={22} color={COLORS.black} />
+                }
+                label="settings"
+              />
+            </View>
           </View>
 
-          <View style={styles.flatlist}>
-            <Card
-              href="/about"
-              icon={
-                <FontAwesome6
-                  name="circle-info"
-                  size={22}
-                  color={COLORS.black}
-                />
-              }
-              label="about"
-            />
-            <Card
-              href="/help"
-              icon={
-                <FontAwesome5
-                  name="question-circle"
-                  size={22}
-                  color={COLORS.black}
-                />
-              }
-              label="help"
-            />
+          <View style={styles.section}>
+            <Text style={styles.sectionHeading}>Support</Text>
+            <View style={styles.flatlist}>
+              <Card
+                href="/about"
+                icon={
+                  <FontAwesome6
+                    name="circle-info"
+                    size={22}
+                    color={COLORS.black}
+                  />
+                }
+                label="about"
+              />
+              <Card
+                href="/help"
+                icon={
+                  <FontAwesome5
+                    name="question-circle"
+                    size={22}
+                    color={COLORS.black}
+                  />
+                }
+                label="help"
+              />
+            </View>
           </View>
 
-          <View style={styles.flatlist}>
-            <Pressable
-              style={styles.card}
-              android_ripple={{ radius: 200 }}
-              onPress={handleLogout}
-            >
-              <View style={styles.icon}>
-                <FontAwesome6
-                  name="power-off"
-                  size={22}
-                  color={COLORS.primary}
-                />
-              </View>
-              <Text style={styles.label}>logout</Text>
-            </Pressable>
+          <View style={styles.section}>
+            <View style={[styles.flatlist, { marginTop: 0 }]}>
+              <Pressable
+                style={styles.card}
+                android_ripple={{ radius: 200 }}
+                onPress={handleLogout}
+              >
+                <View style={styles.icon}>
+                  <FontAwesome6
+                    name="power-off"
+                    size={22}
+                    color={COLORS.primary}
+                  />
+                </View>
+                <Text style={styles.label}>logout</Text>
+              </Pressable>
+            </View>
           </View>
         </>
       )}
@@ -302,6 +312,9 @@ const Card = ({ href, icon, label, sublabel }: IAccountCard) => (
       <View style={styles.icon}>{icon}</View>
       <Text style={styles.label}>{label}</Text>
       {sublabel && <Text style={styles.label}>{label}</Text>}
+      <View style={styles.icon}>
+        <FontAwesome6 name="chevron-right" size={18} color={COLORS.slate400} />
+      </View>
     </Pressable>
   </Link>
 );
@@ -317,7 +330,6 @@ const styles = StyleSheet.create({
     gap: 16,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.slate100,
   },
   donations: {
     margin: HORIZONTAL_SCREEN_MARGIN,
@@ -343,10 +355,19 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontWeight: "500",
   },
+  section: {
+    marginTop: HORIZONTAL_SCREEN_MARGIN,
+  },
+  sectionHeading: {
+    fontSize: SIZES.xSmall,
+    textTransform: "capitalize",
+    fontWeight: "700",
+    marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
   flatlist: {
     flex: 1,
     marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    marginTop: HORIZONTAL_SCREEN_MARGIN,
+    marginTop: 5,
     overflow: "hidden",
     borderRadius: 12,
     shadowRadius: 12,
@@ -360,7 +381,11 @@ const styles = StyleSheet.create({
     gap: 6,
     alignItems: "center",
     backgroundColor: COLORS.slate100,
+    borderColor: COLORS.slate200,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
   },
+  cardBorder: {},
   icon: {
     width: 50,
     aspectRatio: 1,
@@ -368,7 +393,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   label: {
-    width: "100%",
+    flex: 1,
     fontSize: 16,
     fontWeight: "500",
     textTransform: "capitalize",

@@ -26,10 +26,12 @@ export default function DonationIncentive({ checked }: IDonationIncentive) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 84,
-    aspectRatio: 1 / 1,
+    width: 70,
+    maxWidth: 70,
+    maxHeight: 70,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
   },
   bloodbag: {
     height: 55,

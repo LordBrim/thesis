@@ -24,7 +24,7 @@ export default function AppointmentCard({
         </Text>
         <View style={{ flexDirection: "row" }}>
           <Text style={styles.details}>{date}</Text>
-          <Text style={styles.details}> | {time}</Text>
+          <Text style={styles.details}> • {time}</Text>
         </View>
       </View>
       <View style={styles.line} />
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     gap: SPACES.md,
     backgroundColor: COLORS.white,
     position: "relative",
+    maxHeight: 70,
   },
   image: { height: 45, width: 25 },
   text: {

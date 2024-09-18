@@ -3,11 +3,19 @@ import { View, Text } from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../../constants/theme";
 
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { DonationHistory, HomeTab } from "app/screens";
+import UpdatesGeneral from "../(updates)/updates-general";
+
+const Tab = createMaterialTopTabNavigator();
+
 export default function UpdatesTab() {
   return (
-    <View style={styles.container}>
-      <Text>Updates</Text>
-    </View>
+    <Tab.Navigator>
+      <Tab.Screen name="General" component={UpdatesGeneral} />
+      <Tab.Screen name="History" component={DonationHistory} />
+      <Tab.Screen name="Incentives" component={DonationHistory} />
+    </Tab.Navigator>
   );
 }
 

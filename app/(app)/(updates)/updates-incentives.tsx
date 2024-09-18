@@ -1,4 +1,12 @@
-import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  SafeAreaView,
+  Image,
+} from "react-native";
 import React from "react";
 import {
   COLORS,
@@ -6,72 +14,93 @@ import {
   SIZES,
   SPACES,
 } from "../../../constants";
-import DonationIncentive from "components/home/DonationIncentive";
 
 export default function UpdatesIncentives() {
   return (
-    <View style={styles.container}>
-      <View style={styles.bar}>
-        <Text style={styles.title}>Incentive Progress</Text>
-      </View>
-      <FlatList
-        data={sampleData}
-        renderItem={({ item }) => <DonationIncentive checked={item.checked} />}
-        keyExtractor={(item) => item.id.toString()}
-        scrollEnabled={false}
-        contentContainerStyle={styles.flatlist}
+    <FlatList
+      data={sampleData}
+      renderItem={({ item }) => <DonationIncentives />}
+      keyExtractor={(item) => item.id.toString()}
+      contentContainerStyle={styles.container}
+      overScrollMode="never"
+    />
+  );
+}
+
+interface IDonationIncentives {
+  name: string;
+}
+
+function DonationIncentives() {
+  return (
+    <FlatList
+      data={sampleData}
+      renderItem={({ item }) => <DonationIncentive checked={item.checked} />}
+      keyExtractor={(item) => item.id.toString()}
+      scrollEnabled={false}
+      contentContainerStyle={styles.disContainer}
+      overScrollMode="never"
+    />
+  );
+}
+
+type IDonationIncentive = {
+  checked?: boolean;
+};
+
+function DonationIncentive({ checked }: IDonationIncentive) {
+  return (
+    <View style={styles.dsContainer}>
+      <Image
+        source={require("../../../assets/images/bloodbag.png")}
+        style={[styles.bloodbag, { opacity: checked ? 0.6 : 1 }]}
       />
+      {checked && (
+        <Image
+          source={require("../../../assets/images/check.png")}
+          style={styles.checkmark}
+        />
+      )}
     </View>
   );
 }
 
-const Filters = [
-  { id: 0, title: "All" },
-  { id: 1, title: "Appointments" },
-  { id: 2, title: "Requests" },
-  { id: 3, title: "Donations" },
-  { id: 4, title: "Incentives" },
-];
-
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: COLORS.white,
     flexDirection: "column",
     padding: HORIZONTAL_SCREEN_MARGIN,
     gap: HORIZONTAL_SCREEN_MARGIN,
     alignItems: "center",
+    borderWidth: 1,
   },
-
-  filters: {
-    flexDirection: "row",
-    gap: 4,
-    width: "100%",
-  },
-  filter: {
-    fontSize: SIZES.xSmall,
-    fontWeight: "700",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    color: COLORS.slate500,
-  },
-
-  bar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: SIZES.large,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    textTransform: "capitalize",
-  },
-  flatlist: {
+  disContainer: {
     flex: 1,
-    flexDirection: "row",
-    gap: SPACES.sm,
+    gap: HORIZONTAL_SCREEN_MARGIN,
+    borderWidth: 1,
+    maxHeight: 70,
+    flexDirection: "row-reverse",
     width: "100%",
+  },
+  dsContainer: {
+    width: 70,
+    maxWidth: 70,
+    maxHeight: 70,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+  },
+  bloodbag: {
+    height: 55,
+    width: 30,
+  },
+  checkmark: {
+    height: 70,
+    width: 70,
+    aspectRatio: 1 / 1,
+    position: "absolute",
+    opacity: 1,
   },
 });
 

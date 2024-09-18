@@ -5,9 +5,6 @@ import DonationIncentive from "./DonationIncentive";
 export default function DonationIncentives() {
   return (
     <View style={styles.container}>
-      <View style={styles.bar}>
-        <Text style={styles.title}>Incentive Progress</Text>
-      </View>
       <FlatList
         data={sampleData}
         renderItem={({ item }) => <DonationIncentive checked={item.checked} />}
@@ -22,8 +19,11 @@ export default function DonationIncentives() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
     gap: SPACES.xs,
+    borderWidth: 1,
+    width: 70,
+    maxWidth: 70,
+    maxHeight: 70,
   },
   bar: {
     flexDirection: "row",
@@ -42,6 +42,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: SPACES.sm,
     width: "100%",
+  },
+  checkmark: {
+    height: 80,
+    width: 80,
+    aspectRatio: 1 / 1,
+    position: "absolute",
+    opacity: 1,
   },
 });
 

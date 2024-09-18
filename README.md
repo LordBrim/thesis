@@ -39,7 +39,6 @@
   - [ ] Connect event collection for home screen
 - [ ] Add infinite loader to updates tab.
 - [ ] Create new collection for recording process logs. The fields should be title, date, description, and the category it corresponds to. Don’t forget the reference of the tickets.
-- [-] In donations screen make the steps indicator clickable to navigate pages.
 - [ ] In donations screen make all preliminary questions required.
 - [ ] In request screen make the steps indicator clickable to navigate pages.
 - [ ] In request screen, implement firebase image upload. The users cannot upload more than 5mb for their documents.
@@ -80,7 +79,6 @@
 - [ ] Add a set new password modal that shows that the user has successfully changed their password.
 - [ ] Transfer donation screen into updates. The updates tab should have sub tabs as categories containing general, donation history, and donation incentives. All information regarding results are accumulated here.
   - [ ] The general updates should contain appointments, requests, donations, and incentives. All information regarding processes are accumulated here.
-- [ ] In donations screen add an asterisk to all question to indicate that they are required.
 - [ ] In request screen add a steps indicator to declutter current and previous screen.
 - [ ] Update UI for filing a request at file a request screen.
 - [ ] Update UI design for file a request modal. Success and error.

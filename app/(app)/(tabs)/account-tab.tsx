@@ -188,7 +188,7 @@ export default function AccountTab({
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} overScrollMode="never">
       <View style={styles.profile}>
         {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} />

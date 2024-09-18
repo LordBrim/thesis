@@ -5,6 +5,10 @@ import {
   Text,
   TouchableWithoutFeedback,
   Easing,
+  ScrollView,
+  FlatList,
+  TextInput,
+  SafeAreaView,
 } from "react-native";
 // import Divider from "../../../components/Divider";
 import { useNavigation } from "@react-navigation/native";
@@ -12,7 +16,14 @@ import { COLORS, FONT, SIZES, SHADOWS } from "../../../constants/theme";
 import { mapStyle } from "../../../components/maps/mapStyle";
 import BackButton from "../../../constants/backButton";
 import HospitalMapView from "../../../components/maps/hospitalMapView";
-const hospitals = [
+import TextInputWrapper from "components/common/TextInputWrapper";
+import { FontAwesome6 } from "@expo/vector-icons";
+import { HORIZONTAL_SCREEN_MARGIN } from "constants";
+import Title from "components/common/texts/Title";
+import Description from "components/common/texts/Description";
+
+// TODO: Connect this with Firebase with a Hospitals Colleciton.
+const HospitalsData = [
   {
     id: 1,
     name: "UERM Hospital",
@@ -113,19 +124,34 @@ function Maps({ setMapBackground, setMapHeader }) {
   };
 
   return (
-    <View style={styles.container}>
-      {!selectedHospital && (
-        <View style={{ width: "90%" }}>
-          <Text style={styles.header}>
-            Map <Text style={{ color: COLORS.redWhite }}>Locator</Text>
-          </Text>
-          <Text style={styles.subHeader}>
-            Display all affiliated hospitals in the map.
-          </Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView overScrollMode="never">
+        {/* TODO: Add search function for multiple hospitals */}
+        <View style={styles.cTop}>
+          <View style={{ gap: 8 }}>
+            <Title title="Find a medical institution" />
+            <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
+          </View>
+
+          <TextInputWrapper>
+            <TextInput
+              placeholder="Find a medical institution..."
+              // onChangeText={() => void}
+              // value={searchText}
+              style={{ flex: 1 }}
+            />
+            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+          </TextInputWrapper>
         </View>
-      )}
-      {/* {!selectedHospital && <Divider marginTop={30} marginBottom={30} />} */}
-      {!selectedHospital &&
+        <FlatList
+          data={HospitalsData}
+          renderItem={({ item }) => <Hospital name={item.name} />}
+          keyExtractor={(item) => item.id.toString()}
+          scrollEnabled={false} // Disable scrolling for FlatList
+          overScrollMode="never"
+        />
+      </ScrollView>
+      {/* {!selectedHospital &&
         hospitals.map((hospital) => (
           <TouchableWithoutFeedback
             key={hospital.id}
@@ -133,26 +159,10 @@ function Maps({ setMapBackground, setMapHeader }) {
             onPressOut={() => setPressedButtonId(null)}
             onPress={() => focusMap(hospital)}
           >
-            <View
-              style={
-                hospital.id === pressedButtonId
-                  ? styles.buttonHospitalPressed
-                  : styles.buttonHospital
-              }
-            >
-              <Text
-                style={
-                  hospital.id === pressedButtonId
-                    ? styles.textHospitalPressed
-                    : styles.textHospital
-                }
-              >
-                {hospital.name}
-              </Text>
-            </View>
+            <Text>{hospital.name}</Text>
           </TouchableWithoutFeedback>
-        ))}
-      {selectedHospital && (
+        ))} */}
+      {/* {selectedHospital && (
         <HospitalMapView
           mapStyle={mapStyle}
           selectedHospital={selectedHospital}
@@ -168,7 +178,18 @@ function Maps({ setMapBackground, setMapHeader }) {
           // setMapBackground={setMapBackground}
           // setMapHeader={setMapHeader}
         />
-      )}
+      )} */}
+    </SafeAreaView>
+  );
+}
+
+function Hospital(name) {
+  return (
+    <View style={styles.hContainer}>
+      <Text style={styles.hName}>{name}</Text>
+      <View style={styles.icon}>
+        <FontAwesome6 name="chevron-right" size={18} color={COLORS.slate400} />
+      </View>
     </View>
   );
 }
@@ -179,6 +200,14 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     backgroundColor: COLORS.white,
+  },
+  cTop: {
+    width: "100%",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingBottom: HORIZONTAL_SCREEN_MARGIN,
+    backgroundColor: COLORS.white,
+    fontWeight: "bold",
+    gap: 16,
   },
   buttonHospital: {
     width: "80%",
@@ -200,8 +229,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 10,
     borderColor: COLORS.gray,
-    backgroundColor: COLORS.redWhite,
-    borderColor: COLORS.redWhite,
   },
   textHospital: {
     fontSize: SIZES.large,
@@ -299,6 +326,25 @@ const styles = StyleSheet.create({
   infoTopDistance: {
     fontSize: SIZES.medium,
     color: COLORS.white,
+  },
+  hContainer: {
+    flex: 1,
+    borderColor: COLORS.gray2,
+    borderWidth: 1,
+    flexDirection: "row",
+  },
+  hName: {
+    flex: 1,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 8,
+    fontSize: SIZES.large,
+    fontWeight: "600",
+  },
+  icon: {
+    width: 50,
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

@@ -1,4 +1,11 @@
-import { StyleSheet, SafeAreaView, View, Text, FlatList } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  ScrollView,
+} from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
 import LinkBtn from "components/common/LinkBtn";
@@ -15,23 +22,21 @@ export default function UpcomingEvents() {
         />
       </View>
 
-      <SafeAreaView>
-        <FlatList
-          data={sampleData}
-          renderItem={({ item }) => (
-            <EventCard
-              image={item.image}
-              title={item.title}
-              date={item.date}
-              time={item.time}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          numColumns={1}
-          scrollEnabled={false}
-          contentContainerStyle={styles.flatlist}
-        />
-      </SafeAreaView>
+      <FlatList
+        data={sampleData}
+        renderItem={({ item }) => (
+          <EventCard
+            image={item.image}
+            title={item.title}
+            date={item.date}
+            time={item.time}
+          />
+        )}
+        keyExtractor={(item) => item.id}
+        numColumns={1}
+        scrollEnabled={false}
+        contentContainerStyle={styles.flatlist}
+      />
     </View>
   );
 }

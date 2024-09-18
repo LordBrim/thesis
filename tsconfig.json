@@ -7,5 +7,12 @@
     }
   },
   "extends": "expo/tsconfig.base",
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts",
+    "app/(app)/(tabs)/maps-tab.jsx",
+    "app/(app)/(tabs)/maps-tab.jsx"
+  ]
 }

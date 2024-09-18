@@ -1,4 +1,10 @@
-import { FlatList, SafeAreaView, StyleSheet, Text } from "react-native";
+import {
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+} from "react-native";
 import React from "react";
 import EventCard from "../../../components/home/EventCard";
 import {
@@ -25,6 +31,7 @@ export default function AllEventsScreen() {
         numColumns={1}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.flatlist}
+        overScrollMode="never"
       />
     </SafeAreaView>
   );

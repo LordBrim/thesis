@@ -213,7 +213,7 @@ export default function AccountTab({
                 style={[
                   styles.title,
                   {
-                    color: COLORS.black,
+                    color: COLORS.slate400,
                     fontSize: SIZES.small,
                     textAlign: "center",
                   },
@@ -236,14 +236,16 @@ export default function AccountTab({
                 style={[
                   styles.title,
                   {
-                    color: COLORS.black,
+                    color: COLORS.slate400,
                     fontSize: SIZES.small,
                     textAlign: "center",
                   },
                 ]}
               >
                 Units Donated:{"\n"}
-                <Text style={{ fontSize: SIZES.large }}>25</Text>
+                <Text style={{ fontSize: SIZES.large, color: COLORS.black }}>
+                  25
+                </Text>
               </Text>
             </View>
           </View>

@@ -12,7 +12,7 @@ import { COLORS, SIZES } from "../../../constants/theme";
 import { Link } from "expo-router";
 import { FontAwesome6, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-
+import SkeletonText from "components/common/SkeletonText";
 import {
   FIREBASE_AUTH,
   FIREBASE_STORAGE,
@@ -189,109 +189,105 @@ export default function AccountTab({
 
   return (
     <ScrollView style={styles.container}>
-      {loading ? (
-        <View style={styles.loadingContainer}>
+      <View style={styles.profile}>
+        {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} />
-        </View>
-      ) : (
-        <>
-          <View style={styles.profile}>
-            <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
-            <View style={{ flex: 1, gap: 4 }}>
-              <Text style={styles.title}>{displayName || "Eldon Gray"}</Text>
-              <Text style={styles.subtitle}>
-                {email || "lifelineisthebest@gmail.com"}
+        ) : (
+          <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
+        )}
+        <View style={{ flex: 1, gap: 4 }}>
+          {/* Skeleton loader for display name and email */}
+          {loading ? (
+            <>
+              <Text>
+                <SkeletonText width={150} /> {/* Simulates the display name */}
               </Text>
-            </View>
-          </View>
+              <Text>
+                <SkeletonText width={220} /> {/* Simulates the email */}
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.title}>{displayName}</Text>
+              <Text style={styles.subtitle}>{email}</Text>
+            </>
+          )}
+        </View>
+      </View>
 
-          <View style={styles.donations}>
-            <Text
-              style={[
-                styles.title,
-                { color: COLORS.black, fontSize: SIZES.medium },
-              ]}
-            >
-              Donation Status:{" "}
-              {status ? (
-                <Text style={{ color: "green" }}>Available</Text>
-              ) : (
-                <Text style={{ color: "red" }}>Locked</Text>
-              )}
-            </Text>
-            <Text style={styles.subtitle}>
-              Units Donated: <Text style={{ fontWeight: "400" }}>25</Text>
-            </Text>
-            <Text style={styles.subtitle}>
-              Units Received: <Text style={{ fontWeight: "400" }}>3</Text>
-            </Text>
-          </View>
+      <View style={styles.donations}>
+        <Text
+          style={[
+            styles.title,
+            { color: COLORS.black, fontSize: SIZES.medium },
+          ]}
+        >
+          Donation Status:{" "}
+          {status ? (
+            <Text style={{ color: "green" }}>Available</Text>
+          ) : (
+            <Text style={{ color: "red" }}>Locked</Text>
+          )}
+        </Text>
+        <Text style={styles.subtitle}>
+          Units Donated: <Text style={{ fontWeight: "400" }}>25</Text>
+        </Text>
+        <Text style={styles.subtitle}>
+          Units Received: <Text style={{ fontWeight: "400" }}>3</Text>
+        </Text>
+      </View>
 
-          <View style={styles.flatlist}>
-            <Card
-              href="/donation-history"
-              icon={
-                <FontAwesome5 name="history" size={22} color={COLORS.black} />
-              }
-              label="donation history"
-            />
-            <Card
-              href="/profile"
-              icon={
-                <MaterialIcons name="person" size={22} color={COLORS.black} />
-              }
-              label="profile"
-            />
-            <Card
-              href="/settings"
-              icon={<FontAwesome6 name="gear" size={22} color={COLORS.black} />}
-              label="settings"
-            />
-          </View>
+      <View style={styles.flatlist}>
+        <Card
+          href="/donation-history"
+          icon={<FontAwesome5 name="history" size={22} color={COLORS.black} />}
+          label="donation history"
+        />
+        <Card
+          href="/profile"
+          icon={<MaterialIcons name="person" size={22} color={COLORS.black} />}
+          label="profile"
+        />
+        <Card
+          href="/settings"
+          icon={<FontAwesome6 name="gear" size={22} color={COLORS.black} />}
+          label="settings"
+        />
+      </View>
 
-          <View style={styles.flatlist}>
-            <Card
-              href="/about"
-              icon={
-                <FontAwesome6
-                  name="circle-info"
-                  size={22}
-                  color={COLORS.black}
-                />
-              }
-              label="about"
+      <View style={styles.flatlist}>
+        <Card
+          href="/about"
+          icon={
+            <FontAwesome6 name="circle-info" size={22} color={COLORS.black} />
+          }
+          label="about"
+        />
+        <Card
+          href="/help"
+          icon={
+            <FontAwesome5
+              name="question-circle"
+              size={22}
+              color={COLORS.black}
             />
-            <Card
-              href="/help"
-              icon={
-                <FontAwesome5
-                  name="question-circle"
-                  size={22}
-                  color={COLORS.black}
-                />
-              }
-              label="help"
-            />
-          </View>
+          }
+          label="help"
+        />
+      </View>
 
-          <View style={styles.flatlist}>
-            <Pressable
-              style={styles.card}
-              android_ripple={{ radius: 200 }}
-              onPress={handleLogout}
-            >
-              <View style={styles.icon}>
-                <FontAwesome6
-                  name="power-off"
-                  size={22}
-                  color={COLORS.primary}
-                />
-              </View>
-              <Text style={styles.label}>logout</Text>
-            </Pressable>
+      <View style={styles.flatlist}>
+        <Pressable
+          style={styles.card}
+          android_ripple={{ radius: 200 }}
+          onPress={handleLogout}
+        >
+          <View style={styles.icon}>
+            <FontAwesome6 name="power-off" size={22} color={COLORS.primary} />
           </View>
-        </>
-      )}
+          <Text style={styles.label}>logout</Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 }

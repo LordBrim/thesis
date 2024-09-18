@@ -1,6 +1,3 @@
-import { StyleSheet } from "react-native";
-import { COLORS, SIZES } from "../../../constants/theme";
-
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import UpdatesGeneral from "../(updates)/updates-general";
 import UpdatesHistory from "../(updates)/updates-history";

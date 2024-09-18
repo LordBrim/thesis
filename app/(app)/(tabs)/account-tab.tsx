@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
     gap: 16,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: COLORS.slate100,
   },
   donations: {
     margin: HORIZONTAL_SCREEN_MARGIN,
@@ -358,6 +359,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     gap: 6,
     alignItems: "center",
+    backgroundColor: COLORS.slate100,
   },
   icon: {
     width: 50,

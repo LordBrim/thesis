@@ -12,6 +12,7 @@ export default function HomeTab() {
         contentContainerStyle={styles.scrollView}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
+        overScrollMode="never"
       >
         <Welcome toDonate="/donate" toRequest="/request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}

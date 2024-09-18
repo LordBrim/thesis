@@ -28,20 +28,15 @@ export default function PreliminaryChecklist() {
         <Text style={styles.header}>Questions</Text>
         <Text style={[styles.header, { paddingHorizontal: 8 }]}>Yes / No</Text>
       </View>
-      <ScrollView
-        contentContainerStyle={{ gap: 8 }}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-      >
-        <FlatList
-          contentContainerStyle={styles.flatlist}
-          data={checklistQuestions}
-          renderItem={({ item }) => <ChecklistItem question={item.question} />}
-          keyExtractor={(item) => item.id.toString()}
-          scrollEnabled={false}
-        />
-      </ScrollView>
+
+      <FlatList
+        contentContainerStyle={styles.flatlist}
+        data={checklistQuestions}
+        renderItem={({ item }) => <ChecklistItem question={item.question} />}
+        keyExtractor={(item) => item.id.toString()}
+        scrollEnabled={false}
+        overScrollMode="never"
+      />
     </SafeAreaView>
   );
 }

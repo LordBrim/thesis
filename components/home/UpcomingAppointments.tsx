@@ -9,22 +9,20 @@ export default function UpcomingAppointments() {
         <Text style={styles.title}>Upcoming Appointments</Text>
       </View>
       {sampleAppointments ? (
-        <SafeAreaView>
-          <FlatList
-            data={sampleAppointments}
-            renderItem={({ item }) => (
-              <AppointmentCard
-                location={item.location}
-                date={item.date}
-                time={item.time}
-              />
-            )}
-            keyExtractor={(item) => item.id}
-            numColumns={1}
-            scrollEnabled={false}
-            contentContainerStyle={styles.flatlist}
-          />
-        </SafeAreaView>
+        <FlatList
+          data={sampleAppointments}
+          renderItem={({ item }) => (
+            <AppointmentCard
+              location={item.location}
+              date={item.date}
+              time={item.time}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          numColumns={1}
+          scrollEnabled={false}
+          contentContainerStyle={styles.flatlist}
+        />
       ) : (
         <View style={styles.empty}>
           <Text style={{ color: COLORS.gray }}>No Scheduled Appointments</Text>

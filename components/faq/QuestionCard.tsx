@@ -5,36 +5,32 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import IconBtn from "components/common/IconButton";
 
 type IQuestionCard = {
   question: string;
   answer: string;
-  isActive: boolean;
-  onShow: () => void;
-  onHide: () => void;
 };
 
-export default function QuestionCard({
-  question,
-  answer,
-  isActive,
-  onShow,
-  onHide,
-}: IQuestionCard) {
+export default function QuestionCard({ question, answer }: IQuestionCard) {
+  const [open, setOpen] = useState(false);
   return (
-    <Pressable style={styles.container} onPress={isActive ? onHide : onShow}>
+    <Pressable
+      style={styles.container}
+      onPress={open ? () => setOpen(false) : () => setOpen(true)}
+      android_ripple={{ radius: 200 }}
+    >
       <View style={styles.cQuestion}>
         <Text style={styles.question}>{question}</Text>
-        {isActive ? (
-          <IconBtn icon="minus" size={18} onPress={onHide} />
+        {open ? (
+          <IconBtn icon="minus" size={18} onPress={() => setOpen(false)} />
         ) : (
-          <IconBtn icon="plus" size={18} onPress={onShow} />
+          <IconBtn icon="plus" size={18} onPress={() => setOpen(true)} />
         )}
       </View>
-      {isActive ? <Text style={styles.answer}>{answer}</Text> : null}
+      {open ? <Text style={styles.answer}>{answer}</Text> : null}
     </Pressable>
   );
 }

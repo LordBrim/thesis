@@ -196,14 +196,13 @@ export default function AccountTab({
           <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
         )}
         <View style={{ flex: 1, gap: 4 }}>
-          {/* Skeleton loader for display name and email */}
           {loading ? (
             <>
               <Text>
-                <SkeletonText width={150} /> {/* Simulates the display name */}
+                <SkeletonText width={150} />
               </Text>
               <Text>
-                <SkeletonText width={220} /> {/* Simulates the email */}
+                <SkeletonText width={220} />
               </Text>
             </>
           ) : (
@@ -216,144 +215,111 @@ export default function AccountTab({
       </View>
 
       <View style={styles.donations}>
-        <Text
-          style={[
-            styles.title,
-            { color: COLORS.black, fontSize: SIZES.medium },
-          ]}
-        >
-          Donation Status:{" "}
-          {status ? (
-            <Text style={{ color: "green" }}>Available</Text>
-          ) : (
-            <Text style={{ color: "red" }}>Locked</Text>
-          )}
-        </Text>
-        <Text style={styles.subtitle}>
-          Units Donated: <Text style={{ fontWeight: "400" }}>25</Text>
-        </Text>
-        <Text style={styles.subtitle}>
-          Units Received: <Text style={{ fontWeight: "400" }}>3</Text>
-        </Text>
+        <View style={styles.donation}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: COLORS.slate400,
+                fontSize: SIZES.small,
+                textAlign: "center",
+              },
+            ]}
+          >
+            Donation Status:{"\n"}
+            {status ? (
+              <Text style={{ color: "green", fontSize: SIZES.large }}>
+                Available
+              </Text>
+            ) : (
+              <Text style={{ color: "red", fontSize: SIZES.large }}>
+                Locked
+              </Text>
+            )}
+          </Text>
+        </View>
+        <View style={styles.donation}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: COLORS.slate400,
+                fontSize: SIZES.small,
+                textAlign: "center",
+              },
+            ]}
+          >
+            Units Donated:{"\n"}
+            <Text style={{ fontSize: SIZES.large, color: COLORS.black }}>
+              25
+            </Text>
+          </Text>
+        </View>
       </View>
-          <View style={styles.donations}>
-            <View style={styles.donation}>
-              <Text
-                style={[
-                  styles.title,
-                  {
-                    color: COLORS.slate400,
-                    fontSize: SIZES.small,
-                    textAlign: "center",
-                  },
-                ]}
-              >
-                Donation Status:{"\n"}
-                {status ? (
-                  <Text style={{ color: "green", fontSize: SIZES.large }}>
-                    Available
-                  </Text>
-                ) : (
-                  <Text style={{ color: "red", fontSize: SIZES.large }}>
-                    Locked
-                  </Text>
-                )}
-              </Text>
-            </View>
-            <View style={styles.donation}>
-              <Text
-                style={[
-                  styles.title,
-                  {
-                    color: COLORS.slate400,
-                    fontSize: SIZES.small,
-                    textAlign: "center",
-                  },
-                ]}
-              >
-                Units Donated:{"\n"}
-                <Text style={{ fontSize: SIZES.large, color: COLORS.black }}>
-                  25
-                </Text>
-              </Text>
-            </View>
-          </View>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionHeading}>Account</Text>
-            <View style={styles.flatlist}>
-              <Card
-                href="/donation-history"
-                icon={
-                  <FontAwesome5 name="history" size={22} color={COLORS.black} />
-                }
-                label="donation history"
-              />
-              <Card
-                href="/profile"
-                icon={
-                  <MaterialIcons name="person" size={22} color={COLORS.black} />
-                }
-                label="profile"
-              />
-              <Card
-                href="/settings"
-                icon={
-                  <FontAwesome6 name="gear" size={22} color={COLORS.black} />
-                }
-                label="settings"
-              />
-            </View>
-          </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionHeading}>Account</Text>
+        <View style={styles.flatlist}>
+          <Card
+            href="/donation-history"
+            icon={
+              <FontAwesome5 name="history" size={22} color={COLORS.black} />
+            }
+            label="donation history"
+          />
+          <Card
+            href="/profile"
+            icon={
+              <MaterialIcons name="person" size={22} color={COLORS.black} />
+            }
+            label="profile"
+          />
+          <Card
+            href="/settings"
+            icon={<FontAwesome6 name="gear" size={22} color={COLORS.black} />}
+            label="settings"
+          />
+        </View>
+      </View>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionHeading}>Support</Text>
-            <View style={styles.flatlist}>
-              <Card
-                href="/about"
-                icon={
-                  <FontAwesome6
-                    name="circle-info"
-                    size={22}
-                    color={COLORS.black}
-                  />
-                }
-                label="about"
+      <View style={styles.section}>
+        <Text style={styles.sectionHeading}>Support</Text>
+        <View style={styles.flatlist}>
+          <Card
+            href="/about"
+            icon={
+              <FontAwesome6 name="circle-info" size={22} color={COLORS.black} />
+            }
+            label="about"
+          />
+          <Card
+            href="/help"
+            icon={
+              <FontAwesome5
+                name="question-circle"
+                size={22}
+                color={COLORS.black}
               />
-              <Card
-                href="/help"
-                icon={
-                  <FontAwesome5
-                    name="question-circle"
-                    size={22}
-                    color={COLORS.black}
-                  />
-                }
-                label="help"
-              />
-            </View>
-          </View>
+            }
+            label="help"
+          />
+        </View>
+      </View>
 
-          <View style={styles.section}>
-            <View style={[styles.flatlist, { marginTop: 0 }]}>
-              <Pressable
-                style={styles.card}
-                android_ripple={{ radius: 200 }}
-                onPress={handleLogout}
-              >
-                <View style={styles.icon}>
-                  <FontAwesome6
-                    name="power-off"
-                    size={22}
-                    color={COLORS.primary}
-                  />
-                </View>
-                <Text style={styles.label}>logout</Text>
-              </Pressable>
+      <View style={styles.section}>
+        <View style={[styles.flatlist, { marginTop: 0 }]}>
+          <Pressable
+            style={styles.card}
+            android_ripple={{ radius: 200 }}
+            onPress={handleLogout}
+          >
+            <View style={styles.icon}>
+              <FontAwesome6 name="power-off" size={22} color={COLORS.primary} />
             </View>
-          </View>
-        </>
-      )}
+            <Text style={styles.label}>logout</Text>
+          </Pressable>
+        </View>
+      </View>
     </ScrollView>
   );
 }

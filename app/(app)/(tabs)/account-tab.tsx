@@ -381,9 +381,6 @@ const styles = StyleSheet.create({
     gap: 6,
     alignItems: "center",
     backgroundColor: COLORS.slate100,
-    borderColor: COLORS.slate200,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
   },
   cardBorder: {},
   icon: {

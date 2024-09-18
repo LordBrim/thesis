@@ -198,7 +198,9 @@ export default function AccountTab({
           <View style={styles.profile}>
             <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
             <View style={{ flex: 1, gap: 4 }}>
-              <Text style={styles.title}>{displayName || "Eldon Gray"}</Text>
+              <Text style={[styles.title, { fontSize: SIZES.xLarge }]}>
+                {displayName || "Eldon Gray"}
+              </Text>
               <Text style={styles.subtitle}>
                 {email || "lifelineisthebest@gmail.com"}
               </Text>
@@ -206,25 +208,44 @@ export default function AccountTab({
           </View>
 
           <View style={styles.donations}>
-            <Text
-              style={[
-                styles.title,
-                { color: COLORS.black, fontSize: SIZES.medium },
-              ]}
-            >
-              Donation Status:{" "}
-              {status ? (
-                <Text style={{ color: "green" }}>Available</Text>
-              ) : (
-                <Text style={{ color: "red" }}>Locked</Text>
-              )}
-            </Text>
-            <Text style={styles.subtitle}>
-              Units Donated: <Text style={{ fontWeight: "400" }}>25</Text>
-            </Text>
-            <Text style={styles.subtitle}>
-              Units Received: <Text style={{ fontWeight: "400" }}>3</Text>
-            </Text>
+            <View style={styles.donation}>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color: COLORS.black,
+                    fontSize: SIZES.small,
+                    textAlign: "center",
+                  },
+                ]}
+              >
+                Donation Status:{"\n"}
+                {status ? (
+                  <Text style={{ color: "green", fontSize: SIZES.large }}>
+                    Available
+                  </Text>
+                ) : (
+                  <Text style={{ color: "red", fontSize: SIZES.large }}>
+                    Locked
+                  </Text>
+                )}
+              </Text>
+            </View>
+            <View style={styles.donation}>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color: COLORS.black,
+                    fontSize: SIZES.small,
+                    textAlign: "center",
+                  },
+                ]}
+              >
+                Units Donated:{"\n"}
+                <Text style={{ fontSize: SIZES.large }}>25</Text>
+              </Text>
+            </View>
           </View>
 
           <View style={styles.section}>
@@ -332,17 +353,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   donations: {
-    margin: HORIZONTAL_SCREEN_MARGIN,
-    justifyContent: "center",
-    shadowColor: COLORS.shadow,
-    padding: 16,
-    elevation: 3,
-    overflow: "hidden",
-    borderRadius: SIZES.small,
     flex: 1,
-    gap: 4,
+    flexDirection: "row",
+    justifyContent: "center",
+    overflow: "hidden",
     backgroundColor: COLORS.white,
-    position: "relative",
+  },
+  donation: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
+    borderColor: COLORS.slate100,
   },
   title: {
     fontSize: SIZES.large,

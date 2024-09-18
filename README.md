@@ -69,7 +69,7 @@
 
 # Front-End %% #done %%
 
-- [ ] Make Maps section into a flatlist.
+- [x] Make Maps section into a flatlist.
 - [x] Clean up accounts section into the design.
 - [ ] Design the in-app notifications for updates
 - [ ] Redesign login and registration screen to apply OAuth

@@ -11,7 +11,6 @@ import FAQTab from "./(app)/(tabs)/faq-tab";
 import AccountTab from "./(app)/(tabs)/account-tab";
 
 // Home Screens
-import Donate from "./(app)/(home)/donate";
 import Request from "./(app)/(home)/request";
 import EventDetails from "./(app)/(home)/event-details";
 import AllEventsScreen from "./(app)/(home)/all-events";
@@ -41,7 +40,6 @@ export {
   Register,
   ForgotPassword,
   HomeTab,
-  Donate,
   Request,
   EventDetails,
   AllEventsScreen,

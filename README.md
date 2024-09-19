@@ -77,7 +77,7 @@
 - [x] Add a forget password screen where the user will only send an email and activate a modal.
 - [x] Add a modal that accepts the 4-digit pin sent to the user’s email.
 - [x] Add set new password screen that shows password strength conditions. Green for approved and nothing for disapproved.
-- [ ] Add a set new password modal that shows that the user has successfully changed their password.
+- [x] Add a set new password modal that shows that the user has successfully changed their password.
 - [x] Transfer donation screen into updates. The updates tab should have sub tabs as categories containing general, donation history, and donation incentives. All information regarding results are accumulated here.
   - [x] The general updates should contain appointments, requests, donations, and incentives. All information regarding processes are accumulated here.
 - [ ] In request screen add a steps indicator to declutter current and previous screen.

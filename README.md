@@ -89,8 +89,8 @@
 
 ## Admin Screen %% #done %%
 
-- [ ] Create a generate report screen.
 - [ ] Create a command palette on home screen for admins.
+- [ ] Create a generate report screen.
 
 ## Random Bug Fixes %% #done %%
 

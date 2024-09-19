@@ -1,6 +1,6 @@
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import { View, Text, TextInput, Image } from "react-native";
+import { View, TextInput, Image } from "react-native";
 import { StyleSheet } from "react-native";
 import { useState } from "react";
 import TextInputWrapper from "components/common/TextInputWrapper";
@@ -26,7 +26,7 @@ export default function ForgotPassword() {
 
       <View style={{ width: "100%" }}>
         <Title title="Forgot Password" />
-        <Description description="Enter the email you use to sign in." />
+        <Description description="Enter the email you used to sign in." />
       </View>
 
       <View style={{ gap: 24, width: "100%" }}>

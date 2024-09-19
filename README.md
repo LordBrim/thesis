@@ -86,6 +86,11 @@
 - [ ] Redesign modal for maps screen when a location is selected.
 - [ ] Add date and timer modal to lockdown status
 
+## Admin Screen %% #done %%
+
+- [ ] Create a generate report screen.
+- [ ] Create a command palette on home screen for admins.
+
 ## Random Bug Fixes %% #done %%
 
 - [ ] Remove the back buttons of maps screen, donation history screen, profile screen, settings screen, about screen, help screen, maps after upcoming events screen, and login screen after account screens.

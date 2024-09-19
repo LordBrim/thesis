@@ -84,7 +84,7 @@
 - [ ] Update UI for filing a request at file a request screen.
 - [ ] Update UI design for file a request modal. Success and error.
 - [ ] Redesign modal for maps screen when a location is selected.
-- [ ] Add date and timer modal to lockdown status
+- [x] Add date and timer modal to lockdown status
 - [x] Create a reusable modal for all screens
 
 ## Admin Screen %% #done %%

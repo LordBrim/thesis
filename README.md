@@ -94,7 +94,7 @@
 
 ## Random Bug Fixes %% #done %%
 
-- [ ] Remove the back buttons of maps screen, donation history screen, profile screen, settings screen, about screen, help screen, maps after upcoming events screen, and login screen after account screens.
+- [x] Make the back buttons of maps screen, donation history screen, profile screen, settings screen, about screen, help screen, maps after upcoming events screen, and login screen after account screens appear.
 
 ## Low Priority Improvements %% #done %%
 

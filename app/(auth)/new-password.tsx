@@ -27,11 +27,9 @@ export default function NewPassword() {
         }}
       />
 
-      <View style={{ width: "100%" }}>
+      <View style={{ gap: 20, width: "100%" }}>
         <Title title="Set A New Password" />
-      </View>
 
-      <View style={{ gap: 24, width: "100%" }}>
         <TextInputWrapper label="Password">
           <TextInput
             value={password}
@@ -63,12 +61,11 @@ export default function NewPassword() {
             </View>
           ))}
         </View>
-
-        <CallToActionBtn
-          label="Confirm Password"
-          onPress={() => setNewPassword()}
-        />
       </View>
+      <CallToActionBtn
+        label="Confirm Password"
+        onPress={() => setNewPassword()}
+      />
     </View>
   );
 }

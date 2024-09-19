@@ -216,7 +216,7 @@ export default function RegisterScreen() {
               />
               <Text style={{ backgroundColor: COLORS.white }}>
                 {" "}
-                Sign In With{" "}
+                Register With{" "}
               </Text>
             </View>
             <View

@@ -24,7 +24,7 @@ export default function NewPassword() {
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => {
     setShowModal(false);
-    router.navigate("/");
+    router.back();
   };
 
   return (
@@ -77,7 +77,7 @@ export default function NewPassword() {
       <SingleBtnModal
         visible={showModal}
         onRequestClose={handleCloseModal}
-        onPress={() => setShowModal(true)}
+        onPress={handleCloseModal}
         icon={
           <MaterialCommunityIcons name="shield-check" size={40} color="green" />
         }

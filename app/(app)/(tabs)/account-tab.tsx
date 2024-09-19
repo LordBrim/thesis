@@ -343,7 +343,7 @@ export default function AccountTab({
 }
 
 const Card = ({ href, icon, label, sublabel }: IAccountCard) => (
-  <Link asChild replace href={href}>
+  <Link asChild push href={href}>
     <Pressable style={styles.card} android_ripple={{ radius: 200 }}>
       <View style={styles.icon}>{icon}</View>
       <Text style={styles.label}>{label}</Text>

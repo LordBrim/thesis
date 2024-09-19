@@ -22,7 +22,7 @@ export default function PreliminaryChecklist() {
     <SafeAreaView style={styles.container}>
       <View>
         <Title title="Preliminary Checklist" />
-        <Description description="Please answer the questions truthfully as you can possibly can." />
+        <Description description="Please answer the questions honestly as you can possibly can. It is required to answer every question." />
       </View>
       <View style={styles.bar}>
         <Text style={styles.header}>Questions</Text>

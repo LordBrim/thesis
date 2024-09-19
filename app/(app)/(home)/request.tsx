@@ -27,23 +27,21 @@ export default function Request() {
           />
         </View>
 
-        <SafeAreaView>
-          <Text style={styles.title}>Guidelines For Requesting Blood</Text>
+        <Text style={styles.title}>Guidelines For Requesting Blood</Text>
 
-          <FlatList
-            data={sampleGuidelines}
-            renderItem={({ item }) => (
-              <View style={{ gap: 4 }}>
-                <Text style={styles.header}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
-              </View>
-            )}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={1}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.flatlist}
-          />
-        </SafeAreaView>
+        <FlatList
+          data={sampleGuidelines}
+          renderItem={({ item }) => (
+            <View style={{ gap: 4 }}>
+              <Text style={styles.header}>{item.title}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={1}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.flatlist}
+        />
       </ScrollView>
     </SafeAreaView>
   );

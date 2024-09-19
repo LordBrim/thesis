@@ -74,7 +74,7 @@
 - [ ] Design the in-app notifications for updates.
   - [ ] Include groupings for today, yesterday, last week, last month, last year.
 - [x] Redesign login and registration screen to apply OAuth
-- [ ] Add a forget password screen where the user will only send an email and activate a modal.
+- [x] Add a forget password screen where the user will only send an email and activate a modal.
 - [ ] Add a modal that accepts the 4-digit pin sent to the user’s email.
 - [ ] Add set new password screen that shows password strength conditions. Green for approved and nothing for disapproved.
 - [ ] Add a set new password modal that shows that the user has successfully changed their password.

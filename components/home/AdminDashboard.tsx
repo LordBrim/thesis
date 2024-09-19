@@ -5,7 +5,7 @@ import { FontAwesome5, FontAwesome6, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../constants";
 
 export default function AdminDashboard() {
-  const size = 44;
+  const size = 40;
 
   return (
     <View style={styles.container}>

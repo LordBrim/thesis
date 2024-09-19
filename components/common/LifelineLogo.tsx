@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 14,
-    marginTop: 30,
     width: 230,
   },
   title: {

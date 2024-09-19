@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { Alert } from "react-native";
+import { Alert, Image } from "react-native";
 
 import {
   View,
@@ -188,10 +188,58 @@ export default function RegisterScreen() {
               </View>
             </View>
           </View>
+
+          <View
+            style={{
+              gap: 16,
+            }}
+          >
+            <View
+              style={{
+                position: "relative",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: "100%",
+                  position: "absolute",
+                  top: 10,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderWidth: 0.5,
+                  borderColor: COLORS.slate400,
+                }}
+              />
+              <Text style={{ backgroundColor: COLORS.white }}>
+                {" "}
+                Sign In With{" "}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 32,
+                width: "100%",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={require("../../assets/icons/facebook.png")}
+                style={{ width: 34, height: 34 }}
+              />
+              <Image
+                source={require("../../assets/icons/google.png")}
+                style={{ width: 34, height: 34 }}
+              />
+            </View>
+          </View>
+
           <CallToActionBtn label="Register" onPress={() => register()} />
         </View>
-
-        <Text style={{ color: "transparent" }}>Invisible Placeholder</Text>
       </ScrollView>
     </SafeAreaView>
   );

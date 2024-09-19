@@ -7,7 +7,7 @@ import TextInputWrapper from "components/common/TextInputWrapper";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { OtpInput } from "react-native-otp-entry";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import LinkBtnTouch from "components/common/LinkBtnTouch";
@@ -29,6 +29,7 @@ export default function ForgotPassword() {
     console.log("PIN entered:", pin);
     // Your logic for handling the entered PIN
   };
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -63,6 +64,7 @@ export default function ForgotPassword() {
       <SingleBtnModal
         visible={showModal}
         onRequestClose={handleCloseModal}
+        onPress={() => router.replace("new-password")}
         icon={<FontAwesome5 name="unlock-alt" size={40} color="black" />}
         title="One-Time Pin Sent!"
         description={

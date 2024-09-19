@@ -5,9 +5,10 @@ import CallToActionBtn from "../CallToActionBtn";
 
 interface IModal {
   visible: boolean;
-  icon?: ReactNode;
   onRequestClose: () => void;
+  onPress?: () => void;
   children?: ReactNode;
+  icon?: ReactNode;
   title: string;
   description: string | ReactNode;
   btnLabel: string;
@@ -17,6 +18,7 @@ interface IModal {
 export default function SingleBtnModal({
   visible,
   onRequestClose,
+  onPress,
   children,
   icon,
   title,
@@ -24,7 +26,6 @@ export default function SingleBtnModal({
   btnLabel,
   extraBtn,
 }: IModal) {
-  const [open, setOpen] = useState(false);
   return (
     <RNModal
       animationType="fade"
@@ -47,7 +48,7 @@ export default function SingleBtnModal({
               gap: 20,
             }}
           >
-            <CallToActionBtn label={btnLabel} onPress={() => setOpen(true)} />
+            <CallToActionBtn label={btnLabel} onPress={onPress} />
             {extraBtn}
           </View>
         </View>

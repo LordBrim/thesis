@@ -250,11 +250,12 @@ export default function AccountTab({
               </Text>
             ) : (
               <Text style={{ color: "red", fontSize: SIZES.large }}>
-                Locked
+                Locked{"\n"}(3 Months)
               </Text>
             )}
           </Text>
         </View>
+
         <View style={styles.donation}>
           <Text
             style={[
@@ -372,10 +373,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     overflow: "hidden",
     backgroundColor: COLORS.white,
+    minHeight: 110,
   },
   donation: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
     paddingHorizontal: 16,

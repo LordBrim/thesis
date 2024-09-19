@@ -16,7 +16,7 @@ import { getAuth } from "firebase/auth";
 import { generateUniqueTicketCode } from "../../../utils/helperFunction";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
-import Modal from "components/common/modals/Modal";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
 
 const ScheduleAppointmentScreen = forwardRef((props, ref) => {
   const cancel = () => {
@@ -27,8 +27,8 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [ticketNumber, setTicketNumber] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   // State for selected hospital
   const [selectedHospital, setSelectedHospital] = useState(null);
 
@@ -188,11 +188,35 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
         )}
       </View>
       {/* Modal for success message */}
-      <Modal
-        visible={showModal}
-        onRequestClose={handleCloseModal}
-        ticketNumber={ticketNumber}
-      />
+      <SingleBtnModal visible={showModal} onRequestClose={handleCloseModal}>
+        <View
+          style={{
+            backgroundColor: COLORS.white,
+            marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
+            borderRadius: 15,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              textAlign: "center",
+            }}
+          >
+            Here's your code:
+          </Text>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 28,
+              color: COLORS.primary,
+            }}
+          >
+            {ticketNumber}
+          </Text>
+        </View>
+      </SingleBtnModal>
     </View>
   );
 });

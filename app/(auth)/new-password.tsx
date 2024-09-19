@@ -8,14 +8,24 @@ import { useState } from "react";
 import { Octicons, Ionicons } from "@expo/vector-icons";
 import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
 import { Pressable } from "react-native";
+import { useRouter } from "expo-router";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function NewPassword() {
   const [password, setPassword] = useState("");
   const setNewPassword = () => {
+    setShowModal(true);
     //TODO: Send confimation pin to email
   };
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
+  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const handleCloseModal = () => {
+    setShowModal(false);
+    router.navigate("/");
+  };
 
   return (
     <View style={styles.container}>
@@ -62,10 +72,19 @@ export default function NewPassword() {
           ))}
         </View>
       </View>
-      <CallToActionBtn
-        label="Confirm Password"
-        onPress={() => setNewPassword()}
-      />
+      <CallToActionBtn label="Confirm" onPress={() => setNewPassword()} />
+
+      <SingleBtnModal
+        visible={showModal}
+        onRequestClose={handleCloseModal}
+        onPress={() => setShowModal(true)}
+        icon={
+          <MaterialCommunityIcons name="shield-check" size={40} color="green" />
+        }
+        title="Password Changed"
+        description="You can now login with your new password."
+        btnLabel="Back To Login"
+      ></SingleBtnModal>
     </View>
   );
 }

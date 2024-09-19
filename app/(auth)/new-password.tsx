@@ -61,13 +61,13 @@ export default function NewPassword() {
 
         <View style={{ gap: 4 }}>
           {conditions.map((condition) => (
-            <View style={{ flexDirection: "row", gap: 8 }}>
+            <View key={condition.id} style={{ flexDirection: "row", gap: 8 }}>
               <Octicons
                 name="check-circle-fill"
                 size={20}
                 color={COLORS.slate300}
               />
-              <Text key={condition.id}>{condition.condition}</Text>
+              <Text>{condition.condition}</Text>
             </View>
           ))}
         </View>
@@ -84,7 +84,7 @@ export default function NewPassword() {
         title="Password Changed"
         description="You can now login with your new password."
         btnLabel="Back To Login"
-      ></SingleBtnModal>
+      />
     </View>
   );
 }

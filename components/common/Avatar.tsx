@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -5,10 +6,10 @@ import {
   ImageSourcePropType,
   Pressable,
 } from "react-native";
-import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+
 type IAvatar = {
-  avatarUrl: ImageSourcePropType;
+  avatarUrl: string | null;
   onEdit: () => void;
 };
 
@@ -16,7 +17,15 @@ export default function Avatar({ avatarUrl, onEdit }: IAvatar) {
   return (
     <View>
       <Pressable onPress={onEdit} style={styles.container}>
-        <Image style={styles.image} source={avatarUrl} resizeMode="cover" />
+        <Image
+          style={styles.image}
+          source={
+            typeof avatarUrl === "string"
+              ? { uri: avatarUrl } // If it's a string, treat it as a URI
+              : avatarUrl // If it's an object (local image), use it directly
+          }
+          resizeMode="cover"
+        />
       </Pressable>
       <MaterialIcons
         name="edit"
@@ -43,12 +52,12 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   editIcon: {
-    position: "absolute", // Position the icon absolutely inside the container
-    top: 5, // Adjust as needed to position the icon in the top-right corner
-    right: -3, // Adjust as needed to position the icon in the top-right corner
-    backgroundColor: "#f83e3e", // Optional: Add a background if needed for visibility
-    borderRadius: 15, // Optional: Rounded corners for the icon background
-    padding: 1, // Optional: Padding around the icon for better appearance
-    opacity: 0.9, // Optional: Adjust the opacity for better appearance
+    position: "absolute",
+    top: 5,
+    right: -3,
+    backgroundColor: "#f83e3e",
+    borderRadius: 15,
+    padding: 1,
+    opacity: 0.9,
   },
 });

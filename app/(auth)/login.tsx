@@ -7,19 +7,17 @@ import {
   Alert,
   StyleSheet,
   Image,
+  AppState,
 } from "react-native";
 import { router } from "expo-router";
-
 import { useFonts } from "expo-font";
 import {
   Raleway_400Regular,
   Raleway_500Medium,
 } from "@expo-google-fonts/raleway";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { CheckBox } from "react-native-btr";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import LinkBtn from "../../components/common/LinkBtn";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
@@ -27,7 +25,6 @@ import Title from "components/common/texts/Title";
 import LifelineLogo from "components/common/LifelineLogo";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
-
 import {
   getAuth,
   onAuthStateChanged,
@@ -74,26 +71,38 @@ export default function LoginScreen() {
     }
   };
 
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log("User logged in:", user.email);
-        router.replace("/(app)/(tabs)");
-      } else {
-        console.log("No user logged in");
-      }
-    });
+  const removeUserCredentials = async () => {
+    try {
+      await AsyncStorage.removeItem("user_logged_in");
+      await AsyncStorage.removeItem("user_email");
+      await AsyncStorage.removeItem("user_password");
+      console.log("User credentials removed");
+    } catch (error) {
+      console.error("Error removing user credentials:", error.message);
+    }
+  };
 
-    return unsubscribe;
-  }, []);
+  const login = async (email, password) => {
+    console.log("Login attempt:", email, password); // Log the email and password before login attempt
 
-  const login = async () => {
+    if (!email || !password) {
+      console.log("Login blocked due to missing email or password");
+      return; // Prevent login if email or password is missing
+    }
+
     setLoading(true);
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in successfully");
+
+      if (toggleRemember) {
+        await AsyncStorage.setItem("user_logged_in", "true");
+        await storeUserCredentials(email, password);
+      } else {
+        await removeUserCredentials();
+      }
+
       router.replace("/(app)/(tabs)");
     } catch (error) {
       Alert.alert("Login Failed", error.message);
@@ -106,14 +115,20 @@ export default function LoginScreen() {
     const checkLoginState = async () => {
       try {
         const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
+        console.log("User logged in state from AsyncStorage:", userLoggedIn); // Add this log
+
         if (userLoggedIn === "true") {
           const storedEmail = await AsyncStorage.getItem("user_email");
           const storedPassword = await AsyncStorage.getItem("user_password");
 
+          console.log("Stored email:", storedEmail); // Add this log
+          console.log("Stored password:", storedPassword); // Add this log
+
           if (storedEmail && storedPassword) {
             setEmail(storedEmail);
             setPassword(storedPassword);
-            login();
+            // Call login after state is updated
+            setTimeout(() => login(storedEmail, storedPassword), 0);
           } else {
             console.log("No valid credentials found");
           }
@@ -124,6 +139,30 @@ export default function LoginScreen() {
     };
 
     checkLoginState();
+  }, []);
+
+  useEffect(() => {
+    const handleAppStateChange = async (nextAppState) => {
+      if (nextAppState === "background" || nextAppState === "inactive") {
+        const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
+        if (userLoggedIn !== "true") {
+          const auth = getAuth();
+          await auth.signOut();
+          console.log(
+            "User signed out because app went to background and Remember Me was not checked"
+          );
+        }
+      }
+    };
+
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   return (
@@ -192,7 +231,7 @@ export default function LoginScreen() {
           </View>
         </View>
 
-        <CallToActionBtn label="Login" onPress={() => login()} />
+        <CallToActionBtn label="Login" onPress={() => login(email, password)} />
       </View>
 
       <View

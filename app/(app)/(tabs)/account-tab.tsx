@@ -41,7 +41,8 @@ export default function AccountTab({
 }: IAccountTab) {
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [avatar, setAvatar] = useState(avatarUrl);
+  const [avatar, setAvatar] = useState(avatarUrl || null);
+
   const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -82,10 +83,13 @@ export default function AccountTab({
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true); // Start loading
+
       const user = FIREBASE_AUTH.currentUser;
       if (user) {
+        // Fetch the user document from Firestore
         const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
         const userDoc = await getDoc(userDocRef);
+
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setEmail(userData.email);
@@ -93,24 +97,30 @@ export default function AccountTab({
         } else {
           console.log("No such document!");
         }
-      }
 
-      // Get the download URL for the avatar
-      const fileRef = ref(
-        FIREBASE_STORAGE,
-        `gs://lifeline-eb7f0.appspot.com/avatars/${user.uid}.jpg`
-      );
-      getDownloadURL(fileRef)
-        .then((url) => {
-          console.log("Avatar URL:", url); // Log the URL
-          setAvatar(url);
-        })
-        .catch((error) => {
-          console.error("Error getting avatar URL:", error);
-        })
-        .finally(() => {
-          setLoading(false); // Stop loading
-        });
+        // Fetch the avatar from Firebase Storage
+        const fileRef = ref(FIREBASE_STORAGE, `avatars/${user.uid}.jpg`);
+        getDownloadURL(fileRef)
+          .then((url) => {
+            console.log("Avatar URL:", url);
+            setAvatar(url); // Set avatar URL if found
+          })
+          .catch((error) => {
+            // Handle the case where the avatar doesn't exist
+            if (error.code === "storage/object-not-found") {
+              console.warn("Avatar not found, using default avatar.");
+              setAvatar(null); // Use null to indicate that default avatar should be used
+            } else {
+              console.error("Error getting avatar URL:", error);
+            }
+          })
+          .finally(() => {
+            setLoading(false); // Stop loading after avatar fetch
+          });
+      } else {
+        console.log("No user is logged in.");
+        setLoading(false); // Stop loading if no user
+      }
     };
 
     fetchUserData();
@@ -193,7 +203,14 @@ export default function AccountTab({
         {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} />
         ) : (
-          <Avatar avatarUrl={{ uri: avatar }} onEdit={pickImage} />
+          <Avatar
+            avatarUrl={
+              avatar
+                ? { uri: avatar } // Firebase URL case
+                : require("../../../assets/images/defaultAvatar.png") // Local image case
+            }
+            onEdit={pickImage}
+          />
         )}
         <View style={{ flex: 1, gap: 4 }}>
           {loading ? (

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { Alert, Image } from "react-native";
-
 import {
   View,
   Text,
@@ -12,11 +11,10 @@ import {
   ScrollView,
 } from "react-native";
 import { CheckBox } from "react-native-btr";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { SIZES, FONT, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
-
 import { firestoreOperations } from "../../firestore-services";
 import { FIREBASE_AUTH } from "../../firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -25,6 +23,7 @@ import LinkBtn from "components/common/LinkBtn";
 import LifelineLogo from "components/common/LifelineLogo";
 import Title from "components/common/texts/Title";
 import { setDoc, doc } from "firebase/firestore";
+
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
   const cpToggle = useTogglePasswordVisibility();
@@ -32,6 +31,7 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullName, setFullName] = useState("");
 
   const [toggleTerms, setToggleTerms] = useState(false);
   const [toggleAlerts, setToggleAlerts] = useState(false);
@@ -39,6 +39,7 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
 
   const auth = FIREBASE_AUTH;
+
   const register = async () => {
     if (!toggleTerms) {
       Alert.alert(
@@ -47,9 +48,19 @@ export default function RegisterScreen() {
       );
       return;
     }
+
+    if (!fullName) {
+      Alert.alert("Missing Information", "Full name is required.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("Password Mismatch", "Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
     try {
-      // !TODO add confirmPassword and password entered are the same
       const response = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -57,8 +68,9 @@ export default function RegisterScreen() {
       );
       console.log(response);
 
+      const displayName = fullName;
+
       // Add user data to the Firestore in "User" collection with auto-generated document ID
-      const displayName = response.user.displayName;
       const documentData = {
         email: email,
         password: password,
@@ -84,22 +96,10 @@ export default function RegisterScreen() {
   const handleToggleTerms = () => {
     setToggleTerms(!toggleTerms);
   };
+
   const handleToggleAlerts = () => {
     setToggleAlerts(!toggleAlerts);
   };
-  function validateEmailAndPassword(email, password, confirmPassword) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
-      return console.log("Invalid email.");
-    }
-
-    if (password !== confirmPassword) {
-      return console.log("Passwords do not match.");
-    }
-
-    return console.log("Valid email and password.");
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -111,6 +111,17 @@ export default function RegisterScreen() {
 
           <View style={{ gap: 12 }}>
             <View style={{ gap: 24 }}>
+              <TextInputWrapper label="Full Name">
+                <TextInput
+                  style={styles.input}
+                  value={fullName}
+                  placeholder="Enter your full name..."
+                  onChangeText={(fullName) => setFullName(fullName)}
+                  autoCapitalize="words"
+                  autoCorrect={true}
+                  enablesReturnKeyAutomatically
+                />
+              </TextInputWrapper>
               <TextInputWrapper label="Email">
                 <TextInput
                   style={styles.input}

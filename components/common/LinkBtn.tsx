@@ -11,7 +11,7 @@ import { COLORS } from "../../constants";
 
 type ILinkBtn = {
   label: string;
-  href: Href<string>;
+  href?: Href<string>;
   linkStyle?: StyleProp<TextStyle>;
 };
 

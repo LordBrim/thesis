@@ -188,7 +188,14 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
         )}
       </View>
       {/* Modal for success message */}
-      <SingleBtnModal visible={showModal} onRequestClose={handleCloseModal}>
+      <SingleBtnModal
+        visible={showModal}
+        onRequestClose={handleCloseModal}
+        title="Success!"
+        description="Please show the code included in this message to the hospital staff
+            to confirm your attendance."
+        btnLabel="I Understand"
+      >
         <View
           style={{
             backgroundColor: COLORS.white,

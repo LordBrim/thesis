@@ -72,7 +72,7 @@
 - [x] Make Maps section into a flatlist.
 - [x] Clean up accounts section into the design.
 - [ ] Design the in-app notifications for updates
-- [ ] Redesign login and registration screen to apply OAuth
+- [x] Redesign login and registration screen to apply OAuth
 - [ ] Add a forget password screen where the user will only send an email and activate a modal.
 - [ ] Add a modal that accepts the 4-digit pin sent to the user’s email.
 - [ ] Add set new password screen that shows password strength conditions. Green for approved and nothing for disapproved.

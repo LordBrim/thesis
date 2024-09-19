@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    color: COLORS.primary,
   },
   description: {
     fontSize: 16,

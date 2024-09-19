@@ -24,9 +24,9 @@
 ## Back-End %% #done %%
 
 - [x] Integrate database for data in account screen.
-- [ ] Integrate image upload and selection scrre.
+- [x] Integrate image upload and selection screen.
 - [ ] Ask permission for push notifications on first login. If the user declines then prevent push notification and only display it on the updates tab.
-- [ ] Add confirmation modal for logout button.
+- [x] Add confirmation modal for logout button.
 - [ ] Integrate OAuth (additional providers login) for login and registration screen. Integrate OAuth for Google and Facebook.
 - [ ] Integrate local storage for remember me checkbox on login screen. Checking the remember be checkbox will save the user data locally. Checking for an existing login, allowing the user to login instantly. The user will be automatically redirected to the home screen.
 - [ ] Add forget password functionality to send an email for a 4-digit pin confirmation.
@@ -83,6 +83,7 @@
 - [ ] Update UI for filing a request at file a request screen.
 - [ ] Update UI design for file a request modal. Success and error.
 - [ ] Redesign modal for maps screen when a location is selected.
+- [ ] Add date and timer modal to lockdown status
 
 ## Random Bug Fixes %% #done %%
 

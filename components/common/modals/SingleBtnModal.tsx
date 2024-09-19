@@ -8,13 +8,21 @@ interface IModal {
   icon?: ReactNode;
   onRequestClose: () => void;
   children?: ReactNode;
+  title: string;
+  description: string | ReactNode;
+  btnLabel: string;
+  extraBtn?: ReactNode;
 }
 
 export default function SingleBtnModal({
   visible,
-  icon,
   onRequestClose,
   children,
+  icon,
+  title,
+  description,
+  btnLabel,
+  extraBtn,
 }: IModal) {
   const [open, setOpen] = useState(false);
   return (
@@ -27,22 +35,20 @@ export default function SingleBtnModal({
       <View style={styles.modal}>
         <View style={styles.container}>
           {icon}
-          <Text style={styles.header}>Success!</Text>
-          <Text style={styles.description}>
-            Please show the code included in this message to the hospital staff
-            to confirm your attendance.
-          </Text>
+          <Text style={styles.header}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
           {children}
           <View
             style={{
               marginTop: 32,
               width: 300,
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 20,
             }}
           >
-            <CallToActionBtn
-              label="I Understand"
-              onPress={() => setOpen(true)}
-            />
+            <CallToActionBtn label={btnLabel} onPress={() => setOpen(true)} />
+            {extraBtn}
           </View>
         </View>
       </View>

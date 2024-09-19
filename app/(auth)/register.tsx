@@ -189,6 +189,8 @@ export default function RegisterScreen() {
             </View>
           </View>
 
+          <CallToActionBtn label="Register" onPress={() => register()} />
+
           <View
             style={{
               gap: 16,
@@ -237,8 +239,6 @@ export default function RegisterScreen() {
               />
             </View>
           </View>
-
-          <CallToActionBtn label="Register" onPress={() => register()} />
         </View>
       </ScrollView>
     </SafeAreaView>

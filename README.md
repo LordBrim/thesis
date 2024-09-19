@@ -89,7 +89,7 @@
 
 ## Admin Screen %% #done %%
 
-- [ ] Create a command palette on home screen for admins.
+- [x] Create a command palette on home screen for admins.
 - [ ] Create a generate report screen.
 
 ## Random Bug Fixes %% #done %%

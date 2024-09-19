@@ -1,5 +1,6 @@
 // Home Tab Components
 import Welcome from "./home/Welcome";
+import AdminDashboard from "./home/AdminDashboard";
 import RecentDonations from "./home/RecentDonations";
 import Events from "./home/UpcomingEvents";
 
@@ -11,4 +12,4 @@ import Events from "./home/UpcomingEvents";
 
 // Account Tab Components
 
-export { Welcome, RecentDonations, Events };
+export { Welcome, AdminDashboard, RecentDonations, Events };

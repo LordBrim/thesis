@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import React from "react";
 import { type Href, Link } from "expo-router";
+import { COLORS } from "../../constants";
 
 type ILinkBtn = {
   label: string;
@@ -28,5 +29,6 @@ const styles = StyleSheet.create({
   label: {
     fontWeight: "bold",
     textDecorationLine: "underline",
+    color: COLORS.primary,
   },
 });

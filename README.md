@@ -90,9 +90,9 @@
 ## Admin Screen %% #done %%
 
 - [x] Create a command palette on home screen for admins.
-- [ ] Create a generate report screen. Reports include total blood unit donations, total blood unit requests, total blood unit transfers, and total blood unit donations per event. Show a graph on top and a summary of the graph on the bottom.
+- [x] Create a generate report screen. Reports include total blood unit donations, total blood unit requests, total blood unit transfers, and total blood unit donations per event. Show a graph on top and a summary of the graph on the bottom.
   - [ ] Line charts for total donations and requests.
-  - [ ] Bar charts for events.
+  - [x] Bar charts for events.
 - [ ] Create a button for admin, request blood unit transfers from another hospital.
 
 ## Random Bug Fixes %% #done %%

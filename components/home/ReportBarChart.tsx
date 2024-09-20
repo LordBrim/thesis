@@ -82,6 +82,25 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
         yAxisThickness={0}
         xAxisThickness={0}
         scrollToEnd={true}
+        renderTooltip={(item, index) => {
+          return (
+            <View
+              style={{
+                marginBottom: 20,
+                marginLeft: -6,
+                backgroundColor: "#ffcefe",
+                paddingHorizontal: 6,
+                paddingVertical: 4,
+                borderRadius: 4,
+              }}
+            >
+              <Text>{item.value}</Text>
+            </View>
+          );
+        }}
+        leftShiftForTooltip={30}
+        leftShiftForLastIndexTooltip={55}
+        autoCenterTooltip={true}
       />
     </View>
   );

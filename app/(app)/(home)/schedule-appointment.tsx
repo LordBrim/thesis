@@ -17,7 +17,16 @@ import { generateUniqueTicketCode } from "../../../utils/helperFunction";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import { checklistQuestions } from "../../../constants/database"; // Adjust the path to your database.js file
 
+const mapAnswersToQuestions = (answers) => {
+  return checklistQuestions.reduce((acc, question) => {
+    if (answers[question.id]) {
+      acc[question.question] = answers[question.id];
+    }
+    return acc;
+  }, {});
+};
 const ScheduleAppointmentScreen = forwardRef((props, ref) => {
   const cancel = () => {
     router.replace("(app)/(tabs)/index");
@@ -52,7 +61,7 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
     router.navigate("(app)/(tabs)");
   };
 
-  const handleNextButtonPress = async () => {
+  const handleNextButtonPress = async (answers) => {
     if (!selectedHospital) {
       alert("Please select a hospital.");
       return;
@@ -76,6 +85,9 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
       console.log("Current User UID:", user.uid);
 
       try {
+        // Map answers to questions
+        const checklistData = mapAnswersToQuestions(answers);
+
         // Create the data object to store in Firestore
         const ticketData = {
           selectedHospital,
@@ -85,11 +97,13 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
           userUID: user.uid,
           ticketNumber: ticketCode,
           status: "pending",
+          checklistData, // Include the mapped checklist data
         };
         await firestoreOperations.createDocument("ticketDonate", ticketData);
 
         console.log("Ticket request saved successfully!");
         setShowModal(true);
+        console.log(ticketData.checklistData);
         setTicketNumber(ticketData.ticketNumber);
       } catch (error) {
         console.error("Error saving ticket request:", error);
@@ -191,6 +205,7 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
       <SingleBtnModal
         visible={showModal}
         onRequestClose={handleCloseModal}
+        onPress={handleCloseModal}
         title="Success!"
         description="Please show the code included in this message to the hospital staff
             to confirm your attendance."

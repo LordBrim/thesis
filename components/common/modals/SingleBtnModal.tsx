@@ -1,7 +1,15 @@
-import { View, Text, StyleSheet, Modal as RNModal, Image } from "react-native";
-import React, { ReactNode, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal as RNModal,
+  Image,
+  Animated,
+} from "react-native";
+import React, { ReactNode, useRef, useEffect } from "react";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 import CallToActionBtn from "../CallToActionBtn";
+import Markdown from "react-native-markdown-display";
 
 interface IModal {
   visible: boolean;
@@ -13,6 +21,8 @@ interface IModal {
   description: string | ReactNode;
   btnLabel: string;
   extraBtn?: ReactNode;
+  animation?: boolean; // Add the animation prop
+  renderMarkdown?: boolean; // Add the renderMarkdown prop
 }
 
 export default function SingleBtnModal({
@@ -25,19 +35,51 @@ export default function SingleBtnModal({
   description,
   btnLabel,
   extraBtn,
+  animation = false, // Default to false if not provided
+  renderMarkdown = false, // Default to false if not provided
 }: IModal) {
+  const opacityValue = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (visible) {
+      if (animation) {
+        Animated.timing(opacityValue, {
+          toValue: 1,
+          duration: 500, // Duration of the fade-in animation
+          useNativeDriver: true,
+        }).start();
+      } else {
+        opacityValue.setValue(1);
+      }
+    } else {
+      if (animation) {
+        Animated.timing(opacityValue, {
+          toValue: 0,
+          duration: 500, // Duration of the fade-out animation
+          useNativeDriver: true,
+        }).start();
+      } else {
+        opacityValue.setValue(0);
+      }
+    }
+  }, [visible, animation]);
+
   return (
     <RNModal
-      animationType="fade"
+      animationType="none"
       transparent={true}
       visible={visible}
       onRequestClose={onRequestClose}
     >
-      <View style={styles.modal}>
+      <Animated.View style={[styles.modal, { opacity: opacityValue }]}>
         <View style={styles.container}>
           {icon}
           <Text style={styles.header}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
+          {renderMarkdown ? (
+            <Markdown>{description}</Markdown>
+          ) : (
+            <Text style={styles.description}>{description}</Text>
+          )}
           {children}
           <View
             style={{
@@ -52,7 +94,7 @@ export default function SingleBtnModal({
             {extraBtn}
           </View>
         </View>
-      </View>
+      </Animated.View>
     </RNModal>
   );
 }

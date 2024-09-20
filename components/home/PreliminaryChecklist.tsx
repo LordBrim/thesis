@@ -1,41 +1,43 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  ScrollView,
-  FlatList,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
 import React from "react";
-import StepsIndicator from "components/common/StepsIndicator";
+import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
 import ChecklistItem from "./ChecklistItem";
-import CallToActionBtn from "components/common/CallToActionBtn";
-import { router } from "expo-router";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
-import { DonationScreens, checklistQuestions } from "constants/database";
+import { checklistQuestions } from "../../constants/database"; // Adjust the path to your database.js file
 
-export default function PreliminaryChecklist() {
+const HeaderComponent = () => (
+  <>
+    <View>
+      <Title title="Preliminary Checklist" />
+      <Description description="Please answer the questions honestly as you can possibly can. It is required to answer every question." />
+    </View>
+    <View style={styles.bar}>
+      <Text style={styles.header}>Questions</Text>
+    </View>
+  </>
+);
+
+export default function PreliminaryChecklist({ answers, handleAnswerChange }) {
+  const renderItem = ({ item, index }) => (
+    <ChecklistItem
+      question={item}
+      onAnswerChange={handleAnswerChange}
+      index={index}
+    />
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Title title="Preliminary Checklist" />
-        <Description description="Please answer the questions honestly as you can possibly can. It is required to answer every question." />
-      </View>
-      <View style={styles.bar}>
-        <Text style={styles.header}>Questions</Text>
-        <Text style={[styles.header, { paddingHorizontal: 8 }]}>Yes / No</Text>
-      </View>
-
       <FlatList
-        contentContainerStyle={styles.flatlist}
         data={checklistQuestions}
-        renderItem={({ item }) => <ChecklistItem question={item.question} />}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
-        scrollEnabled={false}
+        ListHeaderComponent={HeaderComponent}
+        contentContainerStyle={styles.flatListContent}
+        scrollEnabled={true}
         overScrollMode="never"
+        removeClippedSubviews={false} // This can help with rendering issues
       />
     </SafeAreaView>
   );
@@ -45,28 +47,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+    backgroundColor: COLORS.white,
+  },
+  flatListContent: {
+    flexGrow: 1,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
-    backgroundColor: COLORS.white,
     gap: 12,
-  },
-  flatlist: {
-    rowGap: 8,
   },
   bar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 8,
   },
   header: {
     color: COLORS.primary,
     fontSize: SIZES.large,
     fontWeight: "600",
-  },
-  fixed: {
-    position: "relative",
-    bottom: 0,
-    flexDirection: "row",
-    gap: 8,
   },
 });

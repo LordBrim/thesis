@@ -1,0 +1,38 @@
+1. Are you currently taking any prescription medicines?
+*If yes, show text box* Please list all medications.
+
+2. Have you taken aspirin within the last 3 days?
+
+3. Have you had any vaccination within the last 4 weeks?
+
+4. Do you have any of the following conditions? Please check all that apply.
+** indented under the same question
+- HIV/AIDS
+- Cancer
+- Bleeding conditions (e.g., hemophilia)
+- Tuberculosis
+- Asthma
+- Diabetes
+- Malaria
+
+5. Have you received a blood transfusion within the past x months / recently?
+** check with ace how recent
+
+6. Have you had any surgery within the past x months / recently?
+** check with ace how recent
+
+7. Have you consumed alcohol within the past 12 hours?
+
+8. Have you had a tattoo or piercing within the last 3 months? 
+** 3 mos as per red cross , check with ace medical
+
+9. Do you have a history of drug use?
+
+10. Have you traveled outside the Philippines within the past year?
+
+- FOR FEMALES ONLY -
+
+11. Are you pregnant or breastfeeding?
+
+12. When was your last period? 
+** calendar option

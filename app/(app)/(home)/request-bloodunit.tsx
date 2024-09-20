@@ -7,6 +7,8 @@ import CallToActionBtn from "components/common/CallToActionBtn";
 import { firestoreOperations } from "../../../firestore-services";
 import { getAuth } from "firebase/auth";
 import { router } from "expo-router";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
 export default function RequestBloodunitScreen() {
   const [patientName, setPatientName] = useState("");
@@ -65,22 +67,46 @@ export default function RequestBloodunitScreen() {
         documentData
       );
       console.log(`Added new document with ID: ${documentId}`);
-      Alert.alert(
-        "Success",
-        "Document added successfully, Click OK to go back",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              router.navigate("/(app)/(tabs)");
-            },
-          },
-        ]
-      );
+      // setModalValues({
+      //   status: "success",
+      //   title: "Request Successful",
+      //   description: "Document added successfully, Click OK to go back",
+      //   btnLabel: "Go Back Home",
+      // });
+      setModalValues({
+        status: "failed",
+        title: "Request Failed",
+        description: "Invalid request form data, request failed.",
+        btnLabel: "Try Again",
+      });
+      setShowModal(true);
     } catch (error) {
       console.error("Error adding document: ", error);
+      setModalValues({
+        status: "failed",
+        title: "Request Failed",
+        description: "Invalid request form data, request failed.",
+        btnLabel: "Try Again",
+      });
+      setShowModal(true);
     }
   };
+
+  const [showModal, setShowModal] = useState(false);
+  const handleCloseModal = () => {
+    if (modalValues.status === "success") {
+      setShowModal(false);
+      router.navigate("/(app)/(tabs)");
+    } else {
+      setShowModal(false);
+    }
+  };
+  const [modalValues, setModalValues] = useState({
+    status: "",
+    title: "",
+    description: "",
+    btnLabel: "",
+  });
 
   return (
     <View style={styles.container}>
@@ -153,6 +179,24 @@ export default function RequestBloodunitScreen() {
           style={{ flex: 1 }}
         />
       </View>
+
+      <SingleBtnModal
+        visible={showModal}
+        onRequestClose={handleCloseModal}
+        onPress={handleCloseModal}
+        icon={
+          modalValues.status === "success" ? (
+            // Success
+            <FontAwesome5 name="check" size={40} color="green" />
+          ) : (
+            // Failed
+            <MaterialCommunityIcons name="close-circle" size={40} color="red" />
+          )
+        }
+        title={modalValues.title}
+        description={modalValues.description}
+        btnLabel={modalValues.btnLabel}
+      />
     </View>
   );
 }

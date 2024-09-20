@@ -82,7 +82,7 @@
   - [x] The general updates should contain appointments, requests, donations, and incentives. All information regarding processes are accumulated here.
 - [ ] In request screen add a steps indicator to declutter current and previous screen.
 - [ ] Update UI for filing a request at file a request screen.
-- [ ] Update UI design for file a request modal. Success and error.
+- [x] Update UI design for file a request modal. Success and error.
 - [ ] Redesign modal for maps screen when a location is selected.
 - [x] Add date and timer modal to lockdown status
 - [x] Create a reusable modal for all screens
@@ -92,7 +92,7 @@
 - [x] Create a command palette on home screen for admins.
 - [x] Create a generate report screen. Reports include total blood unit donations, total blood unit requests, total blood unit transfers, and total blood unit donations per event. Show a graph on top and a summary of the graph on the bottom.
   - [ ] Line charts for total donations and requests.
-  - [x] Bar charts for events.
+  - [ ] Bar charts for event donations.
 - [ ] Create a button for admin, request blood unit transfers from another hospital.
 
 ## Random Bug Fixes %% #done %%

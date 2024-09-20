@@ -119,6 +119,8 @@ export default function AdminDashboard() {
         <ReportBarChart title="Monthly" data={monthlyData} />
       )}
       {chart == "Yearly" && <ReportBarChart title="Yearly" data={yearlyData} />}
+
+      <ReportBarChart title="Donations From Events" data={eventsData} />
     </View>
   );
 }
@@ -414,4 +416,35 @@ const yearlyData = [
     frontColor: COLORS.primary,
   },
   { value: 30, frontColor: COLORS.accent1 },
+];
+
+const eventsData = [
+  {
+    value: 40,
+    frontColor: COLORS.primary,
+  },
+  {
+    value: 50,
+    frontColor: COLORS.primary,
+  },
+  {
+    value: 75,
+    frontColor: COLORS.primary,
+  },
+  {
+    value: 30,
+    frontColor: COLORS.primary,
+  },
+  {
+    value: 60,
+    frontColor: COLORS.primary,
+  },
+  {
+    value: 65,
+    frontColor: COLORS.primary,
+  },
+  {
+    value: 65,
+    frontColor: COLORS.primary,
+  },
 ];

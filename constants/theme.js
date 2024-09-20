@@ -2,6 +2,7 @@ const COLORS = {
   primary: "#DA2F47",
   secondary: "#444262",
   tertiary: "#FF7754",
+  accent1: "#177AD5",
 
   line: "#FF3642",
 

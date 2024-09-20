@@ -87,18 +87,14 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
             <View
               style={{
                 marginBottom: 20,
-                marginLeft: -6,
-                backgroundColor: "#ffcefe",
-                paddingHorizontal: 6,
-                paddingVertical: 4,
-                borderRadius: 4,
+                bottom: -75,
               }}
             >
               <Text>{item.value}</Text>
             </View>
           );
         }}
-        leftShiftForTooltip={30}
+        leftShiftForTooltip={0}
         leftShiftForLastIndexTooltip={55}
         autoCenterTooltip={true}
       />

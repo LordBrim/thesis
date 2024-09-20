@@ -21,7 +21,7 @@
 
 # Tasks
 
-## Back-End %% #done %%
+## Back-End
 
 - [x] Integrate database for data in account screen.
 - [x] Integrate image upload and selection screen.
@@ -49,7 +49,7 @@
   - Example: Do you have tattoos?
 - [ ] Add blood components to the database to. Whether they are RBC, WBC, Platelets, or Plasma.
 
-### Admin Screen %% #done %%
+### Admin Screen
 
 > Prioritize Admin
 
@@ -67,7 +67,7 @@
 - [ ] Display the prizes for requesting blood for every hospital.
 - [ ] Add partnership field to the database for when creating events.
 
-# Front-End %% #done %%
+# Front-End
 
 - [x] Make Maps section into a flatlist.
 - [x] Clean up accounts section into the design.
@@ -87,7 +87,7 @@
 - [x] Add date and timer modal to lockdown status
 - [x] Create a reusable modal for all screens
 
-## Admin Screen %% #done %%
+## Admin Screen
 
 - [x] Create a command palette on home screen for admins.
 - [x] Create a generate report screen. Reports include total blood unit donations, total blood unit requests, total blood unit transfers, and total blood unit donations per event. Show a graph on top and a summary of the graph on the bottom.
@@ -95,19 +95,19 @@
   - [x] Bar charts for event donations.
 - [ ] Create a button for admin, request blood unit transfers from another hospital.
 
-## Random Bug Fixes %% #done %%
+## Random Bug Fixes
 
 - [x] Make the back buttons of maps screen, donation history screen, profile screen, settings screen, about screen, help screen, maps after upcoming events screen, and login screen after account screens appear.
 
-## Low Priority Improvements %% #done %%
+## Low Priority Improvements
 
 - [ ] In donations screen improve the modals of each input field.
 
-## Potential Improvements %% #done %%
+## Potential Improvements
 
 - [ ] Chatbot that translates FAQ questions to specified language
 
-## Content %% #done %%
+## Content
 
 > For Nicole
 
@@ -117,16 +117,16 @@
 - [ ] Make content for 10 guidelines for requesting blood units
 - [ ] Make content for FAQ. Based on guides and questionnaires sent by the hospital.
 
-## Consult %% #done %%
+## Consult
 
 - [ ] Add a six digit pin number for email verification. The users must first verify their email before they can login.
 
-## If We Have Time %% #done %%
+## If We Have Time
 
 - [ ] Add automated tests using Jest for React Native
 - [ ] Add close all questions or open all questions in FAQ
 
-## Ask Questions To Clarifty %% #done %%
+## Ask Questions To Clarifty
 
 > For Jam and Angelo
 
@@ -137,7 +137,7 @@
 - [ ] Make a general checklist for all hospitals
 - [ ] Do hospitals donate blood to other medical institutions
 
-## Reminder %% #done %%
+## Reminder
 
 - Make sure to specify the suffix of certain emails. For example:
   - uerm@admin.com

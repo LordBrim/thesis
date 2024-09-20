@@ -67,17 +67,11 @@ export default function RequestBloodunitScreen() {
         documentData
       );
       console.log(`Added new document with ID: ${documentId}`);
-      // setModalValues({
-      //   status: "success",
-      //   title: "Request Successful",
-      //   description: "Document added successfully, Click OK to go back",
-      //   btnLabel: "Go Back Home",
-      // });
       setModalValues({
-        status: "failed",
-        title: "Request Failed",
-        description: "Invalid request form data, request failed.",
-        btnLabel: "Try Again",
+        status: "success",
+        title: "Request Successful",
+        description: "Document added successfully, Click OK to go back",
+        btnLabel: "Go Back Home",
       });
       setShowModal(true);
     } catch (error) {

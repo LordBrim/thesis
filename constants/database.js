@@ -102,6 +102,7 @@ export const checklistQuestions = [
       "Asthma",
       "Diabetes",
       "Malaria",
+      "Others",
     ],
   },
 ];

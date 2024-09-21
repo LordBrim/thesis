@@ -12,6 +12,7 @@ import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
 import { useEffect, useState } from "react";
+import ReportLineChart from "./ReportLineChart";
 
 export default function AdminDashboard() {
   const size = 40;
@@ -121,6 +122,7 @@ export default function AdminDashboard() {
       {chart == "Yearly" && <ReportBarChart title="Yearly" data={yearlyData} />}
 
       <ReportBarChart title="Donations From Events" data={eventsData} />
+      <ReportLineChart />
     </View>
   );
 }

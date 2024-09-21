@@ -1,17 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SafeAreaView, StyleSheet, View, Dimensions } from "react-native";
-import { COLORS, HORIZONTAL_SCREEN_MARGIN, SIZES } from "../../../constants";
+import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
 import StepsIndicator from "components/common/StepsIndicator";
-import { DonationScreens } from "constants/database";
 import ScheduleAppointmentScreen from "./schedule-appointment";
 import PreliminaryChecklist from "components/home/PreliminaryChecklist";
 import Carousel from "pinar";
 import SingleBtnModal from "components/common/modals/SingleBtnModal"; // Adjust the path as necessary
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function PreliminaryChecklistScreen() {
+export default function DonateScreen() {
   const stepCount = 2;
   let [screenIndex, setScreenIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -33,10 +32,6 @@ export default function PreliminaryChecklistScreen() {
 
   const handleAnswerChange = (question, value) => {
     setAnswers((prev) => ({ ...prev, [question]: value }));
-  };
-
-  const cancel = () => {
-    router.navigate("(app)/(tabs)");
   };
 
   const prev = () => {
@@ -76,13 +71,11 @@ By proceeding with this screening, you acknowledge that you understand these req
     }
   };
 
+  const Screens = ["Preliminary\nChecklist", "Schedule\nAppointment"];
+
   return (
     <SafeAreaView style={styles.container}>
-      <StepsIndicator
-        labels={DonationScreens}
-        step={screenIndex}
-        steps={stepCount}
-      />
+      <StepsIndicator labels={Screens} step={screenIndex} steps={stepCount} />
 
       <Carousel
         ref={(carousel) => {
@@ -100,12 +93,6 @@ By proceeding with this screening, you acknowledge that you understand these req
       </Carousel>
 
       <View style={styles.fixed}>
-        <CallToActionBtn
-          label="cancel"
-          onPress={() => cancel()}
-          style={{ flex: 1 }}
-          secondary
-        />
         <CallToActionBtn
           label="previous"
           onPress={() => prev()}

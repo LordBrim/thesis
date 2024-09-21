@@ -1,57 +1,100 @@
-import ActionBtn from "components/home/ActionBtn";
 import {
   COLORS,
   HORIZONTAL_SCREEN_MARGIN,
   SIZES,
   SPACES,
 } from "../../../constants";
-import {
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import Carousel from "pinar";
+import CallToActionBtn from "components/common/CallToActionBtn";
+import { router } from "expo-router";
+import { useState } from "react";
+import StepsIndicator from "components/common/StepsIndicator";
+import RequestBloodunitScreen from "./request-bloodunit";
 
 export default function Request() {
+  const stepCount = 2;
+  let [screenIndex, setScreenIndex] = useState(0);
+
+  const prev = () => {
+    if (screenIndex > 0) {
+      this.carousel.scrollToPrev();
+      setScreenIndex(--screenIndex);
+    }
+  };
+
+  const next = () => {
+    if (screenIndex < stepCount - 1) {
+      this.carousel.scrollToNext();
+      setScreenIndex(++screenIndex);
+    }
+  };
+
+  const submit = () => {
+    //TODO: Place reference like donate screen
+  };
+
+  const Screens = ["Request\nGuidelines", "File A\nRequest"];
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={{ gap: 16 }}>
-        <View style={styles.buttons}>
-          <ActionBtn
-            href="/(app)/(home)/request-bloodunit"
-            title="File A Request"
-            subtitle="Request for an available blood unit."
-            cta
+    <View style={styles.container}>
+      <StepsIndicator labels={Screens} step={screenIndex} steps={stepCount} />
+
+      <Carousel
+        ref={(carousel) => {
+          this.carousel = carousel;
+        }}
+        showsControls={false}
+        showsDots={false}
+        scrollEnabled={false}
+      >
+        <ScrollView
+          contentContainerStyle={{
+            gap: 16,
+            paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+          }}
+        >
+          <Text style={styles.title}>Guidelines For Requesting Blood</Text>
+
+          <FlatList
+            data={sampleGuidelines}
+            renderItem={({ item }) => (
+              <View style={{ gap: 4 }}>
+                <Text style={styles.header}>{item.title}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+              </View>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={1}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flatlist}
           />
-        </View>
+        </ScrollView>
+        <RequestBloodunitScreen />
+      </Carousel>
 
-        <Text style={styles.title}>Guidelines For Requesting Blood</Text>
-
-        <FlatList
-          data={sampleGuidelines}
-          renderItem={({ item }) => (
-            <View style={{ gap: 4 }}>
-              <Text style={styles.header}>{item.title}</Text>
-              <Text style={styles.description}>{item.description}</Text>
-            </View>
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={1}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.flatlist}
+      <View style={styles.fixed}>
+        <CallToActionBtn
+          label="previous"
+          onPress={() => prev()}
+          style={{ flex: 1 }}
+          secondary
         />
-      </ScrollView>
-    </SafeAreaView>
+        <CallToActionBtn
+          label={screenIndex === stepCount - 1 ? "submit" : "next"}
+          onPress={
+            screenIndex === stepCount - 1 ? () => submit() : () => next()
+          }
+          style={{ flex: 1 }}
+        />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     gap: 12,
@@ -76,6 +119,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 90,
     gap: SPACES.sm,
+  },
+  fixed: {
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    flexDirection: "row",
+    gap: 8,
   },
 });
 

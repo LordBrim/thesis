@@ -79,7 +79,7 @@
 - [x] Add a set new password modal that shows that the user has successfully changed their password.
 - [x] Transfer donation screen into updates. The updates tab should have sub tabs as categories containing general, donation history, and donation incentives. All information regarding results are accumulated here.
   - [x] The general updates should contain appointments, requests, donations, and incentives. All information regarding processes are accumulated here.
-- [ ] In request screen add a steps indicator to declutter current and previous screen.
+- [x] In request screen add a steps indicator to declutter current and previous screen.
 - [ ] Update UI for filing a request at file a request screen.
 - [x] Update UI design for file a request modal. Success and error.
 - [ ] Redesign modal for maps screen when a location is selected.

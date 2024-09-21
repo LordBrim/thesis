@@ -34,10 +34,10 @@ export default function Request() {
     //TODO: Place reference like donate screen
   };
 
-  const Screens = ["Request\nGuidelines", "Schedule\nAppointment"];
+  const Screens = ["Request\nGuidelines", "File A\nRequest"];
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <StepsIndicator labels={Screens} step={screenIndex} steps={stepCount} />
 
       <Carousel
@@ -49,8 +49,10 @@ export default function Request() {
         scrollEnabled={false}
       >
         <ScrollView
-          style={styles.container}
-          contentContainerStyle={{ gap: 16 }}
+          contentContainerStyle={{
+            gap: 16,
+            paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+          }}
         >
           <Text style={styles.title}>Guidelines For Requesting Blood</Text>
 
@@ -93,8 +95,6 @@ export default function Request() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
     gap: 12,

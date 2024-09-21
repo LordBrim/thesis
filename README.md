@@ -80,9 +80,7 @@
 - [x] Transfer donation screen into updates. The updates tab should have sub tabs as categories containing general, donation history, and donation incentives. All information regarding results are accumulated here.
   - [x] The general updates should contain appointments, requests, donations, and incentives. All information regarding processes are accumulated here.
 - [x] In request screen add a steps indicator to declutter current and previous screen.
-- [ ] Update UI for filing a request at file a request screen.
 - [x] Update UI design for file a request modal. Success and error.
-- [ ] Redesign modal for maps screen when a location is selected.
 - [x] Add date and timer modal to lockdown status
 - [x] Create a reusable modal for all screens
 
@@ -93,6 +91,11 @@
   - [x] Line charts for total donations and requests.
   - [x] Bar charts for event donations.
 - [x] Create a button for admin, request blood unit transfers from another hospital.
+
+## Redesign
+
+- [ ] Update UI for filing a request at file a request screen.
+- [ ] Redesign modal for maps screen when a location is selected.
 
 ## Random Bug Fixes
 

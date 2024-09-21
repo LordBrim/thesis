@@ -92,7 +92,7 @@
 - [x] Create a generate report screen. Reports include total blood unit donations, total blood unit requests, total blood unit transfers, and total blood unit donations per event. Show a graph on top and a summary of the graph on the bottom.
   - [x] Line charts for total donations and requests.
   - [x] Bar charts for event donations.
-- [ ] Create a button for admin, request blood unit transfers from another hospital.
+- [x] Create a button for admin, request blood unit transfers from another hospital.
 
 ## Random Bug Fixes
 

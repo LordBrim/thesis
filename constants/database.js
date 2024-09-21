@@ -18,11 +18,6 @@ export const FAQuestions = [
   },
 ];
 
-export const DonationScreens = [
-  "Preliminary\nChecklist",
-  "Schedule\nAppointment",
-];
-
 export const RequestScreens = ["Request\nGuidelines", "File A\nRequest"];
 
 export const checklistQuestions = [

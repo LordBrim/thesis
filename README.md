@@ -71,8 +71,7 @@
 
 - [x] Make Maps section into a flatlist.
 - [x] Clean up accounts section into the design.
-- [ ] Design the in-app notifications for updates.
-  - [ ] Include groupings for today, yesterday, last week, last month, last year.
+- [x] Design the in-app notifications for updates.
 - [x] Redesign login and registration screen to apply OAuth
 - [x] Add a forget password screen where the user will only send an email and activate a modal.
 - [x] Add a modal that accepts the 4-digit pin sent to the user’s email.
@@ -80,10 +79,8 @@
 - [x] Add a set new password modal that shows that the user has successfully changed their password.
 - [x] Transfer donation screen into updates. The updates tab should have sub tabs as categories containing general, donation history, and donation incentives. All information regarding results are accumulated here.
   - [x] The general updates should contain appointments, requests, donations, and incentives. All information regarding processes are accumulated here.
-- [ ] In request screen add a steps indicator to declutter current and previous screen.
-- [ ] Update UI for filing a request at file a request screen.
+- [x] In request screen add a steps indicator to declutter current and previous screen.
 - [x] Update UI design for file a request modal. Success and error.
-- [ ] Redesign modal for maps screen when a location is selected.
 - [x] Add date and timer modal to lockdown status
 - [x] Create a reusable modal for all screens
 
@@ -91,9 +88,14 @@
 
 - [x] Create a command palette on home screen for admins.
 - [x] Create a generate report screen. Reports include total blood unit donations, total blood unit requests, total blood unit transfers, and total blood unit donations per event. Show a graph on top and a summary of the graph on the bottom.
-  - [ ] Line charts for total donations and requests.
+  - [x] Line charts for total donations and requests.
   - [x] Bar charts for event donations.
-- [ ] Create a button for admin, request blood unit transfers from another hospital.
+- [x] Create a button for admin, request blood unit transfers from another hospital.
+
+## Redesign
+
+- [ ] Update UI for filing a request at file a request screen.
+- [ ] Redesign modal for maps screen when a location is selected.
 
 ## Random Bug Fixes
 

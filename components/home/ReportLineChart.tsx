@@ -4,6 +4,7 @@ import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import {
   LineChartPropsType,
   LineChartBicolor,
+  LineChart,
 } from "react-native-gifted-charts";
 
 export default function ReportLineChart({ data }: LineChartPropsType) {
@@ -71,28 +72,69 @@ export default function ReportLineChart({ data }: LineChartPropsType) {
         </View>
       </View>
 
-      <LineChartBicolor
-        isAnimated
-        thickness={3}
-        color="#07BAD1"
-        maxValue={600}
-        noOfSections={3}
-        animationDuration={1000}
-        onDataChangeAnimationDuration={300}
+      <LineChart
         areaChart
-        yAxisTextStyle={{ color: "lightgray" }}
-        data={data}
+        curved
+        data={data1}
+        data2={data2}
         hideDataPoints
-        startFillColor={"rgb(84,219,234)"}
-        endFillColor={"rgb(84,219,234)"}
-        startOpacity={0.4}
-        endOpacity={0.1}
-        spacing={22}
-        backgroundColor="#414141"
+        spacing={68}
+        color1={COLORS.primary}
+        color2={COLORS.accent1}
+        startFillColor1={COLORS.primary}
+        startFillColor2={COLORS.accent1}
+        endFillColor1={COLORS.primary}
+        endFillColor2={COLORS.accent1}
+        startOpacity={0.7}
+        endOpacity={0.2}
+        initialSpacing={0}
+        noOfSections={4}
+        yAxisColor="white"
+        yAxisThickness={0}
+        rulesType="solid"
         rulesColor="gray"
-        initialSpacing={10}
-        yAxisColor="lightgray"
+        yAxisTextStyle={{ color: "gray" }}
+        yAxisLabelSuffix="%"
         xAxisColor="lightgray"
+        pointerConfig={{
+          pointerStripUptoDataPoint: true,
+          pointerStripColor: "lightgray",
+          pointerStripWidth: 2,
+          strokeDashArray: [2, 5],
+          pointerColor: "lightgray",
+          radius: 4,
+          pointerLabelWidth: 100,
+          pointerLabelHeight: 120,
+          pointerLabelComponent: (items) => {
+            return (
+              <View
+                style={{
+                  height: 120,
+                  width: 100,
+                  backgroundColor: "#282C3E",
+                  borderRadius: 4,
+                  justifyContent: "center",
+                  paddingLeft: 16,
+                }}
+              >
+                <Text style={{ color: "lightgray", fontSize: 12 }}>
+                  donations
+                </Text>
+                <Text style={{ color: "white", fontWeight: "bold" }}>
+                  {items[0].value}
+                </Text>
+                <Text
+                  style={{ color: "lightgray", fontSize: 12, marginTop: 12 }}
+                >
+                  requests
+                </Text>
+                <Text style={{ color: "white", fontWeight: "bold" }}>
+                  {items[1].value}
+                </Text>
+              </View>
+            );
+          },
+        }}
       />
     </View>
   );
@@ -109,3 +151,20 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
   },
 });
+
+const data1 = [
+  { value: 70 },
+  { value: 36 },
+  { value: 50 },
+  { value: 40 },
+  { value: 18 },
+  { value: 38 },
+];
+const data2 = [
+  { value: 50 },
+  { value: 10 },
+  { value: 45 },
+  { value: 30 },
+  { value: 45 },
+  { value: 18 },
+];

@@ -72,7 +72,6 @@
 - [x] Make Maps section into a flatlist.
 - [x] Clean up accounts section into the design.
 - [x] Design the in-app notifications for updates.
-  - [ ] Include groupings for today, yesterday, last week, last month, last year.
 - [x] Redesign login and registration screen to apply OAuth
 - [x] Add a forget password screen where the user will only send an email and activate a modal.
 - [x] Add a modal that accepts the 4-digit pin sent to the user’s email.

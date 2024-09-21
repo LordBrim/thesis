@@ -11,7 +11,7 @@ import Carousel from "pinar";
 import SingleBtnModal from "components/common/modals/SingleBtnModal"; // Adjust the path as necessary
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function PreliminaryChecklistScreen() {
+export default function DonateScreen() {
   const stepCount = 2;
   let [screenIndex, setScreenIndex] = useState(0);
   const [answers, setAnswers] = useState({});

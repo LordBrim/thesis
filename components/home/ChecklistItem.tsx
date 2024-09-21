@@ -8,19 +8,21 @@ import {
   StyleSheet,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import DropDownPicker from "react-native-dropdown-picker";
+import RadioGroup from "react-native-radio-buttons-group";
+import Checkbox from "expo-checkbox";
 
 const ChecklistItem = ({ question, onAnswerChange, index }) => {
   const [answer, setAnswer] = useState(null);
   const [textInputValue, setTextInputValue] = useState(""); // State for text input value
   const [open, setOpen] = useState(false); // Track dropdown open state
-  const [value, setValue] = useState([]);
+  const [value, setValue] = useState([]); // Initialize value as an empty array
   const [items, setItems] = useState(
     question.options
       ? question.options.map((option) => ({ label: option, value: option }))
       : []
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | undefined>();
 
   const handleAnswerChange = (value) => {
     setAnswer(value);
@@ -47,33 +49,54 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
       case "condionalText":
       case "yesNo":
         return (
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, answer === "Yes" && styles.selectedButton]}
-              onPress={() => handleAnswerChange("Yes")}
-            >
-              <Text
-                style={[
-                  styles.buttonText,
-                  answer === "Yes" && styles.selectedButtonText,
-                ]}
-              >
-                Yes
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, answer === "No" && styles.selectedButton]}
-              onPress={() => handleAnswerChange("No")}
-            >
-              <Text
-                style={[
-                  styles.buttonText,
-                  answer === "No" && styles.selectedButtonText,
-                ]}
-              >
-                No
-              </Text>
-            </TouchableOpacity>
+          <View style={styles.radioGroupContainer}>
+            <RadioGroup
+              radioButtons={[
+                {
+                  id: "yes",
+                  label: "Yes",
+                  value: "Yes",
+                  color: selectedId === "yes" ? COLORS.redWhite : undefined,
+                  labelStyle:
+                    selectedId === "yes"
+                      ? { fontWeight: "bold", color: COLORS.primary }
+                      : undefined,
+                },
+                {
+                  id: "no",
+                  label: "No",
+                  value: "No",
+                  color: selectedId === "no" ? COLORS.redWhite : undefined,
+                  labelStyle:
+                    selectedId === "no"
+                      ? { fontWeight: "bold", color: COLORS.primary }
+                      : undefined,
+                },
+              ]}
+              onPress={(selectedId: string) => {
+                const selectedButton = [
+                  {
+                    id: "yes",
+                    label: "Yes",
+                    value: "Yes",
+                    selected: selectedId === "yes",
+                  },
+                  {
+                    id: "no",
+                    label: "No",
+                    value: "No",
+                    selected: selectedId === "no",
+                  },
+                ].find((button) => button.selected);
+                if (selectedButton) {
+                  handleAnswerChange(selectedButton.value);
+                  setSelectedId(selectedButton.id);
+                }
+              }}
+              selectedId={selectedId}
+              layout="column"
+              containerStyle={styles.radioGroup}
+            />
           </View>
         );
 
@@ -104,24 +127,38 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
         );
       case "dropdown":
         return (
-          <View style={[styles.dropdownWrapper, { zIndex: 1000 - index }]}>
-            <DropDownPicker
-              open={open}
-              multiple={true}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="Select an option"
-              style={styles.dropdown}
-              dropDownContainerStyle={styles.dropdownContainer}
-              onChangeValue={(value) => handleAnswerChange(value)}
-              zIndex={1000} // Ensure the dropdown itself has a higher zIndex
-              dropDownDirection="TOP"
-            />
+          <View style={styles.checkboxGroupContainer}>
+            {items.map((item) => (
+              <View key={item.value} style={styles.checkboxContainer}>
+                <Checkbox
+                  value={value.includes(item.value)}
+                  onValueChange={(isChecked) => {
+                    const newValue = isChecked
+                      ? [...value, item.value]
+                      : value.filter((v) => v !== item.value);
+                    setValue(newValue);
+                    handleAnswerChange(newValue);
+                  }}
+                  color={
+                    value.includes(item.value) ? COLORS.primary : undefined
+                  }
+                />
+                <Text
+                  style={[
+                    styles.checkboxLabel,
+                    value.includes(item.value) && {
+                      fontWeight: "bold",
+                      color: COLORS.primary,
+                    },
+                  ]}
+                >
+                  {item.label}
+                </Text>
+              </View>
+            ))}
           </View>
         );
+
       default:
         return null;
     }
@@ -134,6 +171,19 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
       {question.type === "condionalText" && answer === "Yes" && (
         <>
           <Text style={styles.questionInput}>List all medication here:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Please enter all medicine"
+            value={textInputValue}
+            onChangeText={handleTextInputChange}
+          />
+        </>
+      )}
+      {question.type === "dropdown" && answer?.includes("Others") && (
+        <>
+          <Text style={styles.questionInput}>
+            List other medical condition/s here:
+          </Text>
           <TextInput
             style={styles.input}
             placeholder="Please enter all medicine"
@@ -224,6 +274,24 @@ const styles = StyleSheet.create({
   dropdownContainer: {
     borderColor: "#ccc",
     zIndex: 1000, // Ensure the dropdown container appears above other elements
+  },
+  radioGroupContainer: {
+    alignItems: "flex-start", // Align items to the left
+  },
+  radioGroup: {
+    alignItems: "flex-start", // Align items to the left
+    justifyContent: "flex-start", // Ensure proper alignment
+  },
+  checkboxGroupContainer: {
+    alignItems: "flex-start", // Align items to the left
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  checkboxLabel: {
+    marginLeft: 8,
   },
 });
 

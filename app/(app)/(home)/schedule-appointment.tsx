@@ -129,6 +129,11 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
       value: "De los Santos Medical Center",
     },
     {
+      label: "ACE Medical Center",
+      value: "ACE Medical Center",
+    },
+
+    {
       label: "Our Lady of Lourdes Hospital",
       value: "Our Lady of Lourdes Hospital",
     },

@@ -83,6 +83,7 @@
 - [x] Update UI design for file a request modal. Success and error.
 - [x] Add date and timer modal to lockdown status
 - [x] Create a reusable modal for all screens
+- [ ] Add Modal for required completion of account profile in home for new users and users with incomplete data
 
 ## Admin Screen
 
@@ -94,7 +95,7 @@
 
 ## Redesign
 
-- [ ] Update UI for filing a request at file a request screen.
+- [x] Update UI for filing a request at file a request screen.
 - [ ] Redesign modal for maps screen when a location is selected.
 
 ## Random Bug Fixes
@@ -103,7 +104,7 @@
 
 ## Low Priority Improvements
 
-- [ ] In donations screen improve the modals of each input field.
+- [x] In donations screen improve the modals of each input field.
 
 ## Potential Improvements
 

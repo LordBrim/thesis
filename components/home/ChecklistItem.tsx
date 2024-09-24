@@ -56,20 +56,20 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
                   id: "yes",
                   label: "Yes",
                   value: "Yes",
-                  color: selectedId === "yes" ? COLORS.redWhite : undefined,
+                  color: selectedId === "yes" ? COLORS.black : undefined,
                   labelStyle:
                     selectedId === "yes"
-                      ? { fontWeight: "bold", color: COLORS.primary }
+                      ? { fontWeight: "bold", color: COLORS.black }
                       : undefined,
                 },
                 {
                   id: "no",
                   label: "No",
                   value: "No",
-                  color: selectedId === "no" ? COLORS.redWhite : undefined,
+                  color: selectedId === "no" ? COLORS.black : undefined,
                   labelStyle:
                     selectedId === "no"
-                      ? { fontWeight: "bold", color: COLORS.primary }
+                      ? { fontWeight: "bold", color: COLORS.black }
                       : undefined,
                 },
               ]}
@@ -166,7 +166,9 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
 
   return (
     <View style={[styles.container, { zIndex: 1000 - index }]}>
-      <Text style={styles.question}>{question.question}</Text>
+      <Text style={styles.question}>{`${index + 1}. ${
+        question.question
+      }`}</Text>
       {renderInput()}
       {question.type === "condionalText" && answer === "Yes" && (
         <>
@@ -200,10 +202,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
     padding: 10,
-    backgroundColor: "#f9f9f9",
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ddd",
     position: "relative", // Ensure the stacking works correctly
     zIndex: 1, // Default lower zIndex
   },

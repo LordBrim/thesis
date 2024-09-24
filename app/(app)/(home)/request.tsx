@@ -4,18 +4,39 @@ import {
   SIZES,
   SPACES,
 } from "../../../constants";
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+} from "react-native";
 import Carousel from "pinar";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
 import { useState } from "react";
 import StepsIndicator from "components/common/StepsIndicator";
 import RequestBloodunitScreen from "./request-bloodunit";
+import { firestoreOperations } from "../../../firestore-services";
+import { getAuth } from "firebase/auth";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { FIREBASE_STORAGE } from "../../../firebase-config";
 
 export default function Request() {
   const stepCount = 2;
   let [screenIndex, setScreenIndex] = useState(0);
 
+  const [patientName, setPatientName] = useState("");
+  const [selectedBloodType, setSelectedBloodType] = useState("");
+  const [selectedRelationship, setSelectedRelationship] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [imageUri, setImageUri] = useState("");
+  const [isEmergency, setIsEmergency] = useState(false);
+  const [emergencyReason, setEmergencyReason] = useState("");
+
+  const [packedRequest, setPackedRequest] = useState(false);
+  const [packedRequestInfo, setPackedRequestInfo] = useState("");
   const prev = () => {
     if (screenIndex > 0) {
       this.carousel.scrollToPrev();
@@ -30,8 +51,58 @@ export default function Request() {
     }
   };
 
-  const submit = () => {
-    //TODO: Place reference like donate screen
+  const handleSubmit = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    const formData = {
+      patientName,
+      selectedBloodType,
+      selectedRelationship,
+      contactNumber: "+63" + contactNumber.replace(/\s/g, ""),
+      isEmergency,
+      emergencyReason,
+      packedRequest,
+      packedRequestInfo,
+    };
+
+    console.log("Form Data:", formData);
+
+    try {
+      const documentData = {
+        ...formData,
+        userId: user?.uid,
+      };
+
+      console.log("Document Data:", documentData);
+
+      const documentId = await firestoreOperations.addDocument(
+        "ticketRequest",
+        documentData
+      );
+      console.log(`Added new document with ID: ${documentId}`);
+
+      if (imageUri) {
+        console.log("Image URI:", imageUri);
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
+        const storageRef = ref(FIREBASE_STORAGE, `bloodRequest/${documentId}`);
+        await uploadBytes(storageRef, blob);
+        const downloadUrl = await getDownloadURL(storageRef);
+        console.log("Download URL:", downloadUrl);
+        await firestoreOperations.updateDocument("ticketRequest", documentId, {
+          imageUrl: downloadUrl,
+        });
+      }
+
+      Alert.alert("Request Successful", "Document added successfully.");
+    } catch (error) {
+      console.error("Error adding document: ", error);
+      Alert.alert(
+        "Request Failed",
+        "Invalid request form data, request failed."
+      );
+    }
   };
 
   const Screens = ["Request\nGuidelines", "File A\nRequest"];
@@ -48,8 +119,8 @@ export default function Request() {
         showsDots={false}
         scrollEnabled={false}
       >
-        <ScrollView
-          contentContainerStyle={{
+        <View
+          style={{
             gap: 16,
             paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
           }}
@@ -57,6 +128,7 @@ export default function Request() {
           <Text style={styles.title}>Guidelines For Requesting Blood</Text>
 
           <FlatList
+            scrollEnabled={true}
             data={sampleGuidelines}
             renderItem={({ item }) => (
               <View style={{ gap: 4 }}>
@@ -69,8 +141,27 @@ export default function Request() {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.flatlist}
           />
-        </ScrollView>
-        <RequestBloodunitScreen />
+        </View>
+        <RequestBloodunitScreen
+          patientName={patientName}
+          setPatientName={setPatientName}
+          selectedBloodType={selectedBloodType}
+          setSelectedBloodType={setSelectedBloodType}
+          selectedRelationship={selectedRelationship}
+          setSelectedRelationship={setSelectedRelationship}
+          contactNumber={contactNumber}
+          setContactNumber={setContactNumber}
+          packedRequest={packedRequest}
+          setPackedRequest={setPackedRequest}
+          packedRequestInfo={packedRequestInfo}
+          setPackedRequestInfo={setPackedRequestInfo}
+          setImageUri={setImageUri}
+          imageUri={imageUri}
+          isEmergency={isEmergency}
+          setIsEmergency={setIsEmergency}
+          emergencyReason={emergencyReason}
+          setEmergencyReason={setEmergencyReason}
+        />
       </Carousel>
 
       <View style={styles.fixed}>
@@ -82,9 +173,7 @@ export default function Request() {
         />
         <CallToActionBtn
           label={screenIndex === stepCount - 1 ? "submit" : "next"}
-          onPress={
-            screenIndex === stepCount - 1 ? () => submit() : () => next()
-          }
+          onPress={screenIndex === stepCount - 1 ? handleSubmit : next}
           style={{ flex: 1 }}
         />
       </View>
@@ -130,26 +219,12 @@ const styles = StyleSheet.create({
 const sampleGuidelines = [
   {
     id: 1,
-    title: "Guideline #1",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae,  finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae, finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. ",
+    title: "Hello",
+    description: "some descriptions",
   },
   {
     id: 2,
     title: "Guideline #2",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae,  finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae, finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. ",
-  },
-  {
-    id: 3,
-    title: "Guideline #3",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae,  finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae, finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. ",
-  },
-  {
-    id: 4,
-    title: "Guideline #4",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae,  finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ipsum justo, consectetur in vehicula vitae, finibus posuere ex. Sed eu tempus ligula. Aenean et tincidunt nunc. ",
+    description: "you need to go to this ",
   },
 ];

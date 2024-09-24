@@ -10,7 +10,7 @@ const HeaderComponent = () => (
   <>
     <View>
       <Title title="Preliminary Checklist" />
-      <Description description="Please answer the questions honestly as you can possibly can. It is required to answer every question." />
+      <Description description="Please answer all questions as truthfully as possible." />
     </View>
     <View style={styles.bar}>
       <Text style={styles.header}>Questions</Text>

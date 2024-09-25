@@ -30,7 +30,7 @@
 - [ ] Integrate OAuth (additional providers login) for login and registration screen. Integrate OAuth for Google and Facebook.
   - [ ] Google
   - [ ] Facebook
-- [ ] Integrate local storage for remember me checkbox on login screen. Checking the remember be checkbox will save the user data locally. Checking for an existing login, allowing the user to login instantly. The user will be automatically redirected to the home screen.
+- [x] Integrate local storage for remember me checkbox on login screen. Checking the remember be checkbox will save the user data locally. Checking for an existing login, allowing the user to login instantly. The user will be automatically redirected to the home screen.
 - [ ] Add forget password functionality to send an email for a 4-digit pin confirmation.
 - [ ] Add a forget password modal to accept the 4-digit pin.
   - [ ] Add a button with a 5-minute timer to allow the user to resend another 4-digit pin. This new pin will invalidate the existing pin.

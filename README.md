@@ -47,9 +47,9 @@
 - [ ] Include event markers in maps screen.
 - [ ] Make hospital markers as hospital.
 - [ ] Make blood event markers as blood units.
-- [ ] Allow users to select “no” for preliminary checklist. okay lang kung mag “no” sila
+- [x] Allow users to select “no” for preliminary checklist. okay lang kung mag “no” sila
   - Example: Do you have tattoos?
-- [ ] Add blood components to the database to. Whether they are RBC, WBC, Platelets, or Plasma.
+- [x] Add blood components to the database to. Whether they are RBC, WBC, Platelets, or Plasma.
 
 ### Admin Screen
 

@@ -7,7 +7,11 @@
     "web": {
       "bundler": "metro"
     },
-    "plugins": ["expo-router", "expo-font"],
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "@react-native-google-signin/google-signin"
+    ],
     "name": "Lifeline",
     "slug": "lifeline",
     "icon": "./assets/splash/icon.png",
@@ -16,7 +20,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "3910f42a-59bd-46b1-9b70-1d2d5a3b8ece"
+        "projectId": "bc31c5ed-1121-46d0-8cc8-bbdf1f6e6b50"
       }
     },
     "splash": {
@@ -25,14 +29,18 @@
       "backgroundColor": "#FF3642"
     },
     "android": {
-      "package": "com.andreisager.lifeline",
+      "package": "com.lifeline",
       "config": {
-        "googleMaps": { "apiKey": "AIzaSyCG2UV8weM9nFuWYQNkEbG9f8wwITMiCRk" }
+        "googleMaps": {
+          "apiKey": "AIzaSyCG2UV8weM9nFuWYQNkEbG9f8wwITMiCRk"
+        }
       },
       "adaptiveIcon": {
         "foregroundImage": "./assets/splash/adaptive-icon.png",
         "backgroundColor": "#FF3642"
-      }
-    }
+      },
+      "googleServicesFile": "./google-services.json"
+    },
+    "owner": "lifeline"
   }
 }

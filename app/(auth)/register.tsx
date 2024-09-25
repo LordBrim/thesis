@@ -23,6 +23,11 @@ import LinkBtn from "components/common/LinkBtn";
 import LifelineLogo from "components/common/LifelineLogo";
 import Title from "components/common/texts/Title";
 import { setDoc, doc } from "firebase/firestore";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();

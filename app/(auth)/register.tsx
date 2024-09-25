@@ -104,8 +104,6 @@ export default function RegisterScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
-        <LifelineLogo />
-
         <View style={styles.cTop}>
           <Title title="Register" />
 
@@ -266,7 +264,6 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   cTop: {
-    marginTop: SIZES.xxxLarge,
     gap: SIZES.xxxLarge,
   },
   cBottom: {

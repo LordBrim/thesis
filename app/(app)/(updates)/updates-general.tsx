@@ -1,167 +1,193 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
-import React from "react";
-import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
-import AppointmentCard from "components/home/AppointmentCard";
+import React, { useState, useEffect, useRef } from "react";
 import {
-  Ionicons,
-  Octicons,
-  FontAwesome6,
-  AntDesign,
-} from "@expo/vector-icons";
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  Button,
+  Alert,
+} from "react-native";
+import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import {
+  usePushNotification,
+  CustomNotification,
+} from "hooks/usePushNotifcation";
+import TestNotif from "../../../components/test-notif";
+import useFirestoreListener from "hooks/useFirestoreListener";
+import UpdateCard from "./updateCard";
 
 export default function UpdatesGeneral() {
+  const { notification, expoPushToken } = usePushNotification(); // Extract expoPushToken
+  const updates = useFirestoreListener();
+
+  const [combinedData, setCombinedData] = useState([]);
+  const [filter, setFilter] = useState("All");
+
+  const prevUpdatesRef = useRef([]);
+  const prevNotificationsRef = useRef<CustomNotification[]>([]);
+
+  useEffect(() => {
+    const newUpdates = updates.filter(
+      (update) =>
+        !prevUpdatesRef.current.some(
+          (prevUpdate) =>
+            prevUpdate.id === update.id &&
+            prevUpdate.timestamp === update.timestamp
+        )
+    );
+    const newNotifications = notification.filter(
+      (notif) =>
+        !prevNotificationsRef.current.some(
+          (prevNotif) => prevNotif.id === notif.id
+        )
+    );
+
+    const newCombinedData = new Map(
+      combinedData.map((item) => [item.id + item.timestamp, item])
+    );
+
+    // Process new updates
+    newUpdates.forEach((update) => {
+      if (isValidUpdate(update)) {
+        newCombinedData.set(update.id + update.timestamp, formatUpdate(update));
+      }
+    });
+
+    // Process new notifications
+    newNotifications.forEach((notif) => {
+      if (isValidNotification(notif)) {
+        newCombinedData.set(
+          notif.id + notif.timestamp,
+          formatNotification(notif)
+        );
+      }
+    });
+
+    // Convert the map back to an array and sort by timestamp
+    const sortedData = Array.from(newCombinedData.values()).sort(
+      (a, b) => b.timestamp - a.timestamp
+    );
+
+    setCombinedData(sortedData);
+
+    prevUpdatesRef.current = updates;
+    prevNotificationsRef.current = notification;
+  }, [updates, notification]);
+
+  const filteredData = combinedData.filter((item) => {
+    if (filter === "All") return true;
+    return item.type.toLowerCase() === filter.toLowerCase();
+  });
+
+  const sendPushNotification = async () => {
+    console.log("Expo Push Token in sendPushNotification:", expoPushToken);
+    if (!expoPushToken) {
+      Alert.alert("Error", "Push token is not available");
+      return;
+    }
+
+    const message = {
+      to: expoPushToken,
+      sound: "default",
+      title: "Test Notification dasdas",
+      body: "This is a test notification",
+      data: { someData: "goes here" },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.filters}>
-        {Filters.map((filter) => (
-          <Pressable key={filter.id}>
-            <Text style={styles.filter}>{filter.title}</Text>
+        {Filters.map((filterItem) => (
+          <Pressable
+            key={filterItem.id}
+            onPress={() => setFilter(filterItem.type)}
+          >
+            <Text
+              style={[
+                styles.filter,
+                filter === filterItem.type && styles.activeFilter,
+              ]}
+            >
+              {filterItem.title}
+            </Text>
           </Pressable>
         ))}
       </View>
-      {/* <View style={{ gap: 8, flex: 1, width: "100%" }}>
-        <AppointmentCard
-          location="Request Accepted"
-          date="Sept 18, 2024"
-          time="1:01pm"
-        />
-        <AppointmentCard
-          location="Request Accepted"
-          date="Sept 18, 2024"
-          time="1:01pm"
-        />
-      </View> */}
-
-      <ScrollView style={{ flex: 1, width: "100%" }} overScrollMode="never">
-        {updatesData.map((update) => (
-          <UpdateCard
-            key={update.id}
-            type={update.type}
-            status={update.status}
-            message={update.message}
-            date={update.date}
-            time={update.time}
-            hospital={update.hospital}
-          />
+      <ScrollView style={styles.scrollView} overScrollMode="never">
+        {filteredData.map((item, index) => (
+          <UpdateCard key={item.id + item.timestamp || index} update={item} />
         ))}
       </ScrollView>
+      <Button title="Send Notification" onPress={sendPushNotification} />
     </View>
   );
 }
 
-function UpdateCard({ type, status, message, date, time, hospital }) {
-  const size = 24;
+const isValidDate = (dateString) => {
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+};
 
+const isValidUpdate = (update) => {
   return (
-    <Pressable android_ripple={{ radius: 200 }} style={styles.cardContainer}>
-      <View style={{ height: 35, width: 35 }}>
-        {message === "thanks" && (
-          <View
-            style={[
-              styles.cardIcon,
-              {
-                backgroundColor: "#ffcdd9",
-              },
-            ]}
-          >
-            <Ionicons name="heart" size={size} color="#ff4d7a" />
-          </View>
-        )}
-        {message === "sent" && (
-          <View
-            style={[
-              styles.cardIcon,
-              {
-                backgroundColor: "#ccdcf9",
-              },
-            ]}
-          >
-            <Ionicons name="information-circle" size={size} color="#1f66e5" />
-          </View>
-        )}
-        {message === "deliberation" && status === "accepted" && (
-          <View
-            style={[
-              styles.cardIcon,
-              {
-                backgroundColor: "#b0ecb0",
-              },
-            ]}
-          >
-            <Ionicons name="checkmark-circle" size={size} color="#32cd32" />
-          </View>
-        )}
-        {message === "deliberation" && status === "declined" && (
-          <View
-            style={[
-              styles.cardIcon,
-              {
-                backgroundColor: "#ffb1b1",
-              },
-            ]}
-          >
-            <Ionicons name="close-circle" size={size} color="#ff3333" />
-          </View>
-        )}
-        {message === "incentives" && (
-          <View
-            style={[
-              styles.cardIcon,
-              {
-                backgroundColor: "#f4e3b6",
-              },
-            ]}
-          >
-            <AntDesign name="star" size={size} color="#daa520" />
-          </View>
-        )}
-      </View>
-      <View style={{ width: "100%", flex: 1, gap: 2 }}>
-        {message === "thanks" && (
-          <Text style={styles.cardMessage}>
-            Thank you for donating your blood at
-            <Text style={{ fontWeight: "700" }}> {hospital}</Text>. We would be
-            happy to see you again for another donation.
-          </Text>
-        )}
-        {message === "sent" && (
-          <Text style={styles.cardMessage}>
-            Your request for a {type === "appointment" && "donation appoinment"}
-            {type === "request" && "blood unit"}
-            {type === "transfer" && "transfer of blood units"} is successfuly
-            sent to
-            <Text style={{ fontWeight: "700" }}> {hospital}</Text>.
-          </Text>
-        )}
-        {message === "deliberation" && (
-          <Text style={styles.cardMessage}>
-            Your request for a {type === "appointment" && "donation appoinment"}
-            {type === "request" && "blood unit"}
-            {type === "transfer" && `transfer of blood units`} is{" "}
-            {status === "accepted" ? (
-              <Text style={{ color: "green", fontWeight: "700" }}>
-                accepted
-              </Text>
-            ) : (
-              <Text style={{ color: "red", fontWeight: "700" }}>declined</Text>
-            )}{" "}
-            by
-            <Text style={{ fontWeight: "700" }}> {hospital}</Text>
-          </Text>
-        )}
-        {message === "incentives" && (
-          <Text style={styles.cardMessage}>
-            You are now qualified to claim the incentives for{" "}
-            <Text style={{ fontWeight: "700" }}> {hospital}</Text>
-          </Text>
-        )}
-        <Text style={styles.cardDatetime}>
-          {date} At {time}
-        </Text>
-      </View>
-    </Pressable>
+    update &&
+    update.date &&
+    update.time &&
+    update.date !== "1728384411604" &&
+    update.time !== "Unknown time" &&
+    isValidDate(update.date)
   );
-}
+};
+
+const isValidNotification = (notif) => {
+  return notif && notif.date && notif.time && isValidDate(notif.date);
+};
+
+const formatUpdate = (update) => {
+  const date = new Date(update.date);
+  return {
+    ...update,
+    date: date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    }),
+    time: date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }),
+  };
+};
+
+const formatNotification = (notif) => {
+  const date = new Date(notif.date);
+  return {
+    ...notif,
+    date: date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    }),
+    time: date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }),
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -186,139 +212,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     color: COLORS.slate500,
-    padding: HORIZONTAL_SCREEN_MARGIN,
   },
-  cardContainer: {
+  activeFilter: {
+    color: COLORS.primary,
+    backgroundColor: COLORS.primaryLight,
+    borderRadius: 4,
+  },
+  scrollView: {
+    flex: 1,
     width: "100%",
-    padding: HORIZONTAL_SCREEN_MARGIN,
-    flexDirection: "row",
-    gap: 12,
-    borderBottomWidth: 1,
-    borderColor: COLORS.slate100,
-  },
-  cardIcon: {
-    height: 35,
-    width: 35,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  cardMessage: {
-    width: "auto",
-    fontWeight: "400",
-  },
-  cardDatetime: {
-    fontWeight: "700",
-    color: COLORS.slate500,
-    fontSize: 12,
   },
 });
 
 const Filters = [
-  { id: 0, title: "All" },
-  { id: 1, title: "Donations" },
-  { id: 2, title: "Appointments" },
-  { id: 3, title: "Requests" },
-  { id: 4, title: "Incentives" },
-];
-
-const updatesData = [
-  {
-    id: 0,
-    type: "donations",
-    message: "thanks",
-    date: "Sept 18, 2024",
-    time: "1:01pm",
-    hospital: "Lourdes Hospital",
-  },
-  {
-    id: 1,
-    type: "appointment",
-    message: "sent",
-    status: "pending",
-    date: "Sept 18, 2024",
-    time: "1:00pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 2,
-    type: "appointment",
-    message: "deliberation",
-    status: "accepted",
-    date: "Sept 18, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 3,
-    type: "appointment",
-    message: "deliberation",
-    status: "declined",
-    date: "Sept 18, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 4,
-    type: "request",
-    message: "sent",
-    status: "pending",
-    date: "Sept 19, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 5,
-    type: "request",
-    message: "deliberation",
-    status: "accepted",
-    date: "Sept 19, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 6,
-    type: "request",
-    message: "deliberation",
-    status: "declined",
-    date: "Sept 19, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 7,
-    type: "incentives",
-    message: "incentives",
-    date: "Sept 19, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 8,
-    type: "transfer",
-    message: "sent",
-    status: "none",
-    date: "Sept 19, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 9,
-    type: "transfer",
-    message: "deliberation",
-    status: "accepted",
-    units: "25",
-    date: "Sept 19, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
-  {
-    id: 10,
-    type: "transfer",
-    message: "deliberation",
-    status: "declined",
-    date: "Sept 19, 2024",
-    time: "1:20pm",
-    hospital: "UERM Medical Center",
-  },
+  { id: 0, title: "All", type: "All" },
+  { id: 1, title: "Donations", type: "donation" },
+  { id: 2, title: "Appointments", type: "appointment" },
+  { id: 3, title: "Requests", type: "request" },
+  { id: 4, title: "Incentives", type: "incentives" },
 ];

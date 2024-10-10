@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "258884201826",
+    "project_id": "lifeline-eb7f0",
+    "storage_bucket": "lifeline-eb7f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258884201826:android:35c3565df2864c56a2d03b",
+        "android_client_info": {
+          "package_name": "com.lifeline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258884201826-sh9ltaqsp41jee4eqg73vc2t2ek3mm1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lifeline",
+            "certificate_hash": "5bad46e18aaa9e60f4150a403d0bc4190f333f1e"
+          }
+        },
+        {
+          "client_id": "258884201826-dmk3nhsl315f531bb5ok3vbfboee25kp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrhhKIS967m7icLZ948FQP0LLtxllwP7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258884201826-dmk3nhsl315f531bb5ok3vbfboee25kp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

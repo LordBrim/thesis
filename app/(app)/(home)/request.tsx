@@ -64,6 +64,9 @@ export default function Request() {
       emergencyReason,
       packedRequest,
       packedRequestInfo,
+      status: "pending",
+      message: "sent",
+      type: "request",
     };
 
     console.log("Form Data:", formData);
@@ -71,7 +74,7 @@ export default function Request() {
     try {
       const documentData = {
         ...formData,
-        userId: user?.uid,
+        userUID: user?.uid,
       };
 
       console.log("Document Data:", documentData);

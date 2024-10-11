@@ -208,7 +208,7 @@ export default function LoginScreen() {
 
         <View style={{ gap: 12 }}>
           <View style={{ gap: 24 }}>
-            <TextInputWrapper label="Email">
+            <TextInputWrapper label="Email" error={!!emailError}>
               <TextInput
                 value={email}
                 placeholder="Enter your email address..."
@@ -221,7 +221,7 @@ export default function LoginScreen() {
             {emailError ? (
               <Text style={styles.errorText}>{emailError}</Text>
             ) : null}
-            <TextInputWrapper label="Password">
+            <TextInputWrapper label="Password" error={!!passwordError}>
               <TextInput
                 value={password}
                 placeholder="Enter your password..."
@@ -356,9 +356,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    fontSize: 12,
+    fontSize: 13,
     marginTop: -12,
-    marginLeft: 25,
+    textAlign: "right",
     fontWeight: "bold",
   },
 });

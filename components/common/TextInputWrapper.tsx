@@ -2,22 +2,25 @@ import { View, Text, StyleSheet } from "react-native";
 import { COLORS, SIZES } from "../../constants/theme";
 import { MINOR_COMPONENT_HEIGHT } from "../../constants/measurements";
 
-type TextInputWrapper = {
+type TextInputWrapperProps = {
   label?: string;
   children: React.ReactNode;
+  error?: boolean;
 };
 
 export default function TextInputWrapper({
   label,
   children,
-}: TextInputWrapper) {
+  error,
+}: TextInputWrapperProps) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, error && styles.errorContainer]}>
       {label && <Text style={styles.label}>{label}</Text>}
       {children}
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     width: "100%",
@@ -30,6 +33,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: SIZES.xxxSmall,
+  },
+  errorContainer: {
+    borderColor: "red",
   },
   label: {
     fontWeight: "bold",

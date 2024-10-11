@@ -22,6 +22,8 @@ import { firestoreOperations } from "../../../firestore-services";
 import { getAuth } from "firebase/auth";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { FIREBASE_STORAGE } from "../../../firebase-config";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function Request() {
   const stepCount = 2;
@@ -37,6 +39,9 @@ export default function Request() {
 
   const [packedRequest, setPackedRequest] = useState(false);
   const [packedRequestInfo, setPackedRequestInfo] = useState("");
+
+  const [modalVisible, setModalVisible] = useState(false);
+
   const prev = () => {
     if (screenIndex > 0) {
       this.carousel.scrollToPrev();
@@ -49,6 +54,10 @@ export default function Request() {
       this.carousel.scrollToNext();
       setScreenIndex(++screenIndex);
     }
+  };
+  const onModalClose = () => {
+    setModalVisible(false);
+    router.navigate("(app)/(tabs)");
   };
 
   const handleSubmit = async () => {
@@ -95,7 +104,7 @@ export default function Request() {
         });
       }
 
-      Alert.alert("Request Successful", "Document added successfully.");
+      setModalVisible(true); // Show modal on successful submission
     } catch (error) {
       console.error("Error adding document: ", error);
       Alert.alert(
@@ -177,6 +186,19 @@ export default function Request() {
           style={{ flex: 1 }}
         />
       </View>
+
+      <SingleBtnModal
+        visible={modalVisible}
+        icon={
+          <Ionicons name="information-circle-outline" size={42} color="black" />
+        }
+        onRequestClose={onModalClose}
+        onPress={onModalClose}
+        animation={true}
+        title="Your Ticket Request Has Been Submitted"
+        btnLabel="Okay"
+        description="Your ticket request has been successfully submitted. You will be notified once a donor has been found."
+      />
     </View>
   );
 }

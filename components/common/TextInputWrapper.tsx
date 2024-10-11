@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     gap: SIZES.xxxSmall,
   },
   errorContainer: {
-    borderColor: "red",
+    borderColor: "#FF5607",
   },
   label: {
     fontWeight: "bold",

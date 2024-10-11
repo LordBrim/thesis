@@ -30,7 +30,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
 interface User {
   id: string;
   role: string;
@@ -47,7 +47,8 @@ export default function LoginScreen() {
 
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
-
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handlePassword = (password: string) => {
@@ -55,6 +56,7 @@ export default function LoginScreen() {
   };
 
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [toggleRemember, setToggleRemember] = useState(false);
   const handleToggleRemember = () => {
@@ -69,6 +71,9 @@ export default function LoginScreen() {
     } catch (error) {
       console.error("Error storing user credentials:", error.message);
     }
+  };
+  const onModalClose = () => {
+    setModalVisible(false);
   };
 
   const removeUserCredentials = async () => {
@@ -90,6 +95,31 @@ export default function LoginScreen() {
       return; // Prevent login if email or password is missing
     }
 
+    let valid = true;
+
+    // Reset error messages
+    setEmailError("");
+    setPasswordError("");
+    if (!email) {
+      setEmailError("Email is required.");
+      valid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError("Please enter a valid email address.");
+      valid = false;
+    }
+    if (!password) {
+      setPasswordError("Password is required.");
+      valid = false;
+    } else if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters long.");
+      valid = false;
+    }
+
+    if (!valid) {
+      console.log("Login blocked due to validation errors");
+      return; // Prevent login if validation fails
+    }
+
     setLoading(true);
     try {
       const auth = getAuth();
@@ -105,7 +135,7 @@ export default function LoginScreen() {
 
       router.replace("/(app)/(tabs)");
     } catch (error) {
-      Alert.alert("Login Failed", error.message);
+      setModalVisible(true);
     } finally {
       setLoading(false);
     }
@@ -188,7 +218,9 @@ export default function LoginScreen() {
                 enablesReturnKeyAutomatically
               />
             </TextInputWrapper>
-
+            {emailError ? (
+              <Text style={styles.errorText}>{emailError}</Text>
+            ) : null}
             <TextInputWrapper label="Password">
               <TextInput
                 value={password}
@@ -207,6 +239,9 @@ export default function LoginScreen() {
                 />
               </Pressable>
             </TextInputWrapper>
+            {passwordError ? (
+              <Text style={styles.errorText}>{passwordError}</Text>
+            ) : null}
           </View>
 
           <View
@@ -284,6 +319,18 @@ export default function LoginScreen() {
         <Text>Don't have an account? </Text>
         <LinkBtn label="Register" href="/register" />
       </View>
+      <SingleBtnModal
+        visible={modalVisible}
+        icon={
+          <Ionicons name="information-circle-outline" size={42} color="black" />
+        }
+        onRequestClose={onModalClose}
+        onPress={onModalClose}
+        animation={true}
+        title="Login Error"
+        btnLabel="Okay"
+        description="Your login attempt failed. Please check your email and password and try again."
+      />
     </View>
   );
 }
@@ -306,5 +353,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     padding: SIZES.xSmall,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -12,
+    marginLeft: 25,
+    fontWeight: "bold",
   },
 });

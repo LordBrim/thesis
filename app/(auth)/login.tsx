@@ -240,7 +240,9 @@ export default function LoginScreen() {
               </Pressable>
             </TextInputWrapper>
             {passwordError ? (
-              <Text style={styles.errorText}>{passwordError}</Text>
+              <Text style={[styles.errorText, { marginBottom: 12 }]}>
+                {passwordError}
+              </Text>
             ) : null}
           </View>
 
@@ -355,10 +357,9 @@ const styles = StyleSheet.create({
     padding: SIZES.xSmall,
   },
   errorText: {
-    color: "red",
+    color: "#FF5607",
     fontSize: 13,
     marginTop: -12,
     textAlign: "right",
-    fontWeight: "bold",
   },
 });

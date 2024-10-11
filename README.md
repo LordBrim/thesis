@@ -36,7 +36,7 @@
   - [ ] Add a button with a 5-minute timer to allow the user to resend another 4-digit pin. This new pin will invalidate the existing pin.
 - [ ] Add set new password screen with password strength input rules. The user must adhere to the all password rules to change their password.
 - [ ] Add a back to login button for the successful set new password modal.
-- [ ] Replace login error modal with simpler text feedback below the inputs.
+- [x] Replace login error modal with simpler text feedback below the inputs.
 - [ ] Add an event collection
   - [ ] Connect event collection for home screen
 - [ ] Add infinite loader to updates tab.

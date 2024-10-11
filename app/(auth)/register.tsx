@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { Alert, Image } from "react-native";
+import { Alert, Button, Image, TouchableOpacity } from "react-native";
 import {
   View,
   Text,
@@ -17,17 +17,16 @@ import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { firestoreOperations } from "../../firestore-services";
 import { FIREBASE_AUTH } from "../../firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithCredential,
+} from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import LinkBtn from "components/common/LinkBtn";
 import LifelineLogo from "components/common/LifelineLogo";
 import Title from "components/common/texts/Title";
 import { setDoc, doc } from "firebase/firestore";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
+import GoogleAuth from "providers/GoogleAuth";
 
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
@@ -247,10 +246,7 @@ export default function RegisterScreen() {
                 source={require("../../assets/icons/facebook.png")}
                 style={{ width: 34, height: 34 }}
               />
-              <Image
-                source={require("../../assets/icons/google.png")}
-                style={{ width: 34, height: 34 }}
-              />
+              <GoogleAuth />
             </View>
           </View>
         </View>

@@ -4,6 +4,10 @@ const COLORS = {
   tertiary: "#FF7754",
   accent1: "#177AD5",
 
+  success: "#63ad0e",
+  error: "#b3002a",
+  warning: "",
+
   line: "#FF3642",
 
   slate50: "#f8fafc",

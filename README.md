@@ -63,7 +63,7 @@
   - [ ] Add a view all button to view reports for the year or for selected date range.
   - [ ] Generate reports button that is printable.
 - [ ] Add a dashboard on home screen to manage all tasks as panel of buttons.
-- [ ] Create an indicator to identify between a user, staff, admin, and super admin.
+- [ ] Just replace the home heading with a role (excluding the user). Create an indicator to identify between a user, staff, admin, and super admin.
 - [ ] Remove the marker for account hospital. Disable on maps.
 - [ ] Display the prizes for requesting blood for every hospital.
 - [ ] Add partnership field to the database for when creating events.

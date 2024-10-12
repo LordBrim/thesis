@@ -23,14 +23,19 @@ export default function NewPassword() {
     useTogglePasswordVisibility();
   const [password, setPassword] = useState("");
   const setNewPassword = () => {
-    setShowModal(true);
-    //TODO: Send confimation pin to email
+    if (isValid) {
+      setShowModal(true);
+    } else {
+      //Wrong password
+    }
   };
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => {
     setShowModal(false);
     router.back();
   };
+
+  const [isValid, setIsValid] = useState(false);
 
   const [isValidLength, setIsValidLength] = useState(false);
   const [hasUppercase, setHasUppercase] = useState(false);
@@ -46,6 +51,15 @@ export default function NewPassword() {
     setHasNumber(/[0-9]/.test(password));
     setHasNoSpecialChars(!/[:;,\"'\/]/.test(password));
     setHasNoSpaces(!/\s/.test(password));
+
+    setIsValid(
+      isValidLength &&
+        hasUppercase &&
+        hasLowercase &&
+        hasNumber &&
+        hasNoSpecialChars &&
+        hasNoSpaces
+    );
   }, [password, setPassword]);
 
   const conditions = [

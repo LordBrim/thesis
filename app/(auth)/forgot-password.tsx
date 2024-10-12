@@ -109,7 +109,6 @@ export default function ForgotPassword() {
             <Text
               style={{
                 fontWeight: "bold",
-                textDecorationLine: "underline",
                 color: COLORS.primary,
               }}
             >
@@ -124,7 +123,6 @@ export default function ForgotPassword() {
               // containerStyle={{ borderWidth: 1 }}
               textStyle={{
                 fontWeight: "bold",
-                textDecorationLine: "underline",
                 color: COLORS.primary,
               }}
             />

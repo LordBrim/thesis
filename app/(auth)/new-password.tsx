@@ -60,14 +60,14 @@ export default function NewPassword() {
         </TextInputWrapper>
 
         <View style={{ gap: 4 }}>
-          {conditions.map((condition) => (
-            <View key={condition.id} style={{ flexDirection: "row", gap: 8 }}>
+          {conditions.map(({ condition }, id) => (
+            <View key={id} style={{ flexDirection: "row", gap: 8 }}>
               <Octicons
                 name="check-circle-fill"
                 size={20}
                 color={COLORS.slate300}
               />
-              <Text>{condition.condition}</Text>
+              <Text>{condition}</Text>
             </View>
           ))}
         </View>
@@ -113,27 +113,21 @@ const styles = StyleSheet.create({
 
 const conditions = [
   {
-    id: 0,
     condition: "8-20 characters",
   },
   {
-    id: 1,
     condition: "At least one capital letter (A to Z)",
   },
   {
-    id: 2,
     condition: "At least one lowercase letter (a to z)",
   },
   {
-    id: 3,
     condition: "At least one number (0 to 9)",
   },
   {
-    id: 4,
     condition: "Don't use : ; , \" ' /",
   },
   {
-    id: 5,
     condition: "No spaces",
   },
 ];

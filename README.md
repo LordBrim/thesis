@@ -32,8 +32,9 @@
   - [ ] Facebook
 - [x] Integrate local storage for remember me checkbox on login screen. Checking the remember be checkbox will save the user data locally. Checking for an existing login, allowing the user to login instantly. The user will be automatically redirected to the home screen.
 - [ ] Add forget password functionality to send an email for a 4-digit pin confirmation.
-- [ ] Add a forget password modal to accept the 4-digit pin.
-  - [ ] Add a button with a 5-minute timer to allow the user to resend another 4-digit pin. This new pin will invalidate the existing pin.
+- [x] Add a forget password modal to accept the 4-digit pin.
+  - [x] Add a button with a 5-minute timer to allow the user to resend another 4-digit pin. This new pin will invalidate the existing pin.
+  - [ ] Add a function to send the 4-digit pin to the email.
 - [x] Add set new password screen with password strength input rules. The user must adhere to the all password rules to change their password.
 - [ ] Add a back to login button for the successful set new password modal.
 - [x] Replace login error modal with simpler text feedback below the inputs.

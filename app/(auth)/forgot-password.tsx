@@ -12,13 +12,40 @@ import { OtpInput } from "react-native-otp-entry";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import LinkBtnTouch from "components/common/LinkBtnTouch";
 import CountDownTimer from "react-native-countdown-timer-hooks";
+import TurboMailer from "@mattermost/react-native-turbo-mailer";
 
 export default function ForgotPassword() {
-  const sendPin = () => {
+  const sendPin = async () => {
     setShowModal(true);
     //TODO: Send confimation pin to email
+
+    await TurboMailer.sendMail({
+      subject: "Lifeline Verification Code",
+      recipients: [email],
+      body: `Your Lifeline verification code is: ${handleOTP()}`,
+      attachments: [
+        {
+          path: "",
+          mimeType: "",
+        },
+      ],
+    });
   };
   const [email, setEmail] = useState("");
+  const [otp, setOTP] = useState("");
+
+  const otpGenerator = require("otp-generator");
+  const handleOTP = () => {
+    setOTP(
+      otpGenerator.generate(4, {
+        digits: true,
+        upperCaseAlphabets: false,
+        specialChars: false,
+        specialCharacters: false,
+      })
+    );
+    console.log(otp);
+  };
 
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => {

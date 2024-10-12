@@ -1,13 +1,18 @@
+import { useEffect, useState } from "react";
 import Title from "components/common/texts/Title";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
-import { View, Text, Image, TextInput } from "react-native";
-import { StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import CallToActionBtn from "components/common/CallToActionBtn";
-import { useEffect, useState } from "react";
 import { Octicons, Ionicons } from "@expo/vector-icons";
 import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
-import { Pressable } from "react-native";
 import { useRouter } from "expo-router";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -17,11 +22,6 @@ export default function NewPassword() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
   const [password, setPassword] = useState("");
-  // const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newPassword = e.target.value;
-  //   setPassword(newPassword);
-  //   validatePassword(newPassword);
-  // };
   const setNewPassword = () => {
     setShowModal(true);
     //TODO: Send confimation pin to email
@@ -141,17 +141,6 @@ export default function NewPassword() {
         description="You can now login with your new password."
         btnLabel="Back To Login"
       />
-    </View>
-  );
-}
-
-function Condition() {
-  const [check, setCheck] = useState(false);
-
-  return (
-    <View style={{ flexDirection: "row", gap: 8 }}>
-      <Octicons name="check-circle-fill" size={20} color="black" />
-      {/* <Text key={condition.id}>{condition.condition}</Text> */}
     </View>
   );
 }

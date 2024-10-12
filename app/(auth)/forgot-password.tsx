@@ -1,8 +1,8 @@
+import { useRef, useState } from "react";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import { View, TextInput, Image, Text } from "react-native";
+import { View, TextInput, Image, Text, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
-import { useState } from "react";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
@@ -11,6 +11,7 @@ import { useRouter } from "expo-router";
 import { OtpInput } from "react-native-otp-entry";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import LinkBtnTouch from "components/common/LinkBtnTouch";
+import CountDownTimer from "react-native-countdown-timer-hooks";
 
 export default function ForgotPassword() {
   const sendPin = () => {
@@ -27,9 +28,28 @@ export default function ForgotPassword() {
   const [pin, setPin] = useState("");
   const handlePinEntered = () => {
     console.log("PIN entered:", pin);
+    setTimerEnd(false);
     // Your logic for handling the entered PIN
   };
   const router = useRouter();
+
+  // Timer References
+  const refTimer = useRef();
+
+  // For keeping a track of the timer
+  const [timerEnd, setTimerEnd] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(300);
+
+  const timerOnProgressFunc = (remainingTimeInSecs) => {
+    // console.log("On Progress tracker :", remainingTimeInSecs);
+    setRemainingTime(remainingTimeInSecs);
+  };
+
+  const timerCallbackFunc = (timerFlag) => {
+    // Setting timer flag to false once complete
+    setTimerEnd(timerFlag);
+    console.warn("Alert the user when timer runs out...");
+  };
 
   return (
     <View style={styles.container}>
@@ -79,10 +99,36 @@ export default function ForgotPassword() {
         btnLabel="Proceed"
         extraBtn={
           // TODO: Add a countdown for the one-time pin
-          <LinkBtnTouch
-            label="Resend PIN (5:00)"
-            onPress={() => handlePinEntered()}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              handlePinEntered();
+              refTimer.current.resetTimer();
+            }}
+            style={{ flexDirection: "row" }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                textDecorationLine: "underline",
+                color: COLORS.primary,
+              }}
+            >
+              Resend OTP
+              {remainingTime >= 0 && <Text> </Text>}
+            </Text>
+            <CountDownTimer
+              ref={refTimer}
+              timestamp={300}
+              timerOnProgress={timerOnProgressFunc}
+              timerCallback={timerCallbackFunc}
+              // containerStyle={{ borderWidth: 1 }}
+              textStyle={{
+                fontWeight: "bold",
+                textDecorationLine: "underline",
+                color: COLORS.primary,
+              }}
+            />
+          </TouchableOpacity>
         }
       >
         <View

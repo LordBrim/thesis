@@ -41,13 +41,12 @@
   - [ ] Connect event collection for home screen
 - [ ] Add infinite loader to updates tab.
 - [ ] Create new collection for recording process logs. The fields should be title, date, description, and the category it corresponds to. Don’t forget the reference of the tickets.
-- [ ] In donations screen make all preliminary questions required.
 - [ ] In request screen make the steps indicator clickable to navigate pages.
 - [ ] In request screen, implement firebase image upload. The users cannot upload more than 5mb for their documents.
 - [ ] Include event markers in maps screen.
 - [ ] Make hospital markers as hospital.
 - [ ] Make blood event markers as blood units.
-- [ ] Allow users to select “no” for preliminary checklist. okay lang kung mag “no” sila
+- [x] Allow users to select “no” for preliminary checklist. okay lang kung mag “no” sila
   - Example: Do you have tattoos?
 - [x] Add blood components to the database to. Whether they are RBC, WBC, Platelets, or Plasma.
 

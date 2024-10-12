@@ -4,7 +4,7 @@ import { View, Text, Image, TextInput } from "react-native";
 import { StyleSheet } from "react-native";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import CallToActionBtn from "components/common/CallToActionBtn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Octicons, Ionicons } from "@expo/vector-icons";
 import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
 import { Pressable } from "react-native";
@@ -13,19 +13,67 @@ import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 export default function NewPassword() {
+  const router = useRouter();
+  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
+    useTogglePasswordVisibility();
   const [password, setPassword] = useState("");
+  // const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newPassword = e.target.value;
+  //   setPassword(newPassword);
+  //   validatePassword(newPassword);
+  // };
   const setNewPassword = () => {
     setShowModal(true);
     //TODO: Send confimation pin to email
   };
-  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
-    useTogglePasswordVisibility();
-  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => {
     setShowModal(false);
     router.back();
   };
+
+  const [isValidLength, setIsValidLength] = useState(false);
+  const [hasUppercase, setHasUppercase] = useState(false);
+  const [hasLowercase, setHasLowercase] = useState(false);
+  const [hasNumber, setHasNumber] = useState(false);
+  const [hasNoSpecialChars, setHasNoSpecialChars] = useState(false);
+  const [hasNoSpaces, setHasNoSpaces] = useState(false);
+
+  useEffect(() => {
+    setIsValidLength(password.length >= 8 && password.length <= 20);
+    setHasUppercase(/[A-Z]/.test(password));
+    setHasLowercase(/[a-z]/.test(password));
+    setHasNumber(/[0-9]/.test(password));
+    setHasNoSpecialChars(!/[:;,\"'\/]/.test(password));
+    setHasNoSpaces(!/\s/.test(password));
+  }, [password, setPassword]);
+
+  const conditions = [
+    {
+      isValid: isValidLength,
+      condition: "8-20 characters",
+    },
+    {
+      isValid: hasUppercase,
+      condition: "At least one capital letter (A to Z)",
+    },
+    {
+      isValid: hasLowercase,
+      condition: "At least one lowercase letter (a to z)",
+    },
+    {
+      isValid: hasNumber,
+      condition: "At least one number (0 to 9)",
+    },
+    {
+      isValid: hasNoSpecialChars,
+      condition: "Don't use : ; , \" ' /",
+    },
+    {
+      isValid: hasNoSpaces,
+      condition: "No spaces",
+    },
+  ];
 
   return (
     <View style={styles.container}>
@@ -44,7 +92,7 @@ export default function NewPassword() {
           <TextInput
             value={password}
             placeholder="Enter your new password..."
-            onChangeText={(newPassword) => setPassword(newPassword)}
+            onChangeText={setPassword}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -60,13 +108,21 @@ export default function NewPassword() {
         </TextInputWrapper>
 
         <View style={{ gap: 4 }}>
-          {conditions.map(({ condition }, id) => (
+          {conditions.map(({ isValid, condition }, id) => (
             <View key={id} style={{ flexDirection: "row", gap: 8 }}>
-              <Octicons
-                name="check-circle-fill"
-                size={20}
-                color={COLORS.slate300}
-              />
+              {isValid ? (
+                <Octicons
+                  name="check-circle-fill"
+                  size={20}
+                  color={COLORS.success}
+                />
+              ) : (
+                <Octicons
+                  name="check-circle-fill"
+                  size={20}
+                  color={COLORS.slate300}
+                />
+              )}
               <Text>{condition}</Text>
             </View>
           ))}
@@ -110,24 +166,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
 });
-
-const conditions = [
-  {
-    condition: "8-20 characters",
-  },
-  {
-    condition: "At least one capital letter (A to Z)",
-  },
-  {
-    condition: "At least one lowercase letter (a to z)",
-  },
-  {
-    condition: "At least one number (0 to 9)",
-  },
-  {
-    condition: "Don't use : ; , \" ' /",
-  },
-  {
-    condition: "No spaces",
-  },
-];

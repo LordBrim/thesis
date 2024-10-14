@@ -26,7 +26,7 @@ import { getAuth } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-
+import IconModal from "../(home)/custom-album-modal";
 type IAccountTab = {
   avatarUrl: string;
   username: string;
@@ -42,6 +42,7 @@ export default function AccountTab({
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [avatar, setAvatar] = useState(avatarUrl || null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
@@ -126,45 +127,41 @@ export default function AccountTab({
     fetchUserData();
   }, []);
 
-  const pickImage = async () => {
-    Alert.alert(
-      "Edit Profile Picture",
-      "Do you want to change your profile picture?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: async () => {
-            // Ask for permission to access the camera roll
-            const permissionResult =
-              await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const handleImagePicker = async (source) => {
+    let result;
+    if (source === "camera") {
+      const permissionResult =
+        await ImagePicker.requestCameraPermissionsAsync();
+      if (permissionResult.granted === false) {
+        alert("Permission to access camera is required!");
+        return;
+      }
+      result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+    } else {
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (permissionResult.granted === false) {
+        alert("Permission to access camera roll is required!");
+        return;
+      }
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+    }
 
-            if (permissionResult.granted === false) {
-              alert("Permission to access camera roll is required!");
-              return;
-            }
-
-            const result = await ImagePicker.launchImageLibraryAsync({
-              mediaTypes: ImagePicker.MediaTypeOptions.Images,
-              allowsEditing: true,
-              aspect: [1, 1],
-              quality: 1,
-            });
-
-            if (!result.canceled && result.assets && result.assets.length > 0) {
-              const source = { uri: result.assets[0].uri };
-              console.log(source);
-              uploadImage(source.uri);
-            }
-          },
-        },
-      ],
-      { cancelable: false }
-    );
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const source = { uri: result.assets[0].uri };
+      console.log(source);
+      uploadImage(source.uri);
+    }
+    setModalVisible(false);
   };
 
   const uploadImage = async (uri) => {
@@ -209,7 +206,7 @@ export default function AccountTab({
                 ? { uri: avatar } // Firebase URL case
                 : require("../../../assets/images/defaultAvatar.png") // Local image case
             }
-            onEdit={pickImage}
+            onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
           />
         )}
         <View style={{ flex: 1, gap: 4 }}>
@@ -338,6 +335,11 @@ export default function AccountTab({
           </Pressable>
         </View>
       </View>
+      <IconModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleImagePicker={handleImagePicker}
+      />
     </ScrollView>
   );
 }

@@ -120,9 +120,16 @@ export default function RequestBloodunitScreen({
     >
       <View style={styles.container}>
         <Text style={styles.title}>File A Request</Text>
-        <Text style={{ color: COLORS.secondary, fontSize: 18 }}>
-          NOTE: DATA SHOLD BE COMPLETELY FILLED OUT BEFORE SUBMISSION, REQUEST
-          WILL NOT BE PROCESSED IF DATA IS INCOMPLETE.
+        <Text
+          style={{
+            color: COLORS.secondary,
+            fontSize: 15,
+            fontWeight: "bold",
+            marginVertical: 10,
+          }}
+        >
+          Please ensure all fields are completed before submission. Incomplete
+          requests will not be processed.
         </Text>
         <Text style={styles.header}>Patient's Name</Text>
         <TextInput

@@ -82,9 +82,10 @@
   - [x] The general updates should contain appointments, requests, donations, and incentives. All information regarding processes are accumulated here.
 - [x] In request screen add a steps indicator to declutter current and previous screen.
 - [x] Update UI design for file a request modal. Success and error.
-- [x] Add date and timer modal to lockdown status
-- [x] Create a reusable modal for all screens
-- [ ] Add Modal for required completion of account profile in home for new users and users with incomplete data
+- [x] Add date and timer modal to lockdown status.
+- [x] Create a reusable modal for all screens.
+- [x] Add Modal for required completion of account profile in home for new users and users with incomplete data.
+- [x] Finish profile edit screen with required information for the user.
 
 ## Admin Screen
 

@@ -39,9 +39,9 @@ export default function Avatar({ avatarUrl, onEdit }: IAvatar) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 125,
+    height: 125,
+    borderRadius: 75,
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",

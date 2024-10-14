@@ -10,6 +10,7 @@ const CustomButtonWithIcon = ({
   title,
   buttonStyle,
   textStyle,
+  disabled = false,
 }) => {
   return (
     <TouchableOpacity style={[styles.button, buttonStyle]} onPress={onPress}>

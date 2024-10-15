@@ -44,8 +44,8 @@
 - [ ] In request screen make the steps indicator clickable to navigate pages.
 - [ ] In request screen, implement firebase image upload. The users cannot upload more than 5mb for their documents.
 - [ ] Include event markers in maps screen.
-- [ ] Make hospital markers as hospital.
-- [ ] Make blood event markers as blood units.
+- [ ] Make hospital markers as [hospital](https://icons.expo.fyi/Index/FontAwesome6/hospital).
+- [ ] Make blood event markers as [blood units](https://icons.expo.fyi/Index/Fontisto/blood).
 - [x] Allow users to select “no” for preliminary checklist. okay lang kung mag “no” sila
   - Example: Do you have tattoos?
 - [x] Add blood components to the database to. Whether they are RBC, WBC, Platelets, or Plasma.

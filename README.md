@@ -39,7 +39,7 @@
 - [x] Replace login error modal with simpler text feedback below the inputs.
 - [ ] Add an event collection
   - [ ] Connect event collection for home screen
-- [ ] Add infinite scrolling loader to updates tab.
+- [ ] Add [infinite scrolling](https://truesparrow.com/blog/infinite-scrolling-in-react-native/) loader to updates tab.
 - [ ] Create new collection for recording process logs. The fields should be title, date, description, and the category it corresponds to. Don’t forget the reference of the tickets.
 - [ ] In request screen make the steps indicator clickable to navigate pages.
 - [ ] In request screen, implement firebase image upload. The users cannot upload more than 5mb for their documents.

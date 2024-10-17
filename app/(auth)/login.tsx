@@ -21,7 +21,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import LinkBtn from "../../components/common/LinkBtn";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
-import Title from "components/common/texts/Title";
 import LifelineLogo from "components/common/LifelineLogo";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
@@ -235,7 +234,7 @@ export default function LoginScreen() {
                 <Ionicons
                   name={rightIcon}
                   size={SIZES.xLarge}
-                  color={COLORS.gray}
+                  color={COLORS.grayDark}
                 />
               </Pressable>
             </TextInputWrapper>
@@ -293,10 +292,13 @@ export default function LoginScreen() {
               justifyContent: "center",
               alignItems: "center",
               borderWidth: 0.5,
-              borderColor: COLORS.slate400,
+              borderColor: COLORS.grayMid,
             }}
           />
-          <Text style={{ backgroundColor: COLORS.white }}> Sign In With </Text>
+          <Text style={{ backgroundColor: COLORS.background }}>
+            {" "}
+            Sign In With{" "}
+          </Text>
         </View>
         <View
           style={{
@@ -342,7 +344,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: SIZES.xxxLarge,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     justifyContent: "space-between",
     alignContent: "center",
   },

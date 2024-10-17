@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   container: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     padding: 28,
     marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
     borderRadius: 15,

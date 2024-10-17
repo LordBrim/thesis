@@ -110,6 +110,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     elevation: 3,
     shadowColor: "#52006A",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
   },
 });

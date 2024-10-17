@@ -70,11 +70,11 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.xSmall,
   },
   defaultContainer: {
-    color: COLORS.white,
+    color: COLORS.background,
     backgroundColor: COLORS.primary,
   },
   secondaryContainer: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     borderWidth: 1,
     borderColor: COLORS.gray,
   },
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   defaultLabel: {
-    color: COLORS.white,
+    color: COLORS.background,
   },
   secondaryLabel: {
     color: COLORS.gray,

@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     shadowColor: "#52006A",
     gap: SPACES.md,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     position: "relative",
     maxHeight: 70,
     minHeight: 70,

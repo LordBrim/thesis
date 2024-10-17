@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, .4)",
     justifyContent: "flex-end",
   },
-  title: { fontSize: SIZES.xLarge, color: COLORS.white },
-  subtitle: { fontSize: 14, color: COLORS.white },
+  title: { fontSize: SIZES.xLarge, color: COLORS.background },
+  subtitle: { fontSize: 14, color: COLORS.background },
 });

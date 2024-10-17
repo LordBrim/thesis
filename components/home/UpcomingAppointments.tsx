@@ -1,14 +1,24 @@
-import { StyleSheet, View, Text, FlatList, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  SafeAreaView,
+  Image,
+} from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import AppointmentCard from "./AppointmentCard";
+import { useState } from "react";
 
 export default function UpcomingAppointments() {
+  const [hasAppointments, setHasAppointments] = useState(true);
+
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Upcoming Appointments</Text>
       </View>
-      {sampleAppointments ? (
+      {hasAppointments ? (
         <FlatList
           data={sampleAppointments}
           renderItem={({ item }) => (
@@ -25,7 +35,16 @@ export default function UpcomingAppointments() {
         />
       ) : (
         <View style={styles.empty}>
-          <Text style={{ color: COLORS.gray }}>No Scheduled Appointments</Text>
+          <Image
+            source={require("../../assets/images/no-appointments.png")}
+            style={{
+              width: "20%",
+              height: 120,
+            }}
+          />
+          <Text style={{ color: COLORS.text, textAlign: "center" }}>
+            You Have No {"\n"} Scheduled Appointments
+          </Text>
         </View>
       )}
     </View>
@@ -51,7 +70,8 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   empty: {
-    height: 120,
+    flex: 1,
+    height: 320,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
   },
   flatListContent: {
     flexGrow: 1,

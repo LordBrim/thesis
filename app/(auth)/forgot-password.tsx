@@ -4,7 +4,6 @@ import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import { View, TextInput, Image, Text, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import TextInputWrapper from "components/common/TextInputWrapper";
-import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { useRouter } from "expo-router";
@@ -131,7 +130,6 @@ export default function ForgotPassword() {
       >
         <View
           style={{
-            backgroundColor: COLORS.white,
             marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
             borderRadius: 15,
             justifyContent: "center",
@@ -165,7 +163,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     gap: 40,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },

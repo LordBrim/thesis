@@ -69,7 +69,7 @@ function DonationIncentive({ checked }: IDonationIncentive) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     flexDirection: "column",
     padding: HORIZONTAL_SCREEN_MARGIN,
     gap: HORIZONTAL_SCREEN_MARGIN,

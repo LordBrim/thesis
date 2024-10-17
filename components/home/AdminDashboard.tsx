@@ -19,7 +19,7 @@ export default function AdminDashboard() {
 
   return (
     <View style={styles.container}>
-      <Text style={GS.h1}>Dashboard</Text>
+      <Text style={GS.h2}>Dashboard</Text>
 
       <View
         style={{
@@ -27,90 +27,125 @@ export default function AdminDashboard() {
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
+          gap: 1,
         }}
       >
-        <Link asChild push href={"manage-staff"}>
-          <TouchableOpacity style={styles.btn}>
-            <FontAwesome6
-              name="user-nurse"
-              size={size}
-              color={COLORS.primary}
-            />
-            <Text style={styles.text}>Staff</Text>
-          </TouchableOpacity>
-        </Link>
+        <View style={[styles.dBtnView]}>
+          <Link asChild push href={"manage-staff"}>
+            <Pressable
+              style={styles.dBtnPress}
+              android_ripple={{ radius: 200 }}
+            >
+              <FontAwesome6
+                name="user-nurse"
+                size={size}
+                color={COLORS.primary}
+              />
+              <Text style={styles.dBtnText}>Staff</Text>
+            </Pressable>
+          </Link>
+        </View>
 
-        <Link asChild push href={"manage-users"}>
-          <TouchableOpacity style={styles.btn}>
-            <FontAwesome6
-              name="user-injured"
-              size={size}
-              color={COLORS.primary}
-            />
-            <Text style={styles.text}>Users</Text>
-          </TouchableOpacity>
-        </Link>
+        <View style={[styles.dBtnView]}>
+          <Link asChild push href={"manage-users"}>
+            <Pressable
+              style={styles.dBtnPress}
+              android_ripple={{ radius: 200 }}
+            >
+              <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />
+              <Text style={styles.dBtnText}>Tickets</Text>
+            </Pressable>
+          </Link>
+        </View>
 
-        <Link asChild push href={"manage-events"}>
-          <TouchableOpacity style={styles.btn}>
-            <Ionicons
-              name="calendar-outline"
-              size={size}
-              color={COLORS.primary}
-            />
-            <Text style={styles.text}>Events</Text>
-          </TouchableOpacity>
-        </Link>
+        <View style={[styles.dBtnView]}>
+          <Link asChild push href={"manage-events"}>
+            <Pressable
+              style={styles.dBtnPress}
+              android_ripple={{ radius: 200 }}
+            >
+              <Ionicons
+                name="calendar-outline"
+                size={size}
+                color={COLORS.primary}
+              />
+              <Text style={styles.dBtnText}>Events</Text>
+            </Pressable>
+          </Link>
+        </View>
 
-        <Link asChild push href={"manage-faq"}>
-          <TouchableOpacity style={styles.btn}>
-            <Ionicons
-              name="chatbubbles-outline"
-              size={size}
-              color={COLORS.primary}
-            />
-            <Text style={styles.text}>FAQ</Text>
-          </TouchableOpacity>
-        </Link>
+        <View style={[styles.dBtnView]}>
+          <Link asChild push href={"manage-faq"}>
+            <Pressable
+              style={styles.dBtnPress}
+              android_ripple={{ radius: 200 }}
+            >
+              <Ionicons
+                name="chatbubbles-outline"
+                size={size}
+                color={COLORS.primary}
+              />
+              <Text style={styles.dBtnText}>FAQ</Text>
+            </Pressable>
+          </Link>
+        </View>
       </View>
 
-      <Title title="Reports" />
+      <Text style={GS.h2}>Reports</Text>
 
       <View style={{ flexDirection: "row", gap: 2 }}>
-        <Pressable
-          onPress={() => setChart("Daily")}
-          android_ripple={{ radius: 200 }}
+        <View
           style={[
-            styles.switcher,
+            styles.sBtnView,
             { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
           ]}
         >
-          <Text>Daily</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setChart("Weekly")}
-          android_ripple={{ radius: 200 }}
-          style={styles.switcher}
-        >
-          <Text>Weekly</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setChart("Monthly")}
-          android_ripple={{ radius: 200 }}
-          style={styles.switcher}
-        >
-          <Text>Monthly</Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setChart("Yearly")}
-          android_ripple={{ radius: 200 }}
+          <Pressable
+            onPress={() => setChart("Daily")}
+            android_ripple={{ radius: 200 }}
+            style={styles.sBtnPress}
+          >
+            <Text>Daily</Text>
+          </Pressable>
+        </View>
+
+        <View style={[styles.sBtnView]}>
+          <Pressable
+            onPress={() => setChart("Weekly")}
+            android_ripple={{ radius: 200 }}
+            style={styles.sBtnPress}
+          >
+            <Text>Weekly</Text>
+          </Pressable>
+        </View>
+
+        <View style={[styles.sBtnView]}>
+          <Pressable
+            onPress={() => setChart("Monthly")}
+            android_ripple={{ radius: 200 }}
+            style={styles.sBtnPress}
+          >
+            <Text>Monthly</Text>
+          </Pressable>
+        </View>
+
+        <View
           style={[
-            styles.switcher,
+            styles.sBtnView,
             { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
           ]}
         >
-          <Text>Yearly</Text>
-        </Pressable>
+          <Pressable
+            onPress={() => setChart("Yearly")}
+            android_ripple={{ radius: 200 }}
+            style={[
+              styles.sBtnPress,
+              { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
+            ]}
+          >
+            <Text>Yearly</Text>
+          </Pressable>
+        </View>
       </View>
 
       {chart == "Daily" && <ReportBarChart title="Daily" data={dailyData} />}
@@ -130,28 +165,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
     gap: 12,
   },
-  btn: {
+  dBtnText: {
+    fontWeight: "500",
+  },
+  dBtnView: {
+    borderWidth: 1,
+    flex: 1,
+    aspectRatio: 1 / 1,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  dBtnPress: {
+    flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
-    width: 80,
-    height: 80,
   },
-  text: {
-    fontWeight: "700",
-  },
-  switcher: {
-    borderWidth: 1,
-    paddingVertical: 12,
+  sBtnView: {
     flex: 1,
+    borderWidth: 1,
+    borderColor: COLORS.slate200,
+    overflow: "hidden",
+  },
+  sBtnPress: {
+    flex: 1,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    borderColor: COLORS.slate200,
+    paddingVertical: 12,
   },
 });
 

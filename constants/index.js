@@ -3,6 +3,7 @@ import icons from "./icons";
 import { COLORS, FONT, SIZES, SPACES, SHADOWS } from "./theme";
 import { FAQuestions } from "./database";
 import { HORIZONTAL_SCREEN_MARGIN } from "./measurements";
+import { GS } from "./style";
 
 export {
   images,
@@ -14,4 +15,5 @@ export {
   SHADOWS,
   FAQuestions,
   HORIZONTAL_SCREEN_MARGIN,
+  GS,
 };

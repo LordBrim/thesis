@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { SIZES } from "../../../constants";
+import { GS } from "../../../constants";
 
 type ITitle = {
   title: string;
@@ -9,7 +9,7 @@ type ITitle = {
 export default function Title({ title }: ITitle) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={GS.h1}>{title}</Text>
     </View>
   );
 }
@@ -17,10 +17,5 @@ export default function Title({ title }: ITitle) {
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-  },
-  title: {
-    fontSize: SIZES.xLarge,
-    fontWeight: "bold",
-    textTransform: "capitalize",
   },
 });

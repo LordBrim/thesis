@@ -5,10 +5,14 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
 import { router } from "expo-router";
-import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../constants";
+import {
+  HORIZONTAL_SCREEN_MARGIN,
+  COLORS,
+  SIZES,
+  GS,
+} from "../../../constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { firestoreOperations } from "firestore-services";
@@ -146,7 +150,7 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
   return (
     <View style={styles.container}>
       <View>
-        <Title title="Schedule Appointment" />
+        <Text style={GS.h1}>Schedule Appointment</Text>
         <Description description="Feel free to select a date and time that’s most convenient for you!" />
       </View>
 

@@ -39,13 +39,13 @@
 - [x] Replace login error modal with simpler text feedback below the inputs.
 - [ ] Add an event collection
   - [ ] Connect event collection for home screen
-- [ ] Add infinite scrolling loader to updates tab.
+- [ ] Add [infinite scrolling](https://truesparrow.com/blog/infinite-scrolling-in-react-native/) loader to updates tab.
 - [ ] Create new collection for recording process logs. The fields should be title, date, description, and the category it corresponds to. Don’t forget the reference of the tickets.
 - [ ] In request screen make the steps indicator clickable to navigate pages.
 - [ ] In request screen, implement firebase image upload. The users cannot upload more than 5mb for their documents.
 - [ ] Include event markers in maps screen.
-- [ ] Make hospital markers as hospital.
-- [ ] Make blood event markers as blood units.
+- [ ] Make hospital markers as [hospital](https://icons.expo.fyi/Index/FontAwesome6/hospital).
+- [ ] Make blood event markers as [blood units](https://icons.expo.fyi/Index/Fontisto/blood).
 - [x] Allow users to select “no” for preliminary checklist. okay lang kung mag “no” sila
   - Example: Do you have tattoos?
 - [x] Add blood components to the database to. Whether they are RBC, WBC, Platelets, or Plasma.
@@ -62,11 +62,17 @@
 - [ ] Create a screen to generate reports. Place on home as monthly report.
   - [ ] Add a view all button to view reports for the year or for selected date range.
   - [ ] Generate reports button that is printable.
-- [ ] Add a dashboard on home screen to manage all tasks as panel of buttons.
+- [x] Add a dashboard on home screen to manage all tasks as panel of buttons.
 - [ ] Just replace the home heading with a role (excluding the user). Create an indicator to identify between a user, staff, admin, and super admin.
 - [ ] Remove the marker for account hospital. Disable on maps.
 - [ ] Display the prizes for requesting blood for every hospital.
 - [ ] Add partnership field to the database for when creating events.
+- [ ] (High) Implement roles using context.
+- [x] Replace user dashboard with tickets.
+- [ ] Make events go directly to event location.
+- [ ] No approval needed. Staff can edit event details.
+- [ ] FAQ general questions are pinned to the top. While custom questions are sorted alphabetically by hospital on the bottom.
+- [ ] Allow admin to manipulate blood availability using toggles.
 
 # Front-End
 

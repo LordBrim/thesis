@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Title from "components/common/texts/Title";
-import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
+import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import {
   View,
   Text,
@@ -100,7 +100,7 @@ export default function NewPassword() {
       />
 
       <View style={{ gap: 20, width: "100%" }}>
-        <Title title="Set A New Password" />
+        <Text style={GS.h1}>Set A New Password</Text>
 
         <TextInputWrapper label="Password">
           <TextInput

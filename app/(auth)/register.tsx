@@ -12,7 +12,13 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-btr";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { SIZES, FONT, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
+import {
+  SIZES,
+  FONT,
+  COLORS,
+  HORIZONTAL_SCREEN_MARGIN,
+  GS,
+} from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { firestoreOperations } from "../../firestore-services";
@@ -105,7 +111,7 @@ export default function RegisterScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
         <View style={styles.cTop}>
-          <Title title="Register" />
+          <Text style={GS.h1}>Register</Text>
 
           <View style={{ gap: 12 }}>
             <View style={{ gap: 24 }}>

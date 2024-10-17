@@ -1,4 +1,3 @@
-import Title from "components/common/texts/Title";
 import { Link } from "expo-router";
 import {
   Pressable,
@@ -8,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
-import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
+import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
 import { useEffect, useState } from "react";
@@ -20,7 +19,7 @@ export default function AdminDashboard() {
 
   return (
     <View style={styles.container}>
-      <Title title="Dashboard" />
+      <Text style={GS.h1}>Dashboard</Text>
 
       <View
         style={{

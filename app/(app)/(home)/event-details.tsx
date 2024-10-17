@@ -1,4 +1,3 @@
-import Title from "../../../components/common/texts/Title";
 import Description from "../../../components/common/texts/Description";
 import {
   ImageBackground,
@@ -9,7 +8,12 @@ import {
 } from "react-native";
 import CallToActionBtn from "../../../components/common/CallToActionBtn";
 import { router, useLocalSearchParams } from "expo-router";
-import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../constants";
+import {
+  HORIZONTAL_SCREEN_MARGIN,
+  COLORS,
+  SIZES,
+  GS,
+} from "../../../constants";
 
 export default function EventDetailsScreen() {
   const { image, title, description, toMaps } = useLocalSearchParams();
@@ -30,7 +34,7 @@ export default function EventDetailsScreen() {
           />
         </View>
         <View style={styles.cTop}>
-          <Title title={"Event Details 1"} />
+          <Text style={GS.h1}>Event Details 1</Text>
           <Text style={styles.date}>April 20, 2024</Text>
           <Text style={styles.address}>
             This is line for Address: Lorem ipsum dolor sit amet, consectetur

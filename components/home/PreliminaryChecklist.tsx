@@ -1,15 +1,14 @@
 import React from "react";
 import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native";
-import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
 import ChecklistItem from "./ChecklistItem";
-import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
+import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import { checklistQuestions } from "../../constants/database"; // Adjust the path to your database.js file
 
 const HeaderComponent = () => (
   <>
     <View>
-      <Title title="Preliminary Checklist" />
+      <Text style={GS.h1}>Preliminary Checklist</Text>
       <Description description="Please answer all questions as truthfully as possible." />
     </View>
     <View style={styles.bar}>

@@ -15,7 +15,7 @@ const COLORS = {
   success: "#63ad0e",
   error: "#b3002a",
   enabled: "#DA2F47",
-  disabled: "#cbd5e1",
+  disabled: "#4d4d4d",
 
   // Old Colors
   // secondary: "#444262",

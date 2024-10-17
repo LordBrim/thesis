@@ -16,8 +16,8 @@ import HospitalMapView from "../../../components/maps/hospitalMapView";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants";
-import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
+import { GS } from "constants";
 import UERMLogo from "../../../assets/images/hospital/uerm.png";
 import DeLosSantosLogo from "../../../assets/images/hospital/santos.png";
 import LourdesLogo from "../../../assets/images/hospital/lourdes.png";
@@ -123,23 +123,22 @@ function Maps({ setMapBackground, setMapHeader }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {!selectedHospital && (
-        <View style={styles.cTop}>
-          <View style={{ gap: 8 }}>
-            <Title title="Find a medical institution" />
-            <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
-          </View>
-
-          <TextInputWrapper>
-            <TextInput
-              placeholder="Find a medical institution..."
-              style={{ flex: 1 }}
-            />
-            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
-          </TextInputWrapper>
+      {/* TODO: Add search function for multiple hospitals */}
+      <View style={styles.cTop}>
+        <View style={{ gap: 8 }}>
+          <Text style={GS.h1}>Find a medical institution</Text>
+          <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
         </View>
-      )}
 
+        <TextInputWrapper>
+          <TextInput
+            placeholder="Find a medical institution..."
+            style={{ flex: 1 }}
+          />
+          <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+        </TextInputWrapper>
+      </View>
+      )}
       {!selectedHospital &&
         HospitalsData.map((hospital) => (
           <Pressable
@@ -158,7 +157,6 @@ function Maps({ setMapBackground, setMapHeader }) {
             </View>
           </Pressable>
         ))}
-
       {selectedHospital && (
         <HospitalMapView
           mapStyle={mapStyle}

@@ -23,7 +23,7 @@ import CallToActionBtn from "../../components/common/CallToActionBtn";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import Title from "components/common/texts/Title";
 import LifelineLogo from "components/common/LifelineLogo";
-import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../constants";
+import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import {
   getAuth,
@@ -204,7 +204,7 @@ export default function LoginScreen() {
         </Pressable>
         {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
 
-        <Title title="Login" />
+        <Text style={GS.h1}>Login</Text>
 
         <View style={{ gap: 12 }}>
           <View style={{ gap: 24 }}>

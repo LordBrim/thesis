@@ -1,41 +1,15 @@
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import React from "react";
 import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
-import AppointmentCard from "components/home/AppointmentCard";
-import {
-  Ionicons,
-  Octicons,
-  FontAwesome6,
-  AntDesign,
-} from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 export default function UpdatesGeneral() {
   return (
     <View style={styles.container}>
-      <View style={styles.filters}>
-        {Filters.map((filter) => (
-          <Pressable key={filter.id}>
-            <Text style={styles.filter}>{filter.title}</Text>
-          </Pressable>
-        ))}
-      </View>
-      {/* <View style={{ gap: 8, flex: 1, width: "100%" }}>
-        <AppointmentCard
-          location="Request Accepted"
-          date="Sept 18, 2024"
-          time="1:01pm"
-        />
-        <AppointmentCard
-          location="Request Accepted"
-          date="Sept 18, 2024"
-          time="1:01pm"
-        />
-      </View> */}
-
       <ScrollView style={{ flex: 1, width: "100%" }} overScrollMode="never">
-        {updatesData.map((update) => (
+        {updatesData.map((update, id) => (
           <UpdateCard
-            key={update.id}
+            key={id}
             type={update.type}
             status={update.status}
             message={update.message}
@@ -53,7 +27,7 @@ function UpdateCard({ type, status, message, date, time, hospital }) {
   const size = 24;
 
   return (
-    <Pressable android_ripple={{ radius: 200 }} style={styles.cardContainer}>
+    <Pressable android_ripple={{ radius: 300 }} style={styles.cardContainer}>
       <View style={{ height: 35, width: 35 }}>
         {message === "thanks" && (
           <View
@@ -193,8 +167,6 @@ const styles = StyleSheet.create({
     padding: HORIZONTAL_SCREEN_MARGIN,
     flexDirection: "row",
     gap: 12,
-    borderBottomWidth: 1,
-    borderColor: COLORS.slate100,
   },
   cardIcon: {
     height: 35,
@@ -214,17 +186,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Filters = [
-  { id: 0, title: "All" },
-  { id: 1, title: "Donations" },
-  { id: 2, title: "Appointments" },
-  { id: 3, title: "Requests" },
-  { id: 4, title: "Incentives" },
-];
-
 const updatesData = [
   {
-    id: 0,
     type: "donations",
     message: "thanks",
     date: "Sept 18, 2024",
@@ -232,7 +195,6 @@ const updatesData = [
     hospital: "Lourdes Hospital",
   },
   {
-    id: 1,
     type: "appointment",
     message: "sent",
     status: "pending",
@@ -241,7 +203,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 2,
     type: "appointment",
     message: "deliberation",
     status: "accepted",
@@ -250,7 +211,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 3,
     type: "appointment",
     message: "deliberation",
     status: "declined",
@@ -259,7 +219,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 4,
     type: "request",
     message: "sent",
     status: "pending",
@@ -268,7 +227,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 5,
     type: "request",
     message: "deliberation",
     status: "accepted",
@@ -277,7 +235,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 6,
     type: "request",
     message: "deliberation",
     status: "declined",
@@ -286,7 +243,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 7,
     type: "incentives",
     message: "incentives",
     date: "Sept 19, 2024",
@@ -294,7 +250,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 8,
     type: "transfer",
     message: "sent",
     status: "none",
@@ -303,7 +258,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 9,
     type: "transfer",
     message: "deliberation",
     status: "accepted",
@@ -313,7 +267,6 @@ const updatesData = [
     hospital: "UERM Medical Center",
   },
   {
-    id: 10,
     type: "transfer",
     message: "deliberation",
     status: "declined",

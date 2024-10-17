@@ -20,8 +20,8 @@ import HospitalMapView from "../../../components/maps/hospitalMapView";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants";
-import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
+import { GS } from "constants";
 
 // TODO: Connect this with Firebase with a Hospitals Colleciton.
 const HospitalsData = [
@@ -129,7 +129,7 @@ function Maps({ setMapBackground, setMapHeader }) {
       {/* TODO: Add search function for multiple hospitals */}
       <View style={styles.cTop}>
         <View style={{ gap: 8 }}>
-          <Title title="Find a medical institution" />
+          <Text style={GS.h1}>Find a medical institution</Text>
           <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
         </View>
 

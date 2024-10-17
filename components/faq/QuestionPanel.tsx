@@ -4,6 +4,7 @@ import {
   SIZES,
   HORIZONTAL_SCREEN_MARGIN,
   FAQuestions,
+  GS,
 } from "../../constants";
 import QuestionCard from "./QuestionCard";
 import { useState } from "react";
@@ -17,9 +18,9 @@ export default function QuestionPanel({ title }: IQuestionPanel) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[GS.h3, styles.title]}>{title}</Text>
       <FlatList
-        contentContainerStyle={styles.container}
+        contentContainerStyle={(styles.container, { gap: 16 })}
         data={filteredData}
         renderItem={({ item }) => (
           <QuestionCard question={item.question} answer={item.answer} />
@@ -38,8 +39,5 @@ const styles = StyleSheet.create({
   title: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingVertical: 8,
-    fontSize: SIZES.large,
-    fontWeight: "600",
   },
-  questions: {},
 });

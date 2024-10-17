@@ -1,11 +1,12 @@
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
+  ActivityIndicator,
+  View,
   Text,
 } from "react-native";
-import React from "react";
 import EventCard from "../../../components/home/EventCard";
 import {
   COLORS,
@@ -13,20 +14,79 @@ import {
   SIZES,
   SPACES,
 } from "../../../constants";
+import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
+import { collection, getDocs } from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
+import moment from "moment"; // Import moment for date formatting
 
 export default function AllEventsScreen() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(FIRESTORE_DB, "events"));
+        const allEvents = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const eventData = doc.data();
+            let imageUrl;
+            try {
+              imageUrl = await getDownloadURL(
+                ref(FIREBASE_STORAGE, `events/${doc.id}`)
+              );
+            } catch (error) {
+              console.error(
+                `Error fetching image for event ${doc.id}: `,
+                error
+              );
+              imageUrl = "https://via.placeholder.com/150"; // Default image URL
+            }
+            return { id: doc.id, ...eventData, imageUrl };
+          })
+        );
+        setEvents(allEvents);
+      } catch (error) {
+        console.error("Error fetching events: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
+  const renderEventItem = ({ item }) => (
+    <View style={styles.eventContainer}>
+      <EventCard
+        documentId={item.id}
+        description={item.description}
+        address={item.address}
+        image={{ uri: item.imageUrl }}
+        title={item.title}
+        date={`${moment(item.startDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
+          item.startTime
+        }`}
+        time={`${moment(item.endDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
+          item.endTime
+        }`}
+      />
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={allEventsData}
-        renderItem={({ item }) => (
-          <EventCard
-            image={item.image}
-            title={item.title}
-            date={item.date}
-            time={item.time}
-          />
-        )}
+        data={events}
+        renderItem={renderEventItem} // Use the renderEventItem function
         keyExtractor={(item) => item.id}
         numColumns={1}
         showsVerticalScrollIndicator={false}
@@ -44,61 +104,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.white,
   },
-  bar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   flatlist: {
     gap: SPACES.md,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
+  },
+  eventContainer: {
+    marginVertical: 5,
   },
   title: {
     fontSize: SIZES.medium,
     fontWeight: "bold",
   },
 });
-
-const allEventsData = [
-  {
-    id: "1",
-    image: require("../../../assets/images/location1.jpg"),
-    title: "Medical Center Parañaque",
-    time: "8:00am-5:00pm",
-    date: "Apr 25, 2024",
-  },
-  {
-    id: "2",
-    image: require("../../../assets/images/location3.jpg"),
-    title: "Madugong Mandaluyong: Halloween Blood Donation",
-    time: "10:00am-8:00pm",
-    date: "Oct 31, 2024",
-  },
-  {
-    id: "3",
-    image: require("../../../assets/images/location2.jpg"),
-    title: "Panahon Ng Pasko: Blood Donation Para Sa Nangangailangan",
-    time: "12:00am-4:00pm",
-    date: "Nov 29, 2024 - Dec 20, 2024",
-  },
-  {
-    id: "4",
-    image: require("../../../assets/images/location1.jpg"),
-    title: "Medical Center Parañaque",
-    time: "8:00am-5:00pm",
-    date: "Apr 25, 2024",
-  },
-  {
-    id: "5",
-    image: require("../../../assets/images/location3.jpg"),
-    title: "Madugong Mandaluyong: Halloween Blood Donation",
-    time: "10:00am-8:00pm",
-    date: "Oct 31, 2024",
-  },
-  {
-    id: "6",
-    image: require("../../../assets/images/location2.jpg"),
-    title: "Panahon Ng Pasko: Blood Donation Para Sa Nangangailangan",
-    time: "12:00am-4:00pm",
-    date: "Nov 29, 2024 - Dec 20, 2024",
-  },
-];

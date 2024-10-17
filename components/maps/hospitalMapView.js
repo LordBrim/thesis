@@ -2,7 +2,7 @@ import axios from "axios";
 import * as Location from "expo-location";
 import { getDistance } from "geolib"; // You'll need to install this package
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Image, Text, View } from "react-native";
+import { Animated, Button, Image, Text, View, Linking } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Polyline, UrlTile } from "react-native-maps";
 import { Divider, Icon } from "react-native-paper";
 import BackButton from "../../constants/backButton";
@@ -15,6 +15,7 @@ import ABloodType from "../../assets/icons/AB_bloodType";
 import ABBloodType from "../../assets/icons/AB_bloodType";
 import BBloodType from "../../assets/icons/B_bloodType";
 import OBloodType from "../../assets/icons/O_bloodType";
+import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 
 function isSameLocation(location1, location2) {
   const epsilon = 0.0001; // Threshold for floating point comparison
@@ -97,7 +98,18 @@ const HospitalMapView = ({
       setSelectedMarker(null);
     };
   }, [selectedMarker]);
+  const openGoogleMapsForDriving = () => {
+    if (currentLocation && selectedHospital) {
+      const origin = `${currentLocation.latitude},${currentLocation.longitude}`;
+      const destination = `${selectedHospital.coordinates.latitude},${selectedHospital.coordinates.longitude}`;
+      const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
 
+      // Open Google Maps with the driving directions
+      Linking.openURL(url).catch((err) =>
+        console.error("Error launching Google Maps: ", err)
+      );
+    }
+  };
   useEffect(() => {
     let watchId;
 
@@ -178,7 +190,8 @@ const HospitalMapView = ({
       }
       const start = `${currentLocation.longitude},${currentLocation.latitude}`;
       const end = `${selectedHospital.coordinates.longitude},${selectedHospital.coordinates.latitude}`;
-      // console.log(start, end);
+      console.log("Start:", start);
+      console.log("End:", end);
       const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62480d5edcd000074935966b0d86d130c538&start=${start}&end=${end}`;
 
       try {
@@ -195,7 +208,16 @@ const HospitalMapView = ({
         }));
         setRouteCoordinates(routeCoordinates);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching route:", error);
+        if (error.response) {
+          console.error("Response data:", error.response.data);
+          console.error("Response status:", error.response.status);
+          console.error("Response headers:", error.response.headers);
+        } else if (error.request) {
+          console.error("Request data:", error.request);
+        } else {
+          console.error("Error message:", error.message);
+        }
       }
     };
     fetchRoute();
@@ -215,7 +237,22 @@ const HospitalMapView = ({
           }}
         >
           <Icon source="hospital-building" size={20} color="white" />
+
           <Text style={styles.infoTopTitle}>{selectedHospital.name}</Text>
+          <CustomButtonWithIcon
+            icon={"location-arrow"}
+            size={24}
+            title={"Drive Mode"}
+            onPress={openGoogleMapsForDriving}
+            buttonStyle={{
+              borderRadius: 100,
+              backgroundColor: "white",
+              borderColor: COLORS.primary,
+              borderWidth: 1,
+            }}
+            iconColor={COLORS.primary}
+            textStyle={{ fontSize: 12, color: COLORS.primary }}
+          />
         </View>
         <Text style={styles.infoTopDistance}>
           {distance

@@ -1,6 +1,7 @@
 import { Link } from "expo-router";
 import {
   Pressable,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,83 +13,78 @@ import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
 import { useEffect, useState } from "react";
 import ReportLineChart from "./ReportLineChart";
+import { FlatList } from "react-native";
 
 export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
 
+  const gridBtns = [
+    {
+      href: "manage-staff",
+      icon: (
+        <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
+      ),
+      title: "Staff",
+    },
+    {
+      href: "manage-tickets",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "Tickets",
+    },
+    {
+      href: "manage-events",
+      icon: (
+        <Ionicons name="calendar-outline" size={size} color={COLORS.primary} />
+      ),
+      title: "Events",
+    },
+    {
+      href: "manage-faq",
+      icon: (
+        <Ionicons
+          name="chatbubbles-outline"
+          size={size}
+          color={COLORS.primary}
+        />
+      ),
+      title: "FAQ",
+    },
+    {
+      href: "manage-staff",
+      icon: (
+        <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
+      ),
+      title: "Staff",
+    },
+  ];
+
   return (
-    <View style={styles.container}>
-      <Text style={GS.h2}>Dashboard</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={{ gap: 8 }}>
+        <Text style={GS.h2}>Dashboard</Text>
 
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100%",
-          gap: 1,
-        }}
-      >
-        <View style={[styles.dBtnView]}>
-          <Link asChild push href={"manage-staff"}>
-            <Pressable
-              style={styles.dBtnPress}
-              android_ripple={{ radius: 200 }}
-            >
-              <FontAwesome6
-                name="user-nurse"
-                size={size}
-                color={COLORS.primary}
-              />
-              <Text style={styles.dBtnText}>Staff</Text>
-            </Pressable>
-          </Link>
-        </View>
-
-        <View style={[styles.dBtnView]}>
-          <Link asChild push href={"manage-users"}>
-            <Pressable
-              style={styles.dBtnPress}
-              android_ripple={{ radius: 200 }}
-            >
-              <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />
-              <Text style={styles.dBtnText}>Tickets</Text>
-            </Pressable>
-          </Link>
-        </View>
-
-        <View style={[styles.dBtnView]}>
-          <Link asChild push href={"manage-events"}>
-            <Pressable
-              style={styles.dBtnPress}
-              android_ripple={{ radius: 200 }}
-            >
-              <Ionicons
-                name="calendar-outline"
-                size={size}
-                color={COLORS.primary}
-              />
-              <Text style={styles.dBtnText}>Events</Text>
-            </Pressable>
-          </Link>
-        </View>
-
-        <View style={[styles.dBtnView]}>
-          <Link asChild push href={"manage-faq"}>
-            <Pressable
-              style={styles.dBtnPress}
-              android_ripple={{ radius: 200 }}
-            >
-              <Ionicons
-                name="chatbubbles-outline"
-                size={size}
-                color={COLORS.primary}
-              />
-              <Text style={styles.dBtnText}>FAQ</Text>
-            </Pressable>
-          </Link>
-        </View>
+        <FlatList
+          data={gridBtns}
+          renderItem={({ item }) => (
+            <View style={[styles.dBtnView]}>
+              <Link asChild push href={item.href}>
+                <Pressable
+                  style={styles.dBtnPress}
+                  android_ripple={{ radius: 200 }}
+                >
+                  {item.icon}
+                  <Text style={styles.dBtnText}>{item.title}</Text>
+                </Pressable>
+              </Link>
+            </View>
+          )}
+          keyExtractor={(item) => item.href}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          numColumns={4}
+          scrollEnabled={false}
+        />
       </View>
 
       <Text style={GS.h2}>Reports</Text>
@@ -157,7 +153,7 @@ export default function AdminDashboard() {
 
       <ReportBarChart title="Donations From Events" data={eventsData} />
       <ReportLineChart />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -165,14 +161,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    gap: 12,
+    gap: 16,
   },
   dBtnText: {
     fontWeight: "500",
   },
   dBtnView: {
-    borderWidth: 1,
-    flex: 1,
+    width: "25%",
     aspectRatio: 1 / 1,
     borderRadius: 10,
     overflow: "hidden",

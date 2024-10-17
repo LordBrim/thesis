@@ -5,32 +5,30 @@ import {
   Text,
   TouchableWithoutFeedback,
   Easing,
-  ScrollView,
-  FlatList,
   TextInput,
   SafeAreaView,
   Pressable,
 } from "react-native";
-// import Divider from "../../../components/Divider";
 import { useNavigation } from "@react-navigation/native";
-import { COLORS, FONT, SIZES, SHADOWS } from "../../../constants/theme";
+import { COLORS, SIZES } from "../../../constants/theme";
 import { mapStyle } from "../../../components/maps/mapStyle";
-import BackButton from "../../../constants/backButton";
 import HospitalMapView from "../../../components/maps/hospitalMapView";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants";
 import Title from "components/common/texts/Title";
 import Description from "components/common/texts/Description";
-
-// TODO: Connect this with Firebase with a Hospitals Colleciton.
+import UERMLogo from "../../../assets/images/hospital/uerm.png";
+import DeLosSantosLogo from "../../../assets/images/hospital/santos.png";
+import LourdesLogo from "../../../assets/images/hospital/lourdes.png";
+import QuirinoLogo from "../../../assets/images/hospital/quirino.png";
 const HospitalsData = [
   {
     id: 1,
     name: "UERM Hospital",
     coordinates: { latitude: 14.607184, longitude: 121.020384 },
     address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
-    logoUrl: { uri: "https://via.placeholder.com/150" },
+    logoUrl: UERMLogo,
     bloodBanks: [
       { bloodType: "A+", quantity: 0 },
       { bloodType: "A-", quantity: 0 },
@@ -47,8 +45,7 @@ const HospitalsData = [
     name: "De Los Santos Medical Center",
     coordinates: { latitude: 14.6200998, longitude: 121.0175533 },
     address: "201 E Rodriguez Sr. Ave, Quezon City, 1112 Metro Manila",
-    logoUrl: { uri: "https://via.placeholder.com/150" },
-
+    logoUrl: DeLosSantosLogo,
     bloodBanks: [
       { bloodType: "A+", quantity: 10 },
       { bloodType: "A-", quantity: 0 },
@@ -65,7 +62,7 @@ const HospitalsData = [
     name: "Our Lady of Lourdes Hospital",
     coordinates: { latitude: 14.5949547, longitude: 121.0199822 },
     address: "46 P. Sanchez St, Santa Mesa, Manila, 1016 Metro Manila",
-    logoUrl: { uri: "https://via.placeholder.com/150" },
+    logoUrl: LourdesLogo,
     bloodBanks: [
       { bloodType: "A+", quantity: 0 },
       { bloodType: "A-", quantity: 0 },
@@ -82,7 +79,7 @@ const HospitalsData = [
     name: "Quirino Memorial Medical Center",
     coordinates: { latitude: 14.6222558, longitude: 121.0702733 },
     address: "Project 4, Quezon City, 1109 Metro Manila",
-    logoUrl: { uri: "https://via.placeholder.com/150" },
+    logoUrl: QuirinoLogo,
     bloodBanks: [
       { bloodType: "A+", quantity: 0 },
       { bloodType: "A-", quantity: 0 },
@@ -126,37 +123,30 @@ function Maps({ setMapBackground, setMapHeader }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* TODO: Add search function for multiple hospitals */}
-      <View style={styles.cTop}>
-        <View style={{ gap: 8 }}>
-          <Title title="Find a medical institution" />
-          <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
+      {!selectedHospital && (
+        <View style={styles.cTop}>
+          <View style={{ gap: 8 }}>
+            <Title title="Find a medical institution" />
+            <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
+          </View>
+
+          <TextInputWrapper>
+            <TextInput
+              placeholder="Find a medical institution..."
+              style={{ flex: 1 }}
+            />
+            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+          </TextInputWrapper>
         </View>
+      )}
 
-        <TextInputWrapper>
-          <TextInput
-            placeholder="Find a medical institution..."
-            // onChangeText={() => void}
-            // value={searchText}
-            style={{ flex: 1 }}
-          />
-          <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
-        </TextInputWrapper>
-      </View>
-      {/* <FlatList
-        data={HospitalsData}
-        renderItem={({ item }) => <Hospital name={item.name} />}
-        keyExtractor={(item) => item.id.toString()}
-        scrollEnabled={false} // Disable scrolling for FlatList
-        overScrollMode="never"
-      /> */}
-
-      {HospitalsData &&
+      {!selectedHospital &&
         HospitalsData.map((hospital) => (
           <Pressable
             style={styles.hContainer}
             key={hospital.id}
             android_ripple={{ radius: 200 }}
+            onPress={() => focusMap(hospital)}
           >
             <Text style={styles.hName}>{hospital.name}</Text>
             <View style={styles.icon}>
@@ -168,34 +158,22 @@ function Maps({ setMapBackground, setMapHeader }) {
             </View>
           </Pressable>
         ))}
-      {/* {!selectedHospital &&
-        hospitals.map((hospital) => (
-          <TouchableWithoutFeedback
-            key={hospital.id}
-            onPressIn={() => setPressedButtonId(hospital.id)}
-            onPressOut={() => setPressedButtonId(null)}
-            onPress={() => focusMap(hospital)}
-          >
-            <Text>{hospital.name}</Text>
-          </TouchableWithoutFeedback>
-        ))} */}
-      {/* {selectedHospital && (
+
+      {selectedHospital && (
         <HospitalMapView
           mapStyle={mapStyle}
           selectedHospital={selectedHospital}
           setSelectedHospital={setSelectedHospital}
           setPressedButtonId={setPressedButtonId}
-          hospitals={hospitals}
+          hospitals={HospitalsData}
           navigation={navigation}
           goBack={() => {
             setPressedButtonId(null);
             setSelectedHospital(null);
           }}
           styles={styles}
-          // setMapBackground={setMapBackground}
-          // setMapHeader={setMapHeader}
         />
-      )} */}
+      )}
     </SafeAreaView>
   );
 }
@@ -226,7 +204,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray2,
   },
   buttonHospitalPressed: {
-    // your button styles when pressed
     width: "85%",
     padding: SIZES.medium,
     marginVertical: SIZES.medium,
@@ -242,7 +219,6 @@ const styles = StyleSheet.create({
     color: COLORS.black,
   },
   textHospitalPressed: {
-    // your text styles when button is pressed
     fontSize: SIZES.large,
     textAlign: "left",
     color: "white",
@@ -252,9 +228,9 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   buttonContainer: {
-    position: "absolute", //use absolute position to show button on top of the map
-    bottom: "10%", //for center align
-    alignSelf: "center", //for align to right
+    position: "absolute",
+    bottom: "10%",
+    alignSelf: "center",
     backgroundColor: COLORS.red,
   },
   markerContainer: {

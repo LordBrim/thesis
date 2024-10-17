@@ -1,16 +1,95 @@
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
   View,
   Text,
   FlatList,
-  ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
 import LinkBtn from "components/common/LinkBtn";
+import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
+import { collection, getDocs } from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
+import moment from "moment"; // Import moment for date formatting
 
 export default function UpcomingEvents() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(FIRESTORE_DB, "events"));
+        const allEvents = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const eventData = doc.data();
+            let imageUrl;
+            try {
+              imageUrl = await getDownloadURL(
+                ref(FIREBASE_STORAGE, `events/${doc.id}`)
+              );
+            } catch (error) {
+              console.error(
+                `Error fetching image for event ${doc.id}: `,
+                error
+              );
+              imageUrl = "https://via.placeholder.com/150"; // Default image URL
+            }
+            return { id: doc.id, ...eventData, imageUrl };
+          })
+        );
+
+        // Sort events by start date
+        const sortedEvents = allEvents.sort((a, b) => {
+          const dateA = moment(a.startDate, "MM/DD/YYYY");
+          const dateB = moment(b.startDate, "MM/DD/YYYY");
+          return dateA - dateB;
+        });
+
+        // Limit to 3 events
+        const limitedEvents = sortedEvents.slice(0, 3);
+
+        setEvents(limitedEvents);
+      } catch (error) {
+        console.error("Error fetching events: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
+  const renderEventItem = ({ item }) => (
+    <View style={styles.eventContainer}>
+      <EventCard
+        documentId={item.id}
+        description={item.description}
+        address={item.address}
+        image={{ uri: item.imageUrl }}
+        title={item.title}
+        date={`${moment(item.startDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
+          item.startTime
+        }`}
+        time={`${moment(item.endDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
+          item.endTime
+        }`}
+        manageEvents={true} // Pass the manageEvents prop as true
+      />
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.bar}>
@@ -23,15 +102,8 @@ export default function UpcomingEvents() {
       </View>
 
       <FlatList
-        data={sampleData}
-        renderItem={({ item }) => (
-          <EventCard
-            image={item.image}
-            title={item.title}
-            date={item.date}
-            time={item.time}
-          />
-        )}
+        data={events}
+        renderItem={renderEventItem} // Use the renderEventItem function
         keyExtractor={(item) => item.id}
         numColumns={1}
         scrollEnabled={false}
@@ -54,32 +126,16 @@ const styles = StyleSheet.create({
   flatlist: {
     gap: SPACES.md,
   },
+  eventContainer: {
+    marginVertical: 5,
+  },
   title: {
     fontSize: SIZES.large,
     fontWeight: "bold",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
-
-const sampleData = [
-  {
-    id: 1,
-    image: require("../../assets/images/location1.jpg"),
-    title: "Makati Medical Center",
-    time: "8:00am-5:00pm",
-    date: "Apr 25, 2024",
-  },
-  {
-    id: 2,
-    image: require("../../assets/images/location3.jpg"),
-    title: "Madugong Mandaluyong: Halloween Blood Donation",
-    time: "10:00am-8:00pm",
-    date: "Oct 31, 2024",
-  },
-  {
-    id: 3,
-    image: require("../../assets/images/location2.jpg"),
-    title: "Panahon Ng Pasko: Blood Donation Para Sa Nangangailangan",
-    time: "12:00am-4:00pm",
-    date: "Nov 29, 2024 - Dec 20, 2024",
-  },
-];

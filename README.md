@@ -67,6 +67,12 @@
 - [ ] Remove the marker for account hospital. Disable on maps.
 - [ ] Display the prizes for requesting blood for every hospital.
 - [ ] Add partnership field to the database for when creating events.
+- [ ] (High) Implement roles using context.
+- [x] Replace user dashboard with tickets.
+- [ ] Make events go directly to event location.
+- [ ] No approval needed. Staff can edit event details.
+- [ ] FAQ general questions are pinned to the top. While custom questions are sorted alphabetically by hospital on the bottom.
+- [ ] Allow admin to manipulate blood availability using toggles.
 
 # Front-End
 

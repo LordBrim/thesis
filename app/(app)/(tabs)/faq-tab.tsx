@@ -1,4 +1,4 @@
-import { View, ScrollView, FlatList, SafeAreaView } from "react-native";
+import { View, ScrollView, FlatList, SafeAreaView, Text } from "react-native";
 import { useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { FAQuestions, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";

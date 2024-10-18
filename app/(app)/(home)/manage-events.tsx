@@ -124,6 +124,7 @@ export default function ManageEvents({ navigation }) {
           startTime: event.startTime,
           endTime: event.endTime,
           imageUrl: event.imageUrl,
+          description: event.description,
         });
 
         current.add(1, "day");
@@ -132,7 +133,6 @@ export default function ManageEvents({ navigation }) {
 
     setAgendaItems(items);
   };
-
   const renderEventItem = (item) => (
     <View style={styles.eventContainer}>
       <EventCard

@@ -42,7 +42,7 @@ export default function CreateEvent({ navigation }) {
   const [longitude, setLongitude] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
-
+  const [inputHeight, setInputHeight] = useState(50);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
@@ -381,13 +381,22 @@ export default function CreateEvent({ navigation }) {
         <AddressSearchComponent onAddressSelect={handleAddressSelect} />
       </View>
       <View style={styles.inputContainer}>
-        <TextInputWrapper label="Description">
+        <TextInputWrapper
+          label="Description"
+          customStyle={{ height: inputHeight }}
+        >
           <TextInput
-            style={styles.input}
+            editable
+            style={[styles.input, { height: inputHeight }, { padding: 5 }]}
             placeholder="Description"
             value={description}
             onChangeText={setDescription}
             multiline
+            onContentSizeChange={(event) => {
+              setInputHeight(
+                Math.max(50, event.nativeEvent.contentSize.height)
+              );
+            }}
           />
         </TextInputWrapper>
       </View>
@@ -431,6 +440,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     flex: 1,
+
     color: COLORS.secondary,
   },
   image: {

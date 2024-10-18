@@ -93,11 +93,7 @@ export default function UpcomingEvents() {
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Upcoming Events</Text>
-        <LinkBtn
-          label="View All"
-          href="/all-events"
-          linkStyle={{ color: COLORS.gray, textDecorationLine: "none" }}
-        />
+        <LinkBtn label="View All" href="/all-events" secondary />
       </View>
 
       <FlatList

@@ -263,7 +263,11 @@ export default function LoginScreen() {
                 Remember Me
               </Text>
             </View>
-            <LinkBtn label="Forgot Password?" href="/forgot-password" />
+            <LinkBtn
+              label="Forgot Password?"
+              href="/forgot-password"
+              underline
+            />
           </View>
         </View>
 
@@ -321,7 +325,7 @@ export default function LoginScreen() {
 
       <View style={styles.cBottom}>
         <Text>Don't have an account? </Text>
-        <LinkBtn label="Register" href="/register" />
+        <LinkBtn label="Register" href="/register" underline />
       </View>
       <SingleBtnModal
         visible={modalVisible}

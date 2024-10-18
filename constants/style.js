@@ -19,11 +19,12 @@ export const GS = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "capitalize",
   },
-  link1: {},
+  link1: {
+    fontWeight: "bold",
+    color: COLORS.primary,
+  },
   link2: {
     fontWeight: "bold",
-    textDecorationLine: "underline",
     color: COLORS.grayMid,
-    textDecorationLine: "none",
   },
 });

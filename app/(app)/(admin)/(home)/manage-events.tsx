@@ -134,6 +134,7 @@ export default function ManageEvents({ navigation }) {
 
     setAgendaItems(items);
   };
+
   const renderEventItem = (item) => (
     <View style={styles.eventContainer}>
       <EventCard

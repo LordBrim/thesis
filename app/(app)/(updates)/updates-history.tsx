@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: SIZES.medium,
     alignItems: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     gap: HORIZONTAL_SCREEN_MARGIN,
   },
   title: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     shadowColor: "#52006A",
     gap: SPACES.md,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     maxHeight: 70,
     minHeight: 70,
   },

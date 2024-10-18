@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     gap: 12,
   },
   flatlist: {

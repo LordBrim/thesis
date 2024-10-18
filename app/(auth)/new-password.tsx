@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Title from "components/common/texts/Title";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import {
   View,
@@ -116,7 +115,7 @@ export default function NewPassword() {
             <Ionicons
               name={rightIcon}
               size={SIZES.xLarge}
-              color={COLORS.gray}
+              color={COLORS.grayDark}
             />
           </Pressable>
         </TextInputWrapper>
@@ -164,7 +163,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     gap: 40,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },

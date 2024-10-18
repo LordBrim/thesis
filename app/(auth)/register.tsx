@@ -152,7 +152,7 @@ export default function RegisterScreen() {
                   <Ionicons
                     name={pToggle.rightIcon}
                     size={SIZES.xLarge}
-                    color={COLORS.gray}
+                    color={COLORS.grayDark}
                   />
                 </Pressable>
               </TextInputWrapper>
@@ -173,7 +173,7 @@ export default function RegisterScreen() {
                   <Ionicons
                     name={cpToggle.rightIcon}
                     size={SIZES.xLarge}
-                    color={COLORS.gray}
+                    color={COLORS.grayDark}
                   />
                 </Pressable>
               </TextInputWrapper>
@@ -228,10 +228,10 @@ export default function RegisterScreen() {
                   justifyContent: "center",
                   alignItems: "center",
                   borderWidth: 0.5,
-                  borderColor: COLORS.slate400,
+                  borderColor: COLORS.grayMid,
                 }}
               />
-              <Text style={{ backgroundColor: COLORS.white }}>
+              <Text style={{ backgroundColor: COLORS.background }}>
                 {" "}
                 Register With{" "}
               </Text>
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: SIZES.xxxLarge,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     justifyContent: "space-between",
     alignContent: "center",
   },

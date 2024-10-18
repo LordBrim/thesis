@@ -234,7 +234,7 @@ export default function AccountTab({
             style={[
               styles.title,
               {
-                color: COLORS.slate400,
+                color: COLORS.text,
                 fontSize: SIZES.small,
                 textAlign: "center",
               },
@@ -258,14 +258,14 @@ export default function AccountTab({
             style={[
               styles.title,
               {
-                color: COLORS.slate400,
+                color: COLORS.text,
                 fontSize: SIZES.small,
                 textAlign: "center",
               },
             ]}
           >
             Units Donated:{"\n"}
-            <Text style={{ fontSize: SIZES.large, color: COLORS.black }}>
+            <Text style={{ fontSize: SIZES.large, color: COLORS.text }}>
               25
             </Text>
           </Text>
@@ -277,21 +277,17 @@ export default function AccountTab({
         <View style={styles.flatlist}>
           <Card
             href="/donation-history"
-            icon={
-              <FontAwesome5 name="history" size={22} color={COLORS.black} />
-            }
+            icon={<FontAwesome5 name="history" size={22} color={COLORS.text} />}
             label="donation history"
           />
           <Card
             href="/profile"
-            icon={
-              <MaterialIcons name="person" size={22} color={COLORS.black} />
-            }
+            icon={<MaterialIcons name="person" size={22} color={COLORS.text} />}
             label="profile"
           />
           <Card
             href="/settings"
-            icon={<FontAwesome6 name="gear" size={22} color={COLORS.black} />}
+            icon={<FontAwesome6 name="gear" size={22} color={COLORS.text} />}
             label="settings"
           />
         </View>
@@ -303,7 +299,7 @@ export default function AccountTab({
           <Card
             href="/about"
             icon={
-              <FontAwesome6 name="circle-info" size={22} color={COLORS.black} />
+              <FontAwesome6 name="circle-info" size={22} color={COLORS.text} />
             }
             label="about"
           />
@@ -313,7 +309,7 @@ export default function AccountTab({
               <FontAwesome5
                 name="question-circle"
                 size={22}
-                color={COLORS.black}
+                color={COLORS.text}
               />
             }
             label="help"
@@ -351,7 +347,7 @@ const Card = ({ href, icon, label, sublabel }: IAccountCard) => (
       <Text style={styles.label}>{label}</Text>
       {sublabel && <Text style={styles.label}>{label}</Text>}
       <View style={styles.icon}>
-        <FontAwesome6 name="chevron-right" size={18} color={COLORS.slate400} />
+        <FontAwesome6 name="chevron-right" size={18} color={COLORS.darkGray} />
       </View>
     </Pressable>
   </Link>
@@ -360,7 +356,7 @@ const Card = ({ href, icon, label, sublabel }: IAccountCard) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
   },
   profile: {
     flexDirection: "row",
@@ -374,7 +370,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     overflow: "hidden",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     minHeight: 110,
   },
   donation: {
@@ -393,7 +389,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: SIZES.small,
-    color: COLORS.black,
+    color: COLORS.text,
     fontWeight: "500",
   },
   section: {

@@ -182,13 +182,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
   },
   cTop: {
     width: "100%",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     fontWeight: "bold",
     gap: 16,
   },
@@ -302,11 +302,11 @@ const styles = StyleSheet.create({
   infoTopTitle: {
     fontSize: SIZES.xLarge,
     fontWeight: "bold",
-    color: COLORS.white,
+    color: COLORS.background,
   },
   infoTopDistance: {
     fontSize: SIZES.medium,
-    color: COLORS.white,
+    color: COLORS.background,
   },
   hContainer: {
     flex: 1,

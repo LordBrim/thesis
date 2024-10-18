@@ -14,7 +14,7 @@ import * as ImagePicker from "expo-image-picker";
 import RadioGroup from "react-native-radio-buttons-group";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
-import IconModal from "./custom-album-modal";
+import IconModal from "../../(common)/custom-album-modal";
 export default function RequestBloodunitScreen({
   patientName,
   setPatientName,

@@ -19,7 +19,7 @@ import Avatar from "components/common/Avatar";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import RadioButton from "components/common/RadioButton";
 import CustomButtonWithIcon from "../../../../components/common/CustomButtonWithIcons";
-import IconModal from "../(home)/custom-album-modal";
+import IconModal from "../../(common)/custom-album-modal";
 import {
   FIREBASE_AUTH,
   FIREBASE_STORAGE,

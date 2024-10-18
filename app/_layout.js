@@ -21,6 +21,12 @@ export default function StackLayout() {
           headerTitle: getHeaderTitle(route),
         })}
       />
+      <Stack.Screen
+        name="(app)/(admin)/(tabs)"
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })}
+      />
       {/* User Level Home Screens */}
 
       <Stack.Screen name="(app)/(user)/(home)/request" />

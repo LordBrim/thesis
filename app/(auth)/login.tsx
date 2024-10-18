@@ -86,6 +86,8 @@ export default function LoginScreen() {
     }
   };
 
+  const [isAdmin, setIsAdmin] = useState(false);
+
   const login = async (email, password) => {
     console.log("Login attempt:", email, password); // Log the email and password before login attempt
 
@@ -132,7 +134,11 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
-      router.replace("/(app)/(tabs)");
+      if (isAdmin) {
+        router.replace("/(app)/(admin)/(tabs)");
+      } else {
+        router.replace("/(app)/(user)/(tabs)");
+      }
     } catch (error) {
       setModalVisible(true);
     } finally {

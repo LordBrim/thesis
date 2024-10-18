@@ -1,3 +1,4 @@
+import { COLORS } from "constants/theme";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function ManageStaff() {
@@ -11,6 +12,7 @@ export default function ManageStaff() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -48,7 +48,7 @@ export default function AdminDashboard() {
       title: "Incentives",
     },
     {
-      href: "manage-bloodunits",
+      href: "manage-blood-units",
       icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
       title: "Blood Units",
     },

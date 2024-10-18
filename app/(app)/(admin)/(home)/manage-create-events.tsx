@@ -11,7 +11,7 @@ import {
   FlatList,
   Platform,
 } from "react-native";
-import { COLORS } from "../../../constants/theme";
+import { COLORS } from "../../../../constants/theme";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import AddressSearchComponent from "components/common/AddressSearch";

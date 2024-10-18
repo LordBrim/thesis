@@ -3,15 +3,11 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
   Image,
-  Modal,
-  TouchableOpacity,
   Platform,
-  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState, useRef } from "react";
-import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../constants";
+import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../../constants";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";

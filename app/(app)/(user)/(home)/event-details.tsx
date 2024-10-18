@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
-// import Title from "../../../components/common/texts/Title";
-import Description from "../../../components/common/texts/Description";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import CallToActionBtn from "../../../components/common/CallToActionBtn";
 import { useLocalSearchParams, router } from "expo-router";
-import {
-  HORIZONTAL_SCREEN_MARGIN,
-  COLORS,
-  SIZES,
-  GS,
-} from "../../../constants";
 import { doc, getDoc } from "firebase/firestore";
-import { FIRESTORE_DB } from "../../../firebase-config"; // Adjust the path as needed
+import { FIRESTORE_DB } from "../../../../firebase-config"; // Adjust the path as needed
 import { Card, Button, Icon, ProgressBar } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 export default function EventDetailsScreen() {

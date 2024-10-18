@@ -7,13 +7,13 @@ import {
   View,
   Text,
 } from "react-native";
-import EventCard from "../../../components/home/EventCard";
+import EventCard from "../../../../components/home/EventCard";
 import {
   COLORS,
   HORIZONTAL_SCREEN_MARGIN,
   SIZES,
   SPACES,
-} from "../../../constants";
+} from "../../../../constants";
 import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";

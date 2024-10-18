@@ -105,10 +105,10 @@ export default function AdminTicketScreen() {
   };
 
   const hospitalImages = {
-    "UERM Hospital": require("../../../assets/images/hospital/uerm.png"),
-    "Quirino Memorial Medical Center": require("../../../assets/images/hospital/quirino.png"),
-    "Our Lady of Lourdes Hospital": require("../../../assets/images/hospital/lourdes.png"),
-    "De los Santos Medical Center": require("../../../assets/images/hospital/santos.png"),
+    "UERM Hospital": require("../../../../assets/images/hospital/uerm.png"),
+    "Quirino Memorial Medical Center": require("../../../../assets/images/hospital/quirino.png"),
+    "Our Lady of Lourdes Hospital": require("../../../../assets/images/hospital/lourdes.png"),
+    "De los Santos Medical Center": require("../../../../assets/images/hospital/santos.png"),
   };
   return (
     <View style={styles.container}>

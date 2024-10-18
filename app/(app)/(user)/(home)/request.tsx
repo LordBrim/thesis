@@ -3,25 +3,18 @@ import {
   HORIZONTAL_SCREEN_MARGIN,
   SIZES,
   SPACES,
-} from "../../../constants";
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-} from "react-native";
+} from "../../../../constants";
+import { FlatList, StyleSheet, Text, View, Alert } from "react-native";
 import Carousel from "pinar";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
 import { useState } from "react";
 import StepsIndicator from "components/common/StepsIndicator";
 import RequestBloodunitScreen from "./request-bloodunit";
-import { firestoreOperations } from "../../../firestore-services";
+import { firestoreOperations } from "../../../../firestore-services";
 import { getAuth } from "firebase/auth";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { FIREBASE_STORAGE } from "../../../firebase-config";
+import { FIREBASE_STORAGE } from "../../../../firebase-config";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
 

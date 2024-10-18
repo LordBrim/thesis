@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { COLORS, SIZES } from "../../../constants/theme";
+import { COLORS, SIZES } from "../../../../constants/theme";
 import * as ImagePicker from "expo-image-picker";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
@@ -18,13 +18,13 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import Avatar from "components/common/Avatar";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import RadioButton from "components/common/RadioButton";
-import CustomButtonWithIcon from "../../../components/common/CustomButtonWithIcons";
+import CustomButtonWithIcon from "../../../../components/common/CustomButtonWithIcons";
 import IconModal from "../(home)/custom-album-modal";
 import {
   FIREBASE_AUTH,
   FIREBASE_STORAGE,
   FIRESTORE_DB,
-} from "../../../firebase-config";
+} from "../../../../firebase-config";
 import { black } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 
 const metroCities = [
@@ -200,8 +200,8 @@ const ProfileEditScreen = () => {
               image
                 ? { uri: image } // Show selected image if available
                 : avatar
-                ? { uri: avatar } // Firebase URL case
-                : require("../../../assets/images/defaultAvatar.png") // Local image case
+                  ? { uri: avatar } // Firebase URL case
+                  : require("../../../../assets/images/defaultAvatar.png") // Local image case
             }
             onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
           />

@@ -2,7 +2,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import UpdatesGeneral from "../(updates)/updates-general";
 import UpdatesHistory from "../(updates)/updates-history";
 import UpdatesIncentives from "../(updates)/updates-incentives";
-import { COLORS } from "../../../constants";
+import { COLORS } from "../../../../constants";
 
 const Tab = createMaterialTopTabNavigator();
 

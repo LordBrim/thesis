@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Pressable,
 } from "react-native";
-import { COLORS, SIZES } from "../../../constants/theme";
+import { COLORS, SIZES } from "../../../../constants/theme";
 import { Link } from "expo-router";
 import { FontAwesome6, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -17,8 +17,8 @@ import {
   FIREBASE_AUTH,
   FIREBASE_STORAGE,
   FIRESTORE_DB,
-} from "../../../firebase-config";
-import { HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+} from "../../../../firebase-config";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { IAccountCard } from "constants/Interfaces";
 import Avatar from "components/common/Avatar";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
@@ -27,6 +27,7 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import IconModal from "../(home)/custom-album-modal";
+
 type IAccountTab = {
   avatarUrl: string;
   username: string;
@@ -204,7 +205,7 @@ export default function AccountTab({
             avatarUrl={
               avatar
                 ? { uri: avatar } // Firebase URL case
-                : require("../../../assets/images/defaultAvatar.png") // Local image case
+                : require("../../../../assets/images/defaultAvatar.png") // Local image case
             }
             onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
           />

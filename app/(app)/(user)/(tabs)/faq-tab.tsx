@@ -1,13 +1,17 @@
 import { View, ScrollView, FlatList, SafeAreaView, Text } from "react-native";
 import { useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { FAQuestions, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
-import QuestionPanel from "../../../components/faq/QuestionPanel";
+import {
+  FAQuestions,
+  GS,
+  HORIZONTAL_SCREEN_MARGIN,
+} from "../../../../constants";
+import QuestionPanel from "../../../../components/faq/QuestionPanel";
 import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
-import { COLORS } from "../../../constants/theme";
-import Description from "../../../components/common/texts/Description";
-import TextInputWrapper from "../../../components/common/TextInputWrapper";
+import { COLORS } from "../../../../constants/theme";
+import Description from "../../../../components/common/texts/Description";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
 
 export default function FAQTab() {
   const [searchText, setSearchText] = useState("");

@@ -16,30 +16,30 @@ export default function StackLayout() {
       <Stack.Screen name="(auth)/confirm-email" />
       {/* Home Screens */}
       <Stack.Screen
-        name="(app)/(tabs)"
+        name="(app)/(user)/(tabs)"
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })}
       />
       {/* User Level Home Screens */}
 
-      <Stack.Screen name="(app)/(home)/request" />
-      <Stack.Screen name="(app)/(home)/event-details" />
+      <Stack.Screen name="(app)/(user)/(home)/request" />
+      <Stack.Screen name="(app)/(user)/(home)/event-details" />
       <Stack.Screen
-        name="(app)/(home)/admin"
+        name="(app)/(user)/(home)/admin"
         options={{
           headerTitle: "Admin Dashboard",
         }}
       />
       <Stack.Screen
-        name="(app)/(home)/admin-donate"
+        name="(app)/(user)/(home)/admin-donate"
         options={{
           headerTitle: "Admin Dashboard",
         }}
       />
 
       <Stack.Screen
-        name="(app)/(home)/all-events"
+        name="(app)/(user)/(home)/all-events"
         options={{
           headerTitle: "All Upcoming Events",
           headerTitleAlign: "center",
@@ -47,19 +47,19 @@ export default function StackLayout() {
       />
 
       {/* Staff Level Home Screens */}
-      <Stack.Screen name="(app)/(home)/manage-blood-units" />
-      <Stack.Screen name="(app)/(home)/manage-events" />
-      <Stack.Screen name="(app)/(home)/manage-users" />
+      <Stack.Screen name="(app)/(admin)/(home)/manage-blood-units" />
+      <Stack.Screen name="(app)/(admin)/(home)/manage-events" />
+      <Stack.Screen name="(app)/(admin)/(home)/manage-users" />
       {/* Admin Level Home Screens */}
-      <Stack.Screen name="(app)/(home)/manage-staff" />
+      <Stack.Screen name="(app)/(admin)/(home)/manage-staff" />
       {/* Account Screens */}
-      <Stack.Screen name="(app)/(account)/about" />
-      <Stack.Screen name="(app)/(account)/donation-history" />
-      <Stack.Screen name="(app)/(account)/help" />
-      <Stack.Screen name="(app)/(account)/profile" />
-      <Stack.Screen name="(app)/(account)/settings" />
+      <Stack.Screen name="(app)/(user)/(account)/about" />
+      <Stack.Screen name="(app)/(user)/(account)/donation-history" />
+      <Stack.Screen name="(app)/(user)/(account)/help" />
+      <Stack.Screen name="(app)/(user)/(account)/profile" />
+      <Stack.Screen name="(app)/(user)/(account)/settings" />
       {/* QR Code Screens */}
-      <Stack.Screen name="(app)/(qr)/qr-scanner" />
+      <Stack.Screen name="(app)/(user)/(qr)/qr-scanner" />
       {/* Auxilary Screens */}
       <Stack.Screen name="(aux)/empty" />
       <Stack.Screen name="(aux)/no-internet" />

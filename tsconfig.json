@@ -12,6 +12,6 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "app/(app)/(tabs)/maps-tab.jsx"
+    "app/(app)/(user)/(tabs)/maps-tab.jsx"
   ]
 }

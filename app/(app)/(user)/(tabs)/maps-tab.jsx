@@ -3,25 +3,25 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableWithoutFeedback,
   Easing,
   TextInput,
   SafeAreaView,
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { COLORS, SIZES } from "../../../constants/theme";
-import { mapStyle } from "../../../components/maps/mapStyle";
-import HospitalMapView from "../../../components/maps/hospitalMapView";
+import { COLORS, SIZES } from "../../../../constants/theme";
+
+import { mapStyle } from "../../../../components/maps/mapStyle";
+import HospitalMapView from "../../../../components/maps/hospitalMapView";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants";
 import Description from "components/common/texts/Description";
+import UERMLogo from "../../../../assets/images/hospital/uerm.png";
+import DeLosSantosLogo from "../../../../assets/images/hospital/santos.png";
+import LourdesLogo from "../../../../assets/images/hospital/lourdes.png";
+import QuirinoLogo from "../../../../assets/images/hospital/quirino.png";
 import { GS } from "constants";
-import UERMLogo from "../../../assets/images/hospital/uerm.png";
-import DeLosSantosLogo from "../../../assets/images/hospital/santos.png";
-import LourdesLogo from "../../../assets/images/hospital/lourdes.png";
-import QuirinoLogo from "../../../assets/images/hospital/quirino.png";
 const HospitalsData = [
   {
     id: 1,

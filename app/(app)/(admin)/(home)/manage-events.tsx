@@ -11,6 +11,7 @@ import { router } from "expo-router";
 import EventCard from "components/home/EventCard";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 export default function ManageEvents({ navigation }) {
   const [events, setEvents] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);

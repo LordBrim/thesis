@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { FontAwesome6, Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
@@ -51,11 +51,9 @@ export default function AdminDashboard() {
       title: "FAQ",
     },
     {
-      href: "manage-staff",
-      icon: (
-        <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
-      ),
-      title: "Staff",
+      href: "manage-incentives",
+      icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
+      title: "Incentives",
     },
   ];
 

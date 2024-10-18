@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SafeAreaView, StyleSheet, View, Dimensions } from "react-native";
-import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
 import StepsIndicator from "components/common/StepsIndicator";

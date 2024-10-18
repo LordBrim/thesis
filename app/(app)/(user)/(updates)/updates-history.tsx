@@ -5,7 +5,7 @@ import {
   COLORS,
   HORIZONTAL_SCREEN_MARGIN,
   SPACES,
-} from "../../../constants";
+} from "../../../../constants";
 import { FlatList } from "react-native";
 import AppointmentCard from "components/home/AppointmentCard";
 
@@ -28,7 +28,7 @@ export default function UpdatesHistory() {
           renderItem={({ item }) => (
             <View style={styles.cContainer}>
               <Image
-                source={require("../../../assets/images/bloodbag.png")}
+                source={require("../../../../assets/images/bloodbag.png")}
                 style={styles.image}
               />
               <View style={styles.text}>

@@ -1,10 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React, {
-  useState,
-  useRef,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import Description from "components/common/texts/Description";
 import { router } from "expo-router";
 import {
@@ -12,16 +7,15 @@ import {
   COLORS,
   SIZES,
   GS,
-} from "../../../constants";
+} from "../../../../constants";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { firestoreOperations } from "firestore-services";
 import { getAuth } from "firebase/auth";
-import { generateUniqueTicketCode } from "../../../utils/helperFunction";
-import TextInputWrapper from "components/common/TextInputWrapper";
+import { generateUniqueTicketCode } from "../../../../utils/helperFunction";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-import { checklistQuestions } from "../../../constants/database"; // Adjust the path to your database.js file
+import { checklistQuestions } from "../../../../constants/database"; // Adjust the path to your database.js file
 
 const mapAnswersToQuestions = (answers) => {
   return checklistQuestions.reduce((acc, question) => {

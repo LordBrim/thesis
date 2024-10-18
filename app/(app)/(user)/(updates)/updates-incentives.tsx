@@ -1,19 +1,6 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  SafeAreaView,
-  Image,
-} from "react-native";
+import { View, StyleSheet, FlatList, Image } from "react-native";
 import React from "react";
-import {
-  COLORS,
-  HORIZONTAL_SCREEN_MARGIN,
-  SIZES,
-  SPACES,
-} from "../../../constants";
+import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 
 export default function UpdatesIncentives() {
   return (
@@ -25,10 +12,6 @@ export default function UpdatesIncentives() {
       overScrollMode="never"
     />
   );
-}
-
-interface IDonationIncentives {
-  name: string;
 }
 
 function DonationIncentives() {
@@ -53,12 +36,12 @@ function DonationIncentive({ checked }: IDonationIncentive) {
   return (
     <View style={styles.dsContainer}>
       <Image
-        source={require("../../../assets/images/bloodbag.png")}
+        source={require("../../../../assets/images/bloodbag.png")}
         style={[styles.bloodbag, { opacity: checked ? 0.6 : 1 }]}
       />
       {checked && (
         <Image
-          source={require("../../../assets/images/check.png")}
+          source={require("../../../../assets/images/check.png")}
           style={styles.checkmark}
         />
       )}

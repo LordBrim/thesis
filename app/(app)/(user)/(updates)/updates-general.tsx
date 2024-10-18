@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import React from "react";
-import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
+import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 export default function UpdatesGeneral() {

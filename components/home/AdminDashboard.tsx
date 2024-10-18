@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
+import { FontAwesome6, Fontisto, Ionicons, Octicons } from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
@@ -34,26 +34,23 @@ export default function AdminDashboard() {
     },
     {
       href: "manage-events",
-      icon: (
-        <Ionicons name="calendar-outline" size={size} color={COLORS.primary} />
-      ),
+      icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
       title: "Events",
     },
     {
       href: "manage-faq",
-      icon: (
-        <Ionicons
-          name="chatbubbles-outline"
-          size={size}
-          color={COLORS.primary}
-        />
-      ),
+      icon: <Ionicons name="chatbubbles" size={size} color={COLORS.primary} />,
       title: "FAQ",
     },
     {
       href: "manage-incentives",
-      icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
+      icon: <Ionicons name="gift" size={size} color={COLORS.primary} />,
       title: "Incentives",
+    },
+    {
+      href: "manage-bloodunits",
+      icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
+      title: "Blood Units",
     },
   ];
 

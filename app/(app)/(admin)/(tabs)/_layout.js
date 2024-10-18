@@ -41,3 +41,14 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+function getHeaderTitle(route) {
+  const routeName = getFocusedRouteNameFromRoute(route) ?? "index";
+
+  switch (routeName) {
+    case "index":
+      return "Home";
+    case "account-tab":
+      return "Account";
+  }
+}

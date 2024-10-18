@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   sBtnView: {
     flex: 1,
     borderWidth: 1,
-    borderColor: COLORS.slate200,
+    borderColor: COLORS.grayLight,
     overflow: "hidden",
   },
   sBtnPress: {

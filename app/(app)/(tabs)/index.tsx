@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
   },
   scrollView: { gap: SPACES.xxl },
 });

@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 6,
     top: -10.5,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     paddingHorizontal: 4,
-    borderRadius: 50,
   },
 });

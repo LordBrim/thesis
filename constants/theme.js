@@ -1,14 +1,21 @@
 const COLORS = {
   primary: "#DA2F47",
-  secondary: "#444262",
-  tertiary: "#FF7754",
-  accent1: "#177AD5",
+  accent: "#177AD5",
+
+  text: "#21252F",
+  textLight: "#84848B",
+
+  background: "#ffffff",
+  modal: "",
+
+  grayLight: "#E2E8F0",
+  grayMid: "#83829A",
+  grayDark: "#84848B",
 
   success: "#63ad0e",
   error: "#b3002a",
-  warning: "",
-
-  line: "#FF3642",
+  enabled: "#DA2F47",
+  disabled: "#4d4d4d",
 
   slate50: "#f8fafc",
   slate100: "#f1f5f9",
@@ -17,26 +24,6 @@ const COLORS = {
   slate400: "#94a3b8",
   slate500: "#64748b",
   slate700: "#334155",
-
-  gray: "#83829A",
-  gray2: "#C1C0C8",
-  gray3: "#a5a4ab",
-
-  red: "#FF000F",
-  redTop: "#FF3642",
-  redWhite: "#FF364E",
-
-  white: "#FFFFFF",
-  lightWhite: "#FAFAFC",
-
-  black: "#333333",
-
-  enabled: "#bf2831",
-  disabled: "#8a8a8a",
-
-  warning: "#cc3300",
-
-  shadow: "#52006A",
 };
 
 const FONT = {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  SafeAreaView,
   View,
   Text,
   FlatList,
@@ -10,7 +9,7 @@ import {
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
 import LinkBtn from "components/common/LinkBtn";
-import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
+import { FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import moment from "moment"; // Import moment for date formatting

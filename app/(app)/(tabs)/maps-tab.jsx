@@ -124,20 +124,21 @@ function Maps({ setMapBackground, setMapHeader }) {
   return (
     <SafeAreaView style={styles.container}>
       {/* TODO: Add search function for multiple hospitals */}
-      <View style={styles.cTop}>
-        <View style={{ gap: 8 }}>
-          <Text style={GS.h1}>Find a medical institution</Text>
-          <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
-        </View>
+      {!selectedHospital && (
+        <View style={styles.cTop}>
+          <View style={{ gap: 8 }}>
+            <Text style={GS.h1}>Find a medical institution</Text>
+            <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
+          </View>
 
-        <TextInputWrapper>
-          <TextInput
-            placeholder="Find a medical institution..."
-            style={{ flex: 1 }}
-          />
-          <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
-        </TextInputWrapper>
-      </View>
+          <TextInputWrapper>
+            <TextInput
+              placeholder="Find a medical institution..."
+              style={{ flex: 1 }}
+            />
+            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+          </TextInputWrapper>
+        </View>
       )}
       {!selectedHospital &&
         HospitalsData.map((hospital) => (

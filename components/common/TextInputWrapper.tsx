@@ -6,15 +6,23 @@ type TextInputWrapperProps = {
   label?: string;
   children: React.ReactNode;
   error?: boolean;
+  customStyle?: object;
 };
 
 export default function TextInputWrapper({
   label,
   children,
   error,
+  customStyle = {},
 }: TextInputWrapperProps) {
   return (
-    <View style={[styles.container, error && styles.errorContainer]}>
+    <View
+      style={[
+        styles.container,
+        error && styles.errorContainer,
+        { ...styles.container, ...customStyle },
+      ]}
+    >
       {label && <Text style={styles.label}>{label}</Text>}
       {children}
     </View>

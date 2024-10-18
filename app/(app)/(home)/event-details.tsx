@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Title from "../../../components/common/texts/Title";
+// import Title from "../../../components/common/texts/Title";
 import Description from "../../../components/common/texts/Description";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import CallToActionBtn from "../../../components/common/CallToActionBtn";
@@ -45,7 +45,7 @@ export default function EventDetailsScreen() {
     router.replace("/(app)/(tabs)/maps-tab");
   };
 
-  console.log("imageURI", imageUri);
+  console.log("descrtiption", description);
 
   const donorsCount = 120;
   const donorsGoal = 200;

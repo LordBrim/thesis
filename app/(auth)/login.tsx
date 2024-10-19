@@ -39,7 +39,7 @@ import firestore, {
   getDoc,
   getFirestore,
 } from "firebase/firestore";
-import { FIRESTORE_DB } from "firebase-config";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 
 interface User {
   id: string;
@@ -143,7 +143,9 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
-      const docRef = doc(FIRESTORE_DB, "User", "0iPoIcv9ThhYOHiLsXRCudb2UbT2");
+      const user = FIREBASE_AUTH.currentUser;
+
+      const docRef = doc(FIRESTORE_DB, "User", user.uid);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.data().role === "admin") {

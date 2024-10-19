@@ -30,6 +30,17 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import firestore, {
+  collection,
+  query,
+  where,
+  doc,
+  getDocs,
+  getDoc,
+  getFirestore,
+} from "firebase/firestore";
+import { FIRESTORE_DB } from "firebase-config";
+
 interface User {
   id: string;
   role: string;
@@ -86,8 +97,6 @@ export default function LoginScreen() {
     }
   };
 
-  const [isAdmin, setIsAdmin] = useState(false);
-
   const login = async (email, password) => {
     console.log("Login attempt:", email, password); // Log the email and password before login attempt
 
@@ -134,7 +143,10 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
-      if (isAdmin) {
+      const docRef = doc(FIRESTORE_DB, "User", "0iPoIcv9ThhYOHiLsXRCudb2UbT2");
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.data().role === "admin") {
         router.replace("/(app)/(admin)/(tabs)");
       } else {
         router.replace("/(app)/(user)/(tabs)");
@@ -204,7 +216,7 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.cTop}>
         {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
-        <Pressable onPress={() => router.replace("/(app)/(tabs)")}>
+        <Pressable onPress={() => router.replace("/(app)/(user)/(tabs)")}>
           <LifelineLogo />
         </Pressable>
         {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}

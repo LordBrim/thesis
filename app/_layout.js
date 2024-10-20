@@ -14,20 +14,31 @@ export default function StackLayout() {
       <Stack.Screen name="(auth)/new-password" />
       <Stack.Screen name="(auth)/confirm-email" />
       {/* Home Screens */}
-      <Stack.Screen
-        name="(app)/(user)/(tabs)"
+      {/* <Stack.Screen
+        name="(app)/(super)/(tabs)"
         options={({ route }) => ({
-          headerTitle: getHeaderTitle(route),
+          headerTitle: "Super Admin",
         })}
-      />
+      /> */}
       <Stack.Screen
         name="(app)/(admin)/(tabs)"
         options={({ route }) => ({
           headerTitle: getHeaderTitle(route),
         })}
       />
+      {/* <Stack.Screen
+        name="(app)/(staff)/(tabs)"
+        options={({ route }) => ({
+          headerTitle: "Staff",
+        })}
+      /> */}
+      <Stack.Screen
+        name="(app)/(user)/(tabs)"
+        options={({ route }) => ({
+          headerTitle: getHeaderTitle(route),
+        })}
+      />
       {/* User Level Home Screens */}
-
       <Stack.Screen name="(app)/(user)/(home)/request" />
       <Stack.Screen name="(app)/(user)/(home)/event-details" />
       <Stack.Screen
@@ -42,7 +53,6 @@ export default function StackLayout() {
           headerTitle: "Admin Dashboard",
         }}
       />
-
       <Stack.Screen
         name="(app)/(user)/(home)/all-events"
         options={{
@@ -50,7 +60,6 @@ export default function StackLayout() {
           headerTitleAlign: "center",
         }}
       />
-
       {/* Staff Level Home Screens */}
       <Stack.Screen name="(app)/(admin)/(home)/manage-blood-units" />
       <Stack.Screen name="(app)/(admin)/(home)/manage-events" />

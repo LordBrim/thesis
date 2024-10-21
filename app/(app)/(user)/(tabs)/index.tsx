@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Events, Welcome } from "../../../../components";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import UpcomingAppointments from "components/home/UpcomingAppointments";
-import AdminDashboard from "components/home/AdminDashboard";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { COLORS, SPACES } from "../../../../constants/theme";
 import { router } from "expo-router";

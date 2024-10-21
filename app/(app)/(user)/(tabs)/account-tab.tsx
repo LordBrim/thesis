@@ -27,6 +27,8 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import IconModal from "../../(common)/custom-album-modal";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -195,8 +197,15 @@ export default function AccountTab({
     });
   };
 
+  const { user } = useSelector((state: RootState) => state.user);
+
   return (
     <ScrollView style={styles.container} overScrollMode="never">
+      <Text>{user.displayName}</Text>
+      <Text>{user.email}</Text>
+      <Text>{user.password}</Text>
+      <Text>{user.role}</Text>
+
       <View style={styles.profile}>
         {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} />

@@ -2,8 +2,12 @@ import { Stack } from "expo-router/stack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import Toastable from "react-native-toastable";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function StackLayout() {
+  const { top } = useSafeAreaInsets();
+
   return (
     <Provider store={store}>
       <Stack
@@ -82,6 +86,18 @@ export default function StackLayout() {
         <Stack.Screen name="(aux)/no-internet" />
         <Stack.Screen name="(aux)/terms-and-conditions" />
       </Stack>
+      <Toastable
+        statusMap={{
+          success: "#171717",
+          danger: "yellow",
+          warning: "green",
+          info: "blue",
+        }}
+        messageColor="white"
+        offset={60}
+        position="bottom"
+        swipeDirection={["left", "right"]}
+      />
     </Provider>
   );
 }

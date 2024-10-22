@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import NoInternetScreen from "./(aux)/no-internet";
 import { Login } from "./screens";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function Authentication() {
   const [isConnected, setConnected] = useState(true);
@@ -28,5 +29,9 @@ export default function Authentication() {
     );
   };
 
-  return <>{isConnected ? <Login /> : <NoInternetScreen />}</>;
+  return (
+    <SafeAreaProvider>
+      {isConnected ? <Login /> : <NoInternetScreen />}
+    </SafeAreaProvider>
+  );
 }

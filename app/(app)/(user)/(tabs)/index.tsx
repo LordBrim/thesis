@@ -52,17 +52,6 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
-        <Button
-          title="Show Toastable"
-          onPress={() =>
-            showToastable({
-              message: "React Native Heroes is awesome! 🚀",
-              status: "success",
-            })
-          }
-        />
-        <Button title="Hide Toastable" onPress={() => hideToastable()} />
-
         <Welcome toDonate="/donate" toRequest="/request" />
         {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
         <UpcomingAppointments />

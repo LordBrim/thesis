@@ -88,15 +88,17 @@ export default function StackLayout() {
       </Stack>
       <Toastable
         statusMap={{
-          success: "#171717",
+          success: "#262626",
           danger: "yellow",
           warning: "green",
           info: "blue",
         }}
         messageColor="white"
-        offset={60}
-        position="bottom"
+        offset={top}
+        position="top"
         swipeDirection={["left", "right"]}
+        duration={5000}
+        alwaysVisible={true}
       />
     </Provider>
   );

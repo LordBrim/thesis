@@ -11,39 +11,36 @@ type IQuestionCard = {
 export default function QuestionCard({ question, answer }: IQuestionCard) {
   const [open, setOpen] = useState(false);
   return (
-    <View>
+    <>
       <Pressable
-        style={styles.container}
+        style={styles.qContainer}
         onPress={open ? () => setOpen(false) : () => setOpen(true)}
         android_ripple={{ radius: 250 }}
       >
-        <View style={styles.qContainer}>
-          <Text style={styles.question}>{question}</Text>
-          {open ? (
-            <IconBtn icon="minus" size={18} onPress={() => setOpen(false)} />
-          ) : (
-            <IconBtn icon="plus" size={18} onPress={() => setOpen(true)} />
-          )}
-        </View>
+        <Text style={styles.question}>{question}</Text>
+        {open ? (
+          <IconBtn icon="minus" size={18} onPress={() => setOpen(false)} />
+        ) : (
+          <IconBtn icon="plus" size={18} onPress={() => setOpen(true)} />
+        )}
       </Pressable>
       {open ? (
         <View style={styles.aContainer}>
           <Text style={styles.answer}>{answer}</Text>
         </View>
       ) : null}
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-  },
   qContainer: {
     width: "100%",
+    minHeight: 45,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   question: {
     flex: 1,
@@ -51,14 +48,14 @@ const styles = StyleSheet.create({
   },
   aContainer: {
     width: "100%",
+    minHeight: 45,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 8,
   },
   answer: {
     flex: 1,
     flexDirection: "row",
-    marginBottom: 10,
   },
 });

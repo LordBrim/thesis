@@ -11,31 +11,35 @@ type IQuestionCard = {
 export default function QuestionCard({ question, answer }: IQuestionCard) {
   const [open, setOpen] = useState(false);
   return (
-    <Pressable
-      style={styles.container}
-      onPress={open ? () => setOpen(false) : () => setOpen(true)}
-      android_ripple={{ radius: 250 }}
-    >
-      <View style={styles.cQuestion}>
-        <Text style={styles.question}>{question}</Text>
-        {open ? (
-          <IconBtn icon="minus" size={18} onPress={() => setOpen(false)} />
-        ) : (
-          <IconBtn icon="plus" size={18} onPress={() => setOpen(true)} />
-        )}
-      </View>
-      {open ? <Text style={styles.answer}>{answer}</Text> : null}
-    </Pressable>
+    <View>
+      <Pressable
+        style={styles.container}
+        onPress={open ? () => setOpen(false) : () => setOpen(true)}
+        android_ripple={{ radius: 250 }}
+      >
+        <View style={styles.qContainer}>
+          <Text style={styles.question}>{question}</Text>
+          {open ? (
+            <IconBtn icon="minus" size={18} onPress={() => setOpen(false)} />
+          ) : (
+            <IconBtn icon="plus" size={18} onPress={() => setOpen(true)} />
+          )}
+        </View>
+      </Pressable>
+      {open ? (
+        <View style={styles.aContainer}>
+          <Text style={styles.answer}>{answer}</Text>
+        </View>
+      ) : null}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: COLORS.grayLight,
-    borderTopWidth: 1,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
-  cQuestion: {
+  qContainer: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -44,6 +48,14 @@ const styles = StyleSheet.create({
   question: {
     flex: 1,
     fontWeight: "400",
+  },
+  aContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 4,
   },
   answer: {
     flex: 1,

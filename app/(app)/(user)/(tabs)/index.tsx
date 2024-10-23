@@ -1,14 +1,15 @@
-import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Events, Welcome } from "../../../../components";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import UpcomingAppointments from "components/home/UpcomingAppointments";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-import { COLORS, SPACES } from "../../../../constants/theme";
+import { COLORS, SIZES, SPACES } from "../../../../constants/theme";
 import { router } from "expo-router";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { View } from "react-native";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
@@ -42,6 +43,8 @@ export default function HomeTab() {
     checkUserInfo();
   }, []);
 
+  const [donateStatus, setDonateStatus] = useState(true);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -50,6 +53,50 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
+        <View style={styles.donations}>
+          <View style={styles.donation}>
+            <Text
+              style={[
+                styles.title,
+                {
+                  color: COLORS.text,
+                  fontSize: SIZES.small,
+                  textAlign: "center",
+                },
+              ]}
+            >
+              Donation Status:{"\n"}
+              {donateStatus ? (
+                <Text style={{ color: "green", fontSize: SIZES.large }}>
+                  Available
+                </Text>
+              ) : (
+                <Text style={{ color: "red", fontSize: SIZES.large }}>
+                  Locked{"\n"}(3 Months)
+                </Text>
+              )}
+            </Text>
+          </View>
+
+          <View style={styles.donation}>
+            <Text
+              style={[
+                styles.title,
+                {
+                  color: COLORS.text,
+                  fontSize: SIZES.small,
+                  textAlign: "center",
+                },
+              ]}
+            >
+              Units Donated:{"\n"}
+              <Text style={{ fontSize: SIZES.large, color: COLORS.text }}>
+                25
+              </Text>
+            </Text>
+          </View>
+        </View>
+
         <Welcome toDonate="/donate" toRequest="/request" />
         <UpcomingAppointments />
         <Events />
@@ -79,4 +126,26 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   scrollView: { gap: SPACES.xxl },
+  donations: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    overflow: "hidden",
+    backgroundColor: COLORS.background,
+    minHeight: 110,
+  },
+  donation: {
+    flex: 1,
+    alignItems: "center",
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
+    borderColor: COLORS.slate100,
+  },
+  title: {
+    fontSize: SIZES.large,
+    fontWeight: "bold",
+    textTransform: "capitalize",
+    color: COLORS.primary,
+  },
 });

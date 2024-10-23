@@ -31,7 +31,7 @@ import {
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { getCurrentUser } from "rtx/fbActions/getCurrentUser";
+import { getCurrentUser } from "rtx/slices/user";
 
 interface User {
   id: string;
@@ -39,6 +39,8 @@ interface User {
 }
 
 export default function LoginScreen() {
+  const { user } = useSelector((state: RootState) => state.user);
+
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
     Raleway_500Medium,
@@ -90,7 +92,7 @@ export default function LoginScreen() {
   };
 
   const login = async (email, password) => {
-    console.log("Login attempt:", email, password); // Log the email and password before login attempt
+    // console.log("Login attempt:", email, password); // Log the email and password before login attempt
 
     if (!email || !password) {
       console.log("Login blocked due to missing email or password");
@@ -126,7 +128,7 @@ export default function LoginScreen() {
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in successfully");
+      // console.log("User logged in successfully");
 
       if (toggleRemember) {
         await AsyncStorage.setItem("user_logged_in", "true");
@@ -135,16 +137,11 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
-      useEffect(() => {
-        const dispatch = useDispatch<AppDispatch>();
-        dispatch(getCurrentUser());
-      });
-
-      const { user } = useSelector((state: RootState) => state.user);
-
-      if ("admin" === "admin") {
+      if (user.role === "admin") {
+        console.log(user.role);
         router.replace("/(app)/(admin)/(tabs)");
       } else {
+        console.log(user.role);
         router.replace("/(app)/(user)/(tabs)");
       }
     } catch (error) {
@@ -153,6 +150,12 @@ export default function LoginScreen() {
       setLoading(false);
     }
   };
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, []);
 
   useEffect(() => {
     const checkLoginState = async () => {
@@ -164,8 +167,8 @@ export default function LoginScreen() {
           const storedEmail = await AsyncStorage.getItem("user_email");
           const storedPassword = await AsyncStorage.getItem("user_password");
 
-          console.log("Stored email:", storedEmail); // Add this log
-          console.log("Stored password:", storedPassword); // Add this log
+          // console.log("Stored email:", storedEmail); // Add this log
+          // console.log("Stored password:", storedPassword); // Add this log
 
           if (storedEmail && storedPassword) {
             setEmail(storedEmail);

@@ -12,7 +12,7 @@ export const FAQuestions = [
   },
   {
     id: 3,
-    question: "What is the sample question 4?",
+    question: "What is the sample question 3?",
     answer:
       "Lorem ipsum fafas cxvv sfas fasj fak waek j sf a as vvsdfasfa  qweqw dasd czx askda ads",
   },

@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: "row",
-    height: 90,
     gap: SPACES.sm,
   },
   title: {

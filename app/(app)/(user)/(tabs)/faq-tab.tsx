@@ -47,7 +47,7 @@ export default function FAQTab() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      <ScrollView overScrollMode="never">
         <View style={styles.cTop}>
           <View style={{ gap: 8 }}>
             <Text style={GS.h1}>
@@ -82,9 +82,20 @@ export default function FAQTab() {
             renderItem={({ item }) => <QuestionPanel title={item.title} />}
             keyExtractor={(item) => item.id.toString()}
             overScrollMode="never"
+            scrollEnabled={false}
           />
         </View>
-      </View>
+
+        <View style={styles.panels}>
+          <FlatList
+            data={filteredData}
+            renderItem={({ item }) => <QuestionPanel title={item.title} />}
+            keyExtractor={(item) => item.id.toString()}
+            overScrollMode="never"
+            scrollEnabled={false}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -96,6 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORS.background,
+    paddingBottom: HORIZONTAL_SCREEN_MARGIN,
   },
   cTop: {
     width: "100%",

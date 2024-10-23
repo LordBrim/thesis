@@ -9,8 +9,6 @@ import { router } from "expo-router";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Button } from "react-native";
-import { hideToastable, showToastable } from "react-native-toastable";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
@@ -53,7 +51,6 @@ export default function HomeTab() {
         overScrollMode="never"
       >
         <Welcome toDonate="/donate" toRequest="/request" />
-        {/* Role-Based Component // Staff // Manage Users // Manage Blood Units */}
         <UpcomingAppointments />
         <Events />
       </ScrollView>

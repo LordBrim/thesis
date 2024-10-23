@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontWeight: "400",
+    fontWeight: "bold",
   },
   aContainer: {
     width: "100%",
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingVertical: 4,
   },
   answer: {
     flex: 1,

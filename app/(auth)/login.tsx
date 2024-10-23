@@ -31,6 +31,8 @@ import {
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
+import { doc, getDoc } from "firebase/firestore";
 import { getCurrentUser } from "rtx/slices/user";
 
 interface User {
@@ -39,15 +41,6 @@ interface User {
 }
 
 export default function LoginScreen() {
-  const { user } = useSelector((state: RootState) => state.user);
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  const [dipatched, setDispatched] = useState(false);
-  useEffect(() => {
-    dispatch(getCurrentUser());
-  }, [setDispatched]);
-
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
     Raleway_500Medium,
@@ -144,14 +137,16 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
-      setDispatched(true);
+      const user = FIREBASE_AUTH.currentUser;
 
-      if (user.role === "admin") {
+      const docRef = doc(FIRESTORE_DB, "User", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.data().role === "admin") {
         router.replace("/(app)/(admin)/(tabs)");
       } else {
         router.replace("/(app)/(user)/(tabs)");
       }
-      console.log("Role After Login: " + user.role);
     } catch (error) {
       setModalVisible(true);
     } finally {

@@ -42,7 +42,6 @@ export default function ActionBtn({ href, title, subtitle, cta }: IActionBtn) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    maxHeight: 90,
     width: "50%",
     aspectRatio: 16 / 9,
     borderRadius: SIZES.small,

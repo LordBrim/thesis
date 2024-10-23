@@ -12,7 +12,7 @@ export default function UpcomingAppointments() {
       </View>
       {hasAppointments ? (
         <FlatList
-          data={sampleAppointments}
+          data={sampleAppointment}
           renderItem={({ item }) => (
             <AppointmentCard
               location={item.location}
@@ -133,8 +133,9 @@ const card = StyleSheet.create({
   },
 });
 
-const sampleAppointments = [
+const sampleAppointment = [
   {
+    id: "0",
     location: "Makati Medical Center",
     date: "Feb 15, 2024",
     time: "5:00pm-5:30pm",

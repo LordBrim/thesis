@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { COLORS, SIZES, SPACES } from "../../constants/theme";
-import { Link } from "expo-router";
+import { SIZES, SPACES } from "../../constants/theme";
 import ActionBtn from "./ActionBtn";
 
 export default function Welcome({ toDonate, toRequest }) {
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    gap: SPACES.md,
+    gap: SPACES.sm,
   },
   buttons: {
     flexDirection: "row",

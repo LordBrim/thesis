@@ -1,4 +1,4 @@
-import { Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
 import { SPACES, SIZES, COLORS } from "../../constants";
@@ -20,7 +20,7 @@ export default function ActionBtn({ href, title, subtitle, cta }: IActionBtn) {
         cta ? styles.ctaContainer : styles.defaultContainer,
       ]}
     >
-      <TouchableOpacity>
+      <Pressable android_ripple={{ radius: 200 }}>
         <Text
           style={[styles.title, cta ? styles.ctaTitle : styles.defaultTitle]}
         >
@@ -34,7 +34,7 @@ export default function ActionBtn({ href, title, subtitle, cta }: IActionBtn) {
         >
           {subtitle}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
     </Link>
   );
 }
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.small,
     padding: SPACES.md,
     justifyContent: "space-between",
+    overflow: "hidden",
   },
   defaultContainer: {
     borderWidth: 1,

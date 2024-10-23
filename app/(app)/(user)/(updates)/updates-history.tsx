@@ -7,13 +7,13 @@ import {
   SPACES,
 } from "../../../../constants";
 import { FlatList } from "react-native";
-import AppointmentCard from "components/home/AppointmentCard";
+// import AppointmentCard from "components/home/AppointmentCard";
 
 export default function UpdatesHistory() {
   return (
     <View style={styles.container}>
       <View style={{ gap: 8, flex: 1, width: "100%" }}>
-        <AppointmentCard
+        {/* <AppointmentCard
           location="Request Accepted"
           date="Sept 18, 2024"
           time="1:01pm"
@@ -22,7 +22,7 @@ export default function UpdatesHistory() {
           location="Request Accepted"
           date="Sept 18, 2024"
           time="1:01pm"
-        />
+        /> */}
         <FlatList
           data={sampleData}
           renderItem={({ item }) => (

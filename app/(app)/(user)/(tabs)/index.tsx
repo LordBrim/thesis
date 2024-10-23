@@ -1,7 +1,7 @@
 import { StyleSheet, SafeAreaView, ScrollView, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Events, Welcome } from "../../../../components";
-import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
+import { GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import UpcomingAppointments from "components/home/UpcomingAppointments";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { COLORS, SIZES, SPACES } from "../../../../constants/theme";
@@ -64,7 +64,15 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
-        <Text>{user.displayName}</Text>
+        <View>
+          <Text style={GS.h3}>
+            Welcome Back!
+            <Text style={[GS.h1, { color: COLORS.primary }]}>
+              {" "}
+              {user.displayName}
+            </Text>
+          </Text>
+        </View>
         <View style={styles.donations}>
           <View style={styles.donation}>
             <Text

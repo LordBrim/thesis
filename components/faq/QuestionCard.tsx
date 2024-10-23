@@ -36,7 +36,7 @@ export default function QuestionCard({ question, answer }: IQuestionCard) {
 const styles = StyleSheet.create({
   qContainer: {
     width: "100%",
-    minHeight: 45,
+    minHeight: 35,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -48,11 +48,12 @@ const styles = StyleSheet.create({
   },
   aContainer: {
     width: "100%",
-    minHeight: 45,
+    minHeight: 35,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingVertical: 8,
+    paddingTop: 8,
+    paddingBottom: 16,
   },
   answer: {
     flex: 1,

@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
   title: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingVertical: 8,
+    color: COLORS.primary,
   },
 });

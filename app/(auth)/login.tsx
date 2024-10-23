@@ -41,6 +41,13 @@ interface User {
 export default function LoginScreen() {
   const { user } = useSelector((state: RootState) => state.user);
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [dipatched, setDispatched] = useState(false);
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [setDispatched]);
+
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
     Raleway_500Medium,
@@ -137,25 +144,20 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
+      setDispatched(true);
+
       if (user.role === "admin") {
-        console.log(user.role);
         router.replace("/(app)/(admin)/(tabs)");
       } else {
-        console.log(user.role);
         router.replace("/(app)/(user)/(tabs)");
       }
+      console.log("Role After Login: " + user.role);
     } catch (error) {
       setModalVisible(true);
     } finally {
       setLoading(false);
     }
   };
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(getCurrentUser());
-  }, []);
 
   useEffect(() => {
     const checkLoginState = async () => {

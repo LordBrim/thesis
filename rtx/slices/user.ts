@@ -8,20 +8,23 @@ export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
     const user = FIREBASE_AUTH.currentUser;
 
     if (!user) {
-      throw new Error("No user is currently logged in.");
+      // console.log("No user is currently logged in.");
+      return null;
     }
 
     const docRef = doc(FIRESTORE_DB, "User", user.uid);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      throw new Error("User document does not exist.");
+      // console.log("User document does not exist.");
+      return null;
     }
 
-    console.log(docSnap.data());
-    return docSnap.data();
+    // console.log(docSnap.data());
+    return docSnap.data() as UserState["user"];
   } catch (error) {
-    console.error("Failed to getCurrentUser.");
+    // console.error("Failed to getCurrentUser.");
+    return null;
   }
 });
 
@@ -52,11 +55,12 @@ export const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
-      const { displayName, email, password, role } = action.payload;
-      state.user.displayName = displayName;
-      state.user.email = email;
-      state.user.password = password;
-      state.user.role = role;
+      if (action.payload) {
+        state.user = action.payload; // Only update the state if data exists
+      } else {
+        // Handle the case where no user data is found (optional)
+        state.user = initialState.user; // Reset to initial state or another appropriate action
+      }
     });
   },
 });

@@ -12,7 +12,7 @@ import {
 
 export const getFAQs = createAsyncThunk("getFAQs", async () => {
   try {
-    const faqsCollectionRef = collection(FIRESTORE_DB, "faqs");
+    const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
     const querySnapshot = await getDocs(faqsCollectionRef);
 
     const faqs = querySnapshot.docs.map((doc) => ({

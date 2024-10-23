@@ -10,6 +10,9 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/store";
+import { getCurrentUser } from "rtx/slices/user";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
@@ -45,6 +48,14 @@ export default function HomeTab() {
 
   const [donateStatus, setDonateStatus] = useState(true);
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, []);
+
+  const { user } = useSelector((state: RootState) => state.user);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -53,6 +64,7 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
+        <Text>{user.displayName}</Text>
         <View style={styles.donations}>
           <View style={styles.donation}>
             <Text

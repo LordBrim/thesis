@@ -1,13 +1,5 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  SafeAreaView,
-  Image,
-} from "react-native";
+import { StyleSheet, View, Text, FlatList, Image } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
-import AppointmentCard from "./AppointmentCard";
 import { useState } from "react";
 
 export default function UpcomingAppointments() {
@@ -38,15 +30,40 @@ export default function UpcomingAppointments() {
           <Image
             source={require("../../assets/images/no-appointments.png")}
             style={{
-              width: "20%",
-              height: 120,
+              width: "10%",
+              height: 50,
             }}
           />
-          <Text style={{ color: COLORS.text, textAlign: "center" }}>
-            You Have No {"\n"} Scheduled Appointments
-          </Text>
+          <Text style={{ color: COLORS.text }}>No Scheduled Appointments</Text>
         </View>
       )}
+    </View>
+  );
+}
+
+type IAppointmentCard = {
+  location: string;
+  date: string;
+  time: string;
+};
+
+export function AppointmentCard({ location, date, time }: IAppointmentCard) {
+  return (
+    <View style={card.container}>
+      <Image
+        source={require("../../assets/images/bloodbag.png")}
+        style={card.image}
+      />
+      <View style={card.text}>
+        <Text style={card.location} numberOfLines={1}>
+          {location || "Medical Institution"}
+        </Text>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={card.details}>{date}</Text>
+          <Text style={card.details}> • {time}</Text>
+        </View>
+      </View>
+      <View style={card.line} />
     </View>
   );
 }
@@ -71,23 +88,55 @@ const styles = StyleSheet.create({
   },
   empty: {
     flex: 1,
-    height: 320,
+    height: 70,
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    gap: 16,
+  },
+});
+
+const card = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    paddingHorizontal: 32,
+    paddingVertical: SPACES.md,
+    borderRadius: SIZES.small,
+    elevation: 3,
+    shadowColor: "#52006A",
+    gap: SPACES.md,
+    backgroundColor: COLORS.background,
+    position: "relative",
+    maxHeight: 70,
+    minHeight: 70,
+  },
+  image: { height: 45, width: 25 },
+  text: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  location: {
+    fontSize: SIZES.medium,
+    fontWeight: "bold",
+  },
+  details: {
+    fontSize: SIZES.small,
+  },
+  line: {
+    width: 2,
+    height: "100%",
+    position: "absolute",
+    backgroundColor: COLORS.line,
+    left: 43.3,
+    bottom: 0,
   },
 });
 
 const sampleAppointments = [
   {
-    id: 1,
     location: "Makati Medical Center",
     date: "Feb 15, 2024",
-    time: "5:00pm-5:30pm",
-  },
-  {
-    id: 2,
-    location: "Mandaluyong Health Care Center",
-    date: "May 15, 2024",
     time: "5:00pm-5:30pm",
   },
 ];

@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   title: {
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     fontWeight: "bold",
   },
   loadingContainer: {

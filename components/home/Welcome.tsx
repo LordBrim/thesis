@@ -6,6 +6,8 @@ import ActionBtn from "./ActionBtn";
 export default function Welcome({ toDonate, toRequest }) {
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Get Started</Text>
+
       <View style={styles.buttons}>
         <ActionBtn
           href={toDonate}
@@ -27,11 +29,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    gap: SPACES.xs,
+    gap: SPACES.md,
   },
   buttons: {
     flexDirection: "row",
     height: 90,
     gap: SPACES.sm,
+  },
+  title: {
+    fontSize: SIZES.medium,
+    fontWeight: "bold",
   },
 });

@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     fontWeight: "bold",
   },
   flatlist: {

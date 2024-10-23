@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxHeight: 90,
-    maxWidth: 175,
+    width: "50%",
     aspectRatio: 16 / 9,
     borderRadius: SIZES.small,
     padding: SPACES.md,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   defaultContainer: {
     borderWidth: 1,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.grayLight,
   },
   ctaContainer: {
     backgroundColor: COLORS.primary,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   defaultTitle: {},
   ctaTitle: {
-    color: COLORS.white,
+    color: COLORS.background,
   },
   subtitle: {
     fontSize: SIZES.small,
@@ -71,6 +71,6 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   ctaSubtitle: {
-    color: COLORS.white,
+    color: COLORS.background,
   },
 });

@@ -93,6 +93,7 @@ export default function FAQTab() {
             keyExtractor={(item) => item.id.toString()}
             overScrollMode="never"
             scrollEnabled={false}
+            contentContainerStyle={{ gap: 16 }}
           />
         </View>
       </ScrollView>

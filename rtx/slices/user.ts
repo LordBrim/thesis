@@ -1,7 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../app/store";
-import { getCurrentUser } from "rtx/fbActions/getCurrentUser";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
+import { doc, getDoc } from "firebase/firestore";
+
+export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+
+    if (!user) {
+      throw new Error("No user is currently logged in.");
+    }
+
+    const docRef = doc(FIRESTORE_DB, "User", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      throw new Error("User document does not exist.");
+    }
+
+    console.log(docSnap.data());
+    return docSnap.data();
+  } catch (error) {
+    console.error("Failed to getCurrentUser.");
+  }
+});
 
 // Define a type for the slice state
 interface UserState {
@@ -9,7 +31,7 @@ interface UserState {
     displayName: string;
     email: string;
     password: string;
-    role: "" | "user" | "staff" | "admin" | "super";
+    role: "user" | "staff" | "admin" | "super";
   };
 }
 
@@ -19,7 +41,7 @@ const initialState: UserState = {
     displayName: "",
     email: "",
     password: "",
-    role: "",
+    role: "user",
   },
 };
 
@@ -27,20 +49,14 @@ export const userSlice = createSlice({
   name: "user",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {
-    // setUser: (state, action) => {
-    //   state.user.displayName = action.payload.displayName;
-    //   state.user.email = action.payload.email;
-    //   state.user.password = action.payload.password;
-    //   state.user.role = action.payload.role;
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCurrentUser.fulfilled, (state, action) => {
-      state.user.displayName = action.payload.displayName;
-      state.user.email = action.payload.email;
-      state.user.password = action.payload.password;
-      state.user.role = action.payload.role;
+      const { displayName, email, password, role } = action.payload;
+      state.user.displayName = displayName;
+      state.user.email = email;
+      state.user.password = password;
+      state.user.role = role;
     });
   },
 });

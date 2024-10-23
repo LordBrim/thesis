@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   Pressable,
-  Alert,
   StyleSheet,
   Image,
   AppState,
@@ -30,16 +29,9 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-import firestore, {
-  collection,
-  query,
-  where,
-  doc,
-  getDocs,
-  getDoc,
-  getFirestore,
-} from "firebase/firestore";
-import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/store";
+import { getCurrentUser } from "rtx/fbActions/getCurrentUser";
 
 interface User {
   id: string;
@@ -143,12 +135,14 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
-      const user = FIREBASE_AUTH.currentUser;
+      useEffect(() => {
+        const dispatch = useDispatch<AppDispatch>();
+        dispatch(getCurrentUser());
+      });
 
-      const docRef = doc(FIRESTORE_DB, "User", user.uid);
-      const docSnap = await getDoc(docRef);
+      const { user } = useSelector((state: RootState) => state.user);
 
-      if (docSnap.data().role === "admin") {
+      if ("admin" === "admin") {
         router.replace("/(app)/(admin)/(tabs)");
       } else {
         router.replace("/(app)/(user)/(tabs)");

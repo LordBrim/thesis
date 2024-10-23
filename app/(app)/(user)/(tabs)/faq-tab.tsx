@@ -1,5 +1,5 @@
 import { View, ScrollView, FlatList, SafeAreaView, Text } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import {
   FAQuestions,
@@ -12,6 +12,9 @@ import { StyleSheet } from "react-native";
 import { COLORS } from "../../../../constants/theme";
 import Description from "../../../../components/common/texts/Description";
 import TextInputWrapper from "../../../../components/common/TextInputWrapper";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/store";
+import { getFAQs } from "rtx/slices/faq";
 
 export default function FAQTab() {
   const [searchText, setSearchText] = useState("");
@@ -33,6 +36,14 @@ export default function FAQTab() {
     ).map((item) => ({ id: item.id, title: item.question }));
     setFilteredData(filtered);
   };
+
+  const { faqs } = useSelector((state: RootState) => state.faqs);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getFAQs());
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,6 +68,13 @@ export default function FAQTab() {
             <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
           </TextInputWrapper>
         </View>
+
+        {faqs.map((faqs) => (
+          <View key={faqs.id}>
+            <Text>{faqs.answer}</Text>
+            <Text>{faqs.question}</Text>
+          </View>
+        ))}
 
         <View style={styles.panels}>
           <FlatList

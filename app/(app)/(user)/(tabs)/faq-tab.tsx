@@ -1,4 +1,12 @@
-import { View, ScrollView, FlatList, SafeAreaView, Text } from "react-native";
+import {
+  View,
+  ScrollView,
+  FlatList,
+  SafeAreaView,
+  Text,
+  SectionList,
+  Pressable,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import {
@@ -15,18 +23,19 @@ import TextInputWrapper from "../../../../components/common/TextInputWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { getFAQs } from "rtx/slices/faq";
+import IconBtn from "components/common/IconButton";
 
 export default function FAQTab() {
-  const [searchText, setSearchText] = useState("");
-  const [filteredData, setFilteredData] = useState([
-    {
-      id: 1,
-      title: "Blood Donation",
-    },
-    { id: 2, title: "Blood" },
-    { id: 3, title: "Other Questions" },
-  ]);
+  const { faqs } = useSelector((state: RootState) => state.faqs);
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(getFAQs());
+  }, []);
 
+  const [searchText, setSearchText] = useState("");
+
+  // TODO: Nasira ko ulit lol paayos na lng mamaya @angelomunar
+  const [filteredData, setFilteredData] = useState([]);
   const handleSearch = (text) => {
     setSearchText(text);
     const filtered = FAQuestions.filter(
@@ -36,14 +45,6 @@ export default function FAQTab() {
     ).map((item) => ({ id: item.id, title: item.question }));
     setFilteredData(filtered);
   };
-
-  const { faqs } = useSelector((state: RootState) => state.faqs);
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(getFAQs());
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,28 +70,13 @@ export default function FAQTab() {
           </TextInputWrapper>
         </View>
 
-        {faqs.map((faqs) => (
-          <View key={faqs.id}>
-            <Text>{faqs.answer}</Text>
-            <Text>{faqs.question}</Text>
-          </View>
-        ))}
-
         <View style={styles.panels}>
           <FlatList
-            data={filteredData}
-            renderItem={({ item }) => <QuestionPanel title={item.title} />}
-            keyExtractor={(item) => item.id.toString()}
-            overScrollMode="never"
-            scrollEnabled={false}
-          />
-        </View>
-
-        <View style={styles.panels}>
-          <FlatList
-            data={filteredData}
-            renderItem={({ item }) => <QuestionPanel title={item.title} />}
-            keyExtractor={(item) => item.id.toString()}
+            data={faqs}
+            renderItem={({ item }) => (
+              <QuestionPanel title={item.title} questions={item.questions} />
+            )}
+            keyExtractor={(item) => item.title}
             overScrollMode="never"
             scrollEnabled={false}
             contentContainerStyle={{ gap: 16 }}
@@ -98,6 +84,36 @@ export default function FAQTab() {
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+type IQuestionCard = {
+  question: string;
+  answer: string;
+};
+
+export function QuestionCard({ question, answer }: IQuestionCard) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Pressable
+        style={card.qContainer}
+        onPress={open ? () => setOpen(false) : () => setOpen(true)}
+        android_ripple={{ radius: 250 }}
+      >
+        <Text style={card.question}>{question}</Text>
+        {open ? (
+          <IconBtn icon="minus" size={18} onPress={() => setOpen(false)} />
+        ) : (
+          <IconBtn icon="plus" size={18} onPress={() => setOpen(true)} />
+        )}
+      </Pressable>
+      {open ? (
+        <View style={card.aContainer}>
+          <Text style={card.answer}>{answer}</Text>
+        </View>
+      ) : null}
+    </>
   );
 }
 
@@ -120,5 +136,44 @@ const styles = StyleSheet.create({
   },
   panels: {
     gap: 20,
+  },
+});
+
+const panel = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderColor: COLORS.slate100,
+  },
+  title: {
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 8,
+  },
+});
+
+const card = StyleSheet.create({
+  qContainer: {
+    width: "100%",
+    minHeight: 35,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
+  question: {
+    flex: 1,
+    fontWeight: "bold",
+  },
+  aContainer: {
+    width: "100%",
+    minHeight: 35,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingTop: 8,
+    paddingBottom: 16,
+  },
+  answer: {
+    flex: 1,
+    flexDirection: "row",
   },
 });

@@ -118,12 +118,13 @@ export const faqsSlice = createSlice({
       action: PayloadAction<{ title: string; newQuestion: QuestionState }>
     ) => {
       const { title, newQuestion } = action.payload;
+      const { question, answer } = newQuestion;
       const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
       if (faqIndex !== -1) {
-        state.faqs[faqIndex].questions.push(newQuestion);
+        state.faqs[faqIndex].questions.push({ question, answer });
       } else {
-        state.faqs.push({ title, questions: [newQuestion] });
+        state.faqs.push({ title, questions: [{ question, answer }] });
       }
     },
     updateQuestion: (

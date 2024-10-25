@@ -20,7 +20,10 @@ export default function ManageFaqQuestion() {
           autoCapitalize="none"
           autoCorrect={true}
           enablesReturnKeyAutomatically
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            padding: 12,
+          }}
         />
       </TextInputWrapper>
       <TextInputWrapper label="Answer">
@@ -31,7 +34,10 @@ export default function ManageFaqQuestion() {
           autoCapitalize="none"
           autoCorrect={true}
           enablesReturnKeyAutomatically
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            padding: 12,
+          }}
         />
       </TextInputWrapper>
     </View>

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
@@ -29,7 +29,6 @@ export default function ManageFAQ() {
           contentContainerStyle={{ gap: 16 }}
         />
       </View>
-      <Text>Manage FAQ</Text>
     </View>
   );
 }
@@ -60,8 +59,11 @@ type IQuestionCard = {
   answer: string;
 };
 
+export const handleEdit = () => {
+  console.log("Handling Edit");
+};
+
 export function QuestionCard({ question, answer }: IQuestionCard) {
-  const handleEdit = () => {};
   const handleDelete = () => {};
 
   return (

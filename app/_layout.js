@@ -4,6 +4,9 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import Toastable from "react-native-toastable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import IconBtn from "components/common/IconButton";
+import { handleEdit } from "../app/(app)/(admin)/(home)/manage-faq";
+import { View } from "react-native";
 
 export default function StackLayout() {
   const { top } = useSafeAreaInsets();
@@ -71,6 +74,14 @@ export default function StackLayout() {
         <Stack.Screen name="(app)/(admin)/(home)/manage-blood-units" />
         <Stack.Screen name="(app)/(admin)/(home)/manage-events" />
         <Stack.Screen name="(app)/(admin)/(home)/manage-users" />
+        <Stack.Screen
+          name="(app)/(admin)/(home)/manage-faq"
+          options={{
+            headerRight: () => (
+              <IconBtn icon="plus" size={18} onPress={() => handleEdit()} />
+            ),
+          }}
+        />
         {/* Admin Level Home Screens */}
         <Stack.Screen name="(app)/(admin)/(home)/manage-staff" />
         {/* Account Screens */}

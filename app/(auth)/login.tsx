@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   Pressable,
-  Alert,
   StyleSheet,
   Image,
   AppState,
@@ -30,6 +29,12 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/store";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
+import { doc, getDoc } from "firebase/firestore";
+import { getCurrentUser } from "rtx/slices/user";
+
 interface User {
   id: string;
   role: string;
@@ -87,7 +92,7 @@ export default function LoginScreen() {
   };
 
   const login = async (email, password) => {
-    console.log("Login attempt:", email, password); // Log the email and password before login attempt
+    // console.log("Login attempt:", email, password); // Log the email and password before login attempt
 
     if (!email || !password) {
       console.log("Login blocked due to missing email or password");
@@ -123,7 +128,7 @@ export default function LoginScreen() {
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in successfully");
+      // console.log("User logged in successfully");
 
       if (toggleRemember) {
         await AsyncStorage.setItem("user_logged_in", "true");
@@ -132,7 +137,16 @@ export default function LoginScreen() {
         await removeUserCredentials();
       }
 
-      router.replace("/(app)/(tabs)");
+      const user = FIREBASE_AUTH.currentUser;
+
+      const docRef = doc(FIRESTORE_DB, "User", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.data().role === "admin") {
+        router.replace("/(app)/(admin)/(tabs)");
+      } else {
+        router.replace("/(app)/(user)/(tabs)");
+      }
     } catch (error) {
       setModalVisible(true);
     } finally {
@@ -150,8 +164,8 @@ export default function LoginScreen() {
           const storedEmail = await AsyncStorage.getItem("user_email");
           const storedPassword = await AsyncStorage.getItem("user_password");
 
-          console.log("Stored email:", storedEmail); // Add this log
-          console.log("Stored password:", storedPassword); // Add this log
+          // console.log("Stored email:", storedEmail); // Add this log
+          // console.log("Stored password:", storedPassword); // Add this log
 
           if (storedEmail && storedPassword) {
             setEmail(storedEmail);
@@ -198,7 +212,7 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <View style={styles.cTop}>
         {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
-        <Pressable onPress={() => router.replace("/(app)/(tabs)")}>
+        <Pressable onPress={() => router.replace("/(app)/(user)/(tabs)")}>
           <LifelineLogo />
         </Pressable>
         {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
@@ -263,7 +277,11 @@ export default function LoginScreen() {
                 Remember Me
               </Text>
             </View>
-            <LinkBtn label="Forgot Password?" href="/forgot-password" />
+            <LinkBtn
+              label="Forgot Password?"
+              href="/forgot-password"
+              underline
+            />
           </View>
         </View>
 
@@ -321,7 +339,7 @@ export default function LoginScreen() {
 
       <View style={styles.cBottom}>
         <Text>Don't have an account? </Text>
-        <LinkBtn label="Register" href="/register" />
+        <LinkBtn label="Register" href="/register" underline />
       </View>
       <SingleBtnModal
         visible={modalVisible}

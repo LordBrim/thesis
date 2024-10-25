@@ -23,7 +23,7 @@ export default function TextInputWrapper({
         { ...styles.container, ...customStyle },
       ]}
     >
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={styles.label}> {label} </Text>}
       {children}
     </View>
   );
@@ -32,8 +32,7 @@ export default function TextInputWrapper({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: MINOR_COMPONENT_HEIGHT,
-    padding: SIZES.xSmall,
+    minHeight: MINOR_COMPONENT_HEIGHT,
     borderWidth: 1,
     borderRadius: SIZES.xSmall,
     borderColor: COLORS.gray,
@@ -52,6 +51,5 @@ const styles = StyleSheet.create({
     left: 6,
     top: -10.5,
     backgroundColor: COLORS.background,
-    paddingHorizontal: 4,
   },
 });

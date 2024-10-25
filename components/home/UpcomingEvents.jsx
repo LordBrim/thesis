@@ -70,14 +70,6 @@ export default function UpcomingEvents() {
     fetchEvents();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    );
-  }
-
   const renderEventItem = ({ item }) => (
     <View style={styles.eventContainer}>
       <EventCard
@@ -112,14 +104,20 @@ export default function UpcomingEvents() {
         />
       </View>
 
-      <FlatList
-        data={events}
-        renderItem={renderEventItem} // Use the renderEventItem function
-        keyExtractor={(item) => item.id}
-        numColumns={1}
-        scrollEnabled={false}
-        contentContainerStyle={styles.flatlist}
-      />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      ) : (
+        <FlatList
+          data={events}
+          renderItem={renderEventItem} // Use the renderEventItem function
+          keyExtractor={(item) => item.id}
+          numColumns={1}
+          scrollEnabled={false}
+          contentContainerStyle={styles.flatlist}
+        />
+      )}
     </View>
   );
 }
@@ -141,12 +139,13 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   title: {
-    fontSize: SIZES.large,
+    fontSize: SIZES.medium,
     fontWeight: "bold",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    minHeight: 300,
   },
 });

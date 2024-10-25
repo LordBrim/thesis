@@ -105,12 +105,7 @@ export default function ForgotPassword() {
             }}
             style={{ flexDirection: "row" }}
           >
-            <Text
-              style={{
-                fontWeight: "bold",
-                color: COLORS.primary,
-              }}
-            >
+            <Text style={GS.link1}>
               Resend OTP
               {remainingTime >= 0 && <Text> </Text>}
             </Text>

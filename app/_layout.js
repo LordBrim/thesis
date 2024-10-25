@@ -5,7 +5,7 @@ import { store } from "./store";
 import Toastable from "react-native-toastable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import IconBtn from "components/common/IconButton";
-import { handleAdd } from "../app/(app)/(admin)/(home)/manage-faq";
+import { handleCreate } from "../app/(app)/(admin)/(home)/manage-faq";
 import { Text, TouchableOpacity } from "react-native";
 
 export default function StackLayout() {
@@ -78,18 +78,39 @@ export default function StackLayout() {
           name="(app)/(admin)/(home)/manage-faq"
           options={{
             headerRight: () => (
-              <IconBtn icon="plus" size={18} onPress={() => handleAdd()} />
+              <IconBtn icon="plus" size={18} onPress={() => handleCreate()} />
             ),
           }}
         />
         <Stack.Screen
-          name="(app)/(admin)/(home)/manage-faq-question"
+          name="(app)/(admin)/(home)/manage-faq-create"
           options={{
             headerRight: () => (
               <TouchableOpacity
                 style={{
                   padding: 12,
                   borderRadius: 10,
+                  width: 60,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>Add</Text>
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="(app)/(admin)/(home)/manage-faq-update"
+          options={{
+            headerRight: () => (
+              <TouchableOpacity
+                style={{
+                  padding: 12,
+                  borderRadius: 10,
+                  width: 60,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
                 <Text style={{ fontWeight: "bold" }}>Save</Text>

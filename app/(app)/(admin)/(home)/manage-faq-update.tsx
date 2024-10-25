@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
+import { StyleSheet, TextInput, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { COLORS } from "constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
@@ -7,7 +7,7 @@ import { useLocalSearchParams } from "expo-router";
 
 export const saveChanges = () => {};
 
-export default function ManageFaqQuestion() {
+export default function ManageFaqUpdate() {
   const { question, answer } = useLocalSearchParams();
   const [editedQuestion, setEditedQuestion] = useState(question);
   const [editedAnswer, setEditedAnswer] = useState(answer);

@@ -5,6 +5,8 @@ import TextInputWrapper from "components/common/TextInputWrapper";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { useLocalSearchParams } from "expo-router";
 
+export const saveChanges = () => {};
+
 export default function ManageFaqQuestion() {
   const { question, answer } = useLocalSearchParams();
   const [editedQuestion, setEditedQuestion] = useState(question);

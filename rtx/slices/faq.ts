@@ -115,15 +115,15 @@ export const faqsSlice = createSlice({
   reducers: {
     createQuestion: (
       state,
-      action: PayloadAction<{ title: string; question: QuestionState }>
+      action: PayloadAction<{ title: string; newQuestion: QuestionState }>
     ) => {
-      const { title, question } = action.payload;
+      const { title, newQuestion } = action.payload;
       const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
       if (faqIndex !== -1) {
-        state.faqs[faqIndex].questions.push(question);
+        state.faqs[faqIndex].questions.push(newQuestion);
       } else {
-        state.faqs.push({ title, questions: [question] });
+        state.faqs.push({ title, questions: [newQuestion] });
       }
     },
     updateQuestion: (

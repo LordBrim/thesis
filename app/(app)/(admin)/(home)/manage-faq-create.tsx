@@ -13,12 +13,11 @@ import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { useDispatch } from "react-redux";
 import { TouchableOpacity } from "react-native";
 import { createQuestion } from "rtx/slices/faq";
-import IconBtn from "components/common/IconButton";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {
-  const [editedQuestion, setEditedQuestion] = useState("");
-  const [editedAnswer, setEditedAnswer] = useState("");
+  const [newQuestion, setNewQuestion] = useState("");
+  const [newAnswer, setNewAnswer] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -33,6 +32,7 @@ export default function ManageFaqCreate() {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={handleCreate}
         >
           <Text style={{ fontWeight: "bold" }}>Add</Text>
         </TouchableOpacity>
@@ -44,9 +44,10 @@ export default function ManageFaqCreate() {
     dispatch(
       createQuestion({
         title: "Andrei Sager Gumagana",
-        question: { question: editedQuestion, answer: editedAnswer },
+        newQuestion: { question: newQuestion, answer: newAnswer },
       })
     );
+    router.back();
   };
 
   return (
@@ -58,9 +59,9 @@ export default function ManageFaqCreate() {
       >
         <TextInputWrapper label="Question">
           <TextInput
-            value={editedQuestion}
+            value={newQuestion}
             placeholder="Enter a question..."
-            onChangeText={(question) => setEditedQuestion(question)}
+            onChangeText={(newQuestion) => setNewQuestion(newQuestion)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -73,9 +74,9 @@ export default function ManageFaqCreate() {
         </TextInputWrapper>
         <TextInputWrapper label="Answer">
           <TextInput
-            value={editedAnswer}
+            value={newAnswer}
             placeholder="Enter an answer..."
-            onChangeText={(answer) => setEditedAnswer(answer)}
+            onChangeText={(newAnswer) => setNewAnswer(newAnswer)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically

@@ -11,7 +11,7 @@ export default function StackLayout() {
   return (
     <Provider store={store}>
       <Stack
-        initialRouteName="(auth)/login"
+        initialRouteName="(app)/(admin)/(home)/manage-faq"
         screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
       >
         {/* Authentication Screens */}

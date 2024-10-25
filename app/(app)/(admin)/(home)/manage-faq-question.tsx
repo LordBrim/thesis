@@ -34,9 +34,12 @@ export default function ManageFaqQuestion() {
           autoCapitalize="none"
           autoCorrect={true}
           enablesReturnKeyAutomatically
+          multiline={true}
+          numberOfLines={20}
           style={{
             flex: 1,
             padding: 12,
+            textAlignVertical: "top",
           }}
         />
       </TextInputWrapper>

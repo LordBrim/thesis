@@ -74,7 +74,6 @@ type IQuestionCard = {
 };
 
 export const handleUpdate = (question, answer) => {
-  console.log("Update A Question");
   router.push({
     pathname: "(app)/(admin)/(home)/manage-faq-update",
     params: {

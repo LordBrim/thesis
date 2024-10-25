@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { COLORS } from "constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
@@ -11,7 +11,7 @@ export default function ManageFaqQuestion() {
   const [editedAnswer, setEditedAnswer] = useState(answer);
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <TextInputWrapper label="Question">
         <TextInput
           value={editedQuestion}
@@ -20,6 +20,7 @@ export default function ManageFaqQuestion() {
           autoCapitalize="none"
           autoCorrect={true}
           enablesReturnKeyAutomatically
+          multiline={true}
           style={{
             flex: 1,
             padding: 12,
@@ -35,15 +36,13 @@ export default function ManageFaqQuestion() {
           autoCorrect={true}
           enablesReturnKeyAutomatically
           multiline={true}
-          numberOfLines={20}
           style={{
             flex: 1,
             padding: 12,
-            textAlignVertical: "top",
           }}
         />
       </TextInputWrapper>
-    </View>
+    </ScrollView>
   );
 }
 

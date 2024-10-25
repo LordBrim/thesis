@@ -7,6 +7,7 @@ import {
   View,
   Text,
 } from "react-native";
+import { useRoute, RouteProp } from "@react-navigation/native";
 import EventCard from "../../../components/home/EventCard";
 import {
   COLORS,
@@ -14,48 +15,40 @@ import {
   SIZES,
   SPACES,
 } from "../../../constants";
-import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
-import { collection, getDocs } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
 import moment from "moment"; // Import moment for date formatting
 
+// Define the type for your route parameters
+type AllEventsScreenRouteProp = RouteProp<
+  { params: { events: Event[] } },
+  "params"
+>;
+
+// Define the type for your Event
+interface Event {
+  id: string;
+  description: string;
+  address: string;
+  imageUrl: string;
+  title: string;
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  latitude: number;
+  longitude: number;
+}
+
 export default function AllEventsScreen() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Use the useRoute hook to get the route parameters
+  const route = useRoute<AllEventsScreenRouteProp>();
+  // Destructure the events from the route parameters
+  const { events: passedEvents } = route.params || { events: [] };
+  // Initialize the state with the passed events
+  const [events, setEvents] = useState<Event[]>(passedEvents);
+  // Set the loading state based on whether events are passed
+  const [loading, setLoading] = useState(!passedEvents.length);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(FIRESTORE_DB, "events"));
-        const allEvents = await Promise.all(
-          querySnapshot.docs.map(async (doc) => {
-            const eventData = doc.data();
-            let imageUrl;
-            try {
-              imageUrl = await getDownloadURL(
-                ref(FIREBASE_STORAGE, `events/${doc.id}`)
-              );
-            } catch (error) {
-              console.error(
-                `Error fetching image for event ${doc.id}: `,
-                error
-              );
-              imageUrl = "https://via.placeholder.com/150"; // Default image URL
-            }
-            return { id: doc.id, ...eventData, imageUrl };
-          })
-        );
-        setEvents(allEvents);
-      } catch (error) {
-        console.error("Error fetching events: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvents();
-  }, []);
-
+  // If loading, show a loading indicator
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -64,7 +57,8 @@ export default function AllEventsScreen() {
     );
   }
 
-  const renderEventItem = ({ item }) => (
+  // Function to render each event item
+  const renderEventItem = ({ item }: { item: Event }) => (
     <View style={styles.eventContainer}>
       <EventCard
         documentId={item.id}
@@ -78,10 +72,13 @@ export default function AllEventsScreen() {
         time={`${moment(item.endDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
           item.endTime
         }`}
+        latitude={item.latitude}
+        longitude={item.longitude}
       />
     </View>
   );
 
+  // Render the FlatList with the events
   return (
     <SafeAreaView style={styles.container}>
       <FlatList

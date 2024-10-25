@@ -12,16 +12,25 @@ import { COLORS } from "../../constants";
 type ILinkBtn = {
   label: string;
   href?: Href<string>;
+  onPress?: () => void;
   linkStyle?: StyleProp<TextStyle>;
 };
 
-export default function LinkBtn({ label, href, linkStyle }: ILinkBtn) {
+export default function LinkBtn({ label, href, onPress, linkStyle }: ILinkBtn) {
+  if (href) {
+    return (
+      <Link asChild href={href}>
+        <TouchableOpacity>
+          <Text style={linkStyle || styles.label}>{label}</Text>
+        </TouchableOpacity>
+      </Link>
+    );
+  }
+
   return (
-    <Link asChild href={href}>
-      <TouchableOpacity>
-        <Text style={linkStyle || styles.label}>{label}</Text>
-      </TouchableOpacity>
-    </Link>
+    <TouchableOpacity onPress={onPress}>
+      <Text style={linkStyle || styles.label}>{label}</Text>
+    </TouchableOpacity>
   );
 }
 

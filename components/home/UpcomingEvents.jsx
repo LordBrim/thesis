@@ -6,6 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
 import LinkBtn from "components/common/LinkBtn";
@@ -17,6 +18,7 @@ import moment from "moment"; // Import moment for date formatting
 export default function UpcomingEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation(); // Get the navigation object
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -37,7 +39,13 @@ export default function UpcomingEvents() {
               );
               imageUrl = "https://via.placeholder.com/150"; // Default image URL
             }
-            return { id: doc.id, ...eventData, imageUrl };
+            return {
+              id: doc.id,
+              ...eventData,
+              imageUrl,
+              latitude: eventData.latitude, // Fetch latitude
+              longitude: eventData.longitude, // Fetch longitude
+            };
           })
         );
 
@@ -85,6 +93,8 @@ export default function UpcomingEvents() {
           item.endTime
         }`}
         manageEvents={true} // Pass the manageEvents prop as true
+        latitude={item.latitude} // Pass latitude to EventCard
+        longitude={item.longitude} // Pass longitude to EventCard
       />
     </View>
   );
@@ -95,7 +105,9 @@ export default function UpcomingEvents() {
         <Text style={styles.title}>Upcoming Events</Text>
         <LinkBtn
           label="View All"
-          href="/all-events"
+          onPress={() =>
+            navigation.navigate("(app)/(home)/all-events", { events })
+          } // Pass events as parameter
           linkStyle={{ color: COLORS.gray, textDecorationLine: "none" }}
         />
       </View>

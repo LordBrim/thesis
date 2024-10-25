@@ -21,6 +21,8 @@ type IEventCard = {
   description;
   address;
   documentId?;
+  latitude?;
+  longitude?;
 };
 
 export default function EventCard({
@@ -32,18 +34,9 @@ export default function EventCard({
   address,
   manageEvent = false,
   documentId,
+  latitude,
+  longitude,
 }: IEventCard) {
-  console.log(
-    "image",
-    image,
-    title,
-    date,
-    time,
-    description,
-    address,
-    (manageEvent = false),
-    documentId
-  );
   return (
     <Link
       asChild
@@ -58,6 +51,8 @@ export default function EventCard({
           description,
           address,
           documentId,
+          latitude,
+          longitude,
         },
       }}
     >
@@ -107,6 +102,6 @@ const styles = StyleSheet.create({
   columnDetails: {
     flexDirection: "column",
   },
-  title: { fontSize: SIZES.xLarge, color: COLORS.white },
-  subtitle: { fontSize: 14, color: COLORS.white },
+  title: { fontSize: SIZES.xLarge, color: COLORS.background },
+  subtitle: { fontSize: 14, color: COLORS.background },
 });

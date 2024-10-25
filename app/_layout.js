@@ -4,9 +4,6 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import Toastable from "react-native-toastable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import IconBtn from "components/common/IconButton";
-import { handleCreate } from "../app/(app)/(admin)/(home)/manage-faq";
-import { Text, TouchableOpacity } from "react-native";
 
 export default function StackLayout() {
   const { top } = useSafeAreaInsets();
@@ -74,50 +71,9 @@ export default function StackLayout() {
         <Stack.Screen name="(app)/(admin)/(home)/manage-blood-units" />
         <Stack.Screen name="(app)/(admin)/(home)/manage-events" />
         <Stack.Screen name="(app)/(admin)/(home)/manage-users" />
-        <Stack.Screen
-          name="(app)/(admin)/(home)/manage-faq"
-          options={{
-            headerRight: () => (
-              <IconBtn icon="plus" size={18} onPress={() => handleCreate()} />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(app)/(admin)/(home)/manage-faq-create"
-          options={{
-            headerRight: () => (
-              <TouchableOpacity
-                style={{
-                  padding: 12,
-                  borderRadius: 10,
-                  width: 60,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold" }}>Add</Text>
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="(app)/(admin)/(home)/manage-faq-update"
-          options={{
-            headerRight: () => (
-              <TouchableOpacity
-                style={{
-                  padding: 12,
-                  borderRadius: 10,
-                  width: 60,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold" }}>Save</Text>
-              </TouchableOpacity>
-            ),
-          }}
-        />
+        <Stack.Screen name="(app)/(admin)/(home)/manage-faq" />
+        <Stack.Screen name="(app)/(admin)/(home)/manage-faq-create" />
+        <Stack.Screen name="(app)/(admin)/(home)/manage-faq-update" />
         {/* Admin Level Home Screens */}
         <Stack.Screen name="(app)/(admin)/(home)/manage-staff" />
         {/* Account Screens */}

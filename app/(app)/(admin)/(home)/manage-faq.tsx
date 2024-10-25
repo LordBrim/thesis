@@ -5,16 +5,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { createQuestion, getFAQs } from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 
 export default function ManageFAQ() {
   const { faqs } = useSelector((state: RootState) => state.faqs);
-
   const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation();
 
   // useEffect(() => {
   //   dispatch(getFAQs());
   // }, []);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconBtn
+          icon="plus"
+          size={18}
+          onPress={() => router.push("(app)/(admin)/(home)/manage-faq-create")}
+        />
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -59,10 +71,6 @@ export function QuestionPanel({ title, questions }: IQuestionPanel) {
 type IQuestionCard = {
   question: string;
   answer: string;
-};
-
-export const handleCreate = (question, answer) => {
-  router.push("(app)/(admin)/(home)/manage-faq-create");
 };
 
 export const handleUpdate = (question, answer) => {

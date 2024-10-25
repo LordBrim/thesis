@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { getFAQs } from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
+import { router } from "expo-router";
 
 export default function ManageFAQ() {
   const { faqs } = useSelector((state: RootState) => state.faqs);
@@ -60,12 +61,20 @@ type IQuestionCard = {
   answer: string;
 };
 
-export const handleAdd = () => {
+export const handleAdd = (question, answer) => {
   console.log("Add A Question");
+  router.push("manage-faq-question");
 };
 
-export const handleEdit = () => {
+export const handleEdit = (question, answer) => {
   console.log("Edit A Question");
+  router.push({
+    pathname: "(app)/(admin)/(home)/manage-faq-question",
+    params: {
+      question: question,
+      answer: answer,
+    },
+  });
 };
 
 export const handleDelete = () => {
@@ -77,7 +86,11 @@ export function QuestionCard({ question, answer }: IQuestionCard) {
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
         <Text style={card.question}>{question}</Text>
-        <IconBtn icon="pencil" size={18} onPress={() => handleEdit()} />
+        <IconBtn
+          icon="pencil"
+          size={18}
+          onPress={() => handleEdit(question, answer)}
+        />
         <IconBtn
           icon="trash"
           size={18}

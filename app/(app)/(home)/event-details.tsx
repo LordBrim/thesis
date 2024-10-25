@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import Title from "../../../components/common/texts/Title";
 import Description from "../../../components/common/texts/Description";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import CallToActionBtn from "../../../components/common/CallToActionBtn";
@@ -15,10 +14,27 @@ import { FIRESTORE_DB } from "../../../firebase-config"; // Adjust the path as n
 import { Card, Button, Icon, ProgressBar } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 export default function EventDetailsScreen() {
-  const { title, description, date, address, time, documentId } =
-    useLocalSearchParams();
+  const {
+    title,
+    description,
+    date,
+    address,
+    time,
+    documentId,
+    latitude,
+    longitude,
+  } = useLocalSearchParams();
   const [imageUri, setImageUri] = useState("");
-
+  console.log(
+    title,
+    description,
+    date,
+    address,
+    time,
+    documentId,
+    latitude,
+    longitude
+  );
   useEffect(() => {
     const fetchImageUri = async () => {
       if (documentId) {
@@ -42,10 +58,22 @@ export default function EventDetailsScreen() {
   }, [documentId]);
 
   const navigateToMaps = () => {
-    router.replace("/(app)/(tabs)/maps-tab");
+    router.push({
+      pathname: "/(app)/(maps)/hospitalMapView",
+      params: {
+        event: JSON.stringify({
+          latitude: latitude,
+          longitude: longitude,
+          title: title,
+          description: description,
+          startDate: date,
+          startTime: time,
+          address: address,
+          mapCSS: JSON.stringify(mapCSS),
+        }),
+      },
+    });
   };
-
-  console.log("descrtiption", description);
 
   const donorsCount = 120;
   const donorsGoal = 200;
@@ -55,7 +83,13 @@ export default function EventDetailsScreen() {
     <View style={styles.container}>
       <ScrollView>
         <Card>
-          <Card.Cover source={{ uri: imageUri }} />
+          {imageUri ? (
+            <Card.Cover source={{ uri: imageUri }} />
+          ) : (
+            <View style={styles.placeholder}>
+              <Text>Loading image...</Text>
+            </View>
+          )}
           <Card.Content>
             <Text style={styles.title}>{title}</Text>
             <View style={styles.dateTimeContainer}>
@@ -73,18 +107,6 @@ export default function EventDetailsScreen() {
               <Text style={styles.address}>{address}</Text>
             </View>
             <Text style={styles.description}>{description}</Text>
-
-            <View style={styles.progressContainer}>
-              <Text style={styles.progressTitle}>Donor Goal Progress</Text>
-              <ProgressBar
-                progress={progress}
-                color="#e74c3c"
-                style={styles.progressBar}
-              />
-              <Text style={styles.progressText}>
-                {donorsCount} / {donorsGoal} Donors
-              </Text>
-            </View>
 
             <View style={styles.infoContainer}>
               <View style={styles.infoItem}>
@@ -135,50 +157,6 @@ export default function EventDetailsScreen() {
     </View>
   );
 }
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     backgroundColor: COLORS.white,
-//   },
-//   cTop: {
-//     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-//     paddingVertical: 24,
-//     gap: 12,
-//   },
-//   cBottom: {
-//     width: "100%",
-//     paddingVertical: 8,
-//     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-//     borderWidth: 1,
-//     borderColor: COLORS.gray2,
-//     backgroundColor: "white",
-//   },
-//   banner: {
-//     flex: 1,
-//     minWidth: "100%",
-//     aspectRatio: 16 / 7,
-//     backgroundColor: COLORS.primary,
-//     overflow: "hidden",
-//   },
-//   image: {
-//     width: "100%",
-//     height: "100%",
-//     justifyContent: "center",
-//   },
-//   address: {
-//     fontSize: SIZES.medium,
-//     fontWeight: "bold", // Make the address bold
-//   },
-//   date: {
-//     fontSize: SIZES.medium,
-//     fontWeight: "bold", // Make the date bold
-//   },
-//   time: {
-//     fontSize: SIZES.medium,
-//     fontWeight: "bold", // Make the time bold
-//   },
-// });
 
 const styles = StyleSheet.create({
   container: {
@@ -250,5 +228,170 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     marginTop: 10,
+  },
+  placeholder: {
+    height: 200,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e0e0e0",
+  },
+});
+
+const mapCSS = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    backgroundColor: COLORS.background,
+  },
+  cTop: {
+    width: "100%",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingBottom: HORIZONTAL_SCREEN_MARGIN,
+    backgroundColor: COLORS.background,
+    fontWeight: "bold",
+    gap: 16,
+  },
+  buttonHospital: {
+    width: "80%",
+    padding: SIZES.medium,
+    marginVertical: SIZES.small,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderRadius: 10,
+    elevation: 5,
+    borderColor: COLORS.gray2,
+  },
+  buttonHospitalPressed: {
+    width: "85%",
+    padding: SIZES.medium,
+    marginVertical: SIZES.medium,
+    backgroundColor: "white",
+    borderWidth: 2,
+    elevation: 5,
+    borderRadius: 10,
+    borderColor: COLORS.gray,
+  },
+  textHospital: {
+    fontSize: SIZES.large,
+    textAlign: "left",
+    color: COLORS.black,
+  },
+  textHospitalPressed: {
+    fontSize: SIZES.large,
+    textAlign: "left",
+    color: "white",
+  },
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: "10%",
+    alignSelf: "center",
+    backgroundColor: COLORS.red,
+  },
+  markerContainer: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    alignContent: "center",
+    justifyContent: "center",
+    textAlignVertical: "center",
+    padding: 5,
+    borderRadius: 20,
+    elevation: 5,
+  },
+  markerText: {
+    color: COLORS.primary,
+    fontWeight: "bold",
+    textAlignVertical: "center",
+  },
+  markerImage: {
+    width: 25,
+    height: 25,
+  },
+  fab: {
+    position: "absolute",
+    backgroundColor: "white",
+    borderRadius: 10,
+    borderColor: COLORS.gray,
+    borderWidth: 1,
+    width: 100,
+    shadowColor: "black",
+    elevation: 5,
+    flexDirection: "row",
+    margin: 16,
+    left: 0,
+    top: 0,
+    zIndex: 6,
+  },
+  header: {
+    fontSize: SIZES.xLarge,
+    marginBottom: SIZES.medium,
+    marginTop: 30,
+  },
+  subHeader: {
+    fontSize: SIZES.medium,
+  },
+  infoBottom: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "white",
+    padding: 10,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+  },
+  infoTop: {
+    position: "absolute",
+    zIndex: 5,
+    height: 120,
+    left: 0,
+    right: 0,
+    top: 0,
+    paddingTop: 20,
+    backgroundColor: COLORS.primary,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    padding: 10,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+  },
+  infoTopTitle: {
+    fontSize: SIZES.xLarge,
+    fontWeight: "bold",
+    color: COLORS.background,
+  },
+  infoTopDistance: {
+    fontSize: SIZES.medium,
+    color: COLORS.background,
+  },
+  hContainer: {
+    flex: 1,
+    width: "100%",
+    borderColor: COLORS.slate100,
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    maxHeight: 50,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 12,
+  },
+  hName: {
+    flex: 1,
+    fontWeight: "600",
+  },
+  icon: {
+    width: 50,
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { COLORS } from "../../../constants/theme";
 import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
@@ -11,8 +11,24 @@ import { router } from "expo-router";
 import EventCard from "components/home/EventCard";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+
+// Define the type for the event item
+interface EventItem {
+  id: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
+  imageUrl: string;
+  description: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+}
+
 export default function ManageEvents({ navigation }) {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<EventItem[]>([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
   const [agendaItems, setAgendaItems] = useState({});
@@ -34,12 +50,29 @@ export default function ManageEvents({ navigation }) {
             const imageUrl = await getDownloadURL(
               ref(FIREBASE_STORAGE, `events/${doc.id}`)
             );
-            return { id: doc.id, ...eventData, imageUrl };
+            return {
+              id: doc.id,
+              title: eventData.title, // Use the correct property name
+              startDate: eventData.startDate,
+              endDate: eventData.endDate,
+              startTime: eventData.startTime,
+              endTime: eventData.endTime,
+              imageUrl,
+              description: eventData.description,
+              address: eventData.address,
+              latitude: eventData.latitude,
+              longitude: eventData.longitude,
+            };
           })
         );
         setEvents(userEvents);
         markEventDates(userEvents); // Mark events on calendar
         transformEventsToAgendaItems(userEvents); // Transform events for Agenda
+        console.log(
+          events.map((event) => {
+            `"event ads: ${event.address}  `;
+          })
+        );
       } else {
         setCurrentUser(null);
         setEvents([]);
@@ -52,7 +85,7 @@ export default function ManageEvents({ navigation }) {
   }, []);
 
   // Helper function to convert "MM/DD/YYYY" or "YYYY-MM-DD" to "YYYY-MM-DD"
-  const convertDateString = (dateString) => {
+  const convertDateString = (dateString: string): string | null => {
     if (dateString.includes("/")) {
       const [month, day, year] = dateString.split("/");
       if (!month || !day || !year) {
@@ -74,8 +107,8 @@ export default function ManageEvents({ navigation }) {
   };
 
   // Marking event dates in the calendar
-  const markEventDates = (events) => {
-    let dates = {};
+  const markEventDates = (events: EventItem[]) => {
+    let dates: { [key: string]: { marked: boolean; dotColor: string } } = {};
 
     events.forEach((event) => {
       const startDate = moment(event.startDate, "MM/DD/YYYY");
@@ -100,8 +133,8 @@ export default function ManageEvents({ navigation }) {
   };
 
   // Transform events to the format required by Agenda
-  const transformEventsToAgendaItems = (events) => {
-    let items = {};
+  const transformEventsToAgendaItems = (events: EventItem[]) => {
+    let items: { [key: string]: EventItem[] } = {};
 
     events.forEach((event) => {
       const startDate = moment(event.startDate, "MM/DD/YYYY");
@@ -118,13 +151,16 @@ export default function ManageEvents({ navigation }) {
 
         items[formattedDate].push({
           id: event.id,
-          name: event.title,
+          title: event.title, // Use the correct property title
           startDate: event.startDate,
           endDate: event.endDate,
           startTime: event.startTime,
           endTime: event.endTime,
           imageUrl: event.imageUrl,
           description: event.description,
+          address: event.address,
+          latitude: event.latitude,
+          longitude: event.longitude,
         });
 
         current.add(1, "day");
@@ -133,13 +169,15 @@ export default function ManageEvents({ navigation }) {
 
     setAgendaItems(items);
   };
-  const renderEventItem = (item) => (
+
+  // Memoized Event Item Component
+  const MemoizedEventItem = memo(({ item }: { item: EventItem }) => (
     <View style={styles.eventContainer}>
       <EventCard
         description={item.description}
         address={item.address}
         image={{ uri: item.imageUrl }}
-        title={item.name}
+        title={item.title}
         date={`${moment(item.startDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
           item.startTime
         }`}
@@ -148,9 +186,11 @@ export default function ManageEvents({ navigation }) {
         }`}
         documentId={item.id}
         manageEvent={true}
+        latitude={item.latitude} // Pass latitude to EventCard
+        longitude={item.longitude}
       />
     </View>
-  );
+  ));
 
   // Custom renderEmptyDate to show a message or loader when no events are available on a specific date
   const renderEmptyDate = () => (
@@ -179,7 +219,7 @@ export default function ManageEvents({ navigation }) {
   );
 
   // Handle what happens when a day is pressed
-  const handleDayPress = (day) => {
+  const handleDayPress = (day: { dateString: string }) => {
     setLoading(true); // Start loading when a day is pressed
 
     setTimeout(() => {
@@ -213,7 +253,7 @@ export default function ManageEvents({ navigation }) {
           console.log("day changed", day);
         }}
         selected={moment().format("YYYY-MM-DD")}
-        renderItem={renderEventItem}
+        renderItem={(item) => <MemoizedEventItem item={item} />}
         renderEmptyDate={renderEmptyDate}
         renderEmptyData={renderEmptyData} // Custom empty data handling
         markedDates={markedDates}
@@ -250,6 +290,7 @@ export default function ManageEvents({ navigation }) {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

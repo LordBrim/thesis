@@ -13,6 +13,7 @@ import AccountTab from "./(app)/(tabs)/account-tab";
 // Home Screens
 import Request from "./(app)/(home)/request";
 import EventDetails from "./(app)/(home)/event-details";
+import HospitalMapView from "./(app)/(maps)/hospitalMapView";
 import AllEventsScreen from "./(app)/(home)/all-events";
 import ManageBloodUnits from "./(app)/(home)/manage-blood-units";
 import ManageEvents from "./(app)/(home)/manage-events";
@@ -35,6 +36,7 @@ import NoInternetScreen from "./(aux)/no-internet";
 import TermsAndConditionsScreen from "./(aux)/terms-and-conditions";
 
 export {
+  HospitalMapView,
   EmptyScreen,
   Login,
   Register,

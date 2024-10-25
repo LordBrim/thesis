@@ -1,7 +1,6 @@
 import { Stack } from "expo-router/stack";
 import QRHeaderBtn from "../components/common/QRHeaderBtn";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-
 export default function StackLayout() {
   return (
     <Stack
@@ -25,6 +24,7 @@ export default function StackLayout() {
 
       <Stack.Screen name="(app)/(home)/request" />
       <Stack.Screen name="(app)/(home)/event-details" />
+      <Stack.Screen name="(app)/(maps)/hospitalMapView" />
       <Stack.Screen
         name="(app)/(home)/admin"
         options={{

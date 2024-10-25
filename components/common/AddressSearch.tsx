@@ -34,18 +34,28 @@ const AddressSearchComponent: React.FC<AddressSearchComponentProps> = ({
       if (searchText.length > 2 && !isSelecting.current) {
         setLoading(true);
         try {
-          const apiKey =
-            "5b3ce3597851110001cf62480d5edcd000074935966b0d86d130c538"; // Replace with your actual API key
-          const url = `https://api.openrouteservice.org/geocode/search?api_key=${apiKey}&text=${encodeURIComponent(
-            searchText
-          )}&size=10&boundary.country=PH`;
+          const apiKey = "Dj4loZJ9qrAv9eTFGDKu"; // Replace with your actual API key
+          const query = encodeURIComponent(searchText);
+          const bbox = "120.979,14.408,121.135,14.706"; // Bounding box for Metro Manila
+          const language = "en";
+          const country = "ph";
+          const limit = 5;
+
+          // Add types to the URL to prioritize points of interest
+          const types = "poi"; // Focus on points of interest
+          const url = `https://api.maptiler.com/geocoding/${query}.json?key=${apiKey}&bbox=${bbox}&language=${language}&country=${country}&limit=${limit}&types=${types}`;
 
           const response = await fetch(url);
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
           const data = await response.json();
 
           setResults(
             data.features.map((feature: any) => ({
-              label: feature.properties.label,
+              label: feature.place_name,
               lat: feature.geometry.coordinates[1],
               lon: feature.geometry.coordinates[0],
             }))
@@ -88,7 +98,6 @@ const AddressSearchComponent: React.FC<AddressSearchComponentProps> = ({
       }, 100);
     }
   };
-
   const renderItem = ({ item }: { item: PlaceResult }) => (
     <TouchableOpacity onPress={() => handlePlaceSelect(item.label)}>
       <Text style={styles.resultItem}>{item.label}</Text>

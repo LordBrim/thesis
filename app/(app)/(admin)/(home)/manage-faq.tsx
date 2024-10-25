@@ -11,9 +11,9 @@ export default function ManageFAQ() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    dispatch(getFAQs());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getFAQs());
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -25,7 +25,7 @@ export default function ManageFAQ() {
           )}
           keyExtractor={(item) => item.title}
           overScrollMode="never"
-          scrollEnabled={false}
+          scrollEnabled={true}
           contentContainerStyle={{ gap: 16 }}
         />
       </View>
@@ -59,13 +59,19 @@ type IQuestionCard = {
   answer: string;
 };
 
+export const handleAdd = () => {
+  console.log("Add A Question");
+};
+
 export const handleEdit = () => {
-  console.log("Handling Edit");
+  console.log("Edit A Question");
+};
+
+export const handleDelete = () => {
+  console.log("Delete A Question");
 };
 
 export function QuestionCard({ question, answer }: IQuestionCard) {
-  const handleDelete = () => {};
-
   return (
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>

@@ -1,13 +1,7 @@
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  StyleProp,
-  TextStyle,
-} from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { type Href, Link } from "expo-router";
-import { COLORS } from "../../constants";
+import { GS } from "../../constants";
 
 type ILinkBtn = {
   label: string;
@@ -16,12 +10,25 @@ type ILinkBtn = {
   linkStyle?: StyleProp<TextStyle>;
 };
 
-export default function LinkBtn({ label, href, onPress, linkStyle }: ILinkBtn) {
+export default function LinkBtn({
+  label,
+  href,
+  onPress,
+  underline,
+  secondary,
+}: ILinkBtn) {
   if (href) {
     return (
       <Link asChild href={href}>
         <TouchableOpacity>
-          <Text style={linkStyle || styles.label}>{label}</Text>
+          <Text
+            style={[
+              secondary ? GS.link2 : GS.link1,
+              underline && styles.underline,
+            ]}
+          >
+            {label}
+          </Text>
         </TouchableOpacity>
       </Link>
     );
@@ -35,9 +42,7 @@ export default function LinkBtn({ label, href, onPress, linkStyle }: ILinkBtn) {
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontWeight: "bold",
+  underline: {
     textDecorationLine: "underline",
-    color: COLORS.primary,
   },
 });

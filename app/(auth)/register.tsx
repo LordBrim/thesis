@@ -198,6 +198,7 @@ export default function RegisterScreen() {
                 <LinkBtn
                   label="Terms and Conditions"
                   href="/(aux)/terms-and-conditions"
+                  underline
                 />
                 <Text>?</Text>
               </View>

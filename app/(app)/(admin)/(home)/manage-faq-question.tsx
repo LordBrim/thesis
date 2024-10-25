@@ -8,17 +8,30 @@ import { useLocalSearchParams } from "expo-router";
 export default function ManageFaqQuestion() {
   const { question, answer } = useLocalSearchParams();
   const [editedQuestion, setEditedQuestion] = useState(question);
+  const [editedAnswer, setEditedAnswer] = useState(answer);
 
   return (
     <View style={styles.container}>
       <TextInputWrapper label="Question">
         <TextInput
           value={editedQuestion}
-          placeholder=""
+          placeholder="Enter a question..."
           onChangeText={(question) => setEditedQuestion(question)}
           autoCapitalize="none"
           autoCorrect={true}
           enablesReturnKeyAutomatically
+          style={{ flex: 1 }}
+        />
+      </TextInputWrapper>
+      <TextInputWrapper label="Answer">
+        <TextInput
+          value={editedAnswer}
+          placeholder="Enter an answer..."
+          onChangeText={(answer) => setEditedAnswer(answer)}
+          autoCapitalize="none"
+          autoCorrect={true}
+          enablesReturnKeyAutomatically
+          style={{ flex: 1 }}
         />
       </TextInputWrapper>
     </View>
@@ -30,5 +43,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     padding: HORIZONTAL_SCREEN_MARGIN,
+    gap: 16,
   },
 });

@@ -1,0 +1,34 @@
+import { View, Text, StyleSheet, TextInput } from "react-native";
+import React, { useState } from "react";
+import { COLORS } from "constants/theme";
+import TextInputWrapper from "components/common/TextInputWrapper";
+import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
+import { useLocalSearchParams } from "expo-router";
+
+export default function ManageFaqQuestion() {
+  const { question, answer } = useLocalSearchParams();
+  const [editedQuestion, setEditedQuestion] = useState(question);
+
+  return (
+    <View style={styles.container}>
+      <TextInputWrapper label="Question">
+        <TextInput
+          value={editedQuestion}
+          placeholder=""
+          onChangeText={(question) => setEditedQuestion(question)}
+          autoCapitalize="none"
+          autoCorrect={true}
+          enablesReturnKeyAutomatically
+        />
+      </TextInputWrapper>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: HORIZONTAL_SCREEN_MARGIN,
+  },
+});

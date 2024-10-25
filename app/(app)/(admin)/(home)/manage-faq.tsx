@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { getFAQs } from "rtx/slices/faq";
+import { createQuestion, getFAQs } from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
 import { router } from "expo-router";
 
@@ -61,15 +61,14 @@ type IQuestionCard = {
   answer: string;
 };
 
-export const handleAdd = (question, answer) => {
-  console.log("Add A Question");
-  router.push("manage-faq-question");
+export const handleCreate = (question, answer) => {
+  router.push("(app)/(admin)/(home)/manage-faq-create");
 };
 
-export const handleEdit = (question, answer) => {
-  console.log("Edit A Question");
+export const handleUpdate = (question, answer) => {
+  console.log("Update A Question");
   router.push({
-    pathname: "(app)/(admin)/(home)/manage-faq-question",
+    pathname: "(app)/(admin)/(home)/manage-faq-update",
     params: {
       question: question,
       answer: answer,
@@ -89,7 +88,7 @@ export function QuestionCard({ question, answer }: IQuestionCard) {
         <IconBtn
           icon="pencil"
           size={18}
-          onPress={() => handleEdit(question, answer)}
+          onPress={() => handleUpdate(question, answer)}
         />
         <IconBtn
           icon="trash"

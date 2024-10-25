@@ -64,7 +64,6 @@ interface FAQsState {
 }
 
 interface QuestionState {
-  // id: string;
   question: string;
   answer: string;
 }

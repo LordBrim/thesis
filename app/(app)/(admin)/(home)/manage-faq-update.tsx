@@ -9,15 +9,19 @@ import React, { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { Text } from "react-native";
+import { useDispatch } from "react-redux";
+import { updateQuestion } from "rtx/slices/faq";
 
 export const saveChanges = () => {};
 
 export default function ManageFaqUpdate() {
   const { question, answer } = useLocalSearchParams();
-  const [editedQuestion, setEditedQuestion] = useState(question);
-  const [editedAnswer, setEditedAnswer] = useState(answer);
+  const [updatedTitle, setUpdatedTitle] = useState("Gumagana");
+  const [updatedQuestion, setUpdatedQuestion] = useState(question.toString());
+  const [updatedAnswer, setUpdatedAnswer] = useState(answer.toString());
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -31,12 +35,28 @@ export default function ManageFaqUpdate() {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={handleUpdate}
         >
           <Text style={{ fontWeight: "bold" }}>Save</Text>
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, updatedQuestion, updateQuestion]);
+
+  const handleUpdate = () => {
+    dispatch(
+      updateQuestion({
+        title: updatedTitle,
+        oldQuestion: {
+          question: question.toString(),
+          answer: question.toString(),
+        },
+        updatedQuestion: { question: updatedQuestion, answer: updatedAnswer },
+      })
+    );
+    // addFAQToFirebase(newTitle, newQuestion, newAnswer);
+    router.back();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,9 +67,9 @@ export default function ManageFaqUpdate() {
       >
         <TextInputWrapper label="Question">
           <TextInput
-            value={editedQuestion}
+            value={updatedQuestion}
             placeholder="Enter a question..."
-            onChangeText={(question) => setEditedQuestion(question)}
+            onChangeText={(question) => setUpdatedQuestion(question)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -62,9 +82,9 @@ export default function ManageFaqUpdate() {
         </TextInputWrapper>
         <TextInputWrapper label="Answer">
           <TextInput
-            value={editedAnswer}
+            value={updatedAnswer}
             placeholder="Enter an answer..."
-            onChangeText={(answer) => setEditedAnswer(answer)}
+            onChangeText={(answer) => setUpdatedAnswer(answer)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically

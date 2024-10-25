@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
-import { COLORS } from "../../../../constants";
+import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
+import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { getFAQs } from "rtx/slices/faq";
+import IconBtn from "components/common/IconButton";
 
 export default function ManageFAQ() {
   const { faqs } = useSelector((state: RootState) => state.faqs);
@@ -16,14 +17,69 @@ export default function ManageFAQ() {
 
   return (
     <View style={styles.container}>
-      {faqs.map((faqs) => (
-        <View key={faqs.id}>
-          <Text>{faqs.question}</Text>
-          <Text>{faqs.answer}</Text>
-        </View>
-      ))}
+      <View style={styles.panels}>
+        <FlatList
+          data={faqs}
+          renderItem={({ item }) => (
+            <QuestionPanel title={item.title} questions={item.questions} />
+          )}
+          keyExtractor={(item) => item.title}
+          overScrollMode="never"
+          scrollEnabled={false}
+          contentContainerStyle={{ gap: 16 }}
+        />
+      </View>
       <Text>Manage FAQ</Text>
     </View>
+  );
+}
+
+type IQuestionPanel = {
+  title: string;
+  questions: Array<{ question: string; answer: string }>;
+};
+
+export function QuestionPanel({ title, questions }: IQuestionPanel) {
+  return (
+    <View style={panel.container}>
+      <Text style={[GS.h3, panel.title]}>{title}</Text>
+      <FlatList
+        contentContainerStyle={(panel.container, { gap: 16 })}
+        data={questions}
+        renderItem={({ item }) => (
+          <QuestionCard question={item.question} answer={item.answer} />
+        )}
+        keyExtractor={(item) => item.question}
+      />
+    </View>
+  );
+}
+
+type IQuestionCard = {
+  question: string;
+  answer: string;
+};
+
+export function QuestionCard({ question, answer }: IQuestionCard) {
+  const handleEdit = () => {};
+  const handleDelete = () => {};
+
+  return (
+    <>
+      <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
+        <Text style={card.question}>{question}</Text>
+        <IconBtn icon="pencil" size={18} onPress={() => handleEdit()} />
+        <IconBtn
+          icon="trash"
+          size={18}
+          onPress={() => handleDelete()}
+          color="red"
+        />
+      </Pressable>
+      <View style={card.aContainer}>
+        <Text style={card.answer}>{answer}</Text>
+      </View>
+    </>
   );
 }
 
@@ -33,5 +89,47 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
+  },
+  panels: {
+    gap: 20,
+  },
+});
+
+const panel = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderColor: COLORS.slate100,
+  },
+  title: {
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: 8,
+  },
+});
+
+const card = StyleSheet.create({
+  qContainer: {
+    width: "100%",
+    minHeight: 35,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
+  question: {
+    flex: 1,
+    fontWeight: "bold",
+  },
+  aContainer: {
+    width: "100%",
+    minHeight: 35,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingTop: 8,
+    paddingBottom: 16,
+  },
+  answer: {
+    flex: 1,
+    flexDirection: "row",
   },
 });

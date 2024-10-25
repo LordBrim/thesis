@@ -32,7 +32,7 @@ export default function TextInputWrapper({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    height: MINOR_COMPONENT_HEIGHT,
+    minHeight: MINOR_COMPONENT_HEIGHT,
     borderWidth: 1,
     borderRadius: SIZES.xSmall,
     borderColor: COLORS.gray,

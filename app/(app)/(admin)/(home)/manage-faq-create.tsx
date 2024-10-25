@@ -43,8 +43,6 @@ export default function ManageFaqCreate() {
   }, [navigation, newQuestion, newAnswer]);
 
   const handleCreate = () => {
-    console.log(newQuestion);
-    console.log(newAnswer);
     dispatch(
       createQuestion({
         title: newTitle,

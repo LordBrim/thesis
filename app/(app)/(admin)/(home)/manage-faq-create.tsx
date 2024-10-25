@@ -1,5 +1,4 @@
 import {
-  View,
   Text,
   StyleSheet,
   TextInput,
@@ -32,7 +31,7 @@ export default function ManageFaqCreate() {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={handleCreate}
+          onPress={() => handleCreate()}
         >
           <Text style={{ fontWeight: "bold" }}>Add</Text>
         </TouchableOpacity>
@@ -41,6 +40,7 @@ export default function ManageFaqCreate() {
   }, [navigation]);
 
   const handleCreate = () => {
+    console.log(newQuestion, newAnswer);
     dispatch(
       createQuestion({
         title: "Andrei Sager Gumagana",
@@ -60,8 +60,8 @@ export default function ManageFaqCreate() {
         <TextInputWrapper label="Question">
           <TextInput
             value={newQuestion}
+            onChangeText={(text) => setNewQuestion(text)}
             placeholder="Enter a question..."
-            onChangeText={(newQuestion) => setNewQuestion(newQuestion)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -75,8 +75,8 @@ export default function ManageFaqCreate() {
         <TextInputWrapper label="Answer">
           <TextInput
             value={newAnswer}
+            onChangeText={(text) => setNewAnswer(text)}
             placeholder="Enter an answer..."
-            onChangeText={(newAnswer) => setNewAnswer(newAnswer)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically

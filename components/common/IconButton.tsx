@@ -6,9 +6,10 @@ type IIconBtn = {
   icon: string;
   size: number;
   onPress?: () => void;
+  color?: string;
 };
 
-export default function IconBtn({ icon, size, onPress }: IIconBtn) {
+export default function IconBtn({ icon, size, onPress, color }: IIconBtn) {
   return (
     <Pressable
       style={styles.container}
@@ -19,7 +20,7 @@ export default function IconBtn({ icon, size, onPress }: IIconBtn) {
         radius: 20,
       }}
     >
-      <FontAwesome6 name={icon} size={size} color={"black"} />
+      <FontAwesome6 name={icon} size={size} color={color || "black"} />
     </Pressable>
   );
 }

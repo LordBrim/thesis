@@ -14,7 +14,6 @@ import {
   GS,
   HORIZONTAL_SCREEN_MARGIN,
 } from "../../../../constants";
-import QuestionPanel from "../../../../components/faq/QuestionPanel";
 import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../../../constants/theme";
@@ -84,6 +83,27 @@ export default function FAQTab() {
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+type IQuestionPanel = {
+  title: string;
+  questions: Array<{ question: string; answer: string }>;
+};
+
+export function QuestionPanel({ title, questions }: IQuestionPanel) {
+  return (
+    <View style={panel.container}>
+      <Text style={[GS.h3, panel.title]}>{title}</Text>
+      <FlatList
+        contentContainerStyle={(panel.container, { gap: 16 })}
+        data={questions}
+        renderItem={({ item }) => (
+          <QuestionCard question={item.question} answer={item.answer} />
+        )}
+        keyExtractor={(item) => item.question}
+      />
+    </View>
   );
 }
 

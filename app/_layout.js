@@ -6,6 +6,7 @@ import Toastable from "react-native-toastable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import IconBtn from "components/common/IconButton";
 import { handleAdd } from "../app/(app)/(admin)/(home)/manage-faq";
+import { Text, TouchableOpacity } from "react-native";
 
 export default function StackLayout() {
   const { top } = useSafeAreaInsets();
@@ -78,6 +79,21 @@ export default function StackLayout() {
           options={{
             headerRight: () => (
               <IconBtn icon="plus" size={18} onPress={() => handleAdd()} />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="(app)/(admin)/(home)/manage-faq-question"
+          options={{
+            headerRight: () => (
+              <TouchableOpacity
+                style={{
+                  padding: 12,
+                  borderRadius: 10,
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>Save</Text>
+              </TouchableOpacity>
             ),
           }}
         />

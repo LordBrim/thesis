@@ -136,6 +136,7 @@ const card = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    padding: 2,
   },
   question: {
     flex: 1,

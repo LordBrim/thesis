@@ -23,17 +23,17 @@ import {
   COLORS,
   SIZES,
   HORIZONTAL_SCREEN_MARGIN,
-} from "../../../constants/theme";
+} from "../../../../constants/theme";
 import { GestureHandlerRootView } from "react-native-gesture-handler"; // Import GestureHandlerRootView
 import { Image } from "expo-image";
 
-import HospitalMarker from "../../../components/maps/HospitalMarkers";
-import Plus from "../../../assets/icons/Plus";
-import Minus from "../../../assets/icons/Minus";
-import ABloodType from "../../../assets/icons/A_bloodType";
-import ABBloodType from "../../../assets/icons/AB_bloodType";
-import BBloodType from "../../../assets/icons/B_bloodType";
-import OBloodType from "../../../assets/icons/O_bloodType";
+import HospitalMarker from "../../../../components/maps/HospitalMarkers";
+import Plus from "../../../../assets/icons/Plus";
+import Minus from "../../../../assets/icons/Minus";
+import ABloodType from "../../../../assets/icons/A_bloodType";
+import ABBloodType from "../../../../assets/icons/AB_bloodType";
+import BBloodType from "../../../../assets/icons/B_bloodType";
+import OBloodType from "../../../../assets/icons/O_bloodType";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 import { getDistance } from "geolib";
 import { collection, getDocs } from "firebase/firestore";
@@ -45,7 +45,6 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
-import EventCard from "components/home/EventCard";
 const DisplayedIcons = [
   {
     Icon: ABloodType,

@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { createQuestion, getFAQs } from "rtx/slices/faq";
+import { getFAQs } from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 

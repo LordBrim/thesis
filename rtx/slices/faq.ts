@@ -88,7 +88,7 @@ interface QuestionState {
 const initialState: FAQsState = {
   faqs: [
     {
-      title: "Andrei Sager Gumagana",
+      title: "Gumagana",
       questions: [
         {
           question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.?",
@@ -146,20 +146,30 @@ export const faqsSlice = createSlice({
     },
     updateQuestion: (
       state,
-      action: PayloadAction<{ faqId: string; question: QuestionState }>
+      action: PayloadAction<{
+        title: string;
+        oldQuestion: QuestionState;
+        updatedQuestion: QuestionState;
+      }>
     ) => {
-      const { faqId, question } = action.payload;
-      const faq = state.faqs.find((faq) => faq.title === faqId);
+      const { title, oldQuestion, updatedQuestion } = action.payload;
+      const { question, answer } = updatedQuestion;
+      const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
-      if (faq) {
-        const questionIndex = faq.questions.findIndex(
-          (q) => q.id === question.id
+      if (faqIndex !== -1) {
+        const questionIndex = state.faqs[faqIndex].questions.findIndex(
+          (q) => q.question === oldQuestion.question
         );
+
         if (questionIndex !== -1) {
-          faq.questions[questionIndex] = question;
+          state.faqs[faqIndex].questions[questionIndex] = {
+            question,
+            answer,
+          };
         }
       }
     },
+
     deleteQuestion: (
       state,
       action: PayloadAction<{ faqId: string; questionId: string }>

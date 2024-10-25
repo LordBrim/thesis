@@ -13,7 +13,7 @@ import AccountTab from "./(app)/(user)/(tabs)/account-tab";
 // Home Screens
 import Request from "./(app)/(user)/(home)/request";
 import EventDetails from "./(app)/(user)/(home)/event-details";
-import HospitalMapView from "./(app)/(maps)/hospitalMapView";
+import HospitalMapView from "./(app)/(user)/(maps)/hospitalMapView";
 import AllEventsScreen from "./(app)/(user)/(home)/all-events";
 import ManageBloodUnits from "./(app)/(admin)/(home)/manage-blood-units";
 import ManageEvents from "./(app)/(admin)/(home)/manage-events";

@@ -22,7 +22,7 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { router } from "expo-router";
 import ActionBtn from "components/home/ActionBtn";
 // Import your Firebase config
-import { FIREBASE_AUTH, FIRESTORE_DB } from "../../../firebase-config";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../../../firebase-config";
 import AdminDonate from "./admin-donate";
 
 export default function AdminTicketScreen() {
@@ -104,12 +104,12 @@ export default function AdminTicketScreen() {
     }
   };
 
-  const hospitalImages = {
-    "UERM Hospital": require("../../../../assets/images/hospital/uerm.png"),
-    "Quirino Memorial Medical Center": require("../../../../assets/images/hospital/quirino.png"),
-    "Our Lady of Lourdes Hospital": require("../../../../assets/images/hospital/lourdes.png"),
-    "De los Santos Medical Center": require("../../../../assets/images/hospital/santos.png"),
-  };
+  // const hospitalImages = {
+  //   "UERM Hospital": require("../../../../assets/images/hospital/uerm.png"),
+  //   "Quirino Memorial Medical Center": require("../../../../assets/images/hospital/quirino.png"),
+  //   "Our Lady of Lourdes Hospital": require("../../../../assets/images/hospital/lourdes.png"),
+  //   "De los Santos Medical Center": require("../../../../assets/images/hospital/santos.png"),
+  // };
   return (
     <View style={styles.container}>
       <View
@@ -123,10 +123,10 @@ export default function AdminTicketScreen() {
           margin: 10,
         }}
       >
-        <Image
+        {/* <Image
           source={hospitalImages[adminHospital]}
           style={{ width: 60, height: 60, marginRight: 12 }}
-        />
+        /> */}
         <Text style={[styles.noRequests, { fontWeight: "bold" }]}>
           {adminHospital}
         </Text>

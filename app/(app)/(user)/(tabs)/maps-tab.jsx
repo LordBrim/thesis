@@ -1,146 +1,143 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   StyleSheet,
   Text,
-  Easing,
   TextInput,
   SafeAreaView,
   Pressable,
+  Animated,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES } from "../../../../constants/theme";
-
-import { mapStyle } from "../../../../components/maps/mapStyle";
-import HospitalMapView from "../../../../components/maps/hospitalMapView";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants";
 import Description from "components/common/texts/Description";
-import UERMLogo from "../../../../assets/images/hospital/uerm.png";
-import DeLosSantosLogo from "../../../../assets/images/hospital/santos.png";
-import LourdesLogo from "../../../../assets/images/hospital/lourdes.png";
-import QuirinoLogo from "../../../../assets/images/hospital/quirino.png";
 import { GS } from "constants";
-const HospitalsData = [
-  {
-    id: 1,
-    name: "UERM Hospital",
-    coordinates: { latitude: 14.607184, longitude: 121.020384 },
-    address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
-    logoUrl: UERMLogo,
-    bloodBanks: [
-      { bloodType: "A+", quantity: 0 },
-      { bloodType: "A-", quantity: 0 },
-      { bloodType: "B+", quantity: 10 },
-      { bloodType: "B-", quantity: 10 },
-      { bloodType: "AB+", quantity: 10 },
-      { bloodType: "AB-", quantity: 10 },
-      { bloodType: "O+", quantity: 10 },
-      { bloodType: "O-", quantity: 0 },
-    ],
-  },
-  {
-    id: 2,
-    name: "De Los Santos Medical Center",
-    coordinates: { latitude: 14.6200998, longitude: 121.0175533 },
-    address: "201 E Rodriguez Sr. Ave, Quezon City, 1112 Metro Manila",
-    logoUrl: DeLosSantosLogo,
-    bloodBanks: [
-      { bloodType: "A+", quantity: 10 },
-      { bloodType: "A-", quantity: 0 },
-      { bloodType: "B+", quantity: 10 },
-      { bloodType: "B-", quantity: 10 },
-      { bloodType: "AB+", quantity: 10 },
-      { bloodType: "AB-", quantity: 10 },
-      { bloodType: "O+", quantity: 0 },
-      { bloodType: "O-", quantity: 0 },
-    ],
-  },
-  {
-    id: 3,
-    name: "Our Lady of Lourdes Hospital",
-    coordinates: { latitude: 14.5949547, longitude: 121.0199822 },
-    address: "46 P. Sanchez St, Santa Mesa, Manila, 1016 Metro Manila",
-    logoUrl: LourdesLogo,
-    bloodBanks: [
-      { bloodType: "A+", quantity: 0 },
-      { bloodType: "A-", quantity: 0 },
-      { bloodType: "B+", quantity: 10 },
-      { bloodType: "B-", quantity: 10 },
-      { bloodType: "AB+", quantity: 10 },
-      { bloodType: "AB-", quantity: 10 },
-      { bloodType: "O+", quantity: 0 },
-      { bloodType: "O-", quantity: 0 },
-    ],
-  },
-  {
-    id: 4,
-    name: "Quirino Memorial Medical Center",
-    coordinates: { latitude: 14.6222558, longitude: 121.0702733 },
-    address: "Project 4, Quezon City, 1109 Metro Manila",
-    logoUrl: QuirinoLogo,
-    bloodBanks: [
-      { bloodType: "A+", quantity: 0 },
-      { bloodType: "A-", quantity: 0 },
-      { bloodType: "B+", quantity: 10 },
-      { bloodType: "B-", quantity: 10 },
-      { bloodType: "AB+", quantity: 10 },
-      { bloodType: "AB-", quantity: 10 },
-      { bloodType: "O+", quantity: 0 },
-      { bloodType: "O-", quantity: 0 },
-    ],
-  },
-];
+import { useRouter } from "expo-router";
+import { FIRESTORE_DB } from "../../../../firebase-config";
+import { getDocs, collection } from "firebase/firestore";
+import { LinearGradient } from "expo-linear-gradient";
+import { getStorage, ref, getDownloadURL } from "firebase/storage"; // Correct import
 
 function Maps({ setMapBackground, setMapHeader }) {
   const [selectedHospital, setSelectedHospital] = useState(null);
-  const [pressedButtonId, setPressedButtonId] = useState(null);
-
+  const [HospitalsData, setHospitals] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [isMarkerSelected, setIsMarkerSelected] = useState(false);
+  const skeletonAnimation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        // Simulate a delay
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        const querySnapshot = await getDocs(
+          collection(FIRESTORE_DB, "hospitalData")
+        );
+        const hospitalsData = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const data = doc.data();
+            const storage = getStorage(); // Initialize storage
+            const logoRef = ref(storage, `hospitalDataLogo/${doc.id}.png`);
+            const logoUrl = await getDownloadURL(logoRef);
+            return {
+              id: doc.id,
+              ...data,
+              logoUrl,
+            };
+          })
+        );
+        setHospitals(hospitalsData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching hospitals:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchHospitals();
+  }, []);
 
   useEffect(() => {
     setIsMarkerSelected(selectedHospital !== null);
     navigation.setOptions({ isMarkerSelected });
   }, [selectedHospital, navigation]);
 
-  const focusMap = (hospital) => {
-    setSelectedHospital(hospital);
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(skeletonAnimation, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(skeletonAnimation, {
+          toValue: 0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [skeletonAnimation]);
 
-    selectedHospital?.current.animateCamera(
-      {
-        center: {
-          latitude: hospital.coordinates.latitude,
-          longitude: hospital.coordinates.longitude,
-        },
+  const router = useRouter();
+  const focusMap = (hospital) => {
+    router.push({
+      pathname: "/hospitalMapView",
+      params: {
+        hospital: JSON.stringify(hospital),
+        styles: JSON.stringify(styles),
+        hospitals: JSON.stringify(HospitalsData), // Ensure this is passed
       },
-      { duration: 1000 },
-      { easing: Easing.linear },
-      zoomTo(18)
-    );
+    });
+  };
+
+  const animatedStyle = {
+    opacity: skeletonAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.3, 1],
+    }),
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {/* TODO: Add search function for multiple hospitals */}
-      {!selectedHospital && (
-        <View style={styles.cTop}>
-          <View style={{ gap: 8 }}>
-            <Text style={GS.h1}>Find a medical institution</Text>
-            <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
-          </View>
-
-          <TextInputWrapper>
-            <TextInput
-              placeholder="Find a medical institution..."
-              style={{ flex: 1 }}
-            />
-            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
-          </TextInputWrapper>
+      <View style={styles.cTop}>
+        <View style={{ gap: 8 }}>
+          <Text style={GS.h1}>Find a medical institution</Text>
+          <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
         </View>
-      )}
-      {!selectedHospital &&
+
+        <TextInputWrapper>
+          <TextInput
+            placeholder="Find a medical institution..."
+            style={{ flex: 1 }}
+          />
+          <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+        </TextInputWrapper>
+      </View>
+      {loading ? (
+        <View style={styles.skeletonContainer}>
+          {[...Array(4)].map((_, index) => (
+            <Animated.View
+              key={index}
+              style={[styles.skeletonItem, animatedStyle]}
+            >
+              <LinearGradient
+                colors={["#e0e0e0", "#c0c0c0", "#e0e0e0"]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.gradient}
+              />
+            </Animated.View>
+          ))}
+        </View>
+      ) : (
+        !selectedHospital &&
         HospitalsData.map((hospital) => (
           <Pressable
             style={styles.hContainer}
@@ -157,21 +154,7 @@ function Maps({ setMapBackground, setMapHeader }) {
               />
             </View>
           </Pressable>
-        ))}
-      {selectedHospital && (
-        <HospitalMapView
-          mapStyle={mapStyle}
-          selectedHospital={selectedHospital}
-          setSelectedHospital={setSelectedHospital}
-          setPressedButtonId={setPressedButtonId}
-          hospitals={HospitalsData}
-          navigation={navigation}
-          goBack={() => {
-            setPressedButtonId(null);
-            setSelectedHospital(null);
-          }}
-          styles={styles}
-        />
+        ))
       )}
     </SafeAreaView>
   );
@@ -191,122 +174,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     fontWeight: "bold",
     gap: 16,
-  },
-  buttonHospital: {
-    width: "80%",
-    padding: SIZES.medium,
-    marginVertical: SIZES.small,
-    backgroundColor: "white",
-    borderWidth: 2,
-    borderRadius: 10,
-    elevation: 5,
-    borderColor: COLORS.gray2,
-  },
-  buttonHospitalPressed: {
-    width: "85%",
-    padding: SIZES.medium,
-    marginVertical: SIZES.medium,
-    backgroundColor: "white",
-    borderWidth: 2,
-    elevation: 5,
-    borderRadius: 10,
-    borderColor: COLORS.gray,
-  },
-  textHospital: {
-    fontSize: SIZES.large,
-    textAlign: "left",
-    color: COLORS.black,
-  },
-  textHospitalPressed: {
-    fontSize: SIZES.large,
-    textAlign: "left",
-    color: "white",
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-  buttonContainer: {
-    position: "absolute",
-    bottom: "10%",
-    alignSelf: "center",
-    backgroundColor: COLORS.red,
-  },
-  markerContainer: {
-    flexDirection: "row",
-    backgroundColor: "white",
-    padding: 5,
-    borderRadius: 5,
-    elevation: 5,
-  },
-  markerText: {
-    color: "#000",
-  },
-  markerImage: {
-    width: 25,
-    height: 25,
-  },
-  fab: {
-    position: "absolute",
-    backgroundColor: "white",
-    borderRadius: 10,
-    borderColor: COLORS.gray,
-    borderWidth: 1,
-    width: 100,
-    shadowColor: "black",
-    elevation: 5,
-    flexDirection: "row",
-    margin: 16,
-    left: 0,
-    top: 0,
-    zIndex: 6,
-  },
-  header: {
-    fontSize: SIZES.xLarge,
-    marginBottom: SIZES.medium,
-    marginTop: 30,
-  },
-  subHeader: {
-    fontSize: SIZES.medium,
-  },
-  infoBottom: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "white",
-    padding: 10,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-  },
-  infoTop: {
-    position: "absolute",
-    zIndex: 5,
-    height: 120,
-    left: 0,
-    right: 0,
-    top: 0,
-    paddingTop: 20,
-    backgroundColor: COLORS.redTop,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    padding: 10,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
-  },
-  infoTopTitle: {
-    fontSize: SIZES.xLarge,
-    fontWeight: "bold",
-    color: COLORS.background,
-  },
-  infoTopDistance: {
-    fontSize: SIZES.medium,
-    color: COLORS.background,
   },
   hContainer: {
     flex: 1,
@@ -328,6 +195,21 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  skeletonContainer: {
+    width: "100%",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
+  skeletonItem: {
+    width: "100%",
+    height: 50,
+    backgroundColor: COLORS.slate100,
+    borderRadius: 8,
+    marginVertical: 8,
+    overflow: "hidden",
+  },
+  gradient: {
+    flex: 1,
   },
 });
 

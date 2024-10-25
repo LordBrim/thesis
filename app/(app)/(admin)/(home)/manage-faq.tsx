@@ -26,6 +26,7 @@ export default function ManageFAQ() {
           keyExtractor={(item) => item.title}
           overScrollMode="never"
           scrollEnabled={true}
+          persistentScrollbar={true}
           contentContainerStyle={{ gap: 16 }}
         />
       </View>

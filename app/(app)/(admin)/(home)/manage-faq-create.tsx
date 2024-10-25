@@ -6,26 +6,48 @@ import {
   ScrollView,
   SafeAreaView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { useDispatch } from "react-redux";
+import { TouchableOpacity } from "react-native";
 import { createQuestion } from "rtx/slices/faq";
-
-export const saveChanges = () => {};
+import IconBtn from "components/common/IconButton";
+import { useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {
   const [editedQuestion, setEditedQuestion] = useState("");
   const [editedAnswer, setEditedAnswer] = useState("");
-
   const dispatch = useDispatch();
-  // dispatch(
-  //   createQuestion({
-  //     title: editedQuestion,
-  //     question: { editedQuestion, editedAnswer },
-  //   })
-  // );
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 60,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontWeight: "bold" }}>Add</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+
+  const handleCreate = () => {
+    dispatch(
+      createQuestion({
+        title: "Andrei Sager Gumagana",
+        question: { question: editedQuestion, answer: editedAnswer },
+      })
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>

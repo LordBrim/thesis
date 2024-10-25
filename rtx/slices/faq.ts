@@ -74,7 +74,11 @@ const initialState: FAQsState = {
     {
       title: "Andrei Sager Gumagana",
       questions: [
-        { question: "Question number 1?", answer: "Answer number 1" },
+        {
+          question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.?",
+          answer:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vulputate metus vel purus rhoncus facilisis ac nec eros. Quisque eu efficitur erat. Fusce pellentesque hendrerit nibh nec cursus. Morbi sed dictum velit, sit amet bibendum sem. Nam mi ex, laoreet placerat aliquet eu, venenatis vel purus. Mauris ipsum velit, tincidunt sed augue vitae, dictum feugiat erat.",
+        },
         { question: "Question number 2?", answer: "Answer number 2" },
         { question: "Question number 3?", answer: "Answer number 3" },
       ],

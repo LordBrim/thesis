@@ -13,12 +13,13 @@ import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { createQuestion } from "rtx/slices/faq";
+import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {
-  const [newQuestion, setNewQuestion] = useState<string>("");
-  const [newAnswer, setNewAnswer] = useState<string>("");
+  const [newTitle, setNewTitle] = useState("Blood");
+  const [newQuestion, setNewQuestion] = useState("");
+  const [newAnswer, setNewAnswer] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -46,10 +47,11 @@ export default function ManageFaqCreate() {
     console.log(newAnswer);
     dispatch(
       createQuestion({
-        title: "Andrei Sager Gumagana",
+        title: newTitle,
         newQuestion: { question: newQuestion, answer: newAnswer },
       })
     );
+    addFAQToFirebase(newTitle, newQuestion, newAnswer);
     router.back();
   };
 

@@ -12,9 +12,9 @@ export default function ManageFAQ() {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   dispatch(getFAQs());
-  // }, []);
+  useEffect(() => {
+    dispatch(getFAQs());
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({

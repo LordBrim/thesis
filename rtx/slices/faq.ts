@@ -3,11 +3,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FIRESTORE_DB } from "firebase-config";
 import {
   addDoc,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
   getDocs,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 
 export const getFAQs = createAsyncThunk("getFAQs", async () => {
@@ -33,10 +36,24 @@ export const addFAQToFirebase = async (
   answer: string
 ) => {
   const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-  await addDoc(faqsCollectionRef, {
-    title,
-    questions: [{ question, answer }],
-  });
+
+  const existingFAQQuery = query(
+    faqsCollectionRef,
+    where("title", "==", title)
+  );
+  const querySnapshot = await getDocs(existingFAQQuery);
+
+  if (!querySnapshot.empty) {
+    const faqDocRef = querySnapshot.docs[0].ref;
+    await updateDoc(faqDocRef, {
+      questions: arrayUnion({ question, answer }),
+    });
+  } else {
+    await addDoc(faqsCollectionRef, {
+      title,
+      questions: [{ question, answer }],
+    });
+  }
 };
 
 export const updateFAQInFirebase = async (

@@ -23,7 +23,7 @@ export default function TextInputWrapper({
         { ...styles.container, ...customStyle },
       ]}
     >
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={styles.label}> {label} </Text>}
       {children}
     </View>
   );

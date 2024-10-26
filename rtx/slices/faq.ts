@@ -79,9 +79,33 @@ export const updateFAQInFirebase = async (
   }
 };
 
-export const deleteFAQFromFirebase = async (id: string) => {
-  const faqDocRef = doc(FIRESTORE_DB, "faqs", id);
-  await deleteDoc(faqDocRef);
+export const deleteQuestionInFirebase = async (
+  title: string,
+  deletedQuestion: { question: string; answer: string }
+) => {
+  try {
+    const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
+
+    const q = query(faqsCollectionRef, where("title", "==", title));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const faqDoc = querySnapshot.docs[0];
+      const questions = faqDoc.data().questions;
+
+      const updatedQuestions = questions.filter(
+        (q: any) =>
+          q.question !== deletedQuestion.question ||
+          q.answer !== deletedQuestion.answer
+      );
+
+      await updateDoc(faqDoc.ref, {
+        questions: updatedQuestions,
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting question:", error);
+  }
 };
 
 interface FAQsState {

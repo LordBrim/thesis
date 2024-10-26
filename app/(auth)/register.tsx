@@ -148,7 +148,10 @@ export default function RegisterScreen() {
                   enablesReturnKeyAutomatically
                   secureTextEntry={pToggle.passwordVisibility}
                 />
-                <Pressable onPress={pToggle.handlePasswordVisibility}>
+                <Pressable
+                  onPress={pToggle.handlePasswordVisibility}
+                  style={{ paddingRight: 12 }}
+                >
                   <Ionicons
                     name={pToggle.rightIcon}
                     size={SIZES.xLarge}
@@ -169,7 +172,10 @@ export default function RegisterScreen() {
                   enablesReturnKeyAutomatically
                   secureTextEntry={cpToggle.passwordVisibility}
                 />
-                <Pressable onPress={cpToggle.handlePasswordVisibility}>
+                <Pressable
+                  onPress={cpToggle.handlePasswordVisibility}
+                  style={{ paddingRight: 12 }}
+                >
                   <Ionicons
                     name={cpToggle.rightIcon}
                     size={SIZES.xLarge}
@@ -283,6 +289,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
+    padding: 12,
   },
   signUpWith: {
     flexDirection: "column",

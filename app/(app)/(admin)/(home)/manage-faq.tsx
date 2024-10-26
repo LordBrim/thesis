@@ -87,12 +87,13 @@ type IQuestionCard = {
 };
 
 export function QuestionCard({ title, question, answer }: IQuestionCard) {
-  const handleUpdate = (question, answer) => {
+  const handleUpdate = (title, question, answer) => {
     router.push({
       pathname: "(app)/(admin)/(home)/manage-faq-update",
       params: {
-        question: question,
-        answer: answer,
+        title: title.toString(),
+        question: question.toString(),
+        answer: answer.toString(),
       },
     });
   };
@@ -116,7 +117,7 @@ export function QuestionCard({ title, question, answer }: IQuestionCard) {
         <IconBtn
           icon="pencil"
           size={18}
-          onPress={() => handleUpdate(question, answer)}
+          onPress={() => handleUpdate(title, question, answer)}
         />
         <IconBtn
           icon="trash"

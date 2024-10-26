@@ -58,24 +58,32 @@ export const addFAQToFirebase = async (
 };
 
 export const updateFAQInFirebase = async (
-  id: string,
+  title: string,
   oldQuestion: { question: string; answer: string },
   updatedQuestion: { question: string; answer: string }
 ) => {
-  const faqDocRef = doc(FIRESTORE_DB, "faq", id);
+  try {
+    const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
 
-  const faqDoc = await getDoc(faqDocRef);
+    const q = query(faqsCollectionRef, where("title", "==", title));
+    const querySnapshot = await getDocs(q);
 
-  if (faqDoc.exists()) {
-    const { questions } = faqDoc.data();
+    if (!querySnapshot.empty) {
+      const faqDoc = querySnapshot.docs[0];
+      const questions = faqDoc.data().questions;
 
-    const updatedQuestions = questions.map((q: any) =>
-      q.id === oldQuestion.id ? updatedQuestion : q
-    );
+      const updatedQuestions = questions.map((q: any) =>
+        q.question === oldQuestion.question && q.answer === oldQuestion.answer
+          ? updatedQuestion
+          : q
+      );
 
-    await updateDoc(faqDocRef, {
-      questions: updatedQuestions,
-    });
+      await updateDoc(faqDoc.ref, {
+        questions: updatedQuestions,
+      });
+    }
+  } catch (error) {
+    console.error("Error updating question:", error);
   }
 };
 

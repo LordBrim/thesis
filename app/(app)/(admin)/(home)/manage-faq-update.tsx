@@ -12,15 +12,15 @@ import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { Text } from "react-native";
 import { useDispatch } from "react-redux";
-import { updateQuestion } from "rtx/slices/faq";
-
-export const saveChanges = () => {};
+import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
 
 export default function ManageFaqUpdate() {
-  const { question, answer } = useLocalSearchParams();
-  const [updatedTitle, setUpdatedTitle] = useState("Gumagana");
-  const [updatedQuestion, setUpdatedQuestion] = useState(question.toString());
-  const [updatedAnswer, setUpdatedAnswer] = useState(answer.toString());
+  const { title, question, answer } = useLocalSearchParams();
+  const [oldTitle, setOldTitle] = useState(title);
+  const [oldQuestion, setOldQuestion] = useState(question);
+  const [oldAnswer, setOldAnswer] = useState(answer);
+  const [updatedQuestion, setUpdatedQuestion] = useState(question);
+  const [updatedAnswer, setUpdatedAnswer] = useState(answer);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -41,20 +41,30 @@ export default function ManageFaqUpdate() {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, updatedQuestion, updateQuestion]);
+  }, [navigation, updatedQuestion, updatedAnswer]);
 
   const handleUpdate = () => {
     dispatch(
       updateQuestion({
-        title: updatedTitle,
+        title: oldTitle,
         oldQuestion: {
-          question: question.toString(),
-          answer: question.toString(),
+          question: oldQuestion,
+          answer: oldAnswer,
         },
-        updatedQuestion: { question: updatedQuestion, answer: updatedAnswer },
+        updatedQuestion: {
+          question: updatedQuestion,
+          answer: updatedAnswer,
+        },
       })
     );
-    // addFAQToFirebase(newTitle, newQuestion, newAnswer);
+    updateFAQInFirebase(
+      oldTitle,
+      {
+        question: oldQuestion,
+        answer: oldAnswer,
+      },
+      { question: updatedQuestion, answer: updatedAnswer }
+    );
     router.back();
   };
 

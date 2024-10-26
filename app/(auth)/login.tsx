@@ -229,6 +229,10 @@ export default function LoginScreen() {
                 autoCapitalize="none"
                 autoCorrect={true}
                 enablesReturnKeyAutomatically
+                style={{
+                  flex: 1,
+                  padding: 12,
+                }}
               />
             </TextInputWrapper>
             {emailError ? (
@@ -243,8 +247,15 @@ export default function LoginScreen() {
                 autoCorrect={true}
                 enablesReturnKeyAutomatically
                 secureTextEntry={passwordVisibility}
+                style={{
+                  flex: 1,
+                  padding: 12,
+                }}
               />
-              <Pressable onPress={handlePasswordVisibility}>
+              <Pressable
+                onPress={handlePasswordVisibility}
+                style={{ paddingRight: 12 }}
+              >
                 <Ionicons
                   name={rightIcon}
                   size={SIZES.xLarge}

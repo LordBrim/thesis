@@ -6,6 +6,7 @@ import {
   Text,
   SectionList,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -63,9 +64,17 @@ export default function FAQTab() {
               placeholder="Find a question..."
               onChangeText={handleSearch}
               value={searchText}
-              style={{ flex: 1 }}
+              style={{
+                flex: 1,
+                padding: 12,
+              }}
             />
-            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+            <TouchableOpacity
+              style={{ paddingRight: 12 }}
+              onPress={handleSearch}
+            >
+              <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+            </TouchableOpacity>
           </TextInputWrapper>
         </View>
 

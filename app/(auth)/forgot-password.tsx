@@ -74,6 +74,10 @@ export default function ForgotPassword() {
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
+            style={{
+              flex: 1,
+              padding: 12,
+            }}
           />
         </TextInputWrapper>
 

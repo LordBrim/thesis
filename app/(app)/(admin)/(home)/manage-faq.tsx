@@ -3,7 +3,11 @@ import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { getFAQs } from "rtx/slices/faq";
+import {
+  deleteQuestion,
+  deleteQuestionInFirebase,
+  getFAQs,
+} from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
@@ -55,12 +59,20 @@ type IQuestionPanel = {
 export function QuestionPanel({ title, questions }: IQuestionPanel) {
   return (
     <View style={panel.container}>
+      {/* TODO: For super admin where the super can see all the questions 
+       {questions.length > 0 && (
+        <Text style={[GS.h3, panel.title]}>{title}</Text>
+      )} */}
       <Text style={[GS.h3, panel.title]}>{title}</Text>
       <FlatList
         contentContainerStyle={(panel.container, { gap: 16 })}
         data={questions}
         renderItem={({ item }) => (
-          <QuestionCard question={item.question} answer={item.answer} />
+          <QuestionCard
+            title={title}
+            question={item.question}
+            answer={item.answer}
+          />
         )}
         keyExtractor={(item) => item.question}
       />
@@ -69,25 +81,34 @@ export function QuestionPanel({ title, questions }: IQuestionPanel) {
 }
 
 type IQuestionCard = {
+  title: string;
   question: string;
   answer: string;
 };
 
-export const handleUpdate = (question, answer) => {
-  router.push({
-    pathname: "(app)/(admin)/(home)/manage-faq-update",
-    params: {
-      question: question,
-      answer: answer,
-    },
-  });
-};
+export function QuestionCard({ title, question, answer }: IQuestionCard) {
+  const handleUpdate = (question, answer) => {
+    router.push({
+      pathname: "(app)/(admin)/(home)/manage-faq-update",
+      params: {
+        question: question,
+        answer: answer,
+      },
+    });
+  };
 
-export const handleDelete = () => {
-  console.log("Delete A Question");
-};
+  const dispatch = useDispatch();
 
-export function QuestionCard({ question, answer }: IQuestionCard) {
+  const handleDelete = (title, deletedQuestion) => {
+    dispatch(
+      deleteQuestion({
+        title: title,
+        deletedQuestion: deletedQuestion,
+      })
+    );
+    deleteQuestionInFirebase(title, deletedQuestion);
+  };
+
   return (
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
@@ -100,7 +121,7 @@ export function QuestionCard({ question, answer }: IQuestionCard) {
         <IconBtn
           icon="trash"
           size={18}
-          onPress={() => handleDelete()}
+          onPress={() => handleDelete(title, { question, answer })}
           color="red"
         />
       </Pressable>
@@ -126,9 +147,12 @@ const styles = StyleSheet.create({
 const panel = StyleSheet.create({
   container: {
     flex: 1,
+    width: "100%",
     borderColor: COLORS.slate100,
   },
   title: {
+    flex: 1,
+    minWidth: "100%",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingVertical: 8,
   },

@@ -34,7 +34,9 @@ export default function ManageHospitals() {
         <IconBtn
           icon="plus"
           size={18}
-          onPress={() => router.push("(app)/(admin)/(home)/manage-faq-create")}
+          onPress={() =>
+            router.push("(app)/(super)/(home)/manage-hospitals-create")
+          }
         />
       ),
     });
@@ -100,7 +102,7 @@ export function QuestionCard({
     stock
   ) => {
     router.push({
-      pathname: "(app)/(admin)/(home)/manage-faq-update",
+      pathname: "(app)/(super)/(home)/manage-hospitals-update",
       params: {
         name: name.toString(),
         logoUrl: logoUrl.toString(),

@@ -21,19 +21,19 @@ export default function AdminDashboard() {
 
   const gridBtns = [
     {
-      href: "manage-hospitals",
+      href: "/(app)/(super)/(home)/manage-hospitals",
       icon: (
         <FontAwesome6 name="hospital-user" size={size} color={COLORS.primary} />
       ),
       title: "Hospitals",
     },
     {
-      href: "manage-admins",
+      href: "/(app)/(super)/(home)/manage-admins",
       icon: <FontAwesome6 name="user-tie" size={size} color={COLORS.primary} />,
       title: "Admins",
     },
     {
-      href: "manage-staff",
+      href: "/(app)/(super)/(home)/manage-staff",
       icon: (
         <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
       ),

@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Pressable,
   Animated,
+  TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES } from "../../../../constants/theme";
@@ -115,9 +116,14 @@ function Maps({ setMapBackground, setMapHeader }) {
         <TextInputWrapper>
           <TextInput
             placeholder="Find a medical institution..."
-            style={{ flex: 1 }}
+            style={{
+              flex: 1,
+              padding: 12,
+            }}
           />
-          <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+          <TouchableOpacity style={{ paddingRight: 12 }} onPress={handleSearch}>
+            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
+          </TouchableOpacity>
         </TextInputWrapper>
       </View>
       {loading ? (

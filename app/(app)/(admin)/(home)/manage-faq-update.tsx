@@ -9,15 +9,19 @@ import React, { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { Text } from "react-native";
-
-export const saveChanges = () => {};
+import { useDispatch } from "react-redux";
+import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
 
 export default function ManageFaqUpdate() {
-  const { question, answer } = useLocalSearchParams();
-  const [editedQuestion, setEditedQuestion] = useState(question);
-  const [editedAnswer, setEditedAnswer] = useState(answer);
+  const { title, question, answer } = useLocalSearchParams();
+  const [oldTitle, setOldTitle] = useState(title);
+  const [oldQuestion, setOldQuestion] = useState(question);
+  const [oldAnswer, setOldAnswer] = useState(answer);
+  const [updatedQuestion, setUpdatedQuestion] = useState(question);
+  const [updatedAnswer, setUpdatedAnswer] = useState(answer);
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -31,12 +35,38 @@ export default function ManageFaqUpdate() {
             justifyContent: "center",
             alignItems: "center",
           }}
+          onPress={handleUpdate}
         >
           <Text style={{ fontWeight: "bold" }}>Save</Text>
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, updatedQuestion, updatedAnswer]);
+
+  const handleUpdate = () => {
+    dispatch(
+      updateQuestion({
+        title: oldTitle,
+        oldQuestion: {
+          question: oldQuestion,
+          answer: oldAnswer,
+        },
+        updatedQuestion: {
+          question: updatedQuestion,
+          answer: updatedAnswer,
+        },
+      })
+    );
+    updateFAQInFirebase(
+      oldTitle,
+      {
+        question: oldQuestion,
+        answer: oldAnswer,
+      },
+      { question: updatedQuestion, answer: updatedAnswer }
+    );
+    router.back();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,9 +77,9 @@ export default function ManageFaqUpdate() {
       >
         <TextInputWrapper label="Question">
           <TextInput
-            value={editedQuestion}
+            value={updatedQuestion}
             placeholder="Enter a question..."
-            onChangeText={(question) => setEditedQuestion(question)}
+            onChangeText={(question) => setUpdatedQuestion(question)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -62,9 +92,9 @@ export default function ManageFaqUpdate() {
         </TextInputWrapper>
         <TextInputWrapper label="Answer">
           <TextInput
-            value={editedAnswer}
+            value={updatedAnswer}
             placeholder="Enter an answer..."
-            onChangeText={(answer) => setEditedAnswer(answer)}
+            onChangeText={(answer) => setUpdatedAnswer(answer)}
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically

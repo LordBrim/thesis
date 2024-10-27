@@ -288,27 +288,22 @@ export const hospitalsSlice = createSlice({
       const hospitalIndex = state.hospitals.findIndex(
         (hospital) => hospital.name === name
       );
-
       if (hospitalIndex === -1) {
         state.hospitals.push(action.payload);
       }
     },
+    deleteHospital: (state, action: PayloadAction<{ name: string }>) => {
+      const { name } = action.payload;
+      const hospitalIndex = state.hospitals.findIndex(
+        (hospital) => hospital.name === name
+      );
+
+      if (hospitalIndex !== -1) {
+        state.hospitals.splice(hospitalIndex, 1);
+      }
+    },
   },
   // reducers: {
-  //   createQuestion: (
-  //     state,
-  //     action: PayloadAction<{ title: string; newQuestion: QuestionState }>
-  //   ) => {
-  //     const { title, newQuestion } = action.payload;
-  //     const { question, answer } = newQuestion;
-  //     const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
-
-  //     if (faqIndex !== -1) {
-  //       state.faqs[faqIndex].questions.push({ question, answer });
-  //     } else {
-  //       state.faqs.push({ title, questions: [{ question, answer }] });
-  //     }
-  //   },
   //   updateQuestion: (
   //     state,
   //     action: PayloadAction<{
@@ -360,7 +355,7 @@ export const hospitalsSlice = createSlice({
   // },
 });
 
-export const { createHospital } = hospitalsSlice.actions;
+export const { createHospital, deleteHospital } = hospitalsSlice.actions;
 
 export const selectCount = (state: RootState) => state.hospitals;
 

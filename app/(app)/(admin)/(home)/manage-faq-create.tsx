@@ -4,17 +4,20 @@ import {
   TextInput,
   ScrollView,
   SafeAreaView,
+  TouchableOpacity,
+  Pressable,
+  Button,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
-import TextInputWrapper from "components/common/TextInputWrapper";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
+import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { TouchableOpacity } from "react-native";
-import { createQuestion } from "rtx/slices/faq";
+import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {
+  const [newTitle, setNewTitle] = useState("Blood");
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswer, setNewAnswer] = useState("");
   const dispatch = useDispatch();
@@ -31,22 +34,22 @@ export default function ManageFaqCreate() {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={() => handleCreate()}
+          onPress={handleCreate}
         >
           <Text style={{ fontWeight: "bold" }}>Add</Text>
         </TouchableOpacity>
       ),
     });
-  }, [navigation]);
+  }, [navigation, newQuestion, newAnswer]);
 
   const handleCreate = () => {
-    console.log(newQuestion, newAnswer);
     dispatch(
       createQuestion({
-        title: "Andrei Sager Gumagana",
+        title: newTitle,
         newQuestion: { question: newQuestion, answer: newAnswer },
       })
     );
+    addFAQToFirebase(newTitle, newQuestion, newAnswer);
     router.back();
   };
 

@@ -3,11 +3,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FIRESTORE_DB } from "firebase-config";
 import {
   addDoc,
+  arrayUnion,
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
+  query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 
 export const getFAQs = createAsyncThunk("getFAQs", async () => {
@@ -33,27 +37,83 @@ export const addFAQToFirebase = async (
   answer: string
 ) => {
   const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-  await addDoc(faqsCollectionRef, {
-    title,
-    questions: [{ question, answer }],
-  });
+
+  const existingFAQQuery = query(
+    faqsCollectionRef,
+    where("title", "==", title)
+  );
+  const querySnapshot = await getDocs(existingFAQQuery);
+
+  if (!querySnapshot.empty) {
+    const faqDocRef = querySnapshot.docs[0].ref;
+    await updateDoc(faqDocRef, {
+      questions: arrayUnion({ question, answer }),
+    });
+  } else {
+    await addDoc(faqsCollectionRef, {
+      title,
+      questions: [{ question, answer }],
+    });
+  }
 };
 
 export const updateFAQInFirebase = async (
-  id: string,
-  updatedQuestion: { id: string; question: string; answer: string }
+  title: string,
+  oldQuestion: { question: string; answer: string },
+  updatedQuestion: { question: string; answer: string }
 ) => {
-  const faqDocRef = doc(FIRESTORE_DB, "faq", id);
-  await updateDoc(faqDocRef, {
-    questions: updateDoc.questions.map((q: any) =>
-      q.id === updatedQuestion.id ? updatedQuestion : q
-    ),
-  });
+  try {
+    const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
+
+    const q = query(faqsCollectionRef, where("title", "==", title));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const faqDoc = querySnapshot.docs[0];
+      const questions = faqDoc.data().questions;
+
+      const updatedQuestions = questions.map((q: any) =>
+        q.question === oldQuestion.question && q.answer === oldQuestion.answer
+          ? updatedQuestion
+          : q
+      );
+
+      await updateDoc(faqDoc.ref, {
+        questions: updatedQuestions,
+      });
+    }
+  } catch (error) {
+    console.error("Error updating question:", error);
+  }
 };
 
-export const deleteFAQFromFirebase = async (id: string) => {
-  const faqDocRef = doc(FIRESTORE_DB, "faqs", id);
-  await deleteDoc(faqDocRef);
+export const deleteQuestionInFirebase = async (
+  title: string,
+  deletedQuestion: { question: string; answer: string }
+) => {
+  try {
+    const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
+
+    const q = query(faqsCollectionRef, where("title", "==", title));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const faqDoc = querySnapshot.docs[0];
+      const questions = faqDoc.data().questions;
+
+      const updatedQuestions = questions.filter(
+        (q: any) =>
+          q.question !== deletedQuestion.question ||
+          q.answer !== deletedQuestion.answer
+      );
+
+      await updateDoc(faqDoc.ref, {
+        questions: updatedQuestions,
+      });
+    }
+  } catch (error) {
+    console.error("Error deleting question:", error);
+  }
 };
 
 interface FAQsState {
@@ -71,7 +131,7 @@ interface QuestionState {
 const initialState: FAQsState = {
   faqs: [
     {
-      title: "Andrei Sager Gumagana",
+      title: "Gumagana",
       questions: [
         {
           question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.?",
@@ -129,29 +189,41 @@ export const faqsSlice = createSlice({
     },
     updateQuestion: (
       state,
-      action: PayloadAction<{ faqId: string; question: QuestionState }>
+      action: PayloadAction<{
+        title: string;
+        oldQuestion: QuestionState;
+        updatedQuestion: QuestionState;
+      }>
     ) => {
-      const { faqId, question } = action.payload;
-      const faq = state.faqs.find((faq) => faq.title === faqId);
+      const { title, oldQuestion, updatedQuestion } = action.payload;
+      const { question, answer } = updatedQuestion;
+      const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
-      if (faq) {
-        const questionIndex = faq.questions.findIndex(
-          (q) => q.id === question.id
+      if (faqIndex !== -1) {
+        const questionIndex = state.faqs[faqIndex].questions.findIndex(
+          (q) => q.question === oldQuestion.question
         );
+
         if (questionIndex !== -1) {
-          faq.questions[questionIndex] = question;
+          state.faqs[faqIndex].questions[questionIndex] = {
+            question,
+            answer,
+          };
         }
       }
     },
     deleteQuestion: (
       state,
-      action: PayloadAction<{ faqId: string; questionId: string }>
+      action: PayloadAction<{ title: string; deletedQuestion: QuestionState }>
     ) => {
-      const { faqId, questionId } = action.payload;
-      const faq = state.faqs.find((faq) => faq.title === faqId);
-
+      const { title, deletedQuestion } = action.payload;
+      const faq = state.faqs.find((faq) => faq.title === title);
       if (faq) {
-        faq.questions = faq.questions.filter((q) => q.id !== questionId);
+        faq.questions = faq.questions.filter(
+          (q) =>
+            q.question !== deletedQuestion.question ||
+            q.answer !== deletedQuestion.answer
+        );
       }
     },
   },

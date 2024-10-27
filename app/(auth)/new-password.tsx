@@ -110,8 +110,15 @@ export default function NewPassword() {
             autoCorrect={true}
             enablesReturnKeyAutomatically
             secureTextEntry={passwordVisibility}
+            style={{
+              flex: 1,
+              padding: 12,
+            }}
           />
-          <Pressable onPress={handlePasswordVisibility}>
+          <Pressable
+            onPress={handlePasswordVisibility}
+            style={{ paddingRight: 12 }}
+          >
             <Ionicons
               name={rightIcon}
               size={SIZES.xLarge}

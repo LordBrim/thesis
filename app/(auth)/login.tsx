@@ -7,6 +7,9 @@ import {
   StyleSheet,
   Image,
   AppState,
+  SafeAreaView,
+  ScrollView,
+  Dimensions,
 } from "react-native";
 import { Link, router } from "expo-router";
 import { useFonts } from "expo-font";
@@ -241,120 +244,128 @@ export default function LoginScreen() {
   ];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.cTop}>
-        <LifelineLogo />
-        <Text style={GS.h1}>Login</Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        overScrollMode="never"
+        contentContainerStyle={styles.scrollview}
+      >
+        <View style={styles.cTop}>
+          <LifelineLogo />
+          <Text style={GS.h1}>Login</Text>
 
-        <View style={{ gap: 12 }}>
-          <View style={{ gap: 24 }}>
-            <TextInputWrapper label="Email" error={!!emailError}>
-              <TextInput
-                value={email}
-                placeholder="Enter your email address..."
-                onChangeText={(email) => setEmail(email)}
-                autoCapitalize="none"
-                autoCorrect={true}
-                enablesReturnKeyAutomatically
-                style={{
-                  flex: 1,
-                  padding: 12,
-                }}
-              />
-            </TextInputWrapper>
-            {emailError ? (
-              <Text style={styles.errorText}>{emailError}</Text>
-            ) : null}
-            <TextInputWrapper label="Password" error={!!passwordError}>
-              <TextInput
-                value={password}
-                placeholder="Enter your password..."
-                onChangeText={(password) => setPassword(password)}
-                autoCapitalize="none"
-                autoCorrect={true}
-                enablesReturnKeyAutomatically
-                secureTextEntry={passwordVisibility}
-                style={{
-                  flex: 1,
-                  padding: 12,
-                }}
-              />
-              <Pressable
-                onPress={handlePasswordVisibility}
-                style={{ paddingRight: 12 }}
-              >
-                <Ionicons
-                  name={rightIcon}
-                  size={SIZES.xLarge}
-                  color={COLORS.grayDark}
+          <View style={{ gap: 12 }}>
+            <View style={{ gap: 24 }}>
+              <TextInputWrapper label="Email" error={!!emailError}>
+                <TextInput
+                  value={email}
+                  placeholder="Enter your email address..."
+                  onChangeText={(email) => setEmail(email)}
+                  autoCapitalize="none"
+                  autoCorrect={true}
+                  enablesReturnKeyAutomatically
+                  style={{
+                    flex: 1,
+                    padding: 12,
+                  }}
                 />
-              </Pressable>
-            </TextInputWrapper>
-            {passwordError ? (
-              <Text style={[styles.errorText, { marginBottom: 12 }]}>
-                {passwordError}
-              </Text>
-            ) : null}
+              </TextInputWrapper>
+              {emailError ? (
+                <Text style={styles.errorText}>{emailError}</Text>
+              ) : null}
+              <TextInputWrapper label="Password" error={!!passwordError}>
+                <TextInput
+                  value={password}
+                  placeholder="Enter your password..."
+                  onChangeText={(password) => setPassword(password)}
+                  autoCapitalize="none"
+                  autoCorrect={true}
+                  enablesReturnKeyAutomatically
+                  secureTextEntry={passwordVisibility}
+                  style={{
+                    flex: 1,
+                    padding: 12,
+                  }}
+                />
+                <Pressable
+                  onPress={handlePasswordVisibility}
+                  style={{ paddingRight: 12 }}
+                >
+                  <Ionicons
+                    name={rightIcon}
+                    size={SIZES.xLarge}
+                    color={COLORS.grayDark}
+                  />
+                </Pressable>
+              </TextInputWrapper>
+              {passwordError ? (
+                <Text style={[styles.errorText, { marginBottom: 12 }]}>
+                  {passwordError}
+                </Text>
+              ) : null}
+            </View>
+
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <CheckBox
+                  checked={toggleRemember}
+                  color="#FF3642"
+                  borderRadius={3}
+                  onPress={() => handleToggleRemember()}
+                />
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  Remember Me
+                </Text>
+              </View>
+              <LinkBtn
+                label="Forgot Password?"
+                href="/forgot-password"
+                underline
+              />
+            </View>
           </View>
 
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <CheckBox
-                checked={toggleRemember}
-                color="#FF3642"
-                borderRadius={3}
-                onPress={() => handleToggleRemember()}
-              />
-              <Text
-                style={{
-                  fontWeight: "bold",
-                }}
-              >
-                Remember Me
-              </Text>
-            </View>
-            <LinkBtn
-              label="Forgot Password?"
-              href="/forgot-password"
-              underline
-            />
-          </View>
+          <CallToActionBtn
+            label="Login"
+            onPress={() => login(email, password)}
+          />
         </View>
 
-        <CallToActionBtn label="Login" onPress={() => login(email, password)} />
-      </View>
+        {/* TODO: Remove on showcase */}
+        <View style={{ gap: 8, marginVertical: "auto" }}>
+          <Text style={GS.h2}>Easy Login</Text>
 
-      {/* TODO: Remove on showcase */}
-      <View style={{ gap: 8 }}>
-        <Text style={GS.h2}>Easy Login</Text>
+          <FlatList
+            data={gridBtns}
+            renderItem={({ item }) => (
+              <View style={[easyLogin.view]}>
+                <Link asChild push href={item.href}>
+                  <Pressable
+                    style={easyLogin.press}
+                    android_ripple={{ radius: 200 }}
+                  >
+                    {item.icon}
+                    <Text style={easyLogin.text}>{item.title}</Text>
+                  </Pressable>
+                </Link>
+              </View>
+            )}
+            keyExtractor={(item) => item.href}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            numColumns={4}
+            scrollEnabled={false}
+          />
+        </View>
+        {/* TODO: Remove on showcase */}
 
-        <FlatList
-          data={gridBtns}
-          renderItem={({ item }) => (
-            <View style={[easyLogin.view]}>
-              <Link asChild push href={item.href}>
-                <Pressable
-                  style={easyLogin.press}
-                  android_ripple={{ radius: 200 }}
-                >
-                  {item.icon}
-                  <Text style={easyLogin.text}>{item.title}</Text>
-                </Pressable>
-              </Link>
-            </View>
-          )}
-          keyExtractor={(item) => item.href}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          numColumns={4}
-          scrollEnabled={false}
-        />
-      </View>
-      {/* TODO: Remove on showcase */}
-
-      {/* <View
+        {/* <View
         style={{
           gap: 16,
         }}
@@ -403,34 +414,42 @@ export default function LoginScreen() {
         </View>
       </View> */}
 
-      <View style={styles.cBottom}>
-        <Text>Don't have an account? </Text>
-        <LinkBtn label="Register" href="/register" underline />
-      </View>
-      <SingleBtnModal
-        visible={modalVisible}
-        icon={
-          <Ionicons name="information-circle-outline" size={42} color="black" />
-        }
-        onRequestClose={onModalClose}
-        onPress={onModalClose}
-        animation={true}
-        title="Login Error"
-        btnLabel="Okay"
-        description="Your login attempt failed. Please check your email and password and try again."
-      />
-    </View>
+        <View style={styles.cBottom}>
+          <Text>Don't have an account? </Text>
+          <LinkBtn label="Register" href="/register" underline />
+        </View>
+        <SingleBtnModal
+          visible={modalVisible}
+          icon={
+            <Ionicons
+              name="information-circle-outline"
+              size={42}
+              color="black"
+            />
+          }
+          onRequestClose={onModalClose}
+          onPress={onModalClose}
+          animation={true}
+          title="Login Error"
+          btnLabel="Okay"
+          description="Your login attempt failed. Please check your email and password and try again."
+        />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingBottom: SIZES.xxxLarge,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
-    justifyContent: "space-between",
+  },
+  scrollview: {
+    height: Dimensions.get("window").height,
+    maxHeight: Dimensions.get("window").height - 82,
+    paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     alignContent: "center",
+    justifyContent: "space-between",
   },
   cTop: {
     gap: SIZES.xxxLarge,

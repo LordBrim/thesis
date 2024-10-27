@@ -13,7 +13,7 @@ import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
+import { createHospital } from "rtx/slices/hospitals";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {
@@ -21,7 +21,8 @@ export default function ManageFaqCreate() {
   const [newLogoUrl, setNewLogoUrl] = useState("");
   const [newAddress, setNewAddress] = useState("");
   const [newContactNumber, setNewContactNumber] = useState("");
-  const [newCoordinates, setNewCoordinates] = useState(["", ""]);
+  const [newLatitude, setNewLatitude] = useState("");
+  const [newLongtitude, setNewLongtitude] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -48,17 +49,24 @@ export default function ManageFaqCreate() {
     newLogoUrl,
     newAddress,
     newContactNumber,
-    newCoordinates,
+    newLatitude,
+    newLongtitude,
   ]);
 
   const handleCreate = () => {
-    // dispatch(
-    //   createQuestion({
-    //     name: newHospitalName,
-    //     title: newTitle,
-    //     newQuestion: { question: newQuestion, answer: newAnswer },
-    //   })
-    // );
+    dispatch(
+      createHospital({
+        name: newHospitalName,
+        logoUrl: newLogoUrl,
+        address: newAddress,
+        contactNumber: newContactNumber,
+        coordinates: {
+          latitude: parseFloat(newLatitude),
+          longtitude: parseFloat(newLongtitude),
+        },
+        stock: [],
+      })
+    );
     // addFAQToFirebase(newTitle, newQuestion, newAnswer);
     router.back();
   };
@@ -123,6 +131,7 @@ export default function ManageFaqCreate() {
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
+            keyboardType="number-pad"
             style={{
               flex: 1,
               padding: 12,
@@ -131,12 +140,13 @@ export default function ManageFaqCreate() {
         </TextInputWrapper>
         <TextInputWrapper label="Latitude">
           <TextInput
-            value={newCoordinates[0]}
-            onChangeText={(text) => setNewCoordinates[0](text)}
+            value={newLatitude}
+            onChangeText={(number) => setNewLatitude(number)}
             placeholder="Enter a latitude..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
+            keyboardType="number-pad"
             style={{
               flex: 1,
               padding: 12,
@@ -145,12 +155,13 @@ export default function ManageFaqCreate() {
         </TextInputWrapper>
         <TextInputWrapper label="Longtitude">
           <TextInput
-            value={newCoordinates[0]}
-            onChangeText={(text) => setNewCoordinates[1](text)}
+            value={newLongtitude}
+            onChangeText={(number) => setNewLongtitude(number)}
             placeholder="Enter a longtitude..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
+            keyboardType="number-pad"
             style={{
               flex: 1,
               padding: 12,

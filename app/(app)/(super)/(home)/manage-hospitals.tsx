@@ -11,11 +11,7 @@ import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import {
-  deleteQuestion,
-  deleteQuestionInFirebase,
-  getFAQs,
-} from "rtx/slices/faq";
+import { deleteHospital } from "rtx/slices/hospitals";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
@@ -108,7 +104,8 @@ export function QuestionCard({
         logoUrl: logoUrl.toString(),
         address: address.toString(),
         contactNumber: contactNumber.toString(),
-        coordinates: coordinates,
+        latitude: coordinates.latitude,
+        longtitude: coordinates.longtitude,
         stock: stock,
       },
     });
@@ -118,7 +115,7 @@ export function QuestionCard({
 
   const handleDelete = (name) => {
     dispatch(
-      deleteQuestion({
+      deleteHospital({
         name: name,
       })
     );

@@ -241,6 +241,6 @@ export const faqsSlice = createSlice({
 export const { createQuestion, updateQuestion, deleteQuestion } =
   faqsSlice.actions;
 
-export const selectCount = (state: RootState) => state.user.user;
+export const selectCount = (state: RootState) => state.faqs;
 
 export default faqsSlice.reducer;

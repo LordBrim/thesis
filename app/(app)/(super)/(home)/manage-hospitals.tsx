@@ -1,189 +1,227 @@
-// import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
-// import React, { useEffect } from "react";
-// import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-// import { useDispatch, useSelector } from "react-redux";
-// import { AppDispatch, RootState } from "app/store";
-// import {
-//   deleteQuestion,
-//   deleteQuestionInFirebase,
-//   getFAQs,
-// } from "rtx/slices/faq";
-// import IconBtn from "components/common/IconButton";
-// import { router, useNavigation } from "expo-router";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
+import React, { useEffect } from "react";
+import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/store";
+import {
+  deleteQuestion,
+  deleteQuestionInFirebase,
+  getFAQs,
+} from "rtx/slices/faq";
+import IconBtn from "components/common/IconButton";
+import { router, useNavigation } from "expo-router";
 
-// export default function ManageHospitals() {
-//   const { faqs } = useSelector((state: RootState) => state.faqs);
-//   const dispatch = useDispatch<AppDispatch>();
-//   const navigation = useNavigation();
+export default function ManageHospitals() {
+  const { hospitals } = useSelector((state: RootState) => state.hospitals);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation();
 
-//   useEffect(() => {
-//     dispatch(getFAQs());
-//   }, []);
+  // useEffect(() => {
+  //   dispatch(getFAQs());
+  // }, []);
 
-//   useEffect(() => {
-//     navigation.setOptions({
-//       headerRight: () => (
-//         <IconBtn
-//           icon="plus"
-//           size={18}
-//           onPress={() => router.push("(app)/(admin)/(home)/manage-faq-create")}
-//         />
-//       ),
-//     });
-//   }, [navigation]);
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconBtn
+          icon="plus"
+          size={18}
+          onPress={() => router.push("(app)/(admin)/(home)/manage-faq-create")}
+        />
+      ),
+    });
+  }, [navigation]);
 
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.panels}>
-//         <FlatList
-//           data={faqs}
-//           renderItem={({ item }) => (
-//             <QuestionPanel title={item.title} questions={item.questions} />
-//           )}
-//           keyExtractor={(item) => item.title}
-//           overScrollMode="never"
-//           scrollEnabled={true}
-//           persistentScrollbar={true}
-//           contentContainerStyle={{ gap: 16 }}
-//         />
-//       </View>
-//     </View>
-//   );
-// }
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        overScrollMode="never"
+        persistentScrollbar={true}
+        contentContainerStyle={styles.scrollview}
+      >
+        <FlatList
+          data={hospitals}
+          renderItem={({ item }) => (
+            <QuestionCard
+              name={item.name}
+              logoUrl={item.logoUrl}
+              address={item.address}
+              contactNumber={item.contactNumber}
+              coordinates={item.coordinates}
+              stock={item.stock}
+            />
+          )}
+          keyExtractor={(item) => item.name}
+          scrollEnabled={false}
+          contentContainerStyle={{ gap: 16 }}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 
-// type IQuestionPanel = {
-//   title: string;
-//   questions: Array<{ question: string; answer: string }>;
-// };
+type IQuestionCard = {
+  name: string;
+  logoUrl: string;
+  address: string;
+  contactNumber: string;
+  coordinates: CoordinatesState;
+  stock: Array<StockState>;
+};
 
-// export function QuestionPanel({ title, questions }: IQuestionPanel) {
-//   return (
-//     <View style={panel.container}>
-//       {/* TODO: For super admin where the super can see all the questions
-//        {questions.length > 0 && (
-//         <Text style={[GS.h3, panel.title]}>{title}</Text>
-//       )} */}
-//       <Text style={[GS.h3, panel.title]}>{title}</Text>
-//       <FlatList
-//         contentContainerStyle={(panel.container, { gap: 16 })}
-//         data={questions}
-//         renderItem={({ item }) => (
-//           <QuestionCard
-//             title={title}
-//             question={item.question}
-//             answer={item.answer}
-//           />
-//         )}
-//         keyExtractor={(item) => item.question}
-//       />
-//     </View>
-//   );
-// }
+interface CoordinatesState {
+  latitude: number;
+  longtitude: number;
+}
 
-// type IQuestionCard = {
-//   title: string;
-//   question: string;
-//   answer: string;
-// };
+interface StockState {
+  type: string;
+  available: boolean;
+}
 
-// export function QuestionCard({ title, question, answer }: IQuestionCard) {
-//   const handleUpdate = (title, question, answer) => {
-//     router.push({
-//       pathname: "(app)/(admin)/(home)/manage-faq-update",
-//       params: {
-//         title: title.toString(),
-//         question: question.toString(),
-//         answer: answer.toString(),
-//       },
-//     });
-//   };
+export function QuestionCard({
+  name,
+  logoUrl,
+  address,
+  contactNumber,
+  coordinates,
+  stock,
+}: IQuestionCard) {
+  const handleUpdate = (
+    name,
+    logoUrl,
+    address,
+    contactNumber,
+    coordinates,
+    stock
+  ) => {
+    router.push({
+      pathname: "(app)/(admin)/(home)/manage-faq-update",
+      params: {
+        name: name.toString(),
+        logoUrl: logoUrl.toString(),
+        address: address.toString(),
+        contactNumber: contactNumber.toString(),
+        coordinates: coordinates,
+        stock: stock,
+      },
+    });
+  };
 
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-//   const handleDelete = (title, deletedQuestion) => {
-//     dispatch(
-//       deleteQuestion({
-//         title: title,
-//         deletedQuestion: deletedQuestion,
-//       })
-//     );
-//     deleteQuestionInFirebase(title, deletedQuestion);
-//   };
+  const handleDelete = (name) => {
+    dispatch(
+      deleteQuestion({
+        name: name,
+      })
+    );
+    // deleteQuestionInFirebase(name);
+  };
 
-//   return (
-//     <>
-//       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
-//         <Text style={card.question}>{question}</Text>
-//         <IconBtn
-//           icon="pencil"
-//           size={18}
-//           onPress={() => handleUpdate(title, question, answer)}
-//         />
-//         <IconBtn
-//           icon="trash"
-//           size={18}
-//           onPress={() => handleDelete(title, { question, answer })}
-//           color="red"
-//         />
-//       </Pressable>
-//       <View style={card.aContainer}>
-//         <Text style={card.answer}>{answer}</Text>
-//       </View>
-//     </>
-//   );
-// }
+  return (
+    <View style={{ width: "100%", flex: 1 }}>
+      <Pressable style={card.tContainer} android_ripple={{ radius: 250 }}>
+        <Text style={[GS.h3, card.name]}>{name}</Text>
+        <IconBtn
+          icon="pencil"
+          size={18}
+          onPress={() =>
+            handleUpdate(
+              name,
+              logoUrl,
+              address,
+              contactNumber,
+              coordinates,
+              stock
+            )
+          }
+        />
+        <IconBtn
+          icon="trash"
+          size={18}
+          onPress={() => handleDelete(name)}
+          color="red"
+        />
+      </Pressable>
+      <View style={card.bContainer}>
+        <Text style={card.detail}>
+          Address:<Text style={{ fontWeight: "normal" }}> {address}</Text>
+        </Text>
+        <Text style={card.detail}>
+          Contact Number:
+          <Text style={{ fontWeight: "normal" }}> {contactNumber}</Text>
+        </Text>
+        <Text style={card.detail}>Coordinates:</Text>
+        <Text style={card.detail}>
+          {"\t\t\t\t"}Latitude:
+          <Text style={{ fontWeight: "normal" }}> {coordinates.latitude}</Text>
+        </Text>
+        <Text style={card.detail}>
+          {"\t\t\t\t"}Longtitude:
+          <Text style={{ fontWeight: "normal" }}>
+            {" "}
+            {coordinates.longtitude}
+          </Text>
+        </Text>
+        <Text style={card.detail}>Stock:</Text>
+        {stock.map((item) => (
+          <Text style={card.detail}>
+            {"\t\t\t\t"}
+            {item.type}:
+            <Text style={{ fontWeight: "normal" }}>
+              {" "}
+              {item.available ? "true" : "false"}
+            </Text>
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+}
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: COLORS.background,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   panels: {
-//     gap: 20,
-//   },
-// });
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: COLORS.background,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+  },
+  scrollview: {
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
+});
 
-// const panel = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     width: "100%",
-//     borderColor: COLORS.slate100,
-//   },
-//   title: {
-//     flex: 1,
-//     minWidth: "100%",
-//     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-//     paddingVertical: 8,
-//   },
-// });
-
-// const card = StyleSheet.create({
-//   qContainer: {
-//     width: "100%",
-//     minHeight: 35,
-//     flexDirection: "row",
-//     justifyContent: "space-between",
-//     alignItems: "center",
-//     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-//     padding: 2,
-//   },
-//   question: {
-//     flex: 1,
-//     fontWeight: "bold",
-//   },
-//   aContainer: {
-//     width: "100%",
-//     minHeight: 35,
-//     flexDirection: "row",
-//     alignItems: "center",
-//     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-//     paddingTop: 8,
-//     paddingBottom: 16,
-//   },
-//   answer: {
-//     flex: 1,
-//     flexDirection: "row",
-//   },
-// });
+const card = StyleSheet.create({
+  tContainer: {
+    minHeight: 35,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    padding: 2,
+    borderWidth: 1,
+  },
+  name: {
+    flex: 1,
+    paddingVertical: 8,
+  },
+  bContainer: {
+    minHeight: 35,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingTop: 8,
+    paddingBottom: 16,
+  },
+  detail: {
+    flex: 1,
+    fontWeight: "bold",
+  },
+});

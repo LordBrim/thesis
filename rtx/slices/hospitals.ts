@@ -116,15 +116,17 @@ import {
 //   }
 // };
 
-interface FAQsState {
-  hospitals: Array<{
-    name: string;
-    logoUrl: string;
-    address: string;
-    contactNumber: string;
-    coordinates: CoordinatesState;
-    stock: Array<StockState>;
-  }>;
+interface HospitalsState {
+  hospitals: Array<HospitalState>;
+}
+
+interface HospitalState {
+  name: string;
+  logoUrl: string;
+  address: string;
+  contactNumber: string;
+  coordinates: CoordinatesState;
+  stock: Array<StockState>;
 }
 
 interface CoordinatesState {
@@ -137,8 +139,98 @@ interface StockState {
   available: boolean;
 }
 
-const initialState: FAQsState = {
+const initialState: HospitalsState = {
   hospitals: [
+    {
+      name: "UERM Medical Center",
+      logoUrl:
+        "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
+      address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
+      contactNumber: "(02) 8715 0861",
+      coordinates: {
+        latitude: 14.607184,
+        longtitude: 121.020384,
+      },
+      stock: [
+        {
+          type: "O+",
+          available: true,
+        },
+        {
+          type: "O-",
+          available: true,
+        },
+        {
+          type: "A+",
+          available: true,
+        },
+        {
+          type: "A-",
+          available: true,
+        },
+        {
+          type: "B+",
+          available: true,
+        },
+        {
+          type: "B-",
+          available: true,
+        },
+        {
+          type: "AB+",
+          available: true,
+        },
+        {
+          type: "AB-",
+          available: true,
+        },
+      ],
+    },
+    {
+      name: "UERM Medical Center",
+      logoUrl:
+        "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
+      address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
+      contactNumber: "(02) 8715 0861",
+      coordinates: {
+        latitude: 14.607184,
+        longtitude: 121.020384,
+      },
+      stock: [
+        {
+          type: "O+",
+          available: true,
+        },
+        {
+          type: "O-",
+          available: true,
+        },
+        {
+          type: "A+",
+          available: true,
+        },
+        {
+          type: "A-",
+          available: true,
+        },
+        {
+          type: "B+",
+          available: true,
+        },
+        {
+          type: "B-",
+          available: true,
+        },
+        {
+          type: "AB+",
+          available: true,
+        },
+        {
+          type: "AB-",
+          available: true,
+        },
+      ],
+    },
     {
       name: "UERM Medical Center",
       logoUrl:
@@ -190,7 +282,18 @@ const initialState: FAQsState = {
 export const hospitalsSlice = createSlice({
   name: "hospitals",
   initialState,
-  reducers: {},
+  reducers: {
+    createHospital: (state, action: PayloadAction<HospitalState>) => {
+      const { name } = action.payload;
+      const hospitalIndex = state.hospitals.findIndex(
+        (hospital) => hospital.name === name
+      );
+
+      if (hospitalIndex !== -1) {
+        state.hospitals.push(action.payload);
+      }
+    },
+  },
   // reducers: {
   //   createQuestion: (
   //     state,

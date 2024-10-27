@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import Toastable from "react-native-toastable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { TouchableOpacity, View } from "react-native";
 
 export default function StackLayout() {
   const { top } = useSafeAreaInsets();
@@ -11,7 +12,7 @@ export default function StackLayout() {
   return (
     <Provider store={store}>
       <Stack
-        initialRouteName="(auth)/login"
+        initialRouteName="(app)/(admin)/(tabs)"
         screenOptions={{ headerShadowVisible: false, headerTitle: "" }}
       >
         {/* Authentication Screens */}

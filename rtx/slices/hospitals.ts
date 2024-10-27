@@ -292,6 +292,23 @@ export const hospitalsSlice = createSlice({
         state.hospitals.push(action.payload);
       }
     },
+    updateHospital: (
+      state,
+      action: PayloadAction<{
+        oldName: string;
+        updatedHospital: HospitalState;
+      }>
+    ) => {
+      const { oldName, updatedHospital } = action.payload;
+      const hospitalIndex = state.hospitals.findIndex(
+        (hospital) => hospital.name === oldName
+      );
+
+      if (hospitalIndex !== -1) {
+        state.hospitals[hospitalIndex] = updatedHospital;
+      }
+    },
+
     deleteHospital: (state, action: PayloadAction<{ name: string }>) => {
       const { name } = action.payload;
       const hospitalIndex = state.hospitals.findIndex(
@@ -304,46 +321,6 @@ export const hospitalsSlice = createSlice({
     },
   },
   // reducers: {
-  //   updateQuestion: (
-  //     state,
-  //     action: PayloadAction<{
-  //       title: string;
-  //       oldQuestion: QuestionState;
-  //       updatedQuestion: QuestionState;
-  //     }>
-  //   ) => {
-  //     const { title, oldQuestion, updatedQuestion } = action.payload;
-  //     const { question, answer } = updatedQuestion;
-  //     const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
-
-  //     if (faqIndex !== -1) {
-  //       const questionIndex = state.faqs[faqIndex].questions.findIndex(
-  //         (q) => q.question === oldQuestion.question
-  //       );
-
-  //       if (questionIndex !== -1) {
-  //         state.faqs[faqIndex].questions[questionIndex] = {
-  //           question,
-  //           answer,
-  //         };
-  //       }
-  //     }
-  //   },
-  //   deleteQuestion: (
-  //     state,
-  //     action: PayloadAction<{ title: string; deletedQuestion: QuestionState }>
-  //   ) => {
-  //     const { title, deletedQuestion } = action.payload;
-  //     const faq = state.faqs.find((faq) => faq.title === title);
-  //     if (faq) {
-  //       faq.questions = faq.questions.filter(
-  //         (q) =>
-  //           q.question !== deletedQuestion.question ||
-  //           q.answer !== deletedQuestion.answer
-  //       );
-  //     }
-  //   },
-  // },
   // extraReducers: (builder) => {
   //   builder.addCase(getFAQs.fulfilled, (state, action) => {
   //     if (action.payload) {
@@ -355,7 +332,8 @@ export const hospitalsSlice = createSlice({
   // },
 });
 
-export const { createHospital, deleteHospital } = hospitalsSlice.actions;
+export const { createHospital, updateHospital, deleteHospital } =
+  hospitalsSlice.actions;
 
 export const selectCount = (state: RootState) => state.hospitals;
 

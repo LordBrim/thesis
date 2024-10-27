@@ -104,7 +104,8 @@ export function QuestionCard({
         logoUrl: logoUrl.toString(),
         address: address.toString(),
         contactNumber: contactNumber.toString(),
-        coordinates: coordinates,
+        latitude: coordinates.latitude,
+        longtitude: coordinates.longtitude,
         stock: stock,
       },
     });

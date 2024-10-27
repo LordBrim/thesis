@@ -1,4 +1,4 @@
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import HomeTab from "./index";
 import { useEffect } from "react";
 import { Text, TouchableOpacity } from "react-native";

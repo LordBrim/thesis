@@ -29,6 +29,7 @@ import LinkBtn from "components/common/LinkBtn";
 import LifelineLogo from "components/common/LifelineLogo";
 import Title from "components/common/texts/Title";
 import { setDoc, doc } from "firebase/firestore";
+import { Dimensions } from "react-native";
 
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
@@ -109,7 +110,13 @@ export default function RegisterScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} overScrollMode="never">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        overScrollMode="never"
+        contentContainerStyle={{
+          paddingBottom: HORIZONTAL_SCREEN_MARGIN,
+        }}
+      >
         <View style={styles.cTop}>
           <Text style={GS.h1}>Register</Text>
 
@@ -213,7 +220,7 @@ export default function RegisterScreen() {
 
           <CallToActionBtn label="Register" onPress={() => register()} />
 
-          <View
+          {/* <View
             style={{
               gap: 16,
             }}
@@ -260,7 +267,7 @@ export default function RegisterScreen() {
                 style={{ width: 34, height: 34 }}
               />
             </View>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -270,11 +277,14 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: SIZES.xxxLarge,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
     justifyContent: "space-between",
     alignContent: "center",
+  },
+  scrollview: {
+    height: Dimensions.get("window").height,
+    maxHeight: Dimensions.get("window").height - 82,
   },
   cTop: {
     gap: SIZES.xxxLarge,

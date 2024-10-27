@@ -187,7 +187,7 @@ const initialState: HospitalsState = {
       ],
     },
     {
-      name: "UERM Medical Center",
+      name: "UERM Hospital",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
       address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
@@ -232,7 +232,7 @@ const initialState: HospitalsState = {
       ],
     },
     {
-      name: "UERM Medical Center",
+      name: "UERM Medical",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
       address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",

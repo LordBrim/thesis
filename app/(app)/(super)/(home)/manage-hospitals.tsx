@@ -42,11 +42,7 @@ export default function ManageHospitals() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        overScrollMode="never"
-        persistentScrollbar={true}
-        contentContainerStyle={styles.scrollview}
-      >
+      <ScrollView overScrollMode="never" persistentScrollbar={true}>
         <FlatList
           data={hospitals}
           renderItem={({ item }) => (
@@ -193,22 +189,18 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-  },
-  scrollview: {
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
 });
 
 const card = StyleSheet.create({
   tContainer: {
+    width: "100%",
     minHeight: 35,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     padding: 2,
-    borderWidth: 1,
   },
   name: {
     flex: 1,

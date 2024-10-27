@@ -27,8 +27,6 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import IconModal from "../../(common)/custom-album-modal";
-import { useSelector } from "react-redux";
-import { RootState } from "app/store";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -47,6 +45,7 @@ export default function AccountTab({
   const [avatar, setAvatar] = useState(avatarUrl || null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
 
   const signOutUser = async () => {
@@ -196,8 +195,6 @@ export default function AccountTab({
     });
   };
 
-  const { user } = useSelector((state: RootState) => state.user);
-
   return (
     <ScrollView style={styles.container} overScrollMode="never">
       <View style={styles.profile}>
@@ -225,10 +222,54 @@ export default function AccountTab({
             </>
           ) : (
             <>
-              <Text style={styles.title}>{user.displayName}</Text>
-              <Text style={styles.subtitle}>{user.email}</Text>
+              <Text style={styles.title}>{displayName}</Text>
+              <Text style={styles.subtitle}>{email}</Text>
             </>
           )}
+        </View>
+      </View>
+
+      <View style={styles.donations}>
+        <View style={styles.donation}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: COLORS.text,
+                fontSize: SIZES.small,
+                textAlign: "center",
+              },
+            ]}
+          >
+            Donation Status:{"\n"}
+            {status ? (
+              <Text style={{ color: "green", fontSize: SIZES.large }}>
+                Available
+              </Text>
+            ) : (
+              <Text style={{ color: "red", fontSize: SIZES.large }}>
+                Locked{"\n"}(3 Months)
+              </Text>
+            )}
+          </Text>
+        </View>
+
+        <View style={styles.donation}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: COLORS.text,
+                fontSize: SIZES.small,
+                textAlign: "center",
+              },
+            ]}
+          >
+            Units Donated:{"\n"}
+            <Text style={{ fontSize: SIZES.large, color: COLORS.text }}>
+              25
+            </Text>
+          </Text>
         </View>
       </View>
 
@@ -325,7 +366,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
+  donations: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    overflow: "hidden",
+    backgroundColor: COLORS.background,
+    minHeight: 110,
+  },
+  donation: {
+    flex: 1,
+    alignItems: "center",
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
+    borderColor: COLORS.slate100,
+  },
+  title: {
+    fontSize: SIZES.large,
+    fontWeight: "bold",
+    textTransform: "capitalize",
+    color: COLORS.primary,
+  },
   subtitle: {
     fontSize: SIZES.small,
     color: COLORS.text,
@@ -375,11 +437,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  title: {
-    fontSize: SIZES.large,
-    fontWeight: "bold",
-    textTransform: "capitalize",
-    color: COLORS.primary,
   },
 });

@@ -1,7 +1,7 @@
 import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import AdminDashboard from "components/home/AdminDashboard";
+import SuperAdminDashboard from "components/home/SuperAdminDashboard";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { COLORS, SPACES } from "../../../../constants/theme";
 import { router } from "expo-router";
@@ -49,7 +49,7 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
-        <AdminDashboard />
+        <SuperAdminDashboard />
       </ScrollView>
       <SingleBtnModal
         onPress={onModalClose}

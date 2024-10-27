@@ -21,7 +21,8 @@ export default function ManageFaqCreate() {
   const [newLogoUrl, setNewLogoUrl] = useState("");
   const [newAddress, setNewAddress] = useState("");
   const [newContactNumber, setNewContactNumber] = useState("");
-  const [newCoordinates, setNewCoordinates] = useState(["", ""]);
+  const [newLatitude, setNewLatitude] = useState("");
+  const [newLongtitude, setNewLongtitude] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -48,7 +49,8 @@ export default function ManageFaqCreate() {
     newLogoUrl,
     newAddress,
     newContactNumber,
-    newCoordinates,
+    newLatitude,
+    newLongtitude,
   ]);
 
   const handleCreate = () => {
@@ -131,8 +133,8 @@ export default function ManageFaqCreate() {
         </TextInputWrapper>
         <TextInputWrapper label="Latitude">
           <TextInput
-            value={newCoordinates[0]}
-            onChangeText={(text) => setNewCoordinates[0](text)}
+            value={newLatitude}
+            onChangeText={(text) => setNewLatitude(text)}
             placeholder="Enter a latitude..."
             autoCapitalize="none"
             autoCorrect={true}
@@ -145,8 +147,8 @@ export default function ManageFaqCreate() {
         </TextInputWrapper>
         <TextInputWrapper label="Longtitude">
           <TextInput
-            value={newCoordinates[0]}
-            onChangeText={(text) => setNewCoordinates[1](text)}
+            value={newLongtitude}
+            onChangeText={(text) => setNewLongtitude(text)}
             placeholder="Enter a longtitude..."
             autoCapitalize="none"
             autoCorrect={true}

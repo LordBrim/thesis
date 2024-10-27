@@ -104,6 +104,9 @@ function Maps({ setMapBackground, setMapHeader }) {
     }),
   };
 
+  const handleSearch = () => {
+    console.error("Search Hospital is not yet implemented!");
+  };
   return (
     <SafeAreaView style={styles.container}>
       {/* TODO: Add search function for multiple hospitals */}

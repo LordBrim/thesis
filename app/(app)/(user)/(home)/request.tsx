@@ -74,6 +74,9 @@ export default function Request() {
       const documentData = {
         ...formData,
         userId: user?.uid,
+        message: "sent",
+        status: "pending",
+        type: "request",
       };
 
       console.log("Document Data:", documentData);

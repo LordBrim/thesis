@@ -324,6 +324,7 @@ export default function LoginScreen() {
         <CallToActionBtn label="Login" onPress={() => login(email, password)} />
       </View>
 
+      {/* TODO: Remove on showcase */}
       <View style={{ gap: 8 }}>
         <Text style={GS.h2}>Easy Login</Text>
 
@@ -349,6 +350,7 @@ export default function LoginScreen() {
           scrollEnabled={false}
         />
       </View>
+      {/* TODO: Remove on showcase */}
 
       {/* <View
         style={{

@@ -15,39 +15,6 @@ import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
 
 export default function HomeTab() {
-  const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
-  const onModalClose = () => {
-    setModalVisible(false);
-    router.navigate("(app)/(account)/profile");
-  };
-
-  useEffect(() => {
-    const checkUserInfo = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      if (user) {
-        const db = getFirestore();
-        const userDoc = await getDoc(doc(db, "User", user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          if (
-            !userData.displayName ||
-            !userData.sex ||
-            !userData.age ||
-            !userData.contactDetails ||
-            !userData.city
-          ) {
-            setModalVisible(true);
-          }
-        }
-        console.log("Document data:", userDoc.data());
-      }
-    };
-    checkUserInfo();
-  }, []);
-
-  const [donateStatus, setDonateStatus] = useState(true);
-
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -66,18 +33,6 @@ export default function HomeTab() {
       >
         <UpcomingAppointments />
       </ScrollView>
-      <SingleBtnModal
-        onPress={onModalClose}
-        icon={
-          <Ionicons name="information-circle-outline" size={42} color="black" />
-        }
-        onRequestClose={onModalClose}
-        title="Profile Information Incomplete"
-        btnLabel="I Understand"
-        visible={modalVisible}
-        animation={true}
-        description="Complete your profile to unlock all features and personalize your journey with us. It only takes a moment!"
-      />
     </SafeAreaView>
   );
 }

@@ -95,7 +95,9 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
           userUID: user.uid,
           ticketNumber: ticketCode,
           status: "pending",
-          checklistData, // Include the mapped checklist data
+          checklistData,
+          message: "sent",
+          type: "appointment", // Include the mapped checklist data
         };
         await firestoreOperations.createDocument("ticketDonate", ticketData);
 

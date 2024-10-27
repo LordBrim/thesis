@@ -8,7 +8,7 @@ import {
   Image,
   AppState,
 } from "react-native";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { useFonts } from "expo-font";
 import {
   Raleway_400Regular,
@@ -34,6 +34,8 @@ import { AppDispatch, RootState } from "app/store";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { getCurrentUser } from "rtx/slices/user";
+import { FlatList } from "react-native";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 interface User {
   id: string;
@@ -208,15 +210,38 @@ export default function LoginScreen() {
     };
   }, []);
 
+  const size = 40;
+  const gridBtns = [
+    {
+      href: "/(app)/(super)/(tabs)",
+      icon: (
+        <FontAwesome6 name="hospital-user" size={size} color={COLORS.primary} />
+      ),
+      title: "Super Admin",
+    },
+    {
+      href: "/(app)/(admin)/(tabs)",
+      icon: <FontAwesome6 name="user-tie" size={size} color={COLORS.primary} />,
+      title: "Admin",
+    },
+    {
+      href: "/(app)/(staff)/(tabs)",
+      icon: (
+        <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
+      ),
+      title: "Staff",
+    },
+    {
+      href: "/(app)/(user)/(tabs)",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "User",
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.cTop}>
-        {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
-        <Pressable onPress={() => router.replace("/(app)/(user)/(tabs)")}>
-          <LifelineLogo />
-        </Pressable>
-        {/* Temporary For quick access. Para hindi na natin ginagamit firebase sa pag login. */}
-
+        <LifelineLogo />
         <Text style={GS.h1}>Login</Text>
 
         <View style={{ gap: 12 }}>
@@ -299,7 +324,33 @@ export default function LoginScreen() {
         <CallToActionBtn label="Login" onPress={() => login(email, password)} />
       </View>
 
-      <View
+      <View style={{ gap: 8 }}>
+        <Text style={GS.h2}>Easy Login</Text>
+
+        <FlatList
+          data={gridBtns}
+          renderItem={({ item }) => (
+            <View style={[easyLogin.view]}>
+              <Link asChild push href={item.href}>
+                <Pressable
+                  style={easyLogin.press}
+                  android_ripple={{ radius: 200 }}
+                >
+                  {item.icon}
+                  <Text style={easyLogin.text}>{item.title}</Text>
+                </Pressable>
+              </Link>
+            </View>
+          )}
+          keyExtractor={(item) => item.href}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          numColumns={4}
+          scrollEnabled={false}
+        />
+      </View>
+
+      {/* <View
         style={{
           gap: 16,
         }}
@@ -346,7 +397,7 @@ export default function LoginScreen() {
             style={{ width: 34, height: 34 }}
           />
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.cBottom}>
         <Text>Don't have an account? </Text>
@@ -392,5 +443,24 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: -12,
     textAlign: "right",
+  },
+});
+
+const easyLogin = StyleSheet.create({
+  text: {
+    fontWeight: "500",
+  },
+  view: {
+    width: "25%",
+    aspectRatio: 1 / 1,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  press: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
   },
 });

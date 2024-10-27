@@ -360,7 +360,7 @@ export const hospitalsSlice = createSlice({
   // },
 });
 
-export const {} = hospitalsSlice.actions;
+export const { createHospital } = hospitalsSlice.actions;
 
 export const selectCount = (state: RootState) => state.hospitals;
 

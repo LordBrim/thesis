@@ -289,7 +289,7 @@ export const hospitalsSlice = createSlice({
         (hospital) => hospital.name === name
       );
 
-      if (hospitalIndex !== -1) {
+      if (hospitalIndex === -1) {
         state.hospitals.push(action.payload);
       }
     },

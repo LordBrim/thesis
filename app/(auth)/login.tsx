@@ -345,7 +345,7 @@ export default function LoginScreen() {
             data={gridBtns}
             renderItem={({ item }) => (
               <View style={[easyLogin.view]}>
-                <Link asChild push href={item.href}>
+                <Link asChild replace href={item.href}>
                   <Pressable
                     style={easyLogin.press}
                     android_ripple={{ radius: 200 }}

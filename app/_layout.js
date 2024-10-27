@@ -22,24 +22,24 @@ export default function StackLayout() {
         <Stack.Screen name="(auth)/new-password" />
         <Stack.Screen name="(auth)/confirm-email" />
         {/* Home Screens */}
-        {/* <Stack.Screen
-        name="(app)/(super)/(tabs)"
-        options={({ route }) => ({
-          headerTitle: "Super Admin",
-        })}
-      /> */}
+        <Stack.Screen
+          name="(app)/(super)/(tabs)"
+          options={{
+            headerTitle: "Super Admin",
+          }}
+        />
         <Stack.Screen
           name="(app)/(admin)/(tabs)"
-          options={({ route }) => ({
-            headerTitle: getHeaderTitle(route),
-          })}
+          options={{
+            headerTitle: "Admin",
+          }}
         />
-        {/* <Stack.Screen
-        name="(app)/(staff)/(tabs)"
-        options={({ route }) => ({
-          headerTitle: "Staff",
-        })}
-      /> */}
+        <Stack.Screen
+          name="(app)/(staff)/(tabs)"
+          options={{
+            headerTitle: "Staff",
+          }}
+        />
         <Stack.Screen
           name="(app)/(user)/(tabs)"
           options={({ route }) => ({

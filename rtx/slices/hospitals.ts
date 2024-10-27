@@ -1,18 +1,18 @@
-// import type { RootState } from "../../app/store";
-// import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-// import { FIRESTORE_DB } from "firebase-config";
-// import {
-//   addDoc,
-//   arrayUnion,
-//   collection,
-//   deleteDoc,
-//   doc,
-//   getDoc,
-//   getDocs,
-//   query,
-//   updateDoc,
-//   where,
-// } from "firebase/firestore";
+import type { RootState } from "../../app/store";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FIRESTORE_DB } from "firebase-config";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 
 // export const getFAQs = createAsyncThunk("getFAQs", async () => {
 //   try {
@@ -116,131 +116,149 @@
 //   }
 // };
 
-// interface FAQsState {
-//   faqs: Array<{
-//     title: string;
-//     questions: Array<QuestionState>;
-//   }>;
-// }
+interface FAQsState {
+  hospitals: Array<{
+    name: string;
+    logoUrl: string;
+    address: string;
+    contactNumber: string;
+    coordinates: CoordinatesState;
+    stock: Array<StockState>;
+  }>;
+}
 
-// interface QuestionState {
-//   question: string;
-//   answer: string;
-// }
+interface CoordinatesState {
+  latitude: number;
+  longtitude: number;
+}
 
-// const initialState: FAQsState = {
-//   faqs: [
-//     {
-//       title: "Gumagana",
-//       questions: [
-//         {
-//           question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.?",
-//           answer:
-//             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vulputate metus vel purus rhoncus facilisis ac nec eros. Quisque eu efficitur erat. Fusce pellentesque hendrerit nibh nec cursus. Morbi sed dictum velit, sit amet bibendum sem. Nam mi ex, laoreet placerat aliquet eu, venenatis vel purus. Mauris ipsum velit, tincidunt sed augue vitae, dictum feugiat erat.",
-//         },
-//         { question: "Question number 2?", answer: "Answer number 2" },
-//         { question: "Question number 3?", answer: "Answer number 3" },
-//       ],
-//     },
-//     {
-//       title: "Blood Donation",
-//       questions: [
-//         { question: "Question number 1?", answer: "Answer number 1" },
-//         { question: "Question number 2?", answer: "Answer number 2" },
-//         { question: "Question number 3?", answer: "Answer number 3" },
-//       ],
-//     },
-//     {
-//       title: "Blood",
-//       questions: [
-//         { question: "Question number 1?", answer: "Answer number 1" },
-//         { question: "Question number 2?", answer: "Answer number 2" },
-//         { question: "Question number 3?", answer: "Answer number 3" },
-//       ],
-//     },
-//     {
-//       title: "Other Questions",
-//       questions: [
-//         { question: "Question number 1?", answer: "Answer number 1" },
-//         { question: "Question number 2?", answer: "Answer number 2" },
-//         { question: "Question number 3?", answer: "Answer number 3" },
-//       ],
-//     },
-//   ],
-// };
+interface StockState {
+  type: string;
+  available: boolean;
+}
 
-// export const faqsSlice = createSlice({
-//   name: "faqs",
-//   initialState,
-//   reducers: {
-//     createQuestion: (
-//       state,
-//       action: PayloadAction<{ title: string; newQuestion: QuestionState }>
-//     ) => {
-//       const { title, newQuestion } = action.payload;
-//       const { question, answer } = newQuestion;
-//       const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
+const initialState: FAQsState = {
+  hospitals: [
+    {
+      name: "UERM Medical Center",
+      logoUrl:
+        "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
+      address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
+      contactNumber: "(02) 8715 0861",
+      coordinates: {
+        latitude: 14.607184,
+        longtitude: 121.020384,
+      },
+      stock: [
+        {
+          type: "O+",
+          available: true,
+        },
+        {
+          type: "O-",
+          available: true,
+        },
+        {
+          type: "A+",
+          available: true,
+        },
+        {
+          type: "A-",
+          available: true,
+        },
+        {
+          type: "B+",
+          available: true,
+        },
+        {
+          type: "B-",
+          available: true,
+        },
+        {
+          type: "AB+",
+          available: true,
+        },
+        {
+          type: "AB-",
+          available: true,
+        },
+      ],
+    },
+  ],
+};
 
-//       if (faqIndex !== -1) {
-//         state.faqs[faqIndex].questions.push({ question, answer });
-//       } else {
-//         state.faqs.push({ title, questions: [{ question, answer }] });
-//       }
-//     },
-//     updateQuestion: (
-//       state,
-//       action: PayloadAction<{
-//         title: string;
-//         oldQuestion: QuestionState;
-//         updatedQuestion: QuestionState;
-//       }>
-//     ) => {
-//       const { title, oldQuestion, updatedQuestion } = action.payload;
-//       const { question, answer } = updatedQuestion;
-//       const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
+export const hospitalsSlice = createSlice({
+  name: "hospitals",
+  initialState,
+  reducers: {},
+  // reducers: {
+  //   createQuestion: (
+  //     state,
+  //     action: PayloadAction<{ title: string; newQuestion: QuestionState }>
+  //   ) => {
+  //     const { title, newQuestion } = action.payload;
+  //     const { question, answer } = newQuestion;
+  //     const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
-//       if (faqIndex !== -1) {
-//         const questionIndex = state.faqs[faqIndex].questions.findIndex(
-//           (q) => q.question === oldQuestion.question
-//         );
+  //     if (faqIndex !== -1) {
+  //       state.faqs[faqIndex].questions.push({ question, answer });
+  //     } else {
+  //       state.faqs.push({ title, questions: [{ question, answer }] });
+  //     }
+  //   },
+  //   updateQuestion: (
+  //     state,
+  //     action: PayloadAction<{
+  //       title: string;
+  //       oldQuestion: QuestionState;
+  //       updatedQuestion: QuestionState;
+  //     }>
+  //   ) => {
+  //     const { title, oldQuestion, updatedQuestion } = action.payload;
+  //     const { question, answer } = updatedQuestion;
+  //     const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
-//         if (questionIndex !== -1) {
-//           state.faqs[faqIndex].questions[questionIndex] = {
-//             question,
-//             answer,
-//           };
-//         }
-//       }
-//     },
-//     deleteQuestion: (
-//       state,
-//       action: PayloadAction<{ title: string; deletedQuestion: QuestionState }>
-//     ) => {
-//       const { title, deletedQuestion } = action.payload;
-//       const faq = state.faqs.find((faq) => faq.title === title);
-//       if (faq) {
-//         faq.questions = faq.questions.filter(
-//           (q) =>
-//             q.question !== deletedQuestion.question ||
-//             q.answer !== deletedQuestion.answer
-//         );
-//       }
-//     },
-//   },
-//   extraReducers: (builder) => {
-//     builder.addCase(getFAQs.fulfilled, (state, action) => {
-//       if (action.payload) {
-//         state.faqs = action.payload;
-//       } else {
-//         state.faqs = initialState.faqs;
-//       }
-//     });
-//   },
-// });
+  //     if (faqIndex !== -1) {
+  //       const questionIndex = state.faqs[faqIndex].questions.findIndex(
+  //         (q) => q.question === oldQuestion.question
+  //       );
 
-// export const { createQuestion, updateQuestion, deleteQuestion } =
-//   faqsSlice.actions;
+  //       if (questionIndex !== -1) {
+  //         state.faqs[faqIndex].questions[questionIndex] = {
+  //           question,
+  //           answer,
+  //         };
+  //       }
+  //     }
+  //   },
+  //   deleteQuestion: (
+  //     state,
+  //     action: PayloadAction<{ title: string; deletedQuestion: QuestionState }>
+  //   ) => {
+  //     const { title, deletedQuestion } = action.payload;
+  //     const faq = state.faqs.find((faq) => faq.title === title);
+  //     if (faq) {
+  //       faq.questions = faq.questions.filter(
+  //         (q) =>
+  //           q.question !== deletedQuestion.question ||
+  //           q.answer !== deletedQuestion.answer
+  //       );
+  //     }
+  //   },
+  // },
+  // extraReducers: (builder) => {
+  //   builder.addCase(getFAQs.fulfilled, (state, action) => {
+  //     if (action.payload) {
+  //       state.faqs = action.payload;
+  //     } else {
+  //       state.faqs = initialState.faqs;
+  //     }
+  //   });
+  // },
+});
 
-// export const selectCount = (state: RootState) => state.user.user;
+export const {} = hospitalsSlice.actions;
 
-// export default faqsSlice.reducer;
+export const selectCount = (state: RootState) => state.hospitals;
+
+export default hospitalsSlice.reducer;

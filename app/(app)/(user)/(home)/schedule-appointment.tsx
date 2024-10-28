@@ -93,6 +93,7 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
           selectedTime: formattedTime, // Time as string
           userEmail: user.email,
           userUID: user.uid,
+          fullName: user.displayName,
           ticketNumber: ticketCode,
           status: "pending",
           checklistData,

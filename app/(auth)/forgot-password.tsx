@@ -1,7 +1,15 @@
 import { useRef, useState } from "react";
+import axios from "axios";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import { View, TextInput, Image, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  TextInput,
+  Image,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { StyleSheet } from "react-native";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import Description from "components/common/texts/Description";
@@ -11,41 +19,91 @@ import { OtpInput } from "react-native-otp-entry";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import LinkBtnTouch from "components/common/LinkBtnTouch";
 import CountDownTimer from "react-native-countdown-timer-hooks";
+import {
+  sendPasswordResetEmail,
+  confirmPasswordReset,
+  verifyPasswordResetCode,
+} from "firebase/auth";
+import { FIREBASE_AUTH } from "firebase-config";
 
 export default function ForgotPassword() {
-  const sendPin = () => {
-    setShowModal(true);
-    //TODO: Send confimation pin to email
-  };
   const [email, setEmail] = useState("");
-
   const [showModal, setShowModal] = useState(false);
-  const handleCloseModal = () => {
-    setShowModal(false);
-    router.navigate("new-password");
-  };
-  const [pin, setPin] = useState("");
-  const handlePinEntered = () => {
-    console.log("PIN entered:", pin);
-    setTimerEnd(false);
-    // Your logic for handling the entered PIN
-  };
-  const router = useRouter();
-
-  // Timer References
-  const refTimer = useRef();
-
-  // For keeping a track of the timer
+  const [generatedPin, setGeneratedPin] = useState("");
+  const [enteredPin, setEnteredPin] = useState("");
   const [timerEnd, setTimerEnd] = useState(false);
   const [remainingTime, setRemainingTime] = useState(300);
+  const router = useRouter();
+  const refTimer = useRef(null);
+  const [showModalEmail, setShowModalEmail] = useState(false);
+  const generatePin = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
+
+  const sendPin = async () => {
+    const pin = generatePin();
+    setGeneratedPin(pin);
+
+    const data = {
+      personalizations: [
+        {
+          to: [{ email: email }],
+          subject: "Your Password Reset OTP",
+        },
+      ],
+      from: { email: "lifelineisthebest4@gmail.com" }, // Verified sender email
+      content: [
+        {
+          type: "text/plain",
+          value: `Your OTP code is ${pin}. It will expire in 5 minutes.`,
+        },
+      ],
+    };
+
+    try {
+      const response = await axios.post(
+        "https://api.sendgrid.com/v3/mail/send",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer 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`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 202) {
+        console.log("OTP email sent successfully");
+        console.log("Generated PIN:", pin); // Log the generated PIN value
+        setShowModal(true);
+      } else {
+        console.error("Failed to send email:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sending OTP email:", error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handlePinEntered = async () => {
+    if (enteredPin === generatedPin) {
+      console.log("PIN entered correctly:", enteredPin);
+      await sendPasswordResetEmail(FIREBASE_AUTH, email);
+      setShowModalEmail(true);
+    } else {
+      console.error("Incorrect PIN entered");
+      // Optionally, show an error message to the user
+    }
+  };
 
   const timerOnProgressFunc = (remainingTimeInSecs) => {
-    // console.log("On Progress tracker :", remainingTimeInSecs);
     setRemainingTime(remainingTimeInSecs);
   };
 
   const timerCallbackFunc = (timerFlag) => {
-    // Setting timer flag to false once complete
     setTimerEnd(timerFlag);
     console.warn("Alert the user when timer runs out...");
   };
@@ -81,31 +139,50 @@ export default function ForgotPassword() {
           />
         </TextInputWrapper>
 
-        <CallToActionBtn label="Reset Password" onPress={() => sendPin()} />
+        <CallToActionBtn label="Reset Password" onPress={sendPin} />
       </View>
-
+      <SingleBtnModal
+        visible={showModalEmail}
+        onRequestClose={() => {
+          setShowModalEmail(false);
+          setShowModal(false);
+          router.back();
+        }}
+        onPress={() => {
+          setShowModalEmail(false);
+          setShowModal(false);
+          router.back();
+        }}
+        icon={<FontAwesome5 name="envelope" size={40} color="black" />}
+        title="Email Sent!"
+        description={
+          <Text>
+            We have sent a link to reset your password to your{" "}
+            <Text style={{ fontWeight: "700" }}>email address {email} </Text>
+          </Text>
+        }
+        btnLabel="Close"
+      ></SingleBtnModal>
       <SingleBtnModal
         visible={showModal}
         onRequestClose={handleCloseModal}
-        onPress={() => router.replace("new-password")}
+        onPress={handlePinEntered}
         icon={<FontAwesome5 name="unlock-alt" size={40} color="black" />}
         title="One-Time Pin Sent!"
         description={
           <Text>
             We have sent a PIN to your{" "}
-            <Text style={{ fontWeight: "700" }}>
-              email address ASTERISK OBSCURED EMAIL{" "}
-            </Text>
+            <Text style={{ fontWeight: "700" }}>email address {email} </Text>
             Please confirm below.
           </Text>
         }
         btnLabel="Proceed"
         extraBtn={
-          // TODO: Add a countdown for the one-time pin
           <TouchableOpacity
             onPress={() => {
-              handlePinEntered();
-              refTimer.current.resetTimer();
+              if (refTimer.current) {
+                refTimer.current.resetTimer();
+              }
             }}
             style={{ flexDirection: "row" }}
           >
@@ -118,7 +195,6 @@ export default function ForgotPassword() {
               timestamp={300}
               timerOnProgress={timerOnProgressFunc}
               timerCallback={timerCallbackFunc}
-              // containerStyle={{ borderWidth: 1 }}
               textStyle={{
                 fontWeight: "bold",
                 color: COLORS.primary,
@@ -136,10 +212,10 @@ export default function ForgotPassword() {
           }}
         >
           <OtpInput
-            numberOfDigits={4}
+            numberOfDigits={6}
             focusColor="#DA2F47"
             focusStickBlinkingDuration={500}
-            onFilled={(text) => setPin(text)}
+            onFilled={(text) => setEnteredPin(text)}
             textInputProps={{
               accessibilityLabel: "One-Time Pin Sent!",
             }}

@@ -89,25 +89,10 @@ export function QuestionCard({
   coordinates,
   stock,
 }: IQuestionCard) {
-  const handleUpdate = (
-    name,
-    logoUrl,
-    address,
-    contactNumber,
-    coordinates,
-    stock
-  ) => {
+  const handleUpdate = (name) => {
     router.push({
       pathname: "(app)/(super)/(home)/manage-hospitals-update",
-      params: {
-        name: name.toString(),
-        logoUrl: logoUrl.toString(),
-        address: address.toString(),
-        contactNumber: contactNumber.toString(),
-        latitude: coordinates.latitude,
-        longtitude: coordinates.longtitude,
-        stock: stock,
-      },
+      params: { name: name.toString() },
     });
   };
 
@@ -126,20 +111,7 @@ export function QuestionCard({
     <View style={{ width: "100%", flex: 1 }}>
       <Pressable style={card.tContainer} android_ripple={{ radius: 250 }}>
         <Text style={[GS.h3, card.name]}>{name}</Text>
-        <IconBtn
-          icon="pencil"
-          size={18}
-          onPress={() =>
-            handleUpdate(
-              name,
-              logoUrl,
-              address,
-              contactNumber,
-              coordinates,
-              stock
-            )
-          }
-        />
+        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(name)} />
         <IconBtn
           icon="trash"
           size={18}

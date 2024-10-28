@@ -1,18 +1,164 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
-import React from "react";
-import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
+import React, { useEffect, useState } from "react";
+import { COLORS } from "../../../../constants";
 import IconBtn from "components/common/IconButton";
 import { router } from "expo-router";
+import { FIRESTORE_DB } from "firebase-config";
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from "firebase/firestore";
+
+interface TicketRequest {
+  contactNumber: string;
+  emergencyReason: string;
+  imageUrl: string;
+  isEmergency: boolean;
+  message: string;
+  packedRequest: boolean;
+  packedRequestInfo: string;
+  patientName: string;
+  selectedBloodType: string;
+  selectedRelationship: string;
+  status: "pending" | "rejected" | "accepted";
+  type: string;
+  userId: string;
+}
+
+interface User {
+  displayName: string;
+  email: string;
+  age: number;
+  avatarUrl: string;
+  city: string;
+  contactDetails: string;
+  sex: string;
+}
+
+interface TicketState {
+  id: string;
+  name: string;
+  status: "pending" | "rejected" | "accepted";
+  userUID: string;
+  userEmail: string;
+  contactNumber: string;
+  emergencyReason: string;
+  imageUrl: string;
+  isEmergency: boolean;
+  message: string;
+  packedRequest: boolean;
+  packedRequestInfo: string;
+  patientName: string;
+  selectedBloodType: string;
+  selectedRelationship: string;
+  type: "request";
+}
 
 export default function ManageUserRequests() {
+  const [tickets, setTickets] = useState<TicketState[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const querySnapshot = await getDocs(
+          collection(FIRESTORE_DB, "ticketRequest")
+        );
+        const ticketsData = await Promise.all(
+          querySnapshot.docs.map(
+            async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+              const data = docSnapshot.data() as TicketRequest;
+              try {
+                const userDocRef = doc(FIRESTORE_DB, "User", data.userId);
+                const userDocSnapshot = await getDoc(userDocRef);
+                const userData = userDocSnapshot.exists()
+                  ? (userDocSnapshot.data() as User)
+                  : ({} as User);
+
+                return {
+                  id: docSnapshot.id,
+                  name: userData.displayName ?? "Unknown",
+                  status: data.status,
+                  userUID: data.userId,
+                  userEmail: userData.email ?? "Unknown",
+                  contactNumber: data.contactNumber,
+                  emergencyReason: data.emergencyReason,
+                  imageUrl: data.imageUrl,
+                  isEmergency: data.isEmergency,
+                  message: data.message,
+                  packedRequest: data.packedRequest,
+                  packedRequestInfo: data.packedRequestInfo,
+                  patientName: data.patientName,
+                  selectedBloodType: data.selectedBloodType,
+                  selectedRelationship: data.selectedRelationship,
+                  type: "request",
+                } as TicketState;
+              } catch (error) {
+                console.error(
+                  `Error fetching user data for ticket ${docSnapshot.id}:`,
+                  error
+                );
+                return {
+                  id: docSnapshot.id,
+                  name: "Unknown",
+                  status: data.status,
+                  userUID: data.userId,
+                  userEmail: "Unknown",
+                  contactNumber: data.contactNumber,
+                  emergencyReason: data.emergencyReason,
+                  imageUrl: data.imageUrl,
+                  isEmergency: data.isEmergency,
+                  message: data.message,
+                  packedRequest: data.packedRequest,
+                  packedRequestInfo: data.packedRequestInfo,
+                  patientName: data.patientName,
+                  selectedBloodType: data.selectedBloodType,
+                  selectedRelationship: data.selectedRelationship,
+                  type: "request",
+                } as TicketState;
+              }
+            }
+          )
+        );
+        setTickets(ticketsData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching tickets: ", error);
+        setError("Failed to load tickets");
+        setLoading(false);
+      }
+    };
+
+    fetchTickets();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading Tickets...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <FlatList
         data={tickets}
-        renderItem={({ item }) => (
-          <Card name={item.name} status={item.status} />
-        )}
-        keyExtractor={(item) => item.name}
+        renderItem={({ item }) => <Card ticket={item} />}
+        keyExtractor={(item) => item.id} // Use the unique ID as the key
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
@@ -21,14 +167,12 @@ export default function ManageUserRequests() {
   );
 }
 
-export function Card({ name, status }: TicketState) {
+export function Card({ ticket }: { ticket: TicketState }) {
   const handlePress = () => {
     router.push({
       pathname: "(app)/(admin)/(home)/manage-ticket-review",
       params: {
-        name: name,
-        status: status,
-        // Everything else
+        ticket: JSON.stringify(ticket), // Serialize the ticket data
       },
     });
   };
@@ -48,16 +192,16 @@ export function Card({ name, status }: TicketState) {
           gap: 4,
         }}
       >
-        {status === "pending" && (
+        {ticket.status === "pending" && (
           <IconBtn icon="user-minus" size={18} color="gray" />
         )}
-        {status === "rejected" && (
+        {ticket.status === "rejected" && (
           <IconBtn icon="user-xmark" size={18} color="red" />
         )}
-        {status === "accepted" && (
+        {ticket.status === "accepted" && (
           <IconBtn icon="user-check" size={18} color="green" />
         )}
-        <Text style={card.name}>{name}</Text>
+        <Text style={card.name}>{ticket.name}</Text>
       </View>
       <IconBtn icon="angle-right" size={18} onPress={handlePress} />
     </Pressable>
@@ -88,23 +232,3 @@ const card = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-
-interface TicketState {
-  name: string;
-  status: "pending" | "rejected" | "accepted";
-}
-
-const tickets: TicketState[] = [
-  {
-    name: "Andrei",
-    status: "pending",
-  },
-  {
-    name: "Angelo",
-    status: "rejected",
-  },
-  {
-    name: "Nicole",
-    status: "accepted",
-  },
-];

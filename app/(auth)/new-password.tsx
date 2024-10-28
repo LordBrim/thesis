@@ -12,28 +12,20 @@ import TextInputWrapper from "components/common/TextInputWrapper";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { Octicons, Ionicons } from "@expo/vector-icons";
 import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { FIREBASE_AUTH } from "firebase-config";
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
+import { confirmPasswordReset } from "firebase/auth";
 
 export default function NewPassword() {
   const router = useRouter();
+  const { email, oobCode } = useLocalSearchParams();
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
   const [password, setPassword] = useState("");
-  const setNewPassword = () => {
-    if (isValid) {
-      setShowModal(true);
-    } else {
-      //Wrong password
-    }
-  };
   const [showModal, setShowModal] = useState(false);
-  const handleCloseModal = () => {
-    setShowModal(false);
-    router.back();
-  };
-
   const [isValid, setIsValid] = useState(false);
 
   const [isValidLength, setIsValidLength] = useState(false);
@@ -59,7 +51,37 @@ export default function NewPassword() {
         hasNoSpecialChars &&
         hasNoSpaces
     );
-  }, [password, setPassword]);
+  }, [password]);
+
+  const setNewPassword = async () => {
+    if (isValid) {
+      try {
+        // Ensure oobCode and email are strings
+        const resetCode = Array.isArray(oobCode) ? oobCode[0] : oobCode;
+        const userEmail = Array.isArray(email) ? email[0] : email;
+
+        // Update password using the reset link
+        await confirmPasswordReset(FIREBASE_AUTH, resetCode, password);
+
+        // Update user document in Firestore
+        const userDocRef = doc(getFirestore(), "User", userEmail);
+        await updateDoc(userDocRef, { password });
+
+        setShowModal(true);
+      } catch (error) {
+        console.error("Error updating password:", error);
+        // Optionally, show an error message to the user
+      }
+    } else {
+      // Optionally, show an error message to the user
+      console.error("Password does not meet the criteria");
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    router.back();
+  };
 
   const conditions = [
     {
@@ -148,7 +170,7 @@ export default function NewPassword() {
           ))}
         </View>
       </View>
-      <CallToActionBtn label="Confirm" onPress={() => setNewPassword()} />
+      <CallToActionBtn label="Confirm" onPress={setNewPassword} />
 
       <SingleBtnModal
         visible={showModal}

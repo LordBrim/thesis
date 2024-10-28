@@ -4,39 +4,47 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  Switch,
+  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
-import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import {
+  router,
+  useGlobalSearchParams,
+  useLocalSearchParams,
+  useNavigation,
+} from "expo-router";
 import { Text } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
 import { updateHospital } from "rtx/slices/hospitals";
+import { View } from "react-native";
+import { RootState } from "app/store";
 
 export default function ManageFaqUpdate() {
-  const { name, logoUrl, address, contactNumber, latitude, longtitude, stock } =
-    useLocalSearchParams();
-  const [oldHospitalName, setOldHospitalName] = useState(name);
-  // const [oldLogoUrl, setOldLogoUrl] = useState(logoUrl);
-  // const [oldAddress, setOldAddress] = useState(address);
-  // const [oldContactNumber, setOldContactNumber] = useState(contactNumber);
-  // const [oldLatitude, setOldLatitude] = useState(latitude);
-  // const [oldLongtitude, setOldLongtitude] = useState(longtitude);
-  // const [oldStock, setOldStock] = useState(stock);
-  const [updatedHospitalName, setUpdatedHospitalName] = useState(name);
-  const [updatedLogoUrl, setUpdatedLogoUrl] = useState(logoUrl);
-  const [updatedAddress, setUpdatedAddress] = useState(address);
-  const [updatedContactNumber, setUpdatedContactNumber] =
-    useState(contactNumber);
-  const [updatedLatitude, setUpdatedLatitude] = useState(latitude);
-  const [updatedLongtitude, setUpdatedLongtitude] = useState(longtitude);
-  const [updatedStock, setUpdatedStock] = useState(stock);
+  const { name } = useLocalSearchParams();
+  const { hospitals } = useSelector((state: RootState) => state.hospitals);
+  const hospital = hospitals.find((item) => item.name === name);
 
+  const [oldHospitalName, setOldHospitalName] = useState(hospital.name);
+  const [updatedHospitalName, setUpdatedHospitalName] = useState(hospital.name);
+  const [updatedLogoUrl, setUpdatedLogoUrl] = useState(hospital.logoUrl);
+  const [updatedAddress, setUpdatedAddress] = useState(hospital.address);
+  const [updatedContactNumber, setUpdatedContactNumber] = useState(
+    hospital.contactNumber
+  );
+  const [updatedLatitude, setUpdatedLatitude] = useState(
+    hospital.coordinates.latitude.toString()
+  );
+  const [updatedLongtitude, setUpdatedLongtitude] = useState(
+    hospital.coordinates.longtitude.toString()
+  );
+  const [updatedStock, setUpdatedStock] = useState(hospital.stock);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -64,24 +72,24 @@ export default function ManageFaqUpdate() {
     updatedLongtitude,
     updatedStock,
   ]);
-
   const handleUpdate = () => {
     dispatch(
       updateHospital({
-        oldName: oldHospitalName.toString(),
+        oldName: oldHospitalName,
         updatedHospital: {
-          name: updatedHospitalName.toString(),
-          logoUrl: updatedLogoUrl.toString(),
-          address: updatedAddress.toString(),
-          contactNumber: updatedContactNumber.toString(),
+          name: updatedHospitalName,
+          logoUrl: updatedLogoUrl,
+          address: updatedAddress,
+          contactNumber: updatedContactNumber,
           coordinates: {
-            latitude: parseFloat(updatedLatitude.toString()),
-            longtitude: parseFloat(updatedLongtitude.toString()),
+            latitude: parseInt(updatedLatitude),
+            longtitude: parseInt(updatedLongtitude),
           },
-          stock: [],
+          stock: updatedStock,
         },
       })
     );
+    // TODO: Update in firebase
     // updateFAQInFirebase(
     //   oldTitle,
     //   {
@@ -92,7 +100,6 @@ export default function ManageFaqUpdate() {
     // );
     router.back();
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -190,18 +197,62 @@ export default function ManageFaqUpdate() {
             }}
           />
         </TextInputWrapper>
+        <FlatList
+          data={updatedStock}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                flexDirection: "row",
+                flex: 1,
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              <Text style={styles.detail}>{item.type}</Text>
+              <StockItem stock={item} />
+            </View>
+          )}
+          keyExtractor={(item) => item.type.toString()}
+          overScrollMode="never"
+          scrollEnabled={false}
+          contentContainerStyle={{ gap: 16 }}
+          numColumns={4}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
+const StockItem = (stock) => {
+  const [isEnabled, setIsEnabled] = useState(stock.available);
+  console.log(isEnabled);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  return (
+    <View>
+      <Switch
+        trackColor={{ false: "#767577", true: "#81b0ff" }}
+        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      />
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
+    justifyContent: "center",
   },
   scrollview: {
     padding: HORIZONTAL_SCREEN_MARGIN,
     gap: 16,
+  },
+  card: {
+    flexDirection: "row",
+  },
+  detail: {
+    fontWeight: "bold",
   },
 });

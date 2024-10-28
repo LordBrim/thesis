@@ -209,23 +209,22 @@ export default function ManageFaqUpdate() {
               }}
             >
               <Text style={styles.detail}>{item.type}</Text>
-              <StockItem stock={item} />
+              <StockItem available={item.available} />
             </View>
           )}
           keyExtractor={(item) => item.type.toString()}
           overScrollMode="never"
           scrollEnabled={false}
           contentContainerStyle={{ gap: 16 }}
-          numColumns={4}
+          numColumns={updatedStock.length / 2}
         />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const StockItem = (stock) => {
-  const [isEnabled, setIsEnabled] = useState(stock.available);
-  console.log(isEnabled);
+const StockItem = (available) => {
+  const [isEnabled, setIsEnabled] = useState(available.available);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   return (
     <View>

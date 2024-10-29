@@ -9,6 +9,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   setDoc,
   updateDoc,
@@ -18,7 +19,8 @@ import {
 export const getHospitals = createAsyncThunk("getHospitals", async () => {
   try {
     const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospital");
-    const querySnapshot = await getDocs(hospitalsCollectionRef);
+    const sortedQuery = query(hospitalsCollectionRef, orderBy("name", "asc"));
+    const querySnapshot = await getDocs(sortedQuery);
     const hospitals = querySnapshot.docs.map((doc) => ({
       uuid: doc.id, // Document ID
       name: doc.data().name,

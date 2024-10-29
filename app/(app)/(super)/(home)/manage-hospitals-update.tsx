@@ -20,16 +20,15 @@ import {
 import { Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
-import { updateHospital, updateHospitalInFirebase } from "rtx/slices/hospitals";
+import { updateHospital, updateHospitalByUuid } from "rtx/slices/hospitals";
 import { View } from "react-native";
 import { RootState } from "app/store";
 
 export default function ManageFaqUpdate() {
-  const { name } = useLocalSearchParams();
+  const { uuid } = useLocalSearchParams();
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const hospital = hospitals.find((item) => item.name === name);
+  const hospital = hospitals.find((item) => item.uuid === uuid);
 
-  const [oldHospitalName, setOldHospitalName] = useState(hospital.name);
   const [updatedHospitalName, setUpdatedHospitalName] = useState(hospital.name);
   const [updatedLogoUrl, setUpdatedLogoUrl] = useState(hospital.logoUrl);
   const [updatedAddress, setUpdatedAddress] = useState(hospital.address);
@@ -91,7 +90,7 @@ export default function ManageFaqUpdate() {
   const handleUpdate = () => {
     dispatch(
       updateHospital({
-        oldName: oldHospitalName,
+        uuid: uuid.toString(),
         updatedHospital: {
           uuid: hospital.uuid,
           name: updatedHospitalName,
@@ -115,26 +114,26 @@ export default function ManageFaqUpdate() {
         },
       })
     );
-    updateHospitalInFirebase(
-      updatedHospitalName,
-      updatedHospitalName
-      // updatedData: {
-      // updatedAddress,
-      //   updatedContactNumber,
-      //   updatedLogoUrl,
-      //  coordinates: {parseFloat(updatedLatitude),parseFloat(updatedLongtitude)},
-      //  [
-      //     { type: updatedStock[0].type, available: isEnabledOplus },
-      //     { type: updatedStock[1].type, available: isEnabledOminus },
-      //     { type: updatedStock[2].type, available: isEnabledAplus },
-      //     { type: updatedStock[3].type, available: isEnabledAminus },
-      //     { type: updatedStock[4].type, available: isEnabledBplus },
-      //     { type: updatedStock[5].type, available: isEnabledBminus },
-      //     { type: updatedStock[6].type, available: isEnabledABplus },
-      //     { type: updatedStock[7].type, available: isEnabledABminus },
-      //   ],
-      // }
-    );
+    updateHospitalByUuid(uuid.toString(), {
+      name: updatedHospitalName,
+      address: updatedAddress,
+      contactNumber: updatedContactNumber,
+      logoUrl: updatedLogoUrl,
+      coordinates: {
+        latitude: parseFloat(updatedLatitude),
+        longitude: parseFloat(updatedLongtitude),
+      },
+      stock: [
+        { type: updatedStock[0].type, available: isEnabledOplus },
+        { type: updatedStock[1].type, available: isEnabledOminus },
+        { type: updatedStock[2].type, available: isEnabledAplus },
+        { type: updatedStock[3].type, available: isEnabledAminus },
+        { type: updatedStock[4].type, available: isEnabledBplus },
+        { type: updatedStock[5].type, available: isEnabledBminus },
+        { type: updatedStock[6].type, available: isEnabledABplus },
+        { type: updatedStock[7].type, available: isEnabledABminus },
+      ],
+    });
     router.back();
   };
 

@@ -142,7 +142,7 @@ export function HospitalCard({
           </Text>
         </Text>
         <Text style={card.detail}>Stock:</Text>
-        {/* {stock.map((item, index) => (
+        {stock.map((item, index) => (
           <Text style={card.detail} key={index}>
             {"\t\t\t\t"}
             {item.type}:
@@ -151,7 +151,7 @@ export function HospitalCard({
               {item.available ? "true" : "false"}
             </Text>
           </Text>
-        ))} */}
+        ))}
       </View>
     </View>
   );

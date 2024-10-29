@@ -53,7 +53,9 @@ export default function ManageHospitals() {
               stock={item.stock}
             />
           )}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
           scrollEnabled={false}
           contentContainerStyle={{ gap: 16 }}
         />
@@ -140,8 +142,8 @@ export function HospitalCard({
           </Text>
         </Text>
         <Text style={card.detail}>Stock:</Text>
-        {stock.map((item) => (
-          <Text style={card.detail}>
+        {stock.map((item, index) => (
+          <Text style={card.detail} key={index}>
             {"\t\t\t\t"}
             {item.type}:
             <Text style={{ fontWeight: "normal" }}>

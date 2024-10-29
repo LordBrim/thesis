@@ -11,7 +11,7 @@ import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { deleteHospital } from "rtx/slices/hospitals";
+import { deleteHospital, getHospitals } from "rtx/slices/hospitals";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
@@ -20,9 +20,9 @@ export default function ManageHospitals() {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   dispatch(getFAQs());
-  // }, []);
+  useEffect(() => {
+    dispatch(getHospitals());
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -142,7 +142,7 @@ export function HospitalCard({
           </Text>
         </Text>
         <Text style={card.detail}>Stock:</Text>
-        {stock.map((item, index) => (
+        {/* {stock.map((item, index) => (
           <Text style={card.detail} key={index}>
             {"\t\t\t\t"}
             {item.type}:
@@ -151,7 +151,7 @@ export function HospitalCard({
               {item.available ? "true" : "false"}
             </Text>
           </Text>
-        ))}
+        ))} */}
       </View>
     </View>
   );

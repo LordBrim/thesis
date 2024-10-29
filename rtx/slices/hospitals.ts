@@ -70,7 +70,7 @@ export const addHospitalToFirebase = async (
       stock: arrayUnion(...stock),
     });
   } else {
-    await addDoc(hospitalsCollectionRef, {
+    const newHospitalDocRef = await addDoc(hospitalsCollectionRef, {
       name,
       address,
       contactNumber,
@@ -80,6 +80,9 @@ export const addHospitalToFirebase = async (
         longitude,
       },
       stock,
+    });
+    await updateDoc(newHospitalDocRef, {
+      uuid: newHospitalDocRef.id,
     });
   }
 };
@@ -121,7 +124,7 @@ interface HospitalsState {
 }
 
 interface HospitalState {
-  uuid: string;
+  uuid?: string;
   name: string;
   logoUrl: string;
   address: string;
@@ -288,9 +291,8 @@ export const hospitalsSlice = createSlice({
   initialState,
   reducers: {
     createHospital: (state, action: PayloadAction<HospitalState>) => {
-      const { name } = action.payload;
       const hospitalIndex = state.hospitals.findIndex(
-        (hospital) => hospital.name === name
+        (hospital) => hospital.name === action.payload.name
       );
       if (hospitalIndex === -1) {
         state.hospitals.push(action.payload);

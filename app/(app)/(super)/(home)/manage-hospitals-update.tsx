@@ -197,16 +197,58 @@ export default function ManageFaqUpdate() {
             }}
           />
         </TextInputWrapper>
-        <FlatList
+
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[0].type}</Text>
+              <StockItem available={updatedStock[0].available} />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[1].type}</Text>
+              <StockItem available={updatedStock[1].available} />
+            </View>
+          </View>
+
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[2].type}</Text>
+              <StockItem available={updatedStock[2].available} />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[3].type}</Text>
+              <StockItem available={updatedStock[3].available} />
+            </View>
+          </View>
+
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[4].type}</Text>
+              <StockItem available={updatedStock[4].available} />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[5].type}</Text>
+              <StockItem available={updatedStock[5].available} />
+            </View>
+          </View>
+
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[6].type}</Text>
+              <StockItem available={updatedStock[6].available} />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[7].type}</Text>
+              <StockItem available={updatedStock[7].available} />
+            </View>
+          </View>
+        </View>
+
+        {/* <FlatList
           data={updatedStock}
           renderItem={({ item }) => (
             <View
-              style={{
-                flexDirection: "row",
-                flex: 1,
-                justifyContent: "flex-end",
-                alignItems: "center",
-              }}
+              style={styles.blood}
             >
               <Text style={styles.detail}>{item.type}</Text>
               <StockItem available={item.available} />
@@ -217,7 +259,7 @@ export default function ManageFaqUpdate() {
           scrollEnabled={false}
           contentContainerStyle={{ gap: 16 }}
           numColumns={updatedStock.length / 2}
-        />
+        /> */}
       </ScrollView>
     </SafeAreaView>
   );
@@ -247,6 +289,22 @@ const styles = StyleSheet.create({
   scrollview: {
     padding: HORIZONTAL_SCREEN_MARGIN,
     gap: 16,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  column: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  blood: {
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   card: {
     flexDirection: "row",

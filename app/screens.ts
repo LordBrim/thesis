@@ -8,7 +8,6 @@ import HomeTab from "./(app)/(user)/(tabs)";
 import UpdatesTab from "./(app)/(user)/(tabs)/updates-tab";
 import MapsTab from "./(app)/(user)/(tabs)/maps-tab";
 import FAQTab from "./(app)/(user)/(tabs)/faq-tab";
-import AccountTab from "../removed/account-tab";
 
 // Home Screens
 import Request from "./(app)/(user)/(home)/request";
@@ -50,7 +49,6 @@ export {
   UpdatesTab,
   MapsTab,
   FAQTab,
-  AccountTab,
   Profile,
   DonationHistory,
   Settings,

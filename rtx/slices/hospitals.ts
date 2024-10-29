@@ -87,12 +87,12 @@ export const addHospitalToFirebase = async (
 export const updateHospitalByUuid = async (
   uuid: string,
   updatedData: {
-    name?: string;
-    address?: string;
-    contactNumber?: string;
-    logoUrl?: string;
-    coordinates?: { latitude: number; longitude: number };
-    stock?: { type: string; available: boolean }[];
+    name: string;
+    address: string;
+    contactNumber: string;
+    logoUrl: string;
+    coordinates: { latitude: number; longitude: number };
+    stock: { type: string; available: boolean }[];
   }
 ) => {
   try {

@@ -98,8 +98,8 @@ export default function ManageFaqUpdate() {
           address: updatedAddress,
           contactNumber: updatedContactNumber,
           coordinates: {
-            latitude: parseInt(updatedLatitude),
-            longtitude: parseInt(updatedLongtitude),
+            latitude: parseFloat(updatedLatitude),
+            longtitude: parseFloat(updatedLongtitude),
           },
           stock: [
             { type: updatedStock[0].type, available: isEnabledOplus },

@@ -7,7 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { FontAwesome6, Fontisto, Ionicons, Octicons } from "@expo/vector-icons";
+import {
+  FontAwesome6,
+  Fontisto,
+  Ionicons,
+  Octicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
@@ -28,9 +34,27 @@ export default function AdminDashboard() {
       title: "Staff",
     },
     {
-      href: "manage-tickets",
+      href: "manage-user-appointments",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
-      title: "Tickets",
+      title: "Appointments",
+    },
+    {
+      href: "manage-user-requests",
+      icon: (
+        <MaterialCommunityIcons
+          name="blood-bag"
+          size={size}
+          color={COLORS.primary}
+        />
+      ),
+      title: "Requests",
+    },
+    {
+      href: "manage-bank-transfers",
+      icon: (
+        <FontAwesome6 name="hospital-user" size={size} color={COLORS.primary} />
+      ),
+      title: "Bank Transfers",
     },
     {
       href: "manage-events",

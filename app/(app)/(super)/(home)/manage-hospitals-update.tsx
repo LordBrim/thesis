@@ -11,15 +11,9 @@ import React, { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
-import {
-  router,
-  useGlobalSearchParams,
-  useLocalSearchParams,
-  useNavigation,
-} from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
 import { updateHospital, updateHospitalByUuid } from "rtx/slices/hospitals";
 import { View } from "react-native";
 import { RootState } from "app/store";

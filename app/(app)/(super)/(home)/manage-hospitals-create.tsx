@@ -24,7 +24,7 @@ export default function ManageFaqCreate() {
   const [newAddress, setNewAddress] = useState("");
   const [newContactNumber, setNewContactNumber] = useState("");
   const [newLatitude, setNewLatitude] = useState("");
-  const [newLongtitude, setNewLongtitude] = useState("");
+  const [newLongitude, setNewLongitude] = useState("");
   const [isEnabledOplus, toggleOplus] = useState(false);
   const [isEnabledOminus, toggleOminus] = useState(false);
   const [isEnabledAplus, toggleAplus] = useState(false);
@@ -60,7 +60,7 @@ export default function ManageFaqCreate() {
     newAddress,
     newContactNumber,
     newLatitude,
-    newLongtitude,
+    newLongitude,
     isEnabledOplus,
     isEnabledOminus,
     isEnabledAplus,
@@ -80,7 +80,7 @@ export default function ManageFaqCreate() {
         contactNumber: newContactNumber,
         coordinates: {
           latitude: parseFloat(newLatitude),
-          longtitude: parseFloat(newLongtitude),
+          longitude: parseFloat(newLongitude),
         },
         stock: [
           { type: "O+", available: isEnabledOplus },
@@ -100,7 +100,7 @@ export default function ManageFaqCreate() {
       newAddress,
       newContactNumber,
       parseFloat(newLatitude),
-      parseFloat(newLongtitude),
+      parseFloat(newLongitude),
       [
         { type: "O+", available: isEnabledOplus },
         { type: "O-", available: isEnabledOminus },
@@ -197,11 +197,11 @@ export default function ManageFaqCreate() {
             }}
           />
         </TextInputWrapper>
-        <TextInputWrapper label="Longtitude">
+        <TextInputWrapper label="Longitude">
           <TextInput
-            value={newLongtitude}
-            onChangeText={(number) => setNewLongtitude(number)}
-            placeholder="Enter a longtitude..."
+            value={newLongitude}
+            onChangeText={(number) => setNewLongitude(number)}
+            placeholder="Enter a longitude..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically

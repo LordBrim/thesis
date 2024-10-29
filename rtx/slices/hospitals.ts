@@ -132,7 +132,7 @@ interface HospitalState {
 
 interface CoordinatesState {
   latitude: number;
-  longtitude: number;
+  longitude: number;
 }
 
 interface StockState {
@@ -151,7 +151,7 @@ const initialState: HospitalsState = {
       contactNumber: "(02) 8715 0861",
       coordinates: {
         latitude: 14.607184,
-        longtitude: 121.020384,
+        longitude: 121.020384,
       },
       stock: [
         {
@@ -197,7 +197,7 @@ const initialState: HospitalsState = {
       contactNumber: "(02) 8715 0861",
       coordinates: {
         latitude: 14.607184,
-        longtitude: 121.020384,
+        longitude: 121.020384,
       },
       stock: [
         {
@@ -243,7 +243,7 @@ const initialState: HospitalsState = {
       contactNumber: "(02) 8715 0861",
       coordinates: {
         latitude: 14.607184,
-        longtitude: 121.020384,
+        longitude: 121.020384,
       },
       stock: [
         {

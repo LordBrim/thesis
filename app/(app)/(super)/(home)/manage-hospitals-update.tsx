@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Switch,
-  FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
@@ -22,7 +21,6 @@ export default function ManageFaqUpdate() {
   const { uuid } = useLocalSearchParams();
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
   const hospital = hospitals.find((item) => item.uuid === uuid);
-
   const [updatedHospitalName, setUpdatedHospitalName] = useState(hospital.name);
   const [updatedLogoUrl, setUpdatedLogoUrl] = useState(hospital.logoUrl);
   const [updatedAddress, setUpdatedAddress] = useState(hospital.address);
@@ -32,9 +30,10 @@ export default function ManageFaqUpdate() {
   const [updatedLatitude, setUpdatedLatitude] = useState(
     hospital.coordinates.latitude.toString()
   );
-  const [updatedLongtitude, setUpdatedLongtitude] = useState(
-    hospital.coordinates.longtitude.toString()
+  const [updatedLongitude, setUpdatedLongitude] = useState(
+    hospital.coordinates.longitude.toString()
   );
+
   const [updatedStock, setUpdatedStock] = useState(hospital.stock);
   const [isEnabledOplus, toggleOplus] = useState(updatedStock[0].available);
   const [isEnabledOminus, toggleOminus] = useState(updatedStock[1].available);
@@ -70,7 +69,7 @@ export default function ManageFaqUpdate() {
     updatedAddress,
     updatedContactNumber,
     updatedLatitude,
-    updatedLongtitude,
+    updatedLongitude,
     updatedStock,
     isEnabledOplus,
     isEnabledOminus,
@@ -93,7 +92,7 @@ export default function ManageFaqUpdate() {
           contactNumber: updatedContactNumber,
           coordinates: {
             latitude: parseFloat(updatedLatitude),
-            longtitude: parseFloat(updatedLongtitude),
+            longtitude: parseFloat(updatedLongitude),
           },
           stock: [
             { type: updatedStock[0].type, available: isEnabledOplus },
@@ -115,7 +114,7 @@ export default function ManageFaqUpdate() {
       logoUrl: updatedLogoUrl,
       coordinates: {
         latitude: parseFloat(updatedLatitude),
-        longitude: parseFloat(updatedLongtitude),
+        longitude: parseFloat(updatedLongitude),
       },
       stock: [
         { type: updatedStock[0].type, available: isEnabledOplus },
@@ -204,7 +203,6 @@ export default function ManageFaqUpdate() {
             onChangeText={(number) => setUpdatedLatitude(number)}
             placeholder="Enter a latitude..."
             autoCapitalize="none"
-            autoCorrect={true}
             enablesReturnKeyAutomatically
             keyboardType="number-pad"
             style={{
@@ -215,11 +213,10 @@ export default function ManageFaqUpdate() {
         </TextInputWrapper>
         <TextInputWrapper label="Longtitude">
           <TextInput
-            value={updatedLongtitude}
-            onChangeText={(number) => setUpdatedLongtitude(number)}
+            value={updatedLongitude}
+            onChangeText={(number) => setUpdatedLongitude(number)}
             placeholder="Enter a longtitude..."
             autoCapitalize="none"
-            autoCorrect={true}
             enablesReturnKeyAutomatically
             keyboardType="number-pad"
             style={{

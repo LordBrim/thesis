@@ -82,7 +82,7 @@ type IHospitalCard = {
 
 interface CoordinatesState {
   latitude: number;
-  longtitude: number;
+  longitude: number;
 }
 
 interface StockState {
@@ -146,11 +146,8 @@ export function HospitalCard({
           <Text style={{ fontWeight: "normal" }}> {coordinates.latitude}</Text>
         </Text>
         <Text style={card.detail}>
-          {"\t\t\t\t"}Longtitude:
-          <Text style={{ fontWeight: "normal" }}>
-            {" "}
-            {coordinates.longtitude}
-          </Text>
+          {"\t\t\t\t"}Longitude:
+          <Text style={{ fontWeight: "normal" }}> {coordinates.longitude}</Text>
         </Text>
         <Text style={card.detail}>Stock:</Text>
         {stock.map((item, index) => (

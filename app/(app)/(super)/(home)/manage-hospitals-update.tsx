@@ -35,14 +35,14 @@ export default function ManageFaqUpdate() {
   );
 
   const [updatedStock, setUpdatedStock] = useState(hospital.stock);
-  const [isEnabledOplus, toggleOplus] = useState(updatedStock[0].available);
-  const [isEnabledOminus, toggleOminus] = useState(updatedStock[1].available);
-  const [isEnabledAplus, toggleAplus] = useState(updatedStock[2].available);
-  const [isEnabledAminus, toggleAminus] = useState(updatedStock[3].available);
-  const [isEnabledBplus, toggleBplus] = useState(updatedStock[4].available);
-  const [isEnabledBminus, toggleBminus] = useState(updatedStock[5].available);
-  const [isEnabledABplus, toggleABplus] = useState(updatedStock[6].available);
-  const [isEnabledABminus, toggleABminus] = useState(updatedStock[7].available);
+  const [isEnabledAplus, toggleAplus] = useState(updatedStock[0].available);
+  const [isEnabledAminus, toggleAminus] = useState(updatedStock[1].available);
+  const [isEnabledBplus, toggleBplus] = useState(updatedStock[2].available);
+  const [isEnabledBminus, toggleBminus] = useState(updatedStock[3].available);
+  const [isEnabledABplus, toggleABplus] = useState(updatedStock[4].available);
+  const [isEnabledABminus, toggleABminus] = useState(updatedStock[5].available);
+  const [isEnabledOplus, toggleOplus] = useState(updatedStock[6].available);
+  const [isEnabledOminus, toggleOminus] = useState(updatedStock[7].available);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   useEffect(() => {
@@ -71,14 +71,14 @@ export default function ManageFaqUpdate() {
     updatedLatitude,
     updatedLongitude,
     updatedStock,
-    isEnabledOplus,
-    isEnabledOminus,
     isEnabledAplus,
     isEnabledAminus,
     isEnabledBplus,
     isEnabledBminus,
     isEnabledABplus,
     isEnabledABminus,
+    isEnabledOplus,
+    isEnabledOminus,
   ]);
   const handleUpdate = () => {
     dispatch(
@@ -92,17 +92,17 @@ export default function ManageFaqUpdate() {
           contactNumber: updatedContactNumber,
           coordinates: {
             latitude: parseFloat(updatedLatitude),
-            longtitude: parseFloat(updatedLongitude),
+            longitude: parseFloat(updatedLongitude),
           },
           stock: [
-            { type: updatedStock[0].type, available: isEnabledOplus },
-            { type: updatedStock[1].type, available: isEnabledOminus },
-            { type: updatedStock[2].type, available: isEnabledAplus },
-            { type: updatedStock[3].type, available: isEnabledAminus },
-            { type: updatedStock[4].type, available: isEnabledBplus },
-            { type: updatedStock[5].type, available: isEnabledBminus },
-            { type: updatedStock[6].type, available: isEnabledABplus },
-            { type: updatedStock[7].type, available: isEnabledABminus },
+            { type: updatedStock[0].type, available: isEnabledAplus },
+            { type: updatedStock[1].type, available: isEnabledAminus },
+            { type: updatedStock[2].type, available: isEnabledBplus },
+            { type: updatedStock[3].type, available: isEnabledBminus },
+            { type: updatedStock[4].type, available: isEnabledABplus },
+            { type: updatedStock[5].type, available: isEnabledABminus },
+            { type: updatedStock[6].type, available: isEnabledOplus },
+            { type: updatedStock[7].type, available: isEnabledOminus },
           ],
         },
       })
@@ -117,14 +117,14 @@ export default function ManageFaqUpdate() {
         longitude: parseFloat(updatedLongitude),
       },
       stock: [
-        { type: updatedStock[0].type, available: isEnabledOplus },
-        { type: updatedStock[1].type, available: isEnabledOminus },
-        { type: updatedStock[2].type, available: isEnabledAplus },
-        { type: updatedStock[3].type, available: isEnabledAminus },
-        { type: updatedStock[4].type, available: isEnabledBplus },
-        { type: updatedStock[5].type, available: isEnabledBminus },
-        { type: updatedStock[6].type, available: isEnabledABplus },
-        { type: updatedStock[7].type, available: isEnabledABminus },
+        { type: updatedStock[0].type, available: isEnabledAplus },
+        { type: updatedStock[1].type, available: isEnabledAminus },
+        { type: updatedStock[2].type, available: isEnabledBplus },
+        { type: updatedStock[3].type, available: isEnabledBminus },
+        { type: updatedStock[4].type, available: isEnabledABplus },
+        { type: updatedStock[5].type, available: isEnabledABminus },
+        { type: updatedStock[6].type, available: isEnabledOplus },
+        { type: updatedStock[7].type, available: isEnabledOminus },
       ],
     });
     router.back();
@@ -230,7 +230,7 @@ export default function ManageFaqUpdate() {
           {/* Type A */}
           <View style={styles.column}>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[2].type}</Text>
+              <Text style={styles.detail}>{updatedStock[0].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledAplus ? "white" : "#f4f3f4"}
@@ -239,7 +239,7 @@ export default function ManageFaqUpdate() {
               />
             </View>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[3].type}</Text>
+              <Text style={styles.detail}>{updatedStock[1].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledAminus ? "white" : "#f4f3f4"}
@@ -251,7 +251,7 @@ export default function ManageFaqUpdate() {
           {/* Type B */}
           <View style={styles.column}>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[4].type}</Text>
+              <Text style={styles.detail}>{updatedStock[2].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledBplus ? "white" : "#f4f3f4"}
@@ -260,7 +260,7 @@ export default function ManageFaqUpdate() {
               />
             </View>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[5].type}</Text>
+              <Text style={styles.detail}>{updatedStock[3].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledBminus ? "white" : "#f4f3f4"}
@@ -272,7 +272,7 @@ export default function ManageFaqUpdate() {
           {/* Type AB */}
           <View style={styles.column}>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[6].type}</Text>
+              <Text style={styles.detail}>{updatedStock[4].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledABplus ? "white" : "#f4f3f4"}
@@ -281,7 +281,7 @@ export default function ManageFaqUpdate() {
               />
             </View>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[7].type}</Text>
+              <Text style={styles.detail}>{updatedStock[5].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledABminus ? "white" : "#f4f3f4"}
@@ -293,7 +293,7 @@ export default function ManageFaqUpdate() {
           {/* Type O */}
           <View style={styles.column}>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[0].type}</Text>
+              <Text style={styles.detail}>{updatedStock[6].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
@@ -302,7 +302,7 @@ export default function ManageFaqUpdate() {
               />
             </View>
             <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[1].type}</Text>
+              <Text style={styles.detail}>{updatedStock[7].type}</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}

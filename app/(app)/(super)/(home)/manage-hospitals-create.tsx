@@ -61,14 +61,14 @@ export default function ManageFaqCreate() {
     newContactNumber,
     newLatitude,
     newLongitude,
-    isEnabledOplus,
-    isEnabledOminus,
     isEnabledAplus,
     isEnabledAminus,
     isEnabledBplus,
     isEnabledBminus,
     isEnabledABplus,
     isEnabledABminus,
+    isEnabledOplus,
+    isEnabledOminus,
   ]);
 
   const handleCreate = () => {
@@ -102,14 +102,14 @@ export default function ManageFaqCreate() {
       parseFloat(newLatitude),
       parseFloat(newLongitude),
       [
-        { type: "O+", available: isEnabledOplus },
-        { type: "O-", available: isEnabledOminus },
         { type: "A+", available: isEnabledAplus },
         { type: "A-", available: isEnabledAminus },
         { type: "B+", available: isEnabledBplus },
         { type: "B-", available: isEnabledBminus },
         { type: "AB+", available: isEnabledABplus },
         { type: "AB-", available: isEnabledABminus },
+        { type: "O+", available: isEnabledOplus },
+        { type: "O-", available: isEnabledOminus },
       ]
     );
     router.back();

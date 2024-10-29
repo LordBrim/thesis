@@ -27,7 +27,7 @@ export default function ManageHospitals() {
 
   useEffect(() => {
     dispatch(getHospitals());
-  }, []);
+  }, [hospitals]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -131,7 +131,8 @@ export function HospitalCard({
       </Pressable>
       <View style={card.bContainer}>
         <Text style={card.detail}>
-          UUID:<Text style={{ fontWeight: "normal" }}> {uuid}</Text>
+          UUID:
+          <Text style={{ fontWeight: "normal" }}> {uuid}</Text>
         </Text>
         <Text style={card.detail}>
           Address:<Text style={{ fontWeight: "normal" }}> {address}</Text>

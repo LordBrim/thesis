@@ -14,22 +14,22 @@ import {
   where,
 } from "firebase/firestore";
 
-// export const getFAQs = createAsyncThunk("getFAQs", async () => {
-//   try {
-//     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-//     const querySnapshot = await getDocs(faqsCollectionRef);
+export const getHospitals = createAsyncThunk("getHospitals", async () => {
+  try {
+    const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospitalData");
+    const querySnapshot = await getDocs(hospitalsCollectionRef);
 
-//     const faqs = querySnapshot.docs.map((doc) => ({
-//       id: doc.id,
-//       ...doc.data(),
-//     }));
+    const hospitals = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-//     return faqs;
-//   } catch (error) {
-//     console.error("Error fetching FAQs:", error);
-//     return null;
-//   }
-// });
+    return hospitals;
+  } catch (error) {
+    console.error("Error fetching hospitals:", error);
+    return null;
+  }
+});
 
 // export const addFAQToFirebase = async (
 //   title: string,
@@ -320,6 +320,15 @@ export const hospitalsSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(getHospitals.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.hospitals = action.payload;
+      } else {
+        state.hospitals = initialState.hospitals;
+      }
+    });
+  },
   // reducers: {
   // extraReducers: (builder) => {
   //   builder.addCase(getFAQs.fulfilled, (state, action) => {
@@ -335,6 +344,6 @@ export const hospitalsSlice = createSlice({
 export const { createHospital, updateHospital, deleteHospital } =
   hospitalsSlice.actions;
 
-export const selectCount = (state: RootState) => state.hospitals;
+export const selectCount = (state: RootState) => state.hospitals.hospitals;
 
 export default hospitalsSlice.reducer;

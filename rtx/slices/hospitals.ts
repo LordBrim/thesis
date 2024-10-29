@@ -70,7 +70,7 @@ export const addHospitalToFirebase = async (
       stock: arrayUnion(...stock),
     });
   } else {
-    const newHospitalDocRef = await addDoc(hospitalsCollectionRef, {
+    await addDoc(hospitalsCollectionRef, {
       name,
       address,
       contactNumber,
@@ -80,9 +80,6 @@ export const addHospitalToFirebase = async (
         longitude,
       },
       stock,
-    });
-    await updateDoc(newHospitalDocRef, {
-      uuid: newHospitalDocRef.id,
     });
   }
 };

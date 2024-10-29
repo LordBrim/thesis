@@ -299,13 +299,13 @@ export const hospitalsSlice = createSlice({
     updateHospital: (
       state,
       action: PayloadAction<{
-        oldName: string;
+        uuid: string;
         updatedHospital: HospitalState;
       }>
     ) => {
-      const { oldName, updatedHospital } = action.payload;
+      const { uuid, updatedHospital } = action.payload;
       const hospitalIndex = state.hospitals.findIndex(
-        (hospital) => hospital.name === oldName
+        (hospital) => hospital.uuid === uuid
       );
       if (hospitalIndex !== -1) {
         state.hospitals[hospitalIndex] = updatedHospital;

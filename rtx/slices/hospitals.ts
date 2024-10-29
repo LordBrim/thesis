@@ -19,12 +19,22 @@ export const getHospitals = createAsyncThunk("getHospitals", async () => {
   try {
     const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospital");
     const querySnapshot = await getDocs(hospitalsCollectionRef);
-
     const hospitals = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
+      uuid: doc.id, // Document ID
+      name: doc.data().name,
+      type: doc.data().type,
+      address: doc.data().address,
+      contactNumber: doc.data().contactNumber,
+      logoUrl: doc.data().logoUrl,
+      coordinates: {
+        latitude: doc.data().coordinates.latitude,
+        longitude: doc.data().coordinates.longitude,
+      },
+      stock: doc.data().stock.map((item) => ({
+        available: item.available,
+        type: item.type,
+      })),
     }));
-
     return hospitals;
   } catch (error) {
     console.error("Error fetching hospitals:", error);
@@ -32,96 +42,86 @@ export const getHospitals = createAsyncThunk("getHospitals", async () => {
   }
 });
 
-// export const addFAQToFirebase = async (
-//   title: string,
-//   question: string,
-//   answer: string
-// ) => {
-//   const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
+export const addHospitalToFirebase = async (
+  name: string,
+  address: string,
+  contactNumber: string,
+  logoUrl: string,
+  latitude: number,
+  longitude: number,
+  stock: { type: string; available: boolean }[]
+) => {
+  const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospital");
+  const existingHospitalQuery = query(
+    hospitalsCollectionRef,
+    where("name", "==", name)
+  );
+  const querySnapshot = await getDocs(existingHospitalQuery);
+  if (!querySnapshot.empty) {
+    const hospitalDocRef = querySnapshot.docs[0].ref;
+    await updateDoc(hospitalDocRef, {
+      address,
+      contactNumber,
+      logoUrl,
+      coordinates: {
+        latitude,
+        longitude,
+      },
+      stock: arrayUnion(...stock),
+    });
+  } else {
+    await addDoc(hospitalsCollectionRef, {
+      name,
+      address,
+      contactNumber,
+      logoUrl,
+      coordinates: {
+        latitude,
+        longitude,
+      },
+      stock,
+    });
+  }
+};
 
-//   const existingFAQQuery = query(
-//     faqsCollectionRef,
-//     where("title", "==", title)
-//   );
-//   const querySnapshot = await getDocs(existingFAQQuery);
+export const updateHospitalByUuid = async (
+  uuid: string,
+  updatedData: {
+    name?: string;
+    address?: string;
+    contactNumber?: string;
+    logoUrl?: string;
+    coordinates?: { latitude: number; longitude: number };
+    stock?: { type: string; available: boolean }[];
+  }
+) => {
+  try {
+    const hospitalDocRef = doc(collection(FIRESTORE_DB, "hospital"), uuid);
+    await updateDoc(hospitalDocRef, {
+      ...updatedData,
+    });
+    console.log(`Hospital with UUID ${uuid} updated successfully.`);
+  } catch (error) {
+    console.error("Error updating hospital:", error);
+  }
+};
 
-//   if (!querySnapshot.empty) {
-//     const faqDocRef = querySnapshot.docs[0].ref;
-//     await updateDoc(faqDocRef, {
-//       questions: arrayUnion({ question, answer }),
-//     });
-//   } else {
-//     await addDoc(faqsCollectionRef, {
-//       title,
-//       questions: [{ question, answer }],
-//     });
-//   }
-// };
-
-// export const updateFAQInFirebase = async (
-//   title: string,
-//   oldQuestion: { question: string; answer: string },
-//   updatedQuestion: { question: string; answer: string }
-// ) => {
-//   try {
-//     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
-//     const q = query(faqsCollectionRef, where("title", "==", title));
-//     const querySnapshot = await getDocs(q);
-
-//     if (!querySnapshot.empty) {
-//       const faqDoc = querySnapshot.docs[0];
-//       const questions = faqDoc.data().questions;
-
-//       const updatedQuestions = questions.map((q: any) =>
-//         q.question === oldQuestion.question && q.answer === oldQuestion.answer
-//           ? updatedQuestion
-//           : q
-//       );
-
-//       await updateDoc(faqDoc.ref, {
-//         questions: updatedQuestions,
-//       });
-//     }
-//   } catch (error) {
-//     console.error("Error updating question:", error);
-//   }
-// };
-
-// export const deleteQuestionInFirebase = async (
-//   title: string,
-//   deletedQuestion: { question: string; answer: string }
-// ) => {
-//   try {
-//     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
-//     const q = query(faqsCollectionRef, where("title", "==", title));
-//     const querySnapshot = await getDocs(q);
-
-//     if (!querySnapshot.empty) {
-//       const faqDoc = querySnapshot.docs[0];
-//       const questions = faqDoc.data().questions;
-
-//       const updatedQuestions = questions.filter(
-//         (q: any) =>
-//           q.question !== deletedQuestion.question ||
-//           q.answer !== deletedQuestion.answer
-//       );
-
-//       await updateDoc(faqDoc.ref, {
-//         questions: updatedQuestions,
-//       });
-//     }
-//   } catch (error) {
-//     console.error("Error deleting question:", error);
-//   }
-// };
+export const deleteHospitalInFirebase = async (uuid: string) => {
+  try {
+    const hospitalDocRef = doc(FIRESTORE_DB, "hospital", uuid);
+    await deleteDoc(hospitalDocRef);
+    console.log(`Hospital with ID ${uuid} deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting hospital:", error);
+  }
+};
 
 interface HospitalsState {
   hospitals: Array<HospitalState>;
 }
 
 interface HospitalState {
+  uuid: string;
   name: string;
   logoUrl: string;
   address: string;
@@ -143,6 +143,7 @@ interface StockState {
 const initialState: HospitalsState = {
   hospitals: [
     {
+      uuid: "0",
       name: "UERM Medical Center",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -188,6 +189,7 @@ const initialState: HospitalsState = {
       ],
     },
     {
+      uuid: "1",
       name: "UERM Hospital",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -233,6 +235,7 @@ const initialState: HospitalsState = {
       ],
     },
     {
+      uuid: "2",
       name: "UERM Medical",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -304,18 +307,15 @@ export const hospitalsSlice = createSlice({
       const hospitalIndex = state.hospitals.findIndex(
         (hospital) => hospital.name === oldName
       );
-
       if (hospitalIndex !== -1) {
         state.hospitals[hospitalIndex] = updatedHospital;
       }
     },
-
-    deleteHospital: (state, action: PayloadAction<{ name: string }>) => {
-      const { name } = action.payload;
+    deleteHospital: (state, action: PayloadAction<{ uuid: string }>) => {
+      const { uuid } = action.payload;
       const hospitalIndex = state.hospitals.findIndex(
-        (hospital) => hospital.name === name
+        (hospital) => hospital.uuid === uuid
       );
-
       if (hospitalIndex !== -1) {
         state.hospitals.splice(hospitalIndex, 1);
       }
@@ -330,16 +330,6 @@ export const hospitalsSlice = createSlice({
       }
     });
   },
-  // reducers: {
-  // extraReducers: (builder) => {
-  //   builder.addCase(getFAQs.fulfilled, (state, action) => {
-  //     if (action.payload) {
-  //       state.faqs = action.payload;
-  //     } else {
-  //       state.faqs = initialState.faqs;
-  //     }
-  //   });
-  // },
 });
 
 export const { createHospital, updateHospital, deleteHospital } =

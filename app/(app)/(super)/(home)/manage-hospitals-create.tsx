@@ -15,7 +15,7 @@ import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { createHospital } from "rtx/slices/hospitals";
+import { addHospitalToFirebase, createHospital } from "rtx/slices/hospitals";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {
@@ -94,7 +94,24 @@ export default function ManageFaqCreate() {
         ],
       })
     );
-    // addFAQToFirebase(newTitle, newQuestion, newAnswer);
+    addHospitalToFirebase(
+      newHospitalName,
+      newLogoUrl,
+      newAddress,
+      newContactNumber,
+      parseFloat(newLatitude),
+      parseFloat(newLongtitude),
+      [
+        { type: "O+", available: isEnabledOplus },
+        { type: "O-", available: isEnabledOminus },
+        { type: "A+", available: isEnabledAplus },
+        { type: "A-", available: isEnabledAminus },
+        { type: "B+", available: isEnabledBplus },
+        { type: "B-", available: isEnabledBminus },
+        { type: "AB+", available: isEnabledABplus },
+        { type: "AB-", available: isEnabledABminus },
+      ]
+    );
     router.back();
   };
 
@@ -196,27 +213,6 @@ export default function ManageFaqCreate() {
           />
         </TextInputWrapper>
         <View style={styles.row}>
-          {/* Type O */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>O+</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOplus(!isEnabledOplus)}
-                value={isEnabledOplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>O-</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOminus(!isEnabledOminus)}
-                value={isEnabledOminus}
-              />
-            </View>
-          </View>
           {/* Type A */}
           <View style={styles.column}>
             <View style={styles.blood}>
@@ -271,12 +267,33 @@ export default function ManageFaqCreate() {
               />
             </View>
             <View style={styles.blood}>
-              <Text style={styles.detail}>A-</Text>
+              <Text style={styles.detail}>AB-</Text>
               <Switch
                 trackColor={{ false: "#767577", true: COLORS.primary }}
                 thumbColor={isEnabledABminus ? "white" : "#f4f3f4"}
                 onValueChange={() => toggleABminus(!isEnabledABminus)}
                 value={isEnabledABminus}
+              />
+            </View>
+          </View>
+          {/* Type O */}
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>O+</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleOplus(!isEnabledOplus)}
+                value={isEnabledOplus}
+              />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>O-</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleOminus(!isEnabledOminus)}
+                value={isEnabledOminus}
               />
             </View>
           </View>

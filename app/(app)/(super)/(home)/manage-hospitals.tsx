@@ -11,7 +11,12 @@ import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { deleteHospital, getHospitals } from "rtx/slices/hospitals";
+import {
+  addHospitalToFirebase,
+  deleteHospital,
+  deleteHospitalInFirebase,
+  getHospitals,
+} from "rtx/slices/hospitals";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
@@ -45,6 +50,7 @@ export default function ManageHospitals() {
           data={hospitals}
           renderItem={({ item }) => (
             <HospitalCard
+              uuid={item.uuid}
               name={item.name}
               logoUrl={item.logoUrl}
               address={item.address}
@@ -65,6 +71,7 @@ export default function ManageHospitals() {
 }
 
 type IHospitalCard = {
+  uuid: string;
   name: string;
   logoUrl: string;
   address: string;
@@ -84,6 +91,7 @@ interface StockState {
 }
 
 export function HospitalCard({
+  uuid,
   name,
   logoUrl,
   address,
@@ -100,28 +108,31 @@ export function HospitalCard({
 
   const dispatch = useDispatch();
 
-  const handleDelete = (name) => {
+  const handleDelete = (uuid) => {
     dispatch(
       deleteHospital({
-        name: name,
+        uuid: uuid,
       })
     );
-    // deleteQuestionInFirebase(name);
+    deleteHospitalInFirebase(uuid);
   };
 
   return (
     <View style={{ width: "100%", flex: 1 }}>
       <Pressable style={card.tContainer} android_ripple={{ radius: 250 }}>
         <Text style={[GS.h3, card.name]}>{name}</Text>
-        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(name)} />
+        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} />
         <IconBtn
           icon="trash"
           size={18}
-          onPress={() => handleDelete(name)}
+          onPress={() => handleDelete(uuid)}
           color="red"
         />
       </Pressable>
       <View style={card.bContainer}>
+        <Text style={card.detail}>
+          UUID:<Text style={{ fontWeight: "normal" }}> {uuid}</Text>
+        </Text>
         <Text style={card.detail}>
           Address:<Text style={{ fontWeight: "normal" }}> {address}</Text>
         </Text>

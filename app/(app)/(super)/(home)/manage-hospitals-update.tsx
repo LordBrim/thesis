@@ -20,7 +20,7 @@ import {
 import { Text } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
-import { updateHospital } from "rtx/slices/hospitals";
+import { updateHospital, updateHospitalInFirebase } from "rtx/slices/hospitals";
 import { View } from "react-native";
 import { RootState } from "app/store";
 
@@ -93,6 +93,7 @@ export default function ManageFaqUpdate() {
       updateHospital({
         oldName: oldHospitalName,
         updatedHospital: {
+          uuid: hospital.uuid,
           name: updatedHospitalName,
           logoUrl: updatedLogoUrl,
           address: updatedAddress,
@@ -114,15 +115,26 @@ export default function ManageFaqUpdate() {
         },
       })
     );
-    // TODO: Update in firebase
-    // updateFAQInFirebase(
-    //   oldTitle,
-    //   {
-    //     question: oldQuestion,
-    //     answer: oldAnswer,
-    //   },
-    //   { question: updatedQuestion, answer: updatedAnswer }
-    // );
+    updateHospitalInFirebase(
+      updatedHospitalName,
+      updatedHospitalName
+      // updatedData: {
+      // updatedAddress,
+      //   updatedContactNumber,
+      //   updatedLogoUrl,
+      //  coordinates: {parseFloat(updatedLatitude),parseFloat(updatedLongtitude)},
+      //  [
+      //     { type: updatedStock[0].type, available: isEnabledOplus },
+      //     { type: updatedStock[1].type, available: isEnabledOminus },
+      //     { type: updatedStock[2].type, available: isEnabledAplus },
+      //     { type: updatedStock[3].type, available: isEnabledAminus },
+      //     { type: updatedStock[4].type, available: isEnabledBplus },
+      //     { type: updatedStock[5].type, available: isEnabledBminus },
+      //     { type: updatedStock[6].type, available: isEnabledABplus },
+      //     { type: updatedStock[7].type, available: isEnabledABminus },
+      //   ],
+      // }
+    );
     router.back();
   };
 
@@ -225,27 +237,6 @@ export default function ManageFaqUpdate() {
         </TextInputWrapper>
 
         <View style={styles.row}>
-          {/* Type O */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[0].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOplus(!isEnabledOplus)}
-                value={isEnabledOplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[1].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOminus(!isEnabledOminus)}
-                value={isEnabledOminus}
-              />
-            </View>
-          </View>
           {/* Type A */}
           <View style={styles.column}>
             <View style={styles.blood}>
@@ -306,6 +297,27 @@ export default function ManageFaqUpdate() {
                 thumbColor={isEnabledABminus ? "white" : "#f4f3f4"}
                 onValueChange={() => toggleABminus(!isEnabledABminus)}
                 value={isEnabledABminus}
+              />
+            </View>
+          </View>
+          {/* Type O */}
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[0].type}</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleOplus(!isEnabledOplus)}
+                value={isEnabledOplus}
+              />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>{updatedStock[1].type}</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleOminus(!isEnabledOminus)}
+                value={isEnabledOminus}
               />
             </View>
           </View>

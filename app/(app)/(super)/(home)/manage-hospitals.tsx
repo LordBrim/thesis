@@ -44,7 +44,7 @@ export default function ManageHospitals() {
         <FlatList
           data={hospitals}
           renderItem={({ item }) => (
-            <QuestionCard
+            <HospitalCard
               name={item.name}
               logoUrl={item.logoUrl}
               address={item.address}
@@ -62,7 +62,7 @@ export default function ManageHospitals() {
   );
 }
 
-type IQuestionCard = {
+type IHospitalCard = {
   name: string;
   logoUrl: string;
   address: string;
@@ -81,14 +81,14 @@ interface StockState {
   available: boolean;
 }
 
-export function QuestionCard({
+export function HospitalCard({
   name,
   logoUrl,
   address,
   contactNumber,
   coordinates,
   stock,
-}: IQuestionCard) {
+}: IHospitalCard) {
   const handleUpdate = (name) => {
     router.push({
       pathname: "(app)/(super)/(home)/manage-hospitals-update",

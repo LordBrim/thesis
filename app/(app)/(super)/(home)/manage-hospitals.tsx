@@ -99,10 +99,10 @@ export function HospitalCard({
   coordinates,
   stock,
 }: IHospitalCard) {
-  const handleUpdate = (name) => {
+  const handleUpdate = (uuid) => {
     router.push({
       pathname: "(app)/(super)/(home)/manage-hospitals-update",
-      params: { name: name.toString() },
+      params: { uuid: uuid.toString() },
     });
   };
 

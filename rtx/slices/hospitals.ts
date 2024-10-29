@@ -10,13 +10,14 @@ import {
   getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 
 export const getHospitals = createAsyncThunk("getHospitals", async () => {
   try {
-    const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospitalData");
+    const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospital");
     const querySnapshot = await getDocs(hospitalsCollectionRef);
 
     const hospitals = querySnapshot.docs.map((doc) => ({

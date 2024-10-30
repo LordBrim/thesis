@@ -63,17 +63,17 @@ export default function AdminDashboard() {
 
   const gridBtns2 = [
     {
-      href: "manage-tickets-donations",
+      href: "manage-ticket-donations",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "User\nDonations",
     },
     {
-      href: "manage-tickets-requests",
+      href: "manage-ticket-requests",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "User\nRequests",
     },
     {
-      href: "manage-tickets-transfers",
+      href: "manage-ticket-transfers",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "Bank\nTransfers",
     },

@@ -68,7 +68,7 @@ export default function AdminDashboard() {
       title: "User\nDonations",
     },
     {
-      href: "manage-tickets",
+      href: "manage-tickets-requests",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "User\nRequests",
     },

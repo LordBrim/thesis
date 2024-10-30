@@ -47,12 +47,12 @@ export const addFAQToFirebase = async (
   if (!querySnapshot.empty) {
     const faqDocRef = querySnapshot.docs[0].ref;
     await updateDoc(faqDocRef, {
-      questions: arrayUnion({ question, answer }),
+      data: arrayUnion({ question, answer }),
     });
   } else {
     await addDoc(faqsCollectionRef, {
       title,
-      questions: [{ question, answer }],
+      data: [{ question, answer }],
     });
   }
 };
@@ -70,16 +70,16 @@ export const updateFAQInFirebase = async (
 
     if (!querySnapshot.empty) {
       const faqDoc = querySnapshot.docs[0];
-      const questions = faqDoc.data().questions;
+      const data = faqDoc.data().data;
 
-      const updatedQuestions = questions.map((q: any) =>
+      const updateddata = data.map((q: any) =>
         q.question === oldQuestion.question && q.answer === oldQuestion.answer
           ? updatedQuestion
           : q
       );
 
       await updateDoc(faqDoc.ref, {
-        questions: updatedQuestions,
+        data: updateddata,
       });
     }
   } catch (error) {
@@ -99,16 +99,16 @@ export const deleteQuestionInFirebase = async (
 
     if (!querySnapshot.empty) {
       const faqDoc = querySnapshot.docs[0];
-      const questions = faqDoc.data().questions;
+      const data = faqDoc.data().data;
 
-      const updatedQuestions = questions.filter(
+      const updateddata = data.filter(
         (q: any) =>
           q.question !== deletedQuestion.question ||
           q.answer !== deletedQuestion.answer
       );
 
       await updateDoc(faqDoc.ref, {
-        questions: updatedQuestions,
+        data: updateddata,
       });
     }
   } catch (error) {
@@ -119,11 +119,11 @@ export const deleteQuestionInFirebase = async (
 interface FAQsState {
   faqs: Array<{
     title: string;
-    questions: Array<QuestionState>;
+    data: Array<datatate>;
   }>;
 }
 
-interface QuestionState {
+interface datatate {
   question: string;
   answer: string;
 }
@@ -132,7 +132,7 @@ const initialState: FAQsState = {
   faqs: [
     {
       title: "Gumagana",
-      questions: [
+      data: [
         {
           question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.?",
           answer:
@@ -144,7 +144,7 @@ const initialState: FAQsState = {
     },
     {
       title: "Blood Donation",
-      questions: [
+      data: [
         { question: "Question number 1?", answer: "Answer number 1" },
         { question: "Question number 2?", answer: "Answer number 2" },
         { question: "Question number 3?", answer: "Answer number 3" },
@@ -152,15 +152,15 @@ const initialState: FAQsState = {
     },
     {
       title: "Blood",
-      questions: [
+      data: [
         { question: "Question number 1?", answer: "Answer number 1" },
         { question: "Question number 2?", answer: "Answer number 2" },
         { question: "Question number 3?", answer: "Answer number 3" },
       ],
     },
     {
-      title: "Other Questions",
-      questions: [
+      title: "Other data",
+      data: [
         { question: "Question number 1?", answer: "Answer number 1" },
         { question: "Question number 2?", answer: "Answer number 2" },
         { question: "Question number 3?", answer: "Answer number 3" },
@@ -175,24 +175,24 @@ export const faqsSlice = createSlice({
   reducers: {
     createQuestion: (
       state,
-      action: PayloadAction<{ title: string; newQuestion: QuestionState }>
+      action: PayloadAction<{ title: string; newQuestion: datatate }>
     ) => {
       const { title, newQuestion } = action.payload;
       const { question, answer } = newQuestion;
       const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
       if (faqIndex !== -1) {
-        state.faqs[faqIndex].questions.push({ question, answer });
+        state.faqs[faqIndex].data.push({ question, answer });
       } else {
-        state.faqs.push({ title, questions: [{ question, answer }] });
+        state.faqs.push({ title, data: [{ question, answer }] });
       }
     },
     updateQuestion: (
       state,
       action: PayloadAction<{
         title: string;
-        oldQuestion: QuestionState;
-        updatedQuestion: QuestionState;
+        oldQuestion: datatate;
+        updatedQuestion: datatate;
       }>
     ) => {
       const { title, oldQuestion, updatedQuestion } = action.payload;
@@ -200,12 +200,12 @@ export const faqsSlice = createSlice({
       const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
 
       if (faqIndex !== -1) {
-        const questionIndex = state.faqs[faqIndex].questions.findIndex(
+        const questionIndex = state.faqs[faqIndex].data.findIndex(
           (q) => q.question === oldQuestion.question
         );
 
         if (questionIndex !== -1) {
-          state.faqs[faqIndex].questions[questionIndex] = {
+          state.faqs[faqIndex].data[questionIndex] = {
             question,
             answer,
           };
@@ -214,12 +214,12 @@ export const faqsSlice = createSlice({
     },
     deleteQuestion: (
       state,
-      action: PayloadAction<{ title: string; deletedQuestion: QuestionState }>
+      action: PayloadAction<{ title: string; deletedQuestion: datatate }>
     ) => {
       const { title, deletedQuestion } = action.payload;
       const faq = state.faqs.find((faq) => faq.title === title);
       if (faq) {
-        faq.questions = faq.questions.filter(
+        faq.data = faq.data.filter(
           (q) =>
             q.question !== deletedQuestion.question ||
             q.answer !== deletedQuestion.answer

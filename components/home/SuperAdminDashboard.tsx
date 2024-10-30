@@ -19,7 +19,7 @@ export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
 
-  const gridBtns = [
+  const gridBtns1 = [
     {
       href: "/(app)/(super)/(home)/manage-hospitals",
       icon: (
@@ -38,11 +38,6 @@ export default function AdminDashboard() {
         <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
       ),
       title: "Staff",
-    },
-    {
-      href: "manage-tickets",
-      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
-      title: "Tickets",
     },
     {
       href: "manage-events",
@@ -66,13 +61,52 @@ export default function AdminDashboard() {
     },
   ];
 
+  const gridBtns2 = [
+    {
+      href: "manage-tickets-donations",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "User\nDonations",
+    },
+    {
+      href: "manage-tickets",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "User\nRequests",
+    },
+    {
+      href: "manage-tickets-transfers",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "Bank\nTransfers",
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ gap: 8 }}>
         <Text style={GS.h2}>Dashboard</Text>
-
         <FlatList
-          data={gridBtns}
+          data={gridBtns1}
+          renderItem={({ item }) => (
+            <View style={[styles.dBtnView]}>
+              <Link asChild push href={item.href}>
+                <Pressable
+                  style={styles.dBtnPress}
+                  android_ripple={{ radius: 200 }}
+                >
+                  {item.icon}
+                  <Text style={styles.dBtnText}>{item.title}</Text>
+                </Pressable>
+              </Link>
+            </View>
+          )}
+          keyExtractor={(item) => item.href}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          numColumns={4}
+          scrollEnabled={false}
+        />
+        <Text style={GS.h2}>Transactions</Text>
+        <FlatList
+          data={gridBtns2}
           renderItem={({ item }) => (
             <View style={[styles.dBtnView]}>
               <Link asChild push href={item.href}>
@@ -172,6 +206,7 @@ const styles = StyleSheet.create({
   },
   dBtnText: {
     fontWeight: "500",
+    textAlign: "center",
   },
   dBtnView: {
     width: "25%",

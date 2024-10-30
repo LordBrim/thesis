@@ -18,12 +18,10 @@ export const getFAQs = createAsyncThunk("getFAQs", async () => {
   try {
     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
     const querySnapshot = await getDocs(faqsCollectionRef);
-
     const faqs = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-
     return faqs;
   } catch (error) {
     console.error("Error fetching FAQs:", error);
@@ -36,24 +34,29 @@ export const addFAQToFirebase = async (
   question: string,
   answer: string
 ) => {
-  const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
-  const existingFAQQuery = query(
-    faqsCollectionRef,
-    where("title", "==", title)
-  );
-  const querySnapshot = await getDocs(existingFAQQuery);
-
-  if (!querySnapshot.empty) {
-    const faqDocRef = querySnapshot.docs[0].ref;
-    await updateDoc(faqDocRef, {
-      data: arrayUnion({ question, answer }),
-    });
-  } else {
-    await addDoc(faqsCollectionRef, {
-      title,
-      data: [{ question, answer }],
-    });
+  try {
+    const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
+    const existingFAQQuery = query(
+      faqsCollectionRef,
+      where("title", "==", title)
+    );
+    const querySnapshot = await getDocs(existingFAQQuery);
+    if (!querySnapshot.empty) {
+      const faqDocRef = querySnapshot.docs[0].ref;
+      await updateDoc(faqDocRef, {
+        data: arrayUnion({ question, answer }),
+      });
+      console.log(`FAQ with title "${title}" updated successfully.`);
+    } else {
+      const newFAQDoc = await addDoc(faqsCollectionRef, {
+        title,
+        data: [{ question, answer }],
+      });
+      console.log(`New FAQ with title "${title}" created successfully.`);
+      return newFAQDoc.id;
+    }
+  } catch (error) {
+    console.error("Error adding/updating FAQ:", error);
   }
 };
 
@@ -64,20 +67,16 @@ export const updateFAQInFirebase = async (
 ) => {
   try {
     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
     const q = query(faqsCollectionRef, where("title", "==", title));
     const querySnapshot = await getDocs(q);
-
     if (!querySnapshot.empty) {
       const faqDoc = querySnapshot.docs[0];
       const data = faqDoc.data().data;
-
       const updateddata = data.map((q: any) =>
         q.question === oldQuestion.question && q.answer === oldQuestion.answer
           ? updatedQuestion
           : q
       );
-
       await updateDoc(faqDoc.ref, {
         data: updateddata,
       });
@@ -93,22 +92,18 @@ export const deleteQuestionInFirebase = async (
 ) => {
   try {
     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
     const q = query(faqsCollectionRef, where("title", "==", title));
     const querySnapshot = await getDocs(q);
-
     if (!querySnapshot.empty) {
       const faqDoc = querySnapshot.docs[0];
       const data = faqDoc.data().data;
-
-      const updateddata = data.filter(
+      const updatedData = data.filter(
         (q: any) =>
           q.question !== deletedQuestion.question ||
           q.answer !== deletedQuestion.answer
       );
-
       await updateDoc(faqDoc.ref, {
-        data: updateddata,
+        data: updatedData,
       });
     }
   } catch (error) {
@@ -119,11 +114,11 @@ export const deleteQuestionInFirebase = async (
 interface FAQsState {
   faqs: Array<{
     title: string;
-    data: Array<datatate>;
+    data: Array<DataState>;
   }>;
 }
 
-interface datatate {
+interface DataState {
   question: string;
   answer: string;
 }
@@ -175,24 +170,24 @@ export const faqsSlice = createSlice({
   reducers: {
     createQuestion: (
       state,
-      action: PayloadAction<{ title: string; newQuestion: datatate }>
+      {
+        payload: { title, newQuestion },
+      }: PayloadAction<{ title: string; newQuestion: DataState }>
     ) => {
-      const { title, newQuestion } = action.payload;
-      const { question, answer } = newQuestion;
-      const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
-
-      if (faqIndex !== -1) {
-        state.faqs[faqIndex].data.push({ question, answer });
+      let faq = state.faqs.find((faq) => faq.title === title);
+      if (faq) {
+        faq.data = faq.data || [];
+        faq.data.push(newQuestion);
       } else {
-        state.faqs.push({ title, data: [{ question, answer }] });
+        state.faqs.push({ title, data: [newQuestion] });
       }
     },
     updateQuestion: (
       state,
       action: PayloadAction<{
         title: string;
-        oldQuestion: datatate;
-        updatedQuestion: datatate;
+        oldQuestion: DataState;
+        updatedQuestion: DataState;
       }>
     ) => {
       const { title, oldQuestion, updatedQuestion } = action.payload;

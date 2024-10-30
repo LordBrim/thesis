@@ -11,7 +11,12 @@ import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { deleteHospital } from "rtx/slices/hospitals";
+import {
+  addHospitalToFirebase,
+  deleteHospital,
+  deleteHospitalInFirebase,
+  getHospitals,
+} from "rtx/slices/hospitals";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
@@ -20,9 +25,9 @@ export default function ManageHospitals() {
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   dispatch(getFAQs());
-  // }, []);
+  useEffect(() => {
+    dispatch(getHospitals());
+  }, [hospitals]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,7 +49,8 @@ export default function ManageHospitals() {
         <FlatList
           data={hospitals}
           renderItem={({ item }) => (
-            <QuestionCard
+            <HospitalCard
+              uuid={item.uuid}
               name={item.name}
               logoUrl={item.logoUrl}
               address={item.address}
@@ -53,7 +59,9 @@ export default function ManageHospitals() {
               stock={item.stock}
             />
           )}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
           scrollEnabled={false}
           contentContainerStyle={{ gap: 16 }}
         />
@@ -62,7 +70,8 @@ export default function ManageHospitals() {
   );
 }
 
-type IQuestionCard = {
+type IHospitalCard = {
+  uuid: string;
   name: string;
   logoUrl: string;
   address: string;
@@ -73,7 +82,7 @@ type IQuestionCard = {
 
 interface CoordinatesState {
   latitude: number;
-  longtitude: number;
+  longitude: number;
 }
 
 interface StockState {
@@ -81,45 +90,50 @@ interface StockState {
   available: boolean;
 }
 
-export function QuestionCard({
+export function HospitalCard({
+  uuid,
   name,
   logoUrl,
   address,
   contactNumber,
   coordinates,
   stock,
-}: IQuestionCard) {
-  const handleUpdate = (name) => {
+}: IHospitalCard) {
+  const handleUpdate = (uuid) => {
     router.push({
       pathname: "(app)/(super)/(home)/manage-hospitals-update",
-      params: { name: name.toString() },
+      params: { uuid: uuid.toString() },
     });
   };
 
   const dispatch = useDispatch();
 
-  const handleDelete = (name) => {
+  const handleDelete = (uuid) => {
     dispatch(
       deleteHospital({
-        name: name,
+        uuid: uuid,
       })
     );
-    // deleteQuestionInFirebase(name);
+    deleteHospitalInFirebase(uuid);
   };
 
   return (
     <View style={{ width: "100%", flex: 1 }}>
       <Pressable style={card.tContainer} android_ripple={{ radius: 250 }}>
         <Text style={[GS.h3, card.name]}>{name}</Text>
-        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(name)} />
+        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} />
         <IconBtn
           icon="trash"
           size={18}
-          onPress={() => handleDelete(name)}
+          onPress={() => handleDelete(uuid)}
           color="red"
         />
       </Pressable>
       <View style={card.bContainer}>
+        <Text style={card.detail}>
+          UUID:
+          <Text style={{ fontWeight: "normal" }}> {uuid}</Text>
+        </Text>
         <Text style={card.detail}>
           Address:<Text style={{ fontWeight: "normal" }}> {address}</Text>
         </Text>
@@ -133,15 +147,12 @@ export function QuestionCard({
           <Text style={{ fontWeight: "normal" }}> {coordinates.latitude}</Text>
         </Text>
         <Text style={card.detail}>
-          {"\t\t\t\t"}Longtitude:
-          <Text style={{ fontWeight: "normal" }}>
-            {" "}
-            {coordinates.longtitude}
-          </Text>
+          {"\t\t\t\t"}Longitude:
+          <Text style={{ fontWeight: "normal" }}> {coordinates.longitude}</Text>
         </Text>
         <Text style={card.detail}>Stock:</Text>
-        {stock.map((item) => (
-          <Text style={card.detail}>
+        {stock.map((item, index) => (
+          <Text style={card.detail} key={index}>
             {"\t\t\t\t"}
             {item.type}:
             <Text style={{ fontWeight: "normal" }}>
@@ -157,6 +168,7 @@ export function QuestionCard({
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",

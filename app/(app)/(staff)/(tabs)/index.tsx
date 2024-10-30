@@ -16,7 +16,6 @@ import { getCurrentUser } from "rtx/slices/user";
 
 export default function HomeTab() {
   const dispatch = useDispatch<AppDispatch>();
-
   useEffect(() => {
     dispatch(getCurrentUser());
   }, []);

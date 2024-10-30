@@ -13,8 +13,6 @@ import { router, useNavigation } from "expo-router";
 
 export default function ManageFAQ() {
   const { user } = useSelector((state: RootState) => state.user);
-  console.log(user.hospitalName);
-  console.log(user);
   const { faqs } = useSelector((state: RootState) => state.faqs);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
@@ -23,7 +21,7 @@ export default function ManageFAQ() {
   }, []);
   const faq =
     faqs.find((section) => section.title === user.hospitalName)?.data || [];
-  console.log(user.hospitalName);
+  console.log(faq);
 
   useEffect(() => {
     navigation.setOptions({

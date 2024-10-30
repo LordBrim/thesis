@@ -45,17 +45,17 @@ export default function AdminDashboard() {
       title: "Events",
     },
     {
-      href: "manage-faq",
+      href: "/(app)/(super)/(home)/manage-faq",
       icon: <Ionicons name="chatbubbles" size={size} color={COLORS.primary} />,
       title: "FAQ",
     },
     {
-      href: "manage-incentives",
+      href: "/(app)/(super)/(home)/manage-incentives",
       icon: <Ionicons name="gift" size={size} color={COLORS.primary} />,
       title: "Incentives",
     },
     {
-      href: "manage-blood-units",
+      href: "/(app)/(super)/(home)/manage-blood-units",
       icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
       title: "Blood Units",
     },
@@ -63,17 +63,17 @@ export default function AdminDashboard() {
 
   const gridBtns2 = [
     {
-      href: "manage-ticket-donations",
+      href: "/(app)/(super)/(home)/manage-ticket-donations",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "User\nDonations",
     },
     {
-      href: "manage-ticket-requests",
+      href: "/(app)/(super)/(home)/manage-ticket-requests",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "User\nRequests",
     },
     {
-      href: "manage-ticket-transfers",
+      href: "/(app)/(super)/(home)/manage-ticket-transfers",
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "Bank\nTransfers",
     },

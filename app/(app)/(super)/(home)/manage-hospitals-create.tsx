@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   Pressable,
   Button,
+  View,
+  Switch,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { createHospital } from "rtx/slices/hospitals";
+import { addHospitalToFirebase, createHospital } from "rtx/slices/hospitals";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {
@@ -22,7 +24,15 @@ export default function ManageFaqCreate() {
   const [newAddress, setNewAddress] = useState("");
   const [newContactNumber, setNewContactNumber] = useState("");
   const [newLatitude, setNewLatitude] = useState("");
-  const [newLongtitude, setNewLongtitude] = useState("");
+  const [newLongitude, setNewLongitude] = useState("");
+  const [isEnabledOplus, toggleOplus] = useState(false);
+  const [isEnabledOminus, toggleOminus] = useState(false);
+  const [isEnabledAplus, toggleAplus] = useState(false);
+  const [isEnabledAminus, toggleAminus] = useState(false);
+  const [isEnabledBplus, toggleBplus] = useState(false);
+  const [isEnabledBminus, toggleBminus] = useState(false);
+  const [isEnabledABplus, toggleABplus] = useState(false);
+  const [isEnabledABminus, toggleABminus] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -50,7 +60,15 @@ export default function ManageFaqCreate() {
     newAddress,
     newContactNumber,
     newLatitude,
-    newLongtitude,
+    newLongitude,
+    isEnabledAplus,
+    isEnabledAminus,
+    isEnabledBplus,
+    isEnabledBminus,
+    isEnabledABplus,
+    isEnabledABminus,
+    isEnabledOplus,
+    isEnabledOminus,
   ]);
 
   const handleCreate = () => {
@@ -62,12 +80,38 @@ export default function ManageFaqCreate() {
         contactNumber: newContactNumber,
         coordinates: {
           latitude: parseFloat(newLatitude),
-          longtitude: parseFloat(newLongtitude),
+          longitude: parseFloat(newLongitude),
         },
-        stock: [],
+        stock: [
+          { type: "O+", available: isEnabledOplus },
+          { type: "O-", available: isEnabledOminus },
+          { type: "A+", available: isEnabledAplus },
+          { type: "A-", available: isEnabledAminus },
+          { type: "B+", available: isEnabledBplus },
+          { type: "B-", available: isEnabledBminus },
+          { type: "AB+", available: isEnabledABplus },
+          { type: "AB-", available: isEnabledABminus },
+        ],
       })
     );
-    // addFAQToFirebase(newTitle, newQuestion, newAnswer);
+    addHospitalToFirebase(
+      newHospitalName,
+      newLogoUrl,
+      newAddress,
+      newContactNumber,
+      parseFloat(newLatitude),
+      parseFloat(newLongitude),
+      [
+        { type: "A+", available: isEnabledAplus },
+        { type: "A-", available: isEnabledAminus },
+        { type: "B+", available: isEnabledBplus },
+        { type: "B-", available: isEnabledBminus },
+        { type: "AB+", available: isEnabledABplus },
+        { type: "AB-", available: isEnabledABminus },
+        { type: "O+", available: isEnabledOplus },
+        { type: "O-", available: isEnabledOminus },
+      ]
+    );
     router.back();
   };
 
@@ -153,11 +197,11 @@ export default function ManageFaqCreate() {
             }}
           />
         </TextInputWrapper>
-        <TextInputWrapper label="Longtitude">
+        <TextInputWrapper label="Longitude">
           <TextInput
-            value={newLongtitude}
-            onChangeText={(number) => setNewLongtitude(number)}
-            placeholder="Enter a longtitude..."
+            value={newLongitude}
+            onChangeText={(number) => setNewLongitude(number)}
+            placeholder="Enter a longitude..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -168,6 +212,92 @@ export default function ManageFaqCreate() {
             }}
           />
         </TextInputWrapper>
+        <View style={styles.row}>
+          {/* Type A */}
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>A+</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledAplus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleAplus(!isEnabledAplus)}
+                value={isEnabledAplus}
+              />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>A-</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledAminus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleAminus(!isEnabledAminus)}
+                value={isEnabledAminus}
+              />
+            </View>
+          </View>
+          {/* Type B */}
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>B+</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledBplus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleBplus(!isEnabledBplus)}
+                value={isEnabledBplus}
+              />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>B-</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledBminus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleBminus(!isEnabledBminus)}
+                value={isEnabledBminus}
+              />
+            </View>
+          </View>
+          {/* Type AB */}
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>AB+</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledABplus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleABplus(!isEnabledABplus)}
+                value={isEnabledABplus}
+              />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>AB-</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledABminus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleABminus(!isEnabledABminus)}
+                value={isEnabledABminus}
+              />
+            </View>
+          </View>
+          {/* Type O */}
+          <View style={styles.column}>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>O+</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleOplus(!isEnabledOplus)}
+                value={isEnabledOplus}
+              />
+            </View>
+            <View style={styles.blood}>
+              <Text style={styles.detail}>O-</Text>
+              <Switch
+                trackColor={{ false: "#767577", true: COLORS.primary }}
+                thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}
+                onValueChange={() => toggleOminus(!isEnabledOminus)}
+                value={isEnabledOminus}
+              />
+            </View>
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -181,5 +311,27 @@ const styles = StyleSheet.create({
   scrollview: {
     padding: HORIZONTAL_SCREEN_MARGIN,
     gap: 16,
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  column: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  blood: {
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  card: {
+    flexDirection: "row",
+  },
+  detail: {
+    fontWeight: "bold",
   },
 });

@@ -9,118 +9,121 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
 
-// export const getFAQs = createAsyncThunk("getFAQs", async () => {
-//   try {
-//     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-//     const querySnapshot = await getDocs(faqsCollectionRef);
+export const getHospitals = createAsyncThunk("getHospitals", async () => {
+  try {
+    const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospital");
+    const sortedQuery = query(hospitalsCollectionRef, orderBy("name", "asc"));
+    const querySnapshot = await getDocs(sortedQuery);
+    const hospitals = querySnapshot.docs.map((doc) => ({
+      uuid: doc.id, // Document ID
+      name: doc.data().name,
+      type: doc.data().type,
+      address: doc.data().address,
+      contactNumber: doc.data().contactNumber,
+      logoUrl: doc.data().logoUrl,
+      coordinates: {
+        latitude: doc.data().coordinates.latitude,
+        longitude: doc.data().coordinates.longitude,
+      },
+      stock: doc.data().stock.map((item) => ({
+        available: item.available,
+        type: item.type,
+      })),
+    }));
+    return hospitals;
+  } catch (error) {
+    console.error("Error fetching hospitals:", error);
+    return null;
+  }
+});
 
-//     const faqs = querySnapshot.docs.map((doc) => ({
-//       id: doc.id,
-//       ...doc.data(),
-//     }));
+export const addHospitalToFirebase = async (
+  name: string,
+  address: string,
+  contactNumber: string,
+  logoUrl: string,
+  latitude: number,
+  longitude: number,
+  stock: { type: string; available: boolean }[]
+) => {
+  const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospital");
+  const existingHospitalQuery = query(
+    hospitalsCollectionRef,
+    where("name", "==", name)
+  );
+  const querySnapshot = await getDocs(existingHospitalQuery);
+  if (!querySnapshot.empty) {
+    const hospitalDocRef = querySnapshot.docs[0].ref;
+    await updateDoc(hospitalDocRef, {
+      address,
+      contactNumber,
+      logoUrl,
+      coordinates: {
+        latitude,
+        longitude,
+      },
+      stock: arrayUnion(...stock),
+    });
+  } else {
+    await addDoc(hospitalsCollectionRef, {
+      name,
+      address,
+      contactNumber,
+      logoUrl,
+      coordinates: {
+        latitude,
+        longitude,
+      },
+      stock,
+    });
+  }
+};
 
-//     return faqs;
-//   } catch (error) {
-//     console.error("Error fetching FAQs:", error);
-//     return null;
-//   }
-// });
+export const updateHospitalByUuid = async (
+  uuid: string,
+  updatedData: {
+    name: string;
+    address: string;
+    contactNumber: string;
+    logoUrl: string;
+    coordinates: { latitude: number; longitude: number };
+    stock: { type: string; available: boolean }[];
+  }
+) => {
+  try {
+    const hospitalDocRef = doc(collection(FIRESTORE_DB, "hospital"), uuid);
+    await updateDoc(hospitalDocRef, {
+      ...updatedData,
+    });
+    console.log(`Hospital with UUID ${uuid} updated successfully.`);
+  } catch (error) {
+    console.error("Error updating hospital:", error);
+  }
+};
 
-// export const addFAQToFirebase = async (
-//   title: string,
-//   question: string,
-//   answer: string
-// ) => {
-//   const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
-//   const existingFAQQuery = query(
-//     faqsCollectionRef,
-//     where("title", "==", title)
-//   );
-//   const querySnapshot = await getDocs(existingFAQQuery);
-
-//   if (!querySnapshot.empty) {
-//     const faqDocRef = querySnapshot.docs[0].ref;
-//     await updateDoc(faqDocRef, {
-//       questions: arrayUnion({ question, answer }),
-//     });
-//   } else {
-//     await addDoc(faqsCollectionRef, {
-//       title,
-//       questions: [{ question, answer }],
-//     });
-//   }
-// };
-
-// export const updateFAQInFirebase = async (
-//   title: string,
-//   oldQuestion: { question: string; answer: string },
-//   updatedQuestion: { question: string; answer: string }
-// ) => {
-//   try {
-//     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
-//     const q = query(faqsCollectionRef, where("title", "==", title));
-//     const querySnapshot = await getDocs(q);
-
-//     if (!querySnapshot.empty) {
-//       const faqDoc = querySnapshot.docs[0];
-//       const questions = faqDoc.data().questions;
-
-//       const updatedQuestions = questions.map((q: any) =>
-//         q.question === oldQuestion.question && q.answer === oldQuestion.answer
-//           ? updatedQuestion
-//           : q
-//       );
-
-//       await updateDoc(faqDoc.ref, {
-//         questions: updatedQuestions,
-//       });
-//     }
-//   } catch (error) {
-//     console.error("Error updating question:", error);
-//   }
-// };
-
-// export const deleteQuestionInFirebase = async (
-//   title: string,
-//   deletedQuestion: { question: string; answer: string }
-// ) => {
-//   try {
-//     const faqsCollectionRef = collection(FIRESTORE_DB, "faq");
-
-//     const q = query(faqsCollectionRef, where("title", "==", title));
-//     const querySnapshot = await getDocs(q);
-
-//     if (!querySnapshot.empty) {
-//       const faqDoc = querySnapshot.docs[0];
-//       const questions = faqDoc.data().questions;
-
-//       const updatedQuestions = questions.filter(
-//         (q: any) =>
-//           q.question !== deletedQuestion.question ||
-//           q.answer !== deletedQuestion.answer
-//       );
-
-//       await updateDoc(faqDoc.ref, {
-//         questions: updatedQuestions,
-//       });
-//     }
-//   } catch (error) {
-//     console.error("Error deleting question:", error);
-//   }
-// };
+export const deleteHospitalInFirebase = async (uuid: string) => {
+  try {
+    const hospitalDocRef = doc(FIRESTORE_DB, "hospital", uuid);
+    await deleteDoc(hospitalDocRef);
+    console.log(`Hospital with ID ${uuid} deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting hospital:", error);
+  }
+};
 
 interface HospitalsState {
   hospitals: Array<HospitalState>;
 }
 
 interface HospitalState {
+  uuid?: string;
   name: string;
   logoUrl: string;
   address: string;
@@ -131,7 +134,7 @@ interface HospitalState {
 
 interface CoordinatesState {
   latitude: number;
-  longtitude: number;
+  longitude: number;
 }
 
 interface StockState {
@@ -142,6 +145,7 @@ interface StockState {
 const initialState: HospitalsState = {
   hospitals: [
     {
+      uuid: "0",
       name: "UERM Medical Center",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -149,7 +153,7 @@ const initialState: HospitalsState = {
       contactNumber: "(02) 8715 0861",
       coordinates: {
         latitude: 14.607184,
-        longtitude: 121.020384,
+        longitude: 121.020384,
       },
       stock: [
         {
@@ -187,6 +191,7 @@ const initialState: HospitalsState = {
       ],
     },
     {
+      uuid: "1",
       name: "UERM Hospital",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -194,7 +199,7 @@ const initialState: HospitalsState = {
       contactNumber: "(02) 8715 0861",
       coordinates: {
         latitude: 14.607184,
-        longtitude: 121.020384,
+        longitude: 121.020384,
       },
       stock: [
         {
@@ -232,6 +237,7 @@ const initialState: HospitalsState = {
       ],
     },
     {
+      uuid: "2",
       name: "UERM Medical",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -239,7 +245,7 @@ const initialState: HospitalsState = {
       contactNumber: "(02) 8715 0861",
       coordinates: {
         latitude: 14.607184,
-        longtitude: 121.020384,
+        longitude: 121.020384,
       },
       stock: [
         {
@@ -284,9 +290,8 @@ export const hospitalsSlice = createSlice({
   initialState,
   reducers: {
     createHospital: (state, action: PayloadAction<HospitalState>) => {
-      const { name } = action.payload;
       const hospitalIndex = state.hospitals.findIndex(
-        (hospital) => hospital.name === name
+        (hospital) => hospital.name === action.payload.name
       );
       if (hospitalIndex === -1) {
         state.hospitals.push(action.payload);
@@ -295,46 +300,42 @@ export const hospitalsSlice = createSlice({
     updateHospital: (
       state,
       action: PayloadAction<{
-        oldName: string;
+        uuid: string;
         updatedHospital: HospitalState;
       }>
     ) => {
-      const { oldName, updatedHospital } = action.payload;
+      const { uuid, updatedHospital } = action.payload;
       const hospitalIndex = state.hospitals.findIndex(
-        (hospital) => hospital.name === oldName
+        (hospital) => hospital.uuid === uuid
       );
-
       if (hospitalIndex !== -1) {
         state.hospitals[hospitalIndex] = updatedHospital;
       }
     },
-
-    deleteHospital: (state, action: PayloadAction<{ name: string }>) => {
-      const { name } = action.payload;
+    deleteHospital: (state, action: PayloadAction<{ uuid: string }>) => {
+      const { uuid } = action.payload;
       const hospitalIndex = state.hospitals.findIndex(
-        (hospital) => hospital.name === name
+        (hospital) => hospital.uuid === uuid
       );
-
       if (hospitalIndex !== -1) {
         state.hospitals.splice(hospitalIndex, 1);
       }
     },
   },
-  // reducers: {
-  // extraReducers: (builder) => {
-  //   builder.addCase(getFAQs.fulfilled, (state, action) => {
-  //     if (action.payload) {
-  //       state.faqs = action.payload;
-  //     } else {
-  //       state.faqs = initialState.faqs;
-  //     }
-  //   });
-  // },
+  extraReducers: (builder) => {
+    builder.addCase(getHospitals.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.hospitals = action.payload;
+      } else {
+        state.hospitals = initialState.hospitals;
+      }
+    });
+  },
 });
 
 export const { createHospital, updateHospital, deleteHospital } =
   hospitalsSlice.actions;
 
-export const selectCount = (state: RootState) => state.hospitals;
+export const selectCount = (state: RootState) => state.hospitals.hospitals;
 
 export default hospitalsSlice.reducer;

@@ -12,17 +12,18 @@ import { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
 import { router, useNavigation } from "expo-router";
+import { RootState } from "app/store";
 
 export default function ManageFaqCreate() {
-  const [newTitle, setNewTitle] = useState("Blood");
+  const { user } = useSelector((state: RootState) => state.user);
+  const [newTitle, setNewTitle] = useState(user.hospitalName);
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswer, setNewAnswer] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -43,6 +44,7 @@ export default function ManageFaqCreate() {
   }, [navigation, newQuestion, newAnswer]);
 
   const handleCreate = () => {
+    console.log(newTitle);
     dispatch(
       createQuestion({
         title: newTitle,

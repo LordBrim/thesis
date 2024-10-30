@@ -12,13 +12,19 @@ import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageFAQ() {
+  const { user } = useSelector((state: RootState) => state.user);
+  console.log(user.hospitalName);
+  console.log(user);
   const { faqs } = useSelector((state: RootState) => state.faqs);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-
   useEffect(() => {
     dispatch(getFAQs());
   }, []);
+  const faq =
+    faqs.find((section) => section.title === user.hospitalName)?.data || [];
+  console.log(user.hospitalName);
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Frequently Asked Questions",
@@ -40,22 +46,26 @@ export default function ManageFAQ() {
       ),
     });
   }, [navigation]);
-
   return (
     <View style={styles.container}>
-      <View style={styles.panels}>
-        <FlatList
-          data={faqs}
-          renderItem={({ item }) => (
-            <QuestionPanel title={item.title} questions={item.questions} />
-          )}
-          keyExtractor={(item) => item.title}
-          overScrollMode="never"
-          scrollEnabled={true}
-          persistentScrollbar={true}
-          contentContainerStyle={{ gap: 16 }}
-        />
-      </View>
+      <Text style={[GS.h3, panel.title]}>{user.hospitalName}</Text>
+      <FlatList
+        data={faq}
+        renderItem={({ item }) => (
+          <QuestionCard
+            title={user.hospitalName}
+            answer={item.answer}
+            question={item.question}
+          />
+        )}
+        keyExtractor={(item, index) => {
+          return index.toString();
+        }}
+        overScrollMode="never"
+        scrollEnabled={true}
+        persistentScrollbar={true}
+        contentContainerStyle={{ gap: 16 }}
+      />
     </View>
   );
 }

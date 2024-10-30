@@ -19,7 +19,16 @@ export default function ManageFAQ() {
   useEffect(() => {
     dispatch(getFAQs());
   }, []);
-
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Frequently Asked Questions",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (

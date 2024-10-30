@@ -24,11 +24,19 @@ export default function ManageHospitals() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-
   useEffect(() => {
     dispatch(getHospitals());
   }, [hospitals]);
-
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Hospitals",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (

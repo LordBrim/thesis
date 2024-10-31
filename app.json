@@ -7,10 +7,7 @@
     "web": {
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-font"],
     "name": "Lifeline",
     "slug": "lifeline",
     "icon": "./assets/splash/icon.png",
@@ -25,7 +22,7 @@
     "splash": {
       "image": "./assets/splash/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FF3642"
+      "backgroundColor": "#ffffff"
     },
     "android": {
       "package": "com.andreisager.lifeline",

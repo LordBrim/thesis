@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useNavigation } from "expo-router";
@@ -8,6 +14,10 @@ import { RootState } from "app/store";
 
 export default function ManageBloodUnits() {
   const { user } = useSelector((state: RootState) => state.user);
+  const { hospitals } = useSelector((state: RootState) => state.hospitals);
+  const hospital =
+    hospitals.find((section) => section.name === user.hospitalName)?.stock ||
+    [];
   const navigation = useNavigation();
   const size = 40;
   useEffect(() => {
@@ -20,14 +30,45 @@ export default function ManageBloodUnits() {
       headerTitleAlign: "center",
     });
   }, []);
-  const [isEnabledAplus, toggleAplus] = useState(false);
-  const [isEnabledAminus, toggleAminus] = useState(false);
-  const [isEnabledBplus, toggleBplus] = useState(false);
-  const [isEnabledBminus, toggleBminus] = useState(false);
-  const [isEnabledABplus, toggleABplus] = useState(false);
-  const [isEnabledABminus, toggleABminus] = useState(false);
-  const [isEnabledOplus, toggleOplus] = useState(false);
-  const [isEnabledOminus, toggleOminus] = useState(false);
+  const [isEnabledAplus, toggleAplus] = useState(hospital[0].available);
+  const [isEnabledAminus, toggleAminus] = useState(hospital[1].available);
+  const [isEnabledBplus, toggleBplus] = useState(hospital[2].available);
+  const [isEnabledBminus, toggleBminus] = useState(hospital[3].available);
+  const [isEnabledABplus, toggleABplus] = useState(hospital[4].available);
+  const [isEnabledABminus, toggleABminus] = useState(hospital[5].available);
+  const [isEnabledOplus, toggleOplus] = useState(hospital[6].available);
+  const [isEnabledOminus, toggleOminus] = useState(hospital[7].available);
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 60,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={handleUpdate}
+        >
+          <Text style={{ fontWeight: "bold" }}>Save</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [
+    navigation,
+    isEnabledAplus,
+    isEnabledAminus,
+    isEnabledBplus,
+    isEnabledBminus,
+    isEnabledABplus,
+    isEnabledABminus,
+    isEnabledOplus,
+    isEnabledOminus,
+  ]);
+  const handleUpdate = () => {
+    console.log("Update");
+  };
   return (
     <View style={styles.container}>
       <Text style={[GS.h3, styles.title]}>{user.hospitalName}</Text>

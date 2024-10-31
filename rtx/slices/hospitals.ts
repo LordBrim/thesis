@@ -118,6 +118,21 @@ export const deleteHospitalInFirebase = async (uuid: string) => {
   }
 };
 
+export const updateHospitalStockByUuid = async (
+  uuid: string,
+  updatedStock: { type: string; available: boolean }[]
+) => {
+  try {
+    const hospitalDocRef = doc(collection(FIRESTORE_DB, "hospital"), uuid);
+    await updateDoc(hospitalDocRef, {
+      stock: updatedStock,
+    });
+    console.log(`Stock for hospital with UUID ${uuid} updated successfully.`);
+  } catch (error) {
+    console.error("Error updating hospital stock:", error);
+  }
+};
+
 interface HospitalsState {
   hospitals: Array<HospitalState>;
 }
@@ -321,6 +336,24 @@ export const hospitalsSlice = createSlice({
         state.hospitals.splice(hospitalIndex, 1);
       }
     },
+    updateHospitalStock: (
+      state,
+      action: PayloadAction<{
+        uuid: string;
+        updatedStock: { type: string; available: boolean }[];
+      }>
+    ) => {
+      const { uuid, updatedStock } = action.payload;
+      const hospital = state.hospitals.find(
+        (hospital) => hospital.uuid === uuid
+      );
+      if (hospital && hospital.stock.length === updatedStock.length) {
+        hospital.stock = hospital.stock.map((stockItem, index) => ({
+          ...stockItem,
+          available: updatedStock[index].available,
+        }));
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getHospitals.fulfilled, (state, action) => {
@@ -333,8 +366,12 @@ export const hospitalsSlice = createSlice({
   },
 });
 
-export const { createHospital, updateHospital, deleteHospital } =
-  hospitalsSlice.actions;
+export const {
+  createHospital,
+  updateHospital,
+  deleteHospital,
+  updateHospitalStock,
+} = hospitalsSlice.actions;
 
 export const selectCount = (state: RootState) => state.hospitals.hospitals;
 

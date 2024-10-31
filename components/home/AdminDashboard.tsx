@@ -25,56 +25,51 @@ export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
 
-  const gridBtns = [
+  const gridBtns1 = [
     {
-      href: "manage-staff",
+      href: "/(app)/(admin)/(home)/manage-staff",
       icon: (
         <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
       ),
       title: "Staff",
     },
     {
-      href: "manage-user-appointments",
-      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
-      title: "Appointments",
-    },
-    {
-      href: "manage-user-requests",
-      icon: (
-        <MaterialCommunityIcons
-          name="blood-bag"
-          size={size}
-          color={COLORS.primary}
-        />
-      ),
-      title: "Requests",
-    },
-    {
-      href: "manage-bank-transfers",
-      icon: (
-        <FontAwesome6 name="hospital-user" size={size} color={COLORS.primary} />
-      ),
-      title: "Bank Transfers",
-    },
-    {
-      href: "manage-events",
+      href: "/(app)/(admin)/(home)/manage-events",
       icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
       title: "Events",
     },
     {
-      href: "manage-faq",
+      href: "/(app)/(admin)/(home)/manage-faq",
       icon: <Ionicons name="chatbubbles" size={size} color={COLORS.primary} />,
       title: "FAQ",
     },
     {
-      href: "manage-incentives",
+      href: "/(app)/(admin)/(home)/manage-incentives",
       icon: <Ionicons name="gift" size={size} color={COLORS.primary} />,
       title: "Incentives",
     },
     {
-      href: "manage-blood-units",
+      href: "/(app)/(admin)/(home)/manage-blood-units",
       icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
       title: "Blood Units",
+    },
+  ];
+
+  const gridBtns2 = [
+    {
+      href: "/(app)/(admin)/(home)/manage-ticket-donations",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "User\nDonations",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-ticket-requests",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "User\nRequests",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-ticket-transfers",
+      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
+      title: "Bank\nTransfers",
     },
   ];
 
@@ -82,9 +77,30 @@ export default function AdminDashboard() {
     <SafeAreaView style={styles.container}>
       <View style={{ gap: 8 }}>
         <Text style={GS.h2}>Dashboard</Text>
-
         <FlatList
-          data={gridBtns}
+          data={gridBtns1}
+          renderItem={({ item }) => (
+            <View style={[styles.dBtnView]}>
+              <Link asChild push href={item.href}>
+                <Pressable
+                  style={styles.dBtnPress}
+                  android_ripple={{ radius: 200 }}
+                >
+                  {item.icon}
+                  <Text style={styles.dBtnText}>{item.title}</Text>
+                </Pressable>
+              </Link>
+            </View>
+          )}
+          keyExtractor={(item) => item.href}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          numColumns={4}
+          scrollEnabled={false}
+        />
+        <Text style={GS.h2}>Transactions</Text>
+        <FlatList
+          data={gridBtns2}
           renderItem={({ item }) => (
             <View style={[styles.dBtnView]}>
               <Link asChild push href={item.href}>
@@ -184,6 +200,7 @@ const styles = StyleSheet.create({
   },
   dBtnText: {
     fontWeight: "500",
+    textAlign: "center",
   },
   dBtnView: {
     width: "25%",

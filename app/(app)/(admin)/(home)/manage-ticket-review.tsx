@@ -1,8 +1,20 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Button,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useLocalSearchParams } from "expo-router";
-
+import moment from "moment";
+import IconBtn from "components/common/IconButton";
+import { doc, updateDoc } from "firebase/firestore";
+import { FIRESTORE_DB } from "firebase-config";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 interface TicketState {
   id: string;
   name: string;
@@ -28,6 +40,8 @@ interface TicketState {
 export default function ManageTicketReview() {
   const { ticket } = useLocalSearchParams();
   const [ticketData, setTicketData] = useState<TicketState | null>(null);
+  const [openChecklist, setOpenChecklist] = useState(false);
+  const [openUserDetails, setOpenUserDetails] = useState(false);
 
   useEffect(() => {
     if (ticket) {
@@ -43,7 +57,30 @@ export default function ManageTicketReview() {
     );
   }
 
-  console.log(ticketData);
+  const formatDate = (dateString: string) => {
+    return moment(dateString, "YYYY-MM-DD").format("MMMM D, YYYY");
+  };
+
+  const handleUpdateStatus = async (status: "accepted" | "denied") => {
+    if (!ticketData) return;
+
+    const updatedTicketData = {
+      ...ticketData,
+      status: status,
+      message: "deliberation",
+    };
+
+    try {
+      const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
+      await updateDoc(ticketDocRef, {
+        status: updatedTicketData.status,
+        message: updatedTicketData.message,
+      });
+      setTicketData(updatedTicketData);
+    } catch (error) {
+      console.error("Error updating ticket:", error);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -57,40 +94,153 @@ export default function ManageTicketReview() {
           borderWidth: 1,
           borderColor: COLORS.grayMid,
           borderRadius: 10,
+          padding: 10,
+          marginVertical: 10,
         }}
       >
-        <Text style={{ color: COLORS.primary, fontWeight: "bold" }}>
-          Ticket Number: {ticketData.ticketNumber}
-        </Text>
-        <Text>Date: {ticketData.selectedDate} </Text>
-        <Text>Time: {ticketData.selectedTime}</Text>
-        <Text>Status: {ticketData.status}</Text>
-        <Text>Type: {ticketData.type}</Text>
-      </View>
-      <View>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>Ticket Number:</Text>
         <Text
-          style={{ color: COLORS.primary, fontWeight: "bold", fontSize: 18 }}
+          style={{ fontSize: 20, color: COLORS.primary, fontWeight: "bold" }}
         >
-          User Details
+          {ticketData.ticketNumber}
         </Text>
-        <Text>Name: {ticketData.name}</Text>
-        <Text>City: {ticketData.city}</Text>
-        <Text>Contact Details: {ticketData.contactDetails}</Text>
-        <Text>Sex: {ticketData.sex}</Text>
-        <Text>Age: {ticketData.age}</Text>
-        <Text>User Email: {ticketData.userEmail}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            margin: 5,
+          }}
+        >
+          <FontAwesome6 name="calendar-day" size={18} color="black" />
+          <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 7 }}>
+            {formatDate(ticketData.selectedDate)}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            margin: 5,
+          }}
+        >
+          <FontAwesome6 name="clock" size={18} color="black" />
+          <Text style={{ fontSize: 16, marginLeft: 5, fontWeight: "bold" }}>
+            {ticketData.selectedTime}
+          </Text>
+        </View>
+        <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          Status: {ticketData.status}
+        </Text>
       </View>
 
-      {/* Render checklistData */}
-      <ScrollView style={styles.checklistContainer}>
-        <Text style={styles.checklistTitle}>Checklist Data:</Text>
-        {Object.entries(ticketData.checklistData).map(([key, value]) => (
-          <View key={key} style={styles.checklistItem}>
-            <Text style={styles.checklistKey}>{key}</Text>
-            <Text style={styles.checklistValue}>{value}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      <Pressable
+        style={card.qContainer}
+        onPress={
+          openUserDetails
+            ? () => setOpenUserDetails(false)
+            : () => setOpenUserDetails(true)
+        }
+        android_ripple={{ radius: 250 }}
+      >
+        <Text style={styles.checklistTitle}>User Details</Text>
+        {openUserDetails ? (
+          <IconBtn
+            icon="minus"
+            size={18}
+            onPress={() => setOpenUserDetails(false)}
+          />
+        ) : (
+          <IconBtn
+            icon="plus"
+            size={18}
+            onPress={() => setOpenUserDetails(true)}
+          />
+        )}
+      </Pressable>
+      {openUserDetails ? (
+        <View style={styles.checklistContainer}>
+          <Text style={styles.textDetails}>Name: {ticketData.name}</Text>
+          <Text style={styles.textDetails}>City: {ticketData.city}</Text>
+          <Text style={styles.textDetails}>
+            Contact Details: {ticketData.contactDetails}
+          </Text>
+          <Text style={styles.textDetails}>Sex: {ticketData.sex}</Text>
+          <Text style={styles.textDetails}>Age: {ticketData.age}</Text>
+          <Text style={styles.textDetails}>
+            User Email: {ticketData.userEmail}
+          </Text>
+        </View>
+      ) : null}
+
+      <Pressable
+        style={card.qContainer}
+        onPress={
+          openChecklist
+            ? () => setOpenChecklist(false)
+            : () => setOpenChecklist(true)
+        }
+        android_ripple={{ radius: 250 }}
+      >
+        <Text style={styles.checklistTitle}>Preliminary Checklist</Text>
+        {openChecklist ? (
+          <IconBtn
+            icon="minus"
+            size={18}
+            onPress={() => setOpenChecklist(false)}
+          />
+        ) : (
+          <IconBtn
+            icon="plus"
+            size={18}
+            onPress={() => setOpenChecklist(true)}
+          />
+        )}
+      </Pressable>
+      {openChecklist ? (
+        <ScrollView style={styles.checklistContainer}>
+          {ticketData.checklistData &&
+          Object.keys(ticketData.checklistData).length > 0 ? (
+            Object.entries(ticketData.checklistData).map(
+              ([key, value], index) => (
+                <View key={key} style={styles.checklistItem}>
+                  <Text style={styles.checklistKey}>
+                    {index + 1}. {key}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      marginLeft: 30,
+                    }}
+                  >
+                    <View style={styles.bullet} />
+                    <Text style={styles.checklistValue}>{value}</Text>
+                  </View>
+                </View>
+              )
+            )
+          ) : (
+            <Text style={styles.noChecklistData}>
+              No preliminary checklist data available.
+            </Text>
+          )}
+        </ScrollView>
+      ) : null}
+
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Accept"
+          onPress={() => handleUpdateStatus("accepted")}
+          color="green"
+        />
+        <Button
+          title="Reject"
+          onPress={() => handleUpdateStatus("denied")}
+          color={COLORS.primary}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -102,9 +252,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  textDetails: {
+    fontSize: 16,
+    marginVertical: 3,
+  },
   checklistContainer: {
-    marginTop: 20,
     width: "100%",
+    marginLeft: 15,
   },
   checklistTitle: {
     fontWeight: "bold",
@@ -118,6 +272,54 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   checklistValue: {
-    marginLeft: 10,
+    fontSize: 16,
+    fontWeight: "normal",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 20,
+    width: "100%",
+  },
+  bullet: {
+    width: 8,
+    height: 8,
+    borderRadius: 4, // Makes the view a circle
+    backgroundColor: "black",
+    marginRight: 10,
+  },
+  noChecklistData: {
+    fontSize: 16,
+    fontStyle: "italic",
+    color: COLORS.grayMid,
+    marginTop: 10,
+  },
+});
+
+const card = StyleSheet.create({
+  qContainer: {
+    width: "100%",
+    minHeight: 35,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
+  question: {
+    flex: 1,
+    fontWeight: "bold",
+  },
+  aContainer: {
+    width: "100%",
+    minHeight: 35,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingTop: 8,
+    paddingBottom: 16,
+  },
+  answer: {
+    flex: 1,
+    flexDirection: "row",
   },
 });

@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { COLORS } from "../../../../constants";
 import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "expo-router";
 
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 const Tab = createMaterialTopTabNavigator();
 
 export default function ManageTicketsDonations() {
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "User Donations",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
   return (
     <Tab.Navigator
       screenOptions={{

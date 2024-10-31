@@ -33,7 +33,6 @@ export default function ManageFaqUpdate() {
   const [updatedLongitude, setUpdatedLongitude] = useState(
     hospital.coordinates.longitude.toString()
   );
-
   const [updatedStock, setUpdatedStock] = useState(hospital.stock);
   const [isEnabledAplus, toggleAplus] = useState(updatedStock[0].available);
   const [isEnabledAminus, toggleAminus] = useState(updatedStock[1].available);

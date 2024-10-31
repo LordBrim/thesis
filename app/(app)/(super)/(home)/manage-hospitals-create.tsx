@@ -35,7 +35,6 @@ export default function ManageFaqCreate() {
   const [isEnabledABminus, toggleABminus] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -70,7 +69,6 @@ export default function ManageFaqCreate() {
     isEnabledOplus,
     isEnabledOminus,
   ]);
-
   const handleCreate = () => {
     dispatch(
       createHospital({
@@ -114,7 +112,6 @@ export default function ManageFaqCreate() {
     );
     router.back();
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

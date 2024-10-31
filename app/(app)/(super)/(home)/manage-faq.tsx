@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Pressable,
-  SectionList,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,15 +11,23 @@ import {
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
-export default function ManageAdmins() {
+export default function ManageFAQ() {
   const { faqs } = useSelector((state: RootState) => state.faqs);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-
   useEffect(() => {
     dispatch(getFAQs());
   }, []);
-
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Frequently Asked Questions",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -38,18 +39,10 @@ export default function ManageAdmins() {
       ),
     });
   }, [navigation]);
-
-  const DATA = [
-    {
-      title: "Main dishes",
-      data: [{ name: "Pizza", type: "Hello" }],
-    },
-  ];
-
   return (
     <View style={styles.container}>
       <View style={styles.panels}>
-        {/* <FlatList
+        <FlatList
           data={faqs}
           renderItem={({ item }) => (
             <QuestionPanel title={item.title} questions={item.questions} />
@@ -59,20 +52,7 @@ export default function ManageAdmins() {
           scrollEnabled={true}
           persistentScrollbar={true}
           contentContainerStyle={{ gap: 16 }}
-        /> */}
-        {/* <SectionList
-          sections={faqs}
-          keyExtractor={(item, index) => {
-            return index.toString();
-          }}
-          renderItem={({ item }) => (
-            <View>
-              <Text>{item.question}</Text>
-              <Text>{item.answer}</Text>
-            </View>
-          )}
-          renderSectionHeader={({ section: { title } }) => <Text>{title}</Text>}
-        /> */}
+        />
       </View>
     </View>
   );
@@ -86,6 +66,10 @@ type IQuestionPanel = {
 export function QuestionPanel({ title, questions }: IQuestionPanel) {
   return (
     <View style={panel.container}>
+      {/* TODO: For super admin where the super can see all the questions 
+       {questions.length > 0 && (
+        <Text style={[GS.h3, panel.title]}>{title}</Text>
+      )} */}
       <Text style={[GS.h3, panel.title]}>{title}</Text>
       <FlatList
         contentContainerStyle={(panel.container, { gap: 16 })}

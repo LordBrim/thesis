@@ -5,12 +5,11 @@ import AdminDashboard from "components/home/AdminDashboard";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { COLORS, SPACES } from "../../../../constants/theme";
 import { router } from "expo-router";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
+import { getHospitals } from "rtx/slices/hospitals";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
@@ -21,33 +20,8 @@ export default function HomeTab() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getCurrentUser());
+    dispatch(getHospitals());
   }, []);
-
-  // useEffect(() => {
-  //   const checkUserInfo = async () => {
-  //     const auth = getAuth();
-  //     const user = auth.currentUser;
-  //     if (user) {
-  //       const db = getFirestore();
-  //       const userDoc = await getDoc(doc(db, "User", user.uid));
-  //       if (userDoc.exists()) {
-  //         const userData = userDoc.data();
-  //         if (
-  //           !userData.displayName ||
-  //           !userData.sex ||
-  //           !userData.age ||
-  //           !userData.contactDetails ||
-  //           !userData.city
-  //         ) {
-  //           setModalVisible(true);
-  //         }
-  //       }
-  //       console.log("Document data:", userDoc.data());
-  //     }
-  //   };
-  //   checkUserInfo();
-  // }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

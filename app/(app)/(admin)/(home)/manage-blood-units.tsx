@@ -9,15 +9,19 @@ import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useNavigation } from "expo-router";
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "app/store";
+import {
+  updateHospitalStock,
+  updateHospitalStockByUuid,
+} from "rtx/slices/hospitals";
 
 export default function ManageBloodUnits() {
   const { user } = useSelector((state: RootState) => state.user);
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const hospital =
-    hospitals.find((section) => section.name === user.hospitalName)?.stock ||
-    [];
+  const hospital = hospitals.find(
+    (section) => section.name === user.hospitalName
+  );
   const navigation = useNavigation();
   const size = 40;
   useEffect(() => {
@@ -30,14 +34,16 @@ export default function ManageBloodUnits() {
       headerTitleAlign: "center",
     });
   }, []);
-  const [isEnabledAplus, toggleAplus] = useState(hospital[0].available);
-  const [isEnabledAminus, toggleAminus] = useState(hospital[1].available);
-  const [isEnabledBplus, toggleBplus] = useState(hospital[2].available);
-  const [isEnabledBminus, toggleBminus] = useState(hospital[3].available);
-  const [isEnabledABplus, toggleABplus] = useState(hospital[4].available);
-  const [isEnabledABminus, toggleABminus] = useState(hospital[5].available);
-  const [isEnabledOplus, toggleOplus] = useState(hospital[6].available);
-  const [isEnabledOminus, toggleOminus] = useState(hospital[7].available);
+  const [isEnabledAplus, toggleAplus] = useState(hospital.stock[0].available);
+  const [isEnabledAminus, toggleAminus] = useState(hospital.stock[1].available);
+  const [isEnabledBplus, toggleBplus] = useState(hospital.stock[2].available);
+  const [isEnabledBminus, toggleBminus] = useState(hospital.stock[3].available);
+  const [isEnabledABplus, toggleABplus] = useState(hospital.stock[4].available);
+  const [isEnabledABminus, toggleABminus] = useState(
+    hospital.stock[5].available
+  );
+  const [isEnabledOplus, toggleOplus] = useState(hospital.stock[6].available);
+  const [isEnabledOminus, toggleOminus] = useState(hospital.stock[7].available);
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -66,8 +72,34 @@ export default function ManageBloodUnits() {
     isEnabledOplus,
     isEnabledOminus,
   ]);
+  const dispatch = useDispatch();
   const handleUpdate = () => {
-    console.log("Update");
+    dispatch(
+      updateHospitalStock({
+        uuid: hospital.uuid.toString(),
+        updatedStock: [
+          { type: "A+", available: isEnabledAplus },
+          { type: "A-", available: isEnabledAminus },
+          { type: "B+", available: isEnabledBplus },
+          { type: "B-", available: isEnabledBminus },
+          { type: "AB+", available: isEnabledABplus },
+          { type: "AB-", available: isEnabledABminus },
+          { type: "O+", available: isEnabledOplus },
+          { type: "O-", available: isEnabledOminus },
+        ],
+      })
+    );
+    updateHospitalStockByUuid(hospital.uuid.toString(), [
+      { type: "A+", available: isEnabledAplus },
+      { type: "A-", available: isEnabledAminus },
+      { type: "B+", available: isEnabledBplus },
+      { type: "B-", available: isEnabledBminus },
+      { type: "AB+", available: isEnabledABplus },
+      { type: "AB-", available: isEnabledABminus },
+      { type: "O+", available: isEnabledOplus },
+      { type: "O-", available: isEnabledOminus },
+    ]);
+    navigation.goBack();
   };
   return (
     <View style={styles.container}>

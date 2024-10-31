@@ -1,10 +1,13 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect } from "react";
-import { COLORS } from "../../../../constants";
+import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useNavigation } from "expo-router";
 import Fontisto from "@expo/vector-icons/Fontisto";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
 
 export default function ManageBloodUnits() {
+  const { user } = useSelector((state: RootState) => state.user);
   const navigation = useNavigation();
   const size = 40;
   useEffect(() => {
@@ -19,6 +22,7 @@ export default function ManageBloodUnits() {
   }, []);
   return (
     <View style={styles.container}>
+      <Text style={[GS.h3, styles.title]}>{user.hospitalName}</Text>
       <View style={styles.row}>
         {/* Type A */}
         <View style={styles.column}>
@@ -73,11 +77,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    justifyContent: "center",
-    alignItems: "center",
+    gap: 24,
+  },
+  title: {
+    minWidth: "100%",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   row: {
-    flex: 1,
     flexDirection: "row",
   },
   column: {

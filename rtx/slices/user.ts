@@ -31,6 +31,7 @@ interface UserState {
     email: string;
     password: string;
     role: "user" | "staff" | "admin" | "super";
+    hospitalName: "";
   };
 }
 
@@ -40,6 +41,7 @@ const initialState: UserState = {
     email: "",
     password: "",
     role: "user",
+    hospitalName: "",
   },
 };
 

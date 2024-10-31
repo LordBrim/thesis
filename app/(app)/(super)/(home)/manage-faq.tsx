@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  SectionList,
+} from "react-native";
 import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,47 +49,24 @@ export default function ManageFAQ() {
   return (
     <View style={styles.container}>
       <View style={styles.panels}>
-        <FlatList
-          data={faqs}
-          renderItem={({ item }) => (
-            <QuestionPanel title={item.title} questions={item.questions} />
+        <SectionList
+          sections={faqs}
+          keyExtractor={(item, index) => item.toString() + index}
+          renderItem={({ item, section: { title } }) => (
+            <QuestionCard
+              title={title}
+              question={item.question}
+              answer={item.answer}
+            />
           )}
-          keyExtractor={(item) => item.title}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={[GS.h3, styles.title]}>{title}</Text>
+          )}
           overScrollMode="never"
           scrollEnabled={true}
           persistentScrollbar={true}
-          contentContainerStyle={{ gap: 16 }}
         />
       </View>
-    </View>
-  );
-}
-
-type IQuestionPanel = {
-  title: string;
-  questions: Array<{ question: string; answer: string }>;
-};
-
-export function QuestionPanel({ title, questions }: IQuestionPanel) {
-  return (
-    <View style={panel.container}>
-      {/* TODO: For super admin where the super can see all the questions 
-       {questions.length > 0 && (
-        <Text style={[GS.h3, panel.title]}>{title}</Text>
-      )} */}
-      <Text style={[GS.h3, panel.title]}>{title}</Text>
-      <FlatList
-        contentContainerStyle={(panel.container, { gap: 16 })}
-        data={questions}
-        renderItem={({ item }) => (
-          <QuestionCard
-            title={title}
-            question={item.question}
-            answer={item.answer}
-          />
-        )}
-        keyExtractor={(item) => item.question}
-      />
     </View>
   );
 }
@@ -149,14 +133,6 @@ const styles = StyleSheet.create({
   },
   panels: {
     gap: 20,
-  },
-});
-
-const panel = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    borderColor: COLORS.slate100,
   },
   title: {
     flex: 1,

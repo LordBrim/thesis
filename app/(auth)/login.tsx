@@ -5,13 +5,12 @@ import {
   TextInput,
   Pressable,
   StyleSheet,
-  Image,
   AppState,
   SafeAreaView,
   ScrollView,
   Dimensions,
 } from "react-native";
-import { Link, router } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useFonts } from "expo-font";
 import {
   Raleway_400Regular,
@@ -26,26 +25,15 @@ import TextInputWrapper from "../../components/common/TextInputWrapper";
 import LifelineLogo from "components/common/LifelineLogo";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "app/store";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
-import { getCurrentUser } from "rtx/slices/user";
 import { FlatList } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 
-interface User {
-  id: string;
-  role: string;
-}
-
 export default function LoginScreen() {
+  const router = useRouter();
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,
     Raleway_500Medium,
@@ -147,10 +135,19 @@ export default function LoginScreen() {
       const docRef = doc(FIRESTORE_DB, "User", user.uid);
       const docSnap = await getDoc(docRef);
 
-      if (docSnap.data().role === "admin") {
-        router.replace("/(app)/(admin)/(tabs)");
-      } else {
-        router.replace("/(app)/(user)/(tabs)");
+      switch (docSnap.data().role) {
+        case "super":
+          router.replace("/(app)/(super)/(tabs)");
+          break;
+        case "admin":
+          router.replace("/(app)/(admin)/(tabs)");
+          break;
+        case "staff":
+          router.replace("/(app)/(staff)/(tabs)");
+          break;
+        default:
+          router.replace("/(app)/(user)/(tabs)");
+          break;
       }
     } catch (error) {
       setModalVisible(true);

@@ -16,11 +16,11 @@ import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
 
 export default function ManageFaqUpdate() {
   const { title, question, answer } = useLocalSearchParams();
-  const [oldTitle, setOldTitle] = useState(title);
-  const [oldQuestion, setOldQuestion] = useState(question);
-  const [oldAnswer, setOldAnswer] = useState(answer);
-  const [updatedQuestion, setUpdatedQuestion] = useState(question);
-  const [updatedAnswer, setUpdatedAnswer] = useState(answer);
+  const [oldTitle, setOldTitle] = useState(title.toString());
+  const [oldQuestion, setOldQuestion] = useState(question.toString());
+  const [oldAnswer, setOldAnswer] = useState(answer.toString());
+  const [updatedQuestion, setUpdatedQuestion] = useState(question.toString());
+  const [updatedAnswer, setUpdatedAnswer] = useState(answer.toString());
   const dispatch = useDispatch();
   const navigation = useNavigation();
 

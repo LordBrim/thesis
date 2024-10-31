@@ -8,6 +8,9 @@ import { router } from "expo-router";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "app/store";
+import { getCurrentUser } from "rtx/slices/user";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
@@ -40,6 +43,11 @@ export default function HomeTab() {
   //   };
   //   checkUserInfo();
   // }, []);
+
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

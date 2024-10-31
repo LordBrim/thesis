@@ -2,9 +2,11 @@ import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect } from "react";
 import { COLORS } from "../../../../constants";
 import { useNavigation } from "expo-router";
+import Fontisto from "@expo/vector-icons/Fontisto";
 
 export default function ManageBloodUnits() {
   const navigation = useNavigation();
+  const size = 40;
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Blood Units",
@@ -17,7 +19,52 @@ export default function ManageBloodUnits() {
   }, []);
   return (
     <View style={styles.container}>
-      <Text>Manage Blood Units</Text>
+      <View style={styles.row}>
+        {/* Type A */}
+        <View style={styles.column}>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>A+</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>A-</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+        </View>
+        {/* Type B */}
+        <View style={styles.column}>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>B+</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>B-</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+        </View>
+        {/* Type AB */}
+        <View style={styles.column}>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>AB+</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>AB-</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+        </View>
+        {/* Type O */}
+        <View style={styles.column}>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>O+</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+          <View style={styles.blood}>
+            <Text style={styles.detail}>O-</Text>
+            <Fontisto name="blood" size={size} color={COLORS.primary} />
+          </View>
+        </View>
+      </View>
     </View>
   );
 }
@@ -28,5 +75,26 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
+  },
+  row: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  column: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 12,
+  },
+  blood: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    maxWidth: 55,
+  },
+  detail: {
+    fontWeight: "bold",
   },
 });

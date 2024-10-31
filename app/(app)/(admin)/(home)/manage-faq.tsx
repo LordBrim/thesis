@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  ScrollView,
+} from "react-native";
 import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,16 +17,28 @@ import {
 } from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
+import { SafeAreaView } from "react-native";
 
 export default function ManageFAQ() {
+  const { user } = useSelector((state: RootState) => state.user);
   const { faqs } = useSelector((state: RootState) => state.faqs);
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-
   useEffect(() => {
     dispatch(getFAQs());
   }, []);
-
+  const faq =
+    faqs.find((section) => section.title === user.hospitalName)?.data || [];
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Frequently Asked Questions",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -31,52 +50,28 @@ export default function ManageFAQ() {
       ),
     });
   }, [navigation]);
-
   return (
-    <View style={styles.container}>
-      <View style={styles.panels}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView persistentScrollbar={true} overScrollMode="never">
+        <Text style={[GS.h3, styles.title]}>{user.hospitalName}</Text>
         <FlatList
-          data={faqs}
+          data={faq}
           renderItem={({ item }) => (
-            <QuestionPanel title={item.title} questions={item.questions} />
+            <QuestionCard
+              title={user.hospitalName}
+              answer={item.answer}
+              question={item.question}
+            />
           )}
-          keyExtractor={(item) => item.title}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
           overScrollMode="never"
-          scrollEnabled={true}
+          scrollEnabled={false}
           persistentScrollbar={true}
-          contentContainerStyle={{ gap: 16 }}
         />
-      </View>
-    </View>
-  );
-}
-
-type IQuestionPanel = {
-  title: string;
-  questions: Array<{ question: string; answer: string }>;
-};
-
-export function QuestionPanel({ title, questions }: IQuestionPanel) {
-  return (
-    <View style={panel.container}>
-      {/* TODO: For super admin where the super can see all the questions 
-       {questions.length > 0 && (
-        <Text style={[GS.h3, panel.title]}>{title}</Text>
-      )} */}
-      <Text style={[GS.h3, panel.title]}>{title}</Text>
-      <FlatList
-        contentContainerStyle={(panel.container, { gap: 16 })}
-        data={questions}
-        renderItem={({ item }) => (
-          <QuestionCard
-            title={title}
-            question={item.question}
-            answer={item.answer}
-          />
-        )}
-        keyExtractor={(item) => item.question}
-      />
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -97,9 +92,7 @@ export function QuestionCard({ title, question, answer }: IQuestionCard) {
       },
     });
   };
-
   const dispatch = useDispatch();
-
   const handleDelete = (title, deletedQuestion) => {
     dispatch(
       deleteQuestion({
@@ -109,7 +102,6 @@ export function QuestionCard({ title, question, answer }: IQuestionCard) {
     );
     deleteQuestionInFirebase(title, deletedQuestion);
   };
-
   return (
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
@@ -137,25 +129,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    justifyContent: "center",
-    alignItems: "center",
   },
   panels: {
     gap: 20,
-  },
-});
-
-const panel = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "100%",
-    borderColor: COLORS.slate100,
   },
   title: {
     flex: 1,
     minWidth: "100%",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingVertical: 8,
   },
 });
 

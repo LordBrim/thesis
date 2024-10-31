@@ -20,7 +20,6 @@ export default function HomeTab() {
     setModalVisible(false);
     router.navigate("(app)/(account)/profile");
   };
-
   useEffect(() => {
     const checkUserInfo = async () => {
       const auth = getAuth();
@@ -45,17 +44,12 @@ export default function HomeTab() {
     };
     checkUserInfo();
   }, []);
-
   const [donateStatus, setDonateStatus] = useState(true);
-
   const dispatch = useDispatch<AppDispatch>();
-
   useEffect(() => {
     dispatch(getCurrentUser());
   }, []);
-
   const { user } = useSelector((state: RootState) => state.user);
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

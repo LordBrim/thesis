@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useNavigation } from "expo-router";
 import Fontisto from "@expo/vector-icons/Fontisto";
@@ -20,53 +20,117 @@ export default function ManageBloodUnits() {
       headerTitleAlign: "center",
     });
   }, []);
+  const [isEnabledAplus, toggleAplus] = useState(false);
+  const [isEnabledAminus, toggleAminus] = useState(false);
+  const [isEnabledBplus, toggleBplus] = useState(false);
+  const [isEnabledBminus, toggleBminus] = useState(false);
+  const [isEnabledABplus, toggleABplus] = useState(false);
+  const [isEnabledABminus, toggleABminus] = useState(false);
+  const [isEnabledOplus, toggleOplus] = useState(false);
+  const [isEnabledOminus, toggleOminus] = useState(false);
   return (
     <View style={styles.container}>
       <Text style={[GS.h3, styles.title]}>{user.hospitalName}</Text>
       <View style={styles.row}>
         {/* Type A */}
         <View style={styles.column}>
-          <View style={styles.blood}>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleAplus(!isEnabledAplus)}
+          >
             <Text style={styles.detail}>A+</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
-          <View style={styles.blood}>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledAplus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleAminus(!isEnabledAminus)}
+          >
             <Text style={styles.detail}>A-</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledAminus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
         </View>
         {/* Type B */}
         <View style={styles.column}>
-          <View style={styles.blood}>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleBplus(!isEnabledBplus)}
+          >
             <Text style={styles.detail}>B+</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
-          <View style={styles.blood}>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledBplus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleBminus(!isEnabledBminus)}
+          >
             <Text style={styles.detail}>B-</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledBminus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
         </View>
         {/* Type AB */}
         <View style={styles.column}>
-          <View style={styles.blood}>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleABplus(!isEnabledABplus)}
+          >
             <Text style={styles.detail}>AB+</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
-          <View style={styles.blood}>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledABplus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleABminus(!isEnabledABminus)}
+          >
             <Text style={styles.detail}>AB-</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledABminus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
         </View>
         {/* Type O */}
         <View style={styles.column}>
-          <View style={styles.blood}>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleOplus(!isEnabledOplus)}
+          >
             <Text style={styles.detail}>O+</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
-          <View style={styles.blood}>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledOplus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
+          <Pressable
+            style={styles.blood}
+            onPress={() => toggleOminus(!isEnabledOminus)}
+          >
             <Text style={styles.detail}>O-</Text>
-            <Fontisto name="blood" size={size} color={COLORS.primary} />
-          </View>
+            <Fontisto
+              name="blood"
+              size={size}
+              color={isEnabledOminus ? COLORS.primary : COLORS.grayMid}
+            />
+          </Pressable>
         </View>
       </View>
     </View>
@@ -91,7 +155,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    gap: 12,
+    gap: 16,
   },
   blood: {
     flexDirection: "row",

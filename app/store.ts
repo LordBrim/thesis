@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "../rtx/slices/user";
+import staffSlice from "../rtx/slices/staff";
 import faqsSlice from "rtx/slices/faq";
 import hospitalsSlice from "rtx/slices/hospitals";
 
 export const store = configureStore({
   reducer: {
     user: userSlice,
+    staff: staffSlice,
     faqs: faqsSlice,
     hospitals: hospitalsSlice,
   },

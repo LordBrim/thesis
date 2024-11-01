@@ -18,11 +18,10 @@ export default function ManageStaff() {
     dispatch(getHopitalStaff(user.hospitalName));
   }, []);
   const { staff } = useSelector((state: RootState) => state.staff);
-
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: "Staff",
+      headerTitle: " Staff",
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
@@ -32,13 +31,18 @@ export default function ManageStaff() {
   }, []);
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView persistentScrollbar={true} overScrollMode="never">
-        <Text style={[GS.h3, styles.title]}>{user.hospitalName}</Text>
+      <ScrollView
+        persistentScrollbar={true}
+        overScrollMode="never"
+        style={styles.scrollview}
+      >
+        <Text style={[GS.h3, styles.title]}>{user.hospitalName} Staff</Text>
         <FlatList
           data={staff}
           renderItem={({ item }) => (
             <StaffCard
               title={user.hospitalName}
+              uuid={item.uuid}
               displayName={item.displayName}
               email={item.email}
             />
@@ -57,12 +61,13 @@ export default function ManageStaff() {
 
 type IStaffCard = {
   title: string;
+  uuid: string;
   displayName: string;
   email: string;
 };
 
-export function StaffCard({ title, displayName, email }: IStaffCard) {
-  const handleUpdate = (title, question, answer) => {
+export function StaffCard({ uuid, displayName, email }: IStaffCard) {
+  const handleUpdate = (uuid) => {
     // router.push({
     //   pathname: "(app)/(admin)/(home)/manage-faq-update",
     //   params: {
@@ -85,21 +90,22 @@ export function StaffCard({ title, displayName, email }: IStaffCard) {
   return (
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
-        <Text style={card.question}>{displayName}</Text>
-        {/* <IconBtn
-          icon="pencil"
-          size={18}
-          onPress={() => handleUpdate(title, question, answer)}
-        />
+        <Text style={[GS.h2, card.question]}>{displayName}</Text>
+        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} />
         <IconBtn
           icon="trash"
           size={18}
-          onPress={() => handleDelete(title, { question, answer })}
+          onPress={() => handleDelete(uuid)}
           color="red"
-        /> */}
+        />
       </Pressable>
       <View style={card.aContainer}>
-        <Text style={card.answer}>{email}</Text>
+        <Text style={card.answer}>
+          UUID:<Text style={{ fontWeight: "normal" }}> {uuid}</Text>
+        </Text>
+        <Text style={card.answer}>
+          Email:<Text style={{ fontWeight: "normal" }}> {email}</Text>
+        </Text>
       </View>
     </>
   );
@@ -111,6 +117,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
+  },
+  scrollview: {
+    gap: 20,
   },
   title: {
     flex: 1,
@@ -136,8 +145,6 @@ const card = StyleSheet.create({
   aContainer: {
     width: "100%",
     minHeight: 35,
-    flexDirection: "row",
-    alignItems: "center",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingTop: 8,
     paddingBottom: 16,
@@ -145,5 +152,6 @@ const card = StyleSheet.create({
   answer: {
     flex: 1,
     flexDirection: "row",
+    fontWeight: "bold",
   },
 });

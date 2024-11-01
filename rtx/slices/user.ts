@@ -31,7 +31,7 @@ interface UserState {
     email: string;
     password: string;
     role: "user" | "staff" | "admin" | "super";
-    hospitalName: "";
+    hospitalName: string;
   };
 }
 

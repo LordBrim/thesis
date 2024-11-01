@@ -3,7 +3,7 @@ import IconBtn from "components/common/IconButton";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { GS } from "constants/style";
 import { COLORS } from "constants/theme";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, Pressable } from "react-native";
 import { ScrollView } from "react-native";
@@ -29,6 +29,18 @@ export default function ManageStaff() {
       headerTitleAlign: "center",
     });
   }, []);
+  const router = useRouter();
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconBtn
+          icon="plus"
+          size={18}
+          onPress={() => router.push("(app)/(admin)/(home)/manage-faq-create")}
+        />
+      ),
+    });
+  }, [navigation]);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

@@ -3,38 +3,31 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
-export const getHopitalStaff = createAsyncThunk<
-  StaffState["staff"], // Return type
-  string // Argument type (hospitalName)
->("getHopitalStaff", async (hospitalName) => {
-  try {
-    const user = FIREBASE_AUTH.currentUser;
-
-    if (!user) {
-      return []; // Return empty array if no user
+export const getHopitalStaff = createAsyncThunk<StaffState["staff"], string>(
+  "getHopitalStaff",
+  async (hospitalName) => {
+    try {
+      const staffQuery = query(
+        collection(FIRESTORE_DB, "User"),
+        where("role", "==", "staff"),
+        where("hospitalName", "==", hospitalName)
+      );
+      const querySnapshot = await getDocs(staffQuery);
+      const staff = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        uuid: doc.id,
+      })) as StaffState["staff"];
+      return staff;
+    } catch (error) {
+      console.error("Error fetching staff:", error);
+      return [];
     }
-
-    const staffQuery = query(
-      collection(FIRESTORE_DB, "User"),
-      where("role", "==", "staff"),
-      where("hospitalName", "==", hospitalName)
-    );
-
-    const querySnapshot = await getDocs(staffQuery);
-
-    const staff = querySnapshot.docs.map(
-      (doc) => doc.data() as StaffState["staff"][0]
-    );
-
-    return staff;
-  } catch (error) {
-    console.error("Error fetching staff:", error);
-    return []; // Return empty array on error
   }
-});
+);
 
 interface StaffState {
   staff: {
+    uuid?: string;
     displayName: string;
     email: string;
     password: string;
@@ -46,6 +39,7 @@ interface StaffState {
 const initialState: StaffState = {
   staff: [
     {
+      uuid: "dOpturiUmjxzWMhFf7Qv",
       displayName: "Andrei Sager",
       email: "andrei@mail.com",
       password: "123456",
@@ -53,6 +47,7 @@ const initialState: StaffState = {
       hospitalName: "STI Sta. Mesa",
     },
     {
+      uuid: "wLBJcMvAmdONhDpQSlGbbXsL3KS2",
       displayName: "Angelo Munar",
       email: "angelo@mail.com",
       password: "123456",

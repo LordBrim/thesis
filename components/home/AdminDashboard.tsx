@@ -38,11 +38,11 @@ export default function AdminDashboard() {
       icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
       title: "Events",
     },
-    {
-      href: "/(app)/(admin)/(home)/manage-faq",
-      icon: <Ionicons name="chatbubbles" size={size} color={COLORS.primary} />,
-      title: "FAQ",
-    },
+    // {
+    //   href: "/(app)/(admin)/(home)/manage-faq",
+    //   icon: <Ionicons name="chatbubbles" size={size} color={COLORS.primary} />,
+    //   title: "FAQ",
+    // },
     {
       href: "/(app)/(admin)/(home)/manage-incentives",
       icon: <Ionicons name="gift" size={size} color={COLORS.primary} />,

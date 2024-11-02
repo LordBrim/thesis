@@ -201,14 +201,12 @@ export default function LoginScreen() {
   const size = 40;
   const gridBtns = [
     {
-      href: "/(app)/(super)/(tabs)",
       icon: <FontAwesome6 name="user-tie" size={size} color={COLORS.primary} />,
       title: "Super Admin",
       email: "andrei@mail.com",
       password: "123456",
     },
     {
-      href: "/(app)/(admin)/(tabs)",
       icon: (
         <FontAwesome6 name="user-doctor" size={size} color={COLORS.primary} />
       ),
@@ -217,7 +215,6 @@ export default function LoginScreen() {
       password: "123456",
     },
     {
-      href: "/(app)/(staff)/(tabs)",
       icon: (
         <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
       ),
@@ -226,7 +223,6 @@ export default function LoginScreen() {
       password: "123456",
     },
     {
-      href: "/(app)/(user)/(tabs)",
       icon: (
         <FontAwesome6 name="user-injured" size={size} color={COLORS.primary} />
       ),

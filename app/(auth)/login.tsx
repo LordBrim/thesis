@@ -154,8 +154,6 @@ export default function LoginScreen() {
     const checkLoginState = async () => {
       try {
         const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
-        console.log("User logged in state from AsyncStorage:", userLoggedIn); // Add this log
-
         if (userLoggedIn === "true") {
           const storedEmail = await AsyncStorage.getItem("user_email");
           const storedPassword = await AsyncStorage.getItem("user_password");

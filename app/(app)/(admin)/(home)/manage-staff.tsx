@@ -1,4 +1,4 @@
-import { RootState } from "app/store";
+import { AppDispatch, RootState } from "app/store";
 import IconBtn from "components/common/IconButton";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { GS } from "constants/style";
@@ -14,10 +14,10 @@ import { deleteStaff, getHopitalStaff } from "rtx/slices/staff";
 export default function ManageStaff() {
   const { user } = useSelector((state: RootState) => state.user);
   const { staff } = useSelector((state: RootState) => state.staff);
-  const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getHopitalStaff(user.hospitalName));
-  // }, [staff]);
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(getHopitalStaff(user.hospitalName));
+  }, [staff]);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -96,7 +96,7 @@ export function StaffCard({ uuid, displayName, email }: IStaffCard) {
         uuid: uuid,
       })
     );
-    // deleteQuestionInFirebase(title, deletedQuestion);
+    deleteStaff(uuid);
   };
   return (
     <>

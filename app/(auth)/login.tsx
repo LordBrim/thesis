@@ -64,7 +64,6 @@ export default function LoginScreen() {
     try {
       await AsyncStorage.setItem("user_email", email);
       await AsyncStorage.setItem("user_password", password);
-      console.log("User credentials stored successfully");
     } catch (error) {
       console.error("Error storing user credentials:", error.message);
     }
@@ -78,15 +77,12 @@ export default function LoginScreen() {
       await AsyncStorage.removeItem("user_logged_in");
       await AsyncStorage.removeItem("user_email");
       await AsyncStorage.removeItem("user_password");
-      console.log("User credentials removed");
     } catch (error) {
       console.error("Error removing user credentials:", error.message);
     }
   };
 
   const login = async (email, password) => {
-    // console.log("Login attempt:", email, password); // Log the email and password before login attempt
-
     if (!email || !password) {
       console.log("Login blocked due to missing email or password");
       return; // Prevent login if email or password is missing
@@ -121,8 +117,6 @@ export default function LoginScreen() {
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
-      // console.log("User logged in successfully");
-
       if (toggleRemember) {
         await AsyncStorage.setItem("user_logged_in", "true");
         await storeUserCredentials(email, password);
@@ -165,10 +159,6 @@ export default function LoginScreen() {
         if (userLoggedIn === "true") {
           const storedEmail = await AsyncStorage.getItem("user_email");
           const storedPassword = await AsyncStorage.getItem("user_password");
-
-          // console.log("Stored email:", storedEmail); // Add this log
-          // console.log("Stored password:", storedPassword); // Add this log
-
           if (storedEmail && storedPassword) {
             setEmail(storedEmail);
             setPassword(storedPassword);

@@ -344,7 +344,9 @@ export default function LoginScreen() {
                 </Pressable>
               </View>
             )}
-            keyExtractor={(item) => item.href}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             numColumns={4}

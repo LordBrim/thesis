@@ -40,7 +40,16 @@ export default function ManageFaqCreate() {
       ),
     });
   }, [navigation, newQuestion, newAnswer]);
-
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Update Staff",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
   const handleCreate = () => {
     console.log(newTitle);
     dispatch(

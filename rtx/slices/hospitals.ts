@@ -145,6 +145,7 @@ interface HospitalState {
   contactNumber: string;
   coordinates: CoordinatesState;
   stock: Array<StockState>;
+  incentives: IncentiveState;
 }
 
 interface CoordinatesState {
@@ -157,56 +158,22 @@ interface StockState {
   available: boolean;
 }
 
+interface IncentiveState {
+  incentivesNo: number;
+  data: Array<IncentiveData>;
+  repeatable: boolean;
+  info: string;
+}
+
+interface IncentiveData {
+  incentiveNo: number;
+  incentive: string;
+}
+
 const initialState: HospitalsState = {
   hospitals: [
     {
-      uuid: "0",
-      name: "UERM Medical Center",
-      logoUrl:
-        "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
-      address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
-      contactNumber: "(02) 8715 0861",
-      coordinates: {
-        latitude: 14.607184,
-        longitude: 121.020384,
-      },
-      stock: [
-        {
-          type: "O+",
-          available: true,
-        },
-        {
-          type: "O-",
-          available: true,
-        },
-        {
-          type: "A+",
-          available: true,
-        },
-        {
-          type: "A-",
-          available: true,
-        },
-        {
-          type: "B+",
-          available: true,
-        },
-        {
-          type: "B-",
-          available: true,
-        },
-        {
-          type: "AB+",
-          available: true,
-        },
-        {
-          type: "AB-",
-          available: true,
-        },
-      ],
-    },
-    {
-      uuid: "1",
+      uuid: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
       name: "UERM Hospital",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -250,52 +217,15 @@ const initialState: HospitalsState = {
           available: true,
         },
       ],
-    },
-    {
-      uuid: "2",
-      name: "UERM Medical",
-      logoUrl:
-        "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
-      address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
-      contactNumber: "(02) 8715 0861",
-      coordinates: {
-        latitude: 14.607184,
-        longitude: 121.020384,
+      incentives: {
+        incentivesNo: 9,
+        repeatable: true,
+        data: [
+          { incentiveNo: 9, incentive: '"Priority"' },
+          { incentiveNo: 3, incentive: "T-Shirt" },
+        ],
+        info: 'To obtain "priority" you must have successful donations every 3 months',
       },
-      stock: [
-        {
-          type: "O+",
-          available: true,
-        },
-        {
-          type: "O-",
-          available: true,
-        },
-        {
-          type: "A+",
-          available: true,
-        },
-        {
-          type: "A-",
-          available: true,
-        },
-        {
-          type: "B+",
-          available: true,
-        },
-        {
-          type: "B-",
-          available: true,
-        },
-        {
-          type: "AB+",
-          available: true,
-        },
-        {
-          type: "AB-",
-          available: true,
-        },
-      ],
     },
   ],
 };

@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useNavigation } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { FontAwesome6, Fontisto } from "@expo/vector-icons";
+import CircularProgress from "react-native-circular-progress-indicator";
 
 export default function ManageIncentives() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -38,12 +39,54 @@ export default function ManageIncentives() {
       incentive: uniqueIncentives.length > 0 ? uniqueIncentives.join("") : null,
     };
   });
+  const [isRepeatable, setIsRepeatable] = useState(incentives.repeatable);
   return (
     <View style={styles.container}>
       <Text style={[GS.h3, styles.title]}>{user.hospitalName} Incentives</Text>
-      <View style={{ flexDirection: "row" }}>
-        <Text>{hospital.incentives.incentivesNo}</Text>
-        <Text>{incentives.repeatable ? "true" : "false"}</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+          backgroundColor: COLORS.slate100,
+          padding: 16,
+        }}
+      >
+        <View
+          style={{
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          <CircularProgress
+            value={9}
+            maxValue={incentives.incentivesNo}
+            radius={35}
+            activeStrokeColor={COLORS.primary}
+            activeStrokeSecondaryColor={COLORS.accent}
+            inActiveStrokeColor={COLORS.grayLight}
+          />
+          <View
+            style={{ gap: 12, justifyContent: "center", alignItems: "center" }}
+          >
+            <Text style={{ fontWeight: "bold" }}>Repeatable?</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 8,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {/* <Text>Yes</Text> */}
+              <FontAwesome6
+                name="repeat"
+                size={30}
+                color={false ? COLORS.success : COLORS.grayMid}
+              />
+            </View>
+          </View>
+        </View>
         <FlatList
           data={data}
           renderItem={({ item, index }) => (
@@ -92,6 +135,7 @@ export default function ManageIncentives() {
         <FontAwesome6 name="circle-info" size={24} color={COLORS.primary} />
         <Text style={{ flex: 1 }}>{incentives.info}</Text>
       </View>
+      <Text style={[GS.h3, styles.title]}>Simulate</Text>
     </View>
   );
 }

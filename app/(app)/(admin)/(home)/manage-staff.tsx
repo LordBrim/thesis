@@ -3,7 +3,7 @@ import IconBtn from "components/common/IconButton";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { GS } from "constants/style";
 import { COLORS } from "constants/theme";
-import { useNavigation, useRouter } from "expo-router";
+import { router, useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, Pressable } from "react-native";
 import { ScrollView } from "react-native";
@@ -82,14 +82,14 @@ type IStaffCard = {
 
 export function StaffCard({ uuid, displayName, email }: IStaffCard) {
   const handleUpdate = (uuid) => {
-    // router.push({
-    //   pathname: "(app)/(admin)/(home)/manage-faq-update",
-    //   params: {
-    //     title: title.toString(),
-    //     question: question.toString(),
-    //     answer: answer.toString(),
-    //   },
-    // });
+    router.push({
+      pathname: "(app)/(admin)/(home)/manage-staff-update",
+      // params: {
+      //   title: title.toString(),
+      //   question: question.toString(),
+      //   answer: answer.toString(),
+      // },
+    });
   };
   // const dispatch = useDispatch();
   const handleDelete = (uuid) => {

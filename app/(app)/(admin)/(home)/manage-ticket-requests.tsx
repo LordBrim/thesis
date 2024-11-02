@@ -18,6 +18,7 @@ import {
 import Divider from "constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 const Tab = createMaterialTopTabNavigator();
+
 interface TicketState {
   id: string;
   patientName: string;
@@ -252,9 +253,6 @@ function ManageTicketsRequestsArchived() {
     );
   }
 
-  const missedTickets = tickets.filter(
-    (ticket) => ticket.status === "pending" && ticket.isEmergency
-  );
   const rejectedTickets = tickets.filter(
     (ticket) => ticket.status === "denied"
   );
@@ -270,15 +268,6 @@ function ManageTicketsRequestsArchived() {
         Click tickets to view more details.
       </Text>
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
-      <Text style={{ fontWeight: "bold", fontSize: 20 }}>Missed Requests:</Text>
-      <FlatList
-        data={missedTickets}
-        renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.id} // Use the unique ID as the key
-        overScrollMode="never"
-        scrollEnabled={true}
-        persistentScrollbar={true}
-      />
       <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 20 }}>
         Rejected Requests:
       </Text>

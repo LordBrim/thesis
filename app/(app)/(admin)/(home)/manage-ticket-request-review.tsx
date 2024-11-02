@@ -200,42 +200,39 @@ export default function ManageTicketReview() {
             Message: {ticketData.message}
           </Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Image
-                source={{ uri: imageUrl }}
-                resizeMode="contain"
-                style={{
-                  width: 200,
-                  height: 200,
-                  marginVertical: 10,
-                }}
-              />
-            </TouchableOpacity>
+            {imageUrl && (
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
+                <Image
+                  source={{ uri: imageUrl }}
+                  resizeMode="contain"
+                  style={{
+                    width: 200,
+                    height: 200,
+                    marginVertical: 10,
+                  }}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           {imageUrl && (
-            <>
-              <Modal
-                visible={modalVisible}
-                transparent={true}
-                onRequestClose={() => setModalVisible(false)}
-              >
-                <View style={styles.modalContainer}>
-                  <Image
-                    source={{ uri: imageUrl }}
-                    resizeMode="contain"
-                    style={styles.fullImage}
-                  />
-                  <Button
-                    title="Download Image"
-                    onPress={() => handleDownloadImage(imageUrl)}
-                  />
-                  <Button
-                    title="Close"
-                    onPress={() => setModalVisible(false)}
-                  />
-                </View>
-              </Modal>
-            </>
+            <Modal
+              visible={modalVisible}
+              transparent={true}
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <View style={styles.modalContainer}>
+                <Image
+                  source={{ uri: imageUrl }}
+                  resizeMode="contain"
+                  style={styles.fullImage}
+                />
+                <Button
+                  title="Download Image"
+                  onPress={() => handleDownloadImage(imageUrl)}
+                />
+                <Button title="Close" onPress={() => setModalVisible(false)} />
+              </View>
+            </Modal>
           )}
         </View>
 

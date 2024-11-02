@@ -1,21 +1,29 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import { useNavigation } from "expo-router";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "app/store";
-import { FontAwesome6, Fontisto } from "@expo/vector-icons";
-import CircularProgress from "react-native-circular-progress-indicator";
+import { router, useNavigation } from "expo-router";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
+import { Fontisto } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native";
 
 export default function ManageIncentives() {
   const { user } = useSelector((state: RootState) => state.user);
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const incentives = hospitals.find(
-    (section) => section.name === user.hospitalName
-  ).incentives;
   const hospital = hospitals.find(
     (section) => section.name === user.hospitalName
   );
+  const incentives = hospitals.find(
+    (section) => section.name === user.hospitalName
+  ).incentives;
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -28,62 +36,96 @@ export default function ManageIncentives() {
     });
   }, []);
   const size = 40;
-  const data = Array.from(
-    { length: incentives.incentivesNo },
-    (_, i) => i + 1
-  ).map((number) => {
-    const items = incentives.data.filter((item) => item.incentiveNo === number);
-    const uniqueIncentives = [...new Set(items.map((item) => item.incentive))];
-    return {
-      incentiveNo: number,
-      incentive: uniqueIncentives.length > 0 ? uniqueIncentives.join("") : null,
+  const data = Array.from({ length: incentives.number }, (_, i) => i + 1).map(
+    (number) => {
+      const items = incentives.data.filter((item) => item.position === number);
+      const uniqueIncentives = [
+        ...new Set(items.map((item) => item.incentive)),
+      ];
+      return {
+        incentiveNo: number,
+        incentive:
+          uniqueIncentives.length > 0 ? uniqueIncentives.join("") : null,
+      };
+    }
+  );
+  const [simulation, setSimulation] = useState(incentives.number);
+  const handleSimulation = () => {
+    setSimulation(-1);
+    const incrementSimulation = () => {
+      setSimulation((prev) => {
+        if (prev < incentives.number) {
+          setTimeout(incrementSimulation, 1000);
+          return prev + 1;
+        }
+        return prev;
+      });
     };
-  });
-  const [isRepeatable, setIsRepeatable] = useState(incentives.repeatable);
+    incrementSimulation();
+  };
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 60,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={handleUpdate}
+        >
+          <Text style={{ fontWeight: "bold" }}>Edit</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+  const handleUpdate = () => {
+    router.push("(app)/(admin)/(home)/manage-incentives-update");
+  };
   return (
-    <View style={styles.container}>
-      <Text style={[GS.h3, styles.title]}>{user.hospitalName} Incentives</Text>
-      <View
-        style={{
-          flexDirection: "row",
-          paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-          backgroundColor: COLORS.slate100,
-          padding: 16,
-        }}
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        overScrollMode="never"
+        persistentScrollbar={true}
+        contentContainerStyle={styles.scrollview}
       >
         <View
           style={{
             justifyContent: "space-between",
             alignItems: "center",
             gap: 12,
+            paddingHorizontal: 12,
           }}
         >
-          <CircularProgress
-            value={9}
-            maxValue={incentives.incentivesNo}
-            radius={35}
-            activeStrokeColor={COLORS.primary}
-            activeStrokeSecondaryColor={COLORS.accent}
-            inActiveStrokeColor={COLORS.grayLight}
-          />
           <View
-            style={{ gap: 12, justifyContent: "center", alignItems: "center" }}
+            style={{
+              flexDirection: "row",
+            }}
           >
-            <Text style={{ fontWeight: "bold" }}>Repeatable?</Text>
+            {/* TODO: Show on user home screen */}
+            {/* <CircularProgress
+              value={9}
+              maxValue={incentives.incentivesNo}
+              radius={35}
+              activeStrokeColor={COLORS.primary}
+              activeStrokeSecondaryColor={COLORS.accent}
+              inActiveStrokeColor={COLORS.grayLight}
+            /> */}
+            <Image width={70} height={70} source={{ uri: hospital.logoUrl }} />
             <View
               style={{
-                flexDirection: "row",
-                gap: 8,
+                flexDirection: "column",
+                flexShrink: 1,
                 justifyContent: "center",
-                alignItems: "center",
+                paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
               }}
             >
-              {/* <Text>Yes</Text> */}
-              <FontAwesome6
-                name="repeat"
-                size={30}
-                color={false ? COLORS.success : COLORS.grayMid}
-              />
+              <Text style={[GS.h3, styles.title]}>
+                {user.hospitalName} Incentives
+              </Text>
+              <Text>{incentives.info}</Text>
             </View>
           </View>
         </View>
@@ -94,7 +136,7 @@ export default function ManageIncentives() {
               style={{
                 justifyContent: "flex-start",
                 alignItems: "center",
-                width: 60,
+                width: 70,
                 gap: 4,
               }}
             >
@@ -102,7 +144,9 @@ export default function ManageIncentives() {
               <Fontisto
                 name="blood"
                 size={size}
-                color={index + 1 <= 8 ? COLORS.primary : COLORS.grayMid}
+                color={
+                  index + 1 <= simulation ? COLORS.primary : COLORS.grayMid
+                }
               />
               {item.incentive && (
                 <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
@@ -112,31 +156,36 @@ export default function ManageIncentives() {
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          numColumns={Math.round(data.length / 2)}
-          contentContainerStyle={{
-            width: "100%",
+          numColumns={data.length > 5 ? Math.round(data.length / 2) : 5}
+          contentContainerStyle={[
+            data.length >= 4 ? styles.stockCenter : styles.stockLeft,
+            {
+              justifyContent: "space-between",
+              gap: 12,
+            },
+          ]}
+          columnWrapperStyle={{
+            gap: 12,
+            paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+          }}
+          scrollEnabled={false}
+        />
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 90,
             justifyContent: "center",
             alignItems: "center",
-            gap: 16,
-            // borderWidth: 1,
+            borderWidth: 1,
+            marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
           }}
-          columnWrapperStyle={{}}
-        />
-      </View>
-      <View
-        style={{
-          // borderWidth: 1,
-          flexDirection: "row",
-          gap: 12,
-          alignItems: "center",
-          padding: HORIZONTAL_SCREEN_MARGIN,
-        }}
-      >
-        <FontAwesome6 name="circle-info" size={24} color={COLORS.primary} />
-        <Text style={{ flex: 1 }}>{incentives.info}</Text>
-      </View>
-      <Text style={[GS.h3, styles.title]}>Simulate</Text>
-    </View>
+          onPress={handleSimulation}
+        >
+          <Text style={{ fontWeight: "bold" }}>Simulate</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -144,11 +193,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    gap: 16,
+    gap: 24,
   },
-  scrollview: {},
+  scrollview: {
+    gap: 24,
+  },
   title: {
     minWidth: "100%",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
+  stockLeft: {
+    alignItems: "baseline",
+  },
+  stockCenter: {
+    alignItems: "center",
   },
 });

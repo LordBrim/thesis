@@ -75,6 +75,7 @@ export default function ManageStaffCreate() {
   const [newPassword, setNewPassword] = useState("");
 
   const register = async () => {
+    console.log(newEmail);
     try {
       const response = await createUserWithEmailAndPassword(
         FIREBASE_AUTH,
@@ -85,7 +86,8 @@ export default function ManageStaffCreate() {
         email: newEmail,
         password: newPassword,
         displayName: newUsername,
-        role: "user",
+        role: "staff",
+        hospitalName: newTitle,
       };
       await firestoreOperations.addDocument(
         "User",
@@ -110,7 +112,7 @@ export default function ManageStaffCreate() {
         <TextInputWrapper label="Username">
           <TextInput
             value={newUsername}
-            onChangeText={(text) => setNewUsername(text)}
+            onChangeText={(username) => setNewUsername(username)}
             placeholder="Enter staff username..."
             autoCapitalize="none"
             autoCorrect={true}
@@ -124,7 +126,7 @@ export default function ManageStaffCreate() {
         <TextInputWrapper label="Email">
           <TextInput
             value={newEmail}
-            onChangeText={(text) => setNewEmail(text)}
+            onChangeText={(email) => setNewEmail(email)}
             placeholder="Enter staff email..."
             autoCapitalize="none"
             autoCorrect={true}

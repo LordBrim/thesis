@@ -19,6 +19,7 @@ import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
 import { Ionicons } from "@expo/vector-icons";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "firebase-config";
+import { firestoreOperations } from "../../../../firestore-services";
 
 export default function ManageStaffCreate() {
   const { user } = useSelector((state: RootState) => state.user);

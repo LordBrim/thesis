@@ -1,0 +1,116 @@
+import {
+  Text,
+  StyleSheet,
+  TextInput,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
+import { useEffect, useState } from "react";
+import { COLORS } from "constants/theme";
+import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
+import TextInputWrapper from "components/common/TextInputWrapper";
+import { useDispatch, useSelector } from "react-redux";
+import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
+import { router, useNavigation } from "expo-router";
+import { RootState } from "app/store";
+
+export default function ManageStaffCreate() {
+  const { user } = useSelector((state: RootState) => state.user);
+  const [newTitle, setNewTitle] = useState(user.hospitalName);
+  const [newQuestion, setNewQuestion] = useState("");
+  const [newAnswer, setNewAnswer] = useState("");
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 60,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={handleCreate}
+        >
+          <Text style={{ fontWeight: "bold" }}>Add</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, newQuestion, newAnswer]);
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Create Staff",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
+  const handleCreate = () => {
+    console.log(newTitle);
+    dispatch(
+      createQuestion({
+        title: newTitle,
+        newQuestion: { question: newQuestion, answer: newAnswer },
+      })
+    );
+    addFAQToFirebase(newTitle, newQuestion, newAnswer);
+    router.back();
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.scrollview}
+        overScrollMode="never"
+        persistentScrollbar={true}
+      >
+        <TextInputWrapper label="Question">
+          <TextInput
+            value={newQuestion}
+            onChangeText={(text) => setNewQuestion(text)}
+            placeholder="Enter a question..."
+            autoCapitalize="none"
+            autoCorrect={true}
+            enablesReturnKeyAutomatically
+            multiline={true}
+            style={{
+              flex: 1,
+              padding: 12,
+            }}
+          />
+        </TextInputWrapper>
+        <TextInputWrapper label="Answer">
+          <TextInput
+            value={newAnswer}
+            onChangeText={(text) => setNewAnswer(text)}
+            placeholder="Enter an answer..."
+            autoCapitalize="none"
+            autoCorrect={true}
+            enablesReturnKeyAutomatically
+            multiline={true}
+            style={{
+              flex: 1,
+              padding: 12,
+            }}
+          />
+        </TextInputWrapper>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  scrollview: {
+    padding: HORIZONTAL_SCREEN_MARGIN,
+    gap: 16,
+  },
+});

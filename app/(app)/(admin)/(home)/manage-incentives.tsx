@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   Button,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
@@ -15,6 +16,7 @@ import { AppDispatch, RootState } from "app/store";
 import { FontAwesome6, Fontisto } from "@expo/vector-icons";
 import CircularProgress from "react-native-circular-progress-indicator";
 import { SafeAreaView } from "react-native";
+import CallToActionBtn from "components/common/CallToActionBtn";
 
 export default function ManageIncentives() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -149,7 +151,20 @@ export default function ManageIncentives() {
           }}
           scrollEnabled={false}
         />
-        <Button onPress={handleSimulation} title="Simulation" />
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 90,
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 1,
+            marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
+          }}
+          onPress={handleSimulation}
+        >
+          <Text style={{ fontWeight: "bold" }}>Simulate</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );

@@ -215,15 +215,15 @@ function ManageTicketsDonationsPending() {
 
   const sortTickets = (tickets: TicketState[], option: string) => {
     return tickets.sort((a, b) => {
-      const dateA = moment(
-        `${a.selectedDate} ${a.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      const dateB = moment(
-        `${b.selectedDate} ${b.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      if (!dateA.isValid() || !dateB.isValid()) {
+      const dateA =
+        a.selectedDate && a.selectedTime
+          ? moment(`${a.selectedDate} ${a.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      const dateB =
+        b.selectedDate && b.selectedTime
+          ? moment(`${b.selectedDate} ${b.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      if (!dateA || !dateB || !dateA.isValid() || !dateB.isValid()) {
         console.warn("Invalid date parsing in ticket data.");
         return 0; // No change if parsing fails
       }
@@ -448,15 +448,15 @@ function ManageTicketsDonationsArchived() {
 
   const sortTickets = (tickets: TicketState[], option: string) => {
     return tickets.sort((a, b) => {
-      const dateA = moment(
-        `${a.selectedDate} ${a.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      const dateB = moment(
-        `${b.selectedDate} ${b.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      if (!dateA.isValid() || !dateB.isValid()) {
+      const dateA =
+        a.selectedDate && a.selectedTime
+          ? moment(`${a.selectedDate} ${a.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      const dateB =
+        b.selectedDate && b.selectedTime
+          ? moment(`${b.selectedDate} ${b.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      if (!dateA || !dateB || !dateA.isValid() || !dateB.isValid()) {
         console.warn("Invalid date parsing in ticket data.");
         return 0; // No change if parsing fails
       }
@@ -487,6 +487,8 @@ function ManageTicketsDonationsArchived() {
   const missedTickets = tickets.filter(
     (ticket) =>
       ticket.status === "pending" &&
+      ticket.selectedDate &&
+      ticket.selectedTime &&
       moment(
         `${ticket.selectedDate} ${ticket.selectedTime}`,
         "YYYY-MM-DD h:mm A"
@@ -583,8 +585,10 @@ export function Card({ ticket }: CardProps) {
         )}
         <View style={{ flexDirection: "column", justifyContent: "center" }}>
           <Text style={card.name}>{ticket.ticketNumber}</Text>
-          <Text style={card.text}> {formatDate(ticket.selectedDate)}</Text>
-          <Text style={card.text}> {ticket.selectedTime}</Text>
+          <Text style={card.text}>
+            {ticket.selectedDate ? formatDate(ticket.selectedDate) : ""}
+          </Text>
+          <Text style={card.text}>{ticket.selectedTime || ""}</Text>
         </View>
       </View>
       <IconBtn icon="angle-right" size={18} onPress={handlePress} />

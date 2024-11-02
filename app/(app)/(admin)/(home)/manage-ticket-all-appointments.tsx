@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  FlatList,
-} from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { COLORS } from "../../../../constants/theme";
-import { useLocalSearchParams } from "expo-router";
 import { Agenda } from "react-native-calendars";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 
 interface TicketState {
   id: string;
@@ -35,7 +35,6 @@ interface TicketState {
 }
 
 export default function ManageTicketAllAppointments() {
-  const { tickets } = useLocalSearchParams();
   const [ticketList, setTicketList] = useState<TicketState[]>([]);
   const [markedDates, setMarkedDates] = useState({});
   const [agendaItems, setAgendaItems] = useState({});
@@ -43,13 +42,26 @@ export default function ManageTicketAllAppointments() {
   const [emptyDateMessage, setEmptyDateMessage] = useState(""); // New state for empty date message
 
   useEffect(() => {
-    if (tickets) {
-      const parsedTickets = JSON.parse(tickets as string) as TicketState[];
-      setTicketList(parsedTickets);
-      markAppointmentDates(parsedTickets); // Mark appointments on calendar
-      transformAppointmentsToAgendaItems(parsedTickets); // Transform appointments for Agenda
-    }
-  }, [tickets]);
+    const fetchTickets = async () => {
+      setLoading(true);
+      const db = getFirestore();
+      const q = query(
+        collection(db, "ticketDonate"),
+        where("status", "==", "accepted")
+      );
+      const querySnapshot = await getDocs(q);
+      const fetchedTickets = querySnapshot.docs.map(
+        (doc) => ({ id: doc.id, ...doc.data() } as TicketState)
+      );
+      console.log("Fetched Tickets:", fetchedTickets); // Debugging
+      setTicketList(fetchedTickets);
+      markAppointmentDates(fetchedTickets); // Mark appointments on calendar
+      transformAppointmentsToAgendaItems(fetchedTickets); // Transform appointments for Agenda
+      setLoading(false);
+    };
+
+    fetchTickets();
+  }, []);
 
   // Marking appointment dates in the calendar
   const markAppointmentDates = (appointments: TicketState[]) => {
@@ -69,6 +81,7 @@ export default function ManageTicketAllAppointments() {
       }
     });
 
+    console.log("Marked Dates:", dates); // Debugging
     setMarkedDates(dates);
   };
 
@@ -97,6 +110,7 @@ export default function ManageTicketAllAppointments() {
       });
     });
 
+    console.log("Agenda Items:", items); // Debugging
     setAgendaItems(items);
   };
 
@@ -105,7 +119,7 @@ export default function ManageTicketAllAppointments() {
       <Text style={styles.appointmentText}>
         Ticket Number: {item.ticketNumber}
       </Text>
-      <Text style={styles.appointmentText}>Name: {item.name}</Text>
+      <Text style={styles.appointmentText}>Name: {item.displ}</Text>
       <Text style={styles.appointmentText}>Date: {item.selectedDate}</Text>
       <Text style={styles.appointmentText}>Time: {item.selectedTime}</Text>
       <Text style={styles.appointmentText}>
@@ -231,7 +245,7 @@ const styles = StyleSheet.create({
   },
   emptyDateText: {
     fontSize: 16,
-    color: COLORS.gray,
+    color: COLORS.grayDark,
     textAlign: "center", // Center align the text
     paddingHorizontal: 20, // Add padding for better readability
   },

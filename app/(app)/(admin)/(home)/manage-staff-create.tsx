@@ -17,6 +17,8 @@ import { router, useNavigation } from "expo-router";
 import { RootState } from "app/store";
 import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
 import { Ionicons } from "@expo/vector-icons";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_AUTH } from "firebase-config";
 
 export default function ManageStaffCreate() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -71,6 +73,33 @@ export default function ManageStaffCreate() {
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+
+  const register = async () => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        FIREBASE_AUTH,
+        newEmail,
+        newPassword
+      );
+      const documentData = {
+        email: newEmail,
+        password: newPassword,
+        displayName: newUsername,
+        role: "user",
+      };
+      await firestoreOperations.addDocument(
+        "User",
+        documentData,
+        response.user.uid
+      );
+      router.back();
+      router.replace("/(app)/(tabs)/");
+    } catch (error) {
+      console.log(error);
+      alert("Registration Failed:" + error.message);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

@@ -1,7 +1,14 @@
 import type { RootState } from "../../app/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 export const getHopitalStaff = createAsyncThunk<StaffState["staff"], string>(
   "getHopitalStaff",
@@ -24,6 +31,24 @@ export const getHopitalStaff = createAsyncThunk<StaffState["staff"], string>(
     }
   }
 );
+
+export const deleteStaffInFirebase = async (uuid: string) => {
+  try {
+    const userCollectionRef = collection(FIRESTORE_DB, "User");
+    const staffQuery = query(
+      userCollectionRef,
+      where("role", "==", "staff"),
+      where("uuid", "==", uuid)
+    );
+    const querySnapshot = await getDocs(staffQuery);
+    querySnapshot.forEach(async (doc) => {
+      await deleteDoc(doc.ref);
+    });
+  } catch (error) {
+    console.error("Error deleting staff:", error);
+  }
+};
+
 interface StaffMember {
   uuid?: string;
   displayName: string;

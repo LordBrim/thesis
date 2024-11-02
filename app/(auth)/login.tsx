@@ -222,7 +222,7 @@ export default function LoginScreen() {
         <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
       ),
       title: "Staff",
-      email: "user6@mail.com",
+      email: "munaru@mail.com",
       password: "123456",
     },
     {
@@ -231,7 +231,7 @@ export default function LoginScreen() {
         <FontAwesome6 name="user-injured" size={size} color={COLORS.primary} />
       ),
       title: "User",
-      email: "eloyms26@gmail.com",
+      email: "user6@mail.com",
       password: "123456",
     },
   ];

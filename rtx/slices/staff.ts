@@ -24,18 +24,18 @@ export const getHopitalStaff = createAsyncThunk<StaffState["staff"], string>(
     }
   }
 );
-
-interface StaffState {
-  staff: {
-    uuid?: string;
-    displayName: string;
-    email: string;
-    password: string;
-    role: "user" | "staff" | "admin" | "super";
-    hospitalName: string;
-  }[];
+interface StaffMember {
+  uuid?: string;
+  displayName: string;
+  email: string;
+  password: string;
+  role: "user" | "staff" | "admin" | "super";
+  hospitalName: string;
 }
 
+interface StaffState {
+  staff: StaffMember[];
+}
 const initialState: StaffState = {
   staff: [
     {
@@ -61,20 +61,19 @@ const staffSlice = createSlice({
   name: "staff",
   initialState,
   reducers: {
-    //   createQuestion: (
-    //     state,
-    //     {
-    //       payload: { title, newQuestion },
-    //     }: PayloadAction<{ title: string; newQuestion: StaffState }>
-    //   ) => {
-    //     let faq = state.faqs.find((faq) => faq.title === title);
-    //     if (faq) {
-    //       faq.data = faq.data || [];
-    //       faq.data.push(newQuestion);
-    //     } else {
-    //       state.faqs.push({ title, data: [newQuestion] });
-    //     }
-    //   },
+    createStaff: (
+      state,
+      { payload: { newStaff } }: PayloadAction<{ newStaff: StaffMember }>
+    ) => {
+      const existingStaff = state.staff.find(
+        (staff) => staff.email === newStaff.email
+      );
+      if (existingStaff) {
+        Object.assign(existingStaff, newStaff);
+      } else {
+        state.staff.push(newStaff);
+      }
+    },
     //   updateQuestion: (
     //     state,
     //     action: PayloadAction<{
@@ -98,21 +97,10 @@ const staffSlice = createSlice({
     //       }
     //     }
     //   },
-    //   deleteQuestion: (
-    //     state,
-    //     action: PayloadAction<{ title: string; deletedQuestion: datatate }>
-    //   ) => {
-    //     const { title, deletedQuestion } = action.payload;
-    //     const faq = state.faqs.find((faq) => faq.title === title);
-    //     if (faq) {
-    //       faq.data = faq.data.filter(
-    //         (q) =>
-    //           q.question !== deletedQuestion.question ||
-    //           q.answer !== deletedQuestion.answer
-    //       );
-    //     }
-    //   },
-    // },
+    deleteStaff: (state, action: PayloadAction<{ uuid: string }>) => {
+      const { uuid } = action.payload;
+      state.staff = state.staff.filter((staff) => staff.uuid !== uuid);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getHopitalStaff.fulfilled, (state, action) => {
@@ -124,6 +112,8 @@ const staffSlice = createSlice({
     });
   },
 });
+
+export const { createStaff, updateStaff, deleteStaff } = staffSlice.actions;
 
 export const selectCount = (state: RootState) => state.staff;
 

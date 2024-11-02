@@ -32,6 +32,11 @@ interface UserState {
     password: string;
     role: "user" | "staff" | "admin" | "super";
     hospitalName: string;
+    incentives: {
+      hospitalUuid: string;
+      claimed: number;
+      timesCompleted: number;
+    }[];
   };
 }
 
@@ -42,6 +47,13 @@ const initialState: UserState = {
     password: "",
     role: "user",
     hospitalName: "",
+    incentives: [
+      {
+        hospitalUuid: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
+        claimed: 3,
+        timesCompleted: 3,
+      },
+    ],
   },
 };
 

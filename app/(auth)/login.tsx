@@ -64,7 +64,6 @@ export default function LoginScreen() {
     try {
       await AsyncStorage.setItem("user_email", email);
       await AsyncStorage.setItem("user_password", password);
-      console.log("User credentials stored successfully");
     } catch (error) {
       console.error("Error storing user credentials:", error.message);
     }
@@ -78,15 +77,12 @@ export default function LoginScreen() {
       await AsyncStorage.removeItem("user_logged_in");
       await AsyncStorage.removeItem("user_email");
       await AsyncStorage.removeItem("user_password");
-      console.log("User credentials removed");
     } catch (error) {
       console.error("Error removing user credentials:", error.message);
     }
   };
 
   const login = async (email, password) => {
-    // console.log("Login attempt:", email, password); // Log the email and password before login attempt
-
     if (!email || !password) {
       console.log("Login blocked due to missing email or password");
       return; // Prevent login if email or password is missing
@@ -121,8 +117,6 @@ export default function LoginScreen() {
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, password);
-      // console.log("User logged in successfully");
-
       if (toggleRemember) {
         await AsyncStorage.setItem("user_logged_in", "true");
         await storeUserCredentials(email, password);
@@ -160,15 +154,9 @@ export default function LoginScreen() {
     const checkLoginState = async () => {
       try {
         const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
-        console.log("User logged in state from AsyncStorage:", userLoggedIn); // Add this log
-
         if (userLoggedIn === "true") {
           const storedEmail = await AsyncStorage.getItem("user_email");
           const storedPassword = await AsyncStorage.getItem("user_password");
-
-          // console.log("Stored email:", storedEmail); // Add this log
-          // console.log("Stored password:", storedPassword); // Add this log
-
           if (storedEmail && storedPassword) {
             setEmail(storedEmail);
             setPassword(storedPassword);
@@ -213,30 +201,34 @@ export default function LoginScreen() {
   const size = 40;
   const gridBtns = [
     {
-      href: "/(app)/(super)/(tabs)",
       icon: <FontAwesome6 name="user-tie" size={size} color={COLORS.primary} />,
       title: "Super Admin",
+      email: "andrei@mail.com",
+      password: "123456",
     },
     {
-      href: "/(app)/(admin)/(tabs)",
       icon: (
         <FontAwesome6 name="user-doctor" size={size} color={COLORS.primary} />
       ),
       title: "Admin",
+      email: "uerm@mail.com",
+      password: "123456",
     },
     {
-      href: "/(app)/(staff)/(tabs)",
       icon: (
         <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
       ),
       title: "Staff",
+      email: "munaru@mail.com",
+      password: "123456",
     },
     {
-      href: "/(app)/(user)/(tabs)",
       icon: (
         <FontAwesome6 name="user-injured" size={size} color={COLORS.primary} />
       ),
       title: "User",
+      email: "user6@mail.com",
+      password: "123456",
     },
   ];
 
@@ -342,15 +334,14 @@ export default function LoginScreen() {
             data={gridBtns}
             renderItem={({ item }) => (
               <View style={[easyLogin.view]}>
-                <Link asChild replace href={item.href}>
-                  <Pressable
-                    style={easyLogin.press}
-                    android_ripple={{ radius: 200 }}
-                  >
-                    {item.icon}
-                    <Text style={easyLogin.text}>{item.title}</Text>
-                  </Pressable>
-                </Link>
+                <Pressable
+                  style={easyLogin.press}
+                  android_ripple={{ radius: 200 }}
+                  onPress={() => login(item.email, item.password)}
+                >
+                  {item.icon}
+                  <Text style={easyLogin.text}>{item.title}</Text>
+                </Pressable>
               </View>
             )}
             keyExtractor={(item) => item.href}
@@ -361,56 +352,6 @@ export default function LoginScreen() {
           />
         </View>
         {/* TODO: Remove on showcase */}
-
-        {/* <View
-        style={{
-          gap: 16,
-        }}
-      >
-        <View
-          style={{
-            position: "relative",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              width: "100%",
-              position: "absolute",
-              top: 10,
-              left: 0,
-              right: 0,
-              justifyContent: "center",
-              alignItems: "center",
-              borderWidth: 0.5,
-              borderColor: COLORS.grayMid,
-            }}
-          />
-          <Text style={{ backgroundColor: COLORS.background }}>
-            {" "}
-            Sign In With{" "}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 32,
-            width: "100%",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            source={require("../../assets/icons/facebook.png")}
-            style={{ width: 34, height: 34 }}
-          />
-          <Image
-            source={require("../../assets/icons/google.png")}
-            style={{ width: 34, height: 34 }}
-          />
-        </View>
-      </View> */}
-
         <View style={styles.cBottom}>
           <Text>Don't have an account? </Text>
           <LinkBtn label="Register" href="/register" underline />

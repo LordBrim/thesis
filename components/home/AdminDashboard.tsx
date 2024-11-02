@@ -45,7 +45,7 @@ export default function AdminDashboard() {
     // },
     {
       href: "/(app)/(admin)/(home)/manage-incentives",
-      icon: <Ionicons name="gift" size={size} color={COLORS.primary} />,
+      icon: <FontAwesome6 name="gifts" size={size} color={COLORS.primary} />,
       title: "Incentives",
     },
     {

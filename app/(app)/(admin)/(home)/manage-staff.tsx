@@ -1,27 +1,27 @@
-import { RootState } from "app/store";
+import { AppDispatch, RootState } from "app/store";
 import IconBtn from "components/common/IconButton";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { GS } from "constants/style";
 import { COLORS } from "constants/theme";
-import { useNavigation } from "expo-router";
+import { router, useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, Pressable } from "react-native";
 import { ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getHopitalStaff } from "rtx/slices/staff";
+import { deleteStaff, getHopitalStaff } from "rtx/slices/staff";
 
 export default function ManageStaff() {
   const { user } = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
+  const { staff } = useSelector((state: RootState) => state.staff);
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getHopitalStaff(user.hospitalName));
-  }, []);
-  const { staff } = useSelector((state: RootState) => state.staff);
+  }, [staff]);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: " Staff",
+      headerTitle: "Staff",
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
@@ -29,6 +29,20 @@ export default function ManageStaff() {
       headerTitleAlign: "center",
     });
   }, []);
+  const router = useRouter();
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconBtn
+          icon="plus"
+          size={18}
+          onPress={() =>
+            router.push("/(app)/(admin)/(home)/manage-staff-create")
+          }
+        />
+      ),
+    });
+  }, [navigation]);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -68,24 +82,21 @@ type IStaffCard = {
 
 export function StaffCard({ uuid, displayName, email }: IStaffCard) {
   const handleUpdate = (uuid) => {
-    // router.push({
-    //   pathname: "(app)/(admin)/(home)/manage-faq-update",
-    //   params: {
-    //     title: title.toString(),
-    //     question: question.toString(),
-    //     answer: answer.toString(),
-    //   },
-    // });
+    router.push({
+      pathname: "(app)/(admin)/(home)/manage-staff-update",
+      params: {
+        uuid: uuid,
+      },
+    });
   };
-  // const dispatch = useDispatch();
-  const handleDelete = (title, deletedQuestion) => {
-    // dispatch(
-    //   deleteQuestion({
-    //     title: title,
-    //     deletedQuestion: deletedQuestion,
-    //   })
-    // );
-    // deleteQuestionInFirebase(title, deletedQuestion);
+  const dispatch = useDispatch();
+  const handleDelete = (uuid) => {
+    dispatch(
+      deleteStaff({
+        uuid: uuid,
+      })
+    );
+    deleteStaff(uuid);
   };
   return (
     <>

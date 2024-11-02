@@ -20,12 +20,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "firebase-config";
 import { firestoreOperations } from "../../../../firestore-services";
+import { createStaff, getHopitalStaff } from "rtx/slices/staff";
 
 export default function ManageStaffCreate() {
   const { user } = useSelector((state: RootState) => state.user);
   const [newTitle, setNewTitle] = useState(user.hospitalName);
-  const [newQuestion, setNewQuestion] = useState("");
-  const [newAnswer, setNewAnswer] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
   useEffect(() => {
@@ -39,13 +41,13 @@ export default function ManageStaffCreate() {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={register}
+          onPress={handleCreate}
         >
           <Text style={{ fontWeight: "bold" }}>Add</Text>
         </TouchableOpacity>
       ),
     });
-  }, [navigation, newQuestion, newAnswer]);
+  }, [navigation, newTitle, newUsername, newEmail, newPassword]);
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Create Staff",
@@ -56,26 +58,10 @@ export default function ManageStaffCreate() {
       headerTitleAlign: "center",
     });
   }, []);
-  const handleCreate = () => {
-    console.log(newTitle);
-    dispatch(
-      createQuestion({
-        title: newTitle,
-        newQuestion: { question: newQuestion, answer: newAnswer },
-      })
-    );
-    addFAQToFirebase(newTitle, newQuestion, newAnswer);
-    router.back();
-  };
   const [passwordError, setPasswordError] = useState("");
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
-  const [newUsername, setNewUsername] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-
-  const register = async () => {
-    console.log(newEmail);
+  const handleCreate = async () => {
     try {
       const response = await createUserWithEmailAndPassword(
         FIREBASE_AUTH,
@@ -94,8 +80,18 @@ export default function ManageStaffCreate() {
         documentData,
         response.user.uid
       );
+      dispatch(
+        createStaff({
+          newStaff: {
+            email: newEmail,
+            password: newPassword,
+            displayName: newUsername,
+            role: "staff",
+            hospitalName: newTitle,
+          },
+        })
+      );
       router.back();
-      router.replace("/(app)/(tabs)/");
     } catch (error) {
       console.log(error);
       alert("Registration Failed:" + error.message);

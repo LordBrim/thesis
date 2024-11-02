@@ -60,14 +60,16 @@ export default function LoginScreen() {
     setToggleRemember(!toggleRemember);
   };
 
-  const storeUserCredentials = async (email, password) => {
+  const storeUserCredentials = async (email, password, rememberMe) => {
     try {
       await AsyncStorage.setItem("user_email", email);
       await AsyncStorage.setItem("user_password", password);
+      await AsyncStorage.setItem("remember_me", rememberMe ? "true" : "false");
     } catch (error) {
       console.error("Error storing user credentials:", error.message);
     }
   };
+
   const onModalClose = () => {
     setModalVisible(false);
   };
@@ -77,6 +79,7 @@ export default function LoginScreen() {
       await AsyncStorage.removeItem("user_logged_in");
       await AsyncStorage.removeItem("user_email");
       await AsyncStorage.removeItem("user_password");
+      await AsyncStorage.removeItem("remember_me");
     } catch (error) {
       console.error("Error removing user credentials:", error.message);
     }
@@ -119,7 +122,7 @@ export default function LoginScreen() {
       await signInWithEmailAndPassword(auth, email, password);
       if (toggleRemember) {
         await AsyncStorage.setItem("user_logged_in", "true");
-        await storeUserCredentials(email, password);
+        await storeUserCredentials(email, password, toggleRemember);
       } else {
         await removeUserCredentials();
       }
@@ -153,13 +156,14 @@ export default function LoginScreen() {
   useEffect(() => {
     const checkLoginState = async () => {
       try {
-        const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
-        if (userLoggedIn === "true") {
+        const rememberMe = await AsyncStorage.getItem("remember_me");
+        if (rememberMe === "true") {
           const storedEmail = await AsyncStorage.getItem("user_email");
           const storedPassword = await AsyncStorage.getItem("user_password");
           if (storedEmail && storedPassword) {
             setEmail(storedEmail);
             setPassword(storedPassword);
+            setToggleRemember(true);
             // Call login after state is updated
             setTimeout(() => login(storedEmail, storedPassword), 0);
           } else {

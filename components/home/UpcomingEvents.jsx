@@ -98,7 +98,7 @@ export default function UpcomingEvents() {
         <LinkBtn
           label="View All"
           onPress={() =>
-            navigation.navigate("(app)/(home)/all-events", { events })
+            navigation.navigate("(app)/(user)/(home)/all-events", { events })
           } // Pass events as parameter
           linkStyle={{ color: COLORS.gray, textDecorationLine: "none" }}
         />

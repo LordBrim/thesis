@@ -82,7 +82,7 @@ export default function FAQTab() {
           <FlatList
             data={faqs}
             renderItem={({ item }) => (
-              <QuestionPanel title={item.title} questions={item.questions} />
+              <QuestionPanel questions={item.questions} />
             )}
             keyExtractor={(item) => item.title}
             overScrollMode="never"
@@ -96,14 +96,12 @@ export default function FAQTab() {
 }
 
 type IQuestionPanel = {
-  title: string;
   questions: Array<{ question: string; answer: string }>;
 };
 
-export function QuestionPanel({ title, questions }: IQuestionPanel) {
+export function QuestionPanel({ questions }: IQuestionPanel) {
   return (
     <View style={panel.container}>
-      <Text style={[GS.h3, panel.title]}>{title}</Text>
       <FlatList
         contentContainerStyle={(panel.container, { gap: 16 })}
         data={questions}

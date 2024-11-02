@@ -159,14 +159,13 @@ interface StockState {
 }
 
 interface IncentiveState {
-  incentivesNo: number;
-  data: Array<IncentiveData>;
-  repeatable: boolean;
   info: string;
+  number: number;
+  data: Array<IncentiveData>;
 }
 
 interface IncentiveData {
-  incentiveNo: number;
+  position: number;
   incentive: string;
 }
 
@@ -218,13 +217,9 @@ const initialState: HospitalsState = {
         },
       ],
       incentives: {
-        incentivesNo: 9,
-        repeatable: true,
-        data: [
-          { incentiveNo: 9, incentive: '"Priority"' },
-          { incentiveNo: 3, incentive: "T-Shirt" },
-        ],
-        info: 'To obtain "priority" you must have successful donations every 3 months',
+        info: 'To obtain "priority" you must have successful donations every 3 months for 1 year.',
+        number: 4,
+        data: [{ position: 4, incentive: '"Priority"' }],
       },
     },
   ],

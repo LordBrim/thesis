@@ -5,15 +5,18 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
+import { COLORS, SIZES } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
 import { router, useNavigation } from "expo-router";
 import { RootState } from "app/store";
+import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ManageStaffCreate() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -61,7 +64,13 @@ export default function ManageStaffCreate() {
     addFAQToFirebase(newTitle, newQuestion, newAnswer);
     router.back();
   };
-
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
+    useTogglePasswordVisibility();
+  const [newUsername, setNewUsername] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -69,35 +78,58 @@ export default function ManageStaffCreate() {
         overScrollMode="never"
         persistentScrollbar={true}
       >
-        <TextInputWrapper label="Question">
+        <TextInputWrapper label="Username">
           <TextInput
-            value={newQuestion}
-            onChangeText={(text) => setNewQuestion(text)}
-            placeholder="Enter a question..."
+            value={newUsername}
+            onChangeText={(text) => setNewUsername(text)}
+            placeholder="Enter staff username..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
-            multiline={true}
             style={{
               flex: 1,
               padding: 12,
             }}
           />
         </TextInputWrapper>
-        <TextInputWrapper label="Answer">
+        <TextInputWrapper label="Email">
           <TextInput
-            value={newAnswer}
-            onChangeText={(text) => setNewAnswer(text)}
-            placeholder="Enter an answer..."
+            value={newEmail}
+            onChangeText={(text) => setNewEmail(text)}
+            placeholder="Enter staff email..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
-            multiline={true}
             style={{
               flex: 1,
               padding: 12,
             }}
           />
+        </TextInputWrapper>
+        <TextInputWrapper label="Password" error={!!passwordError}>
+          <TextInput
+            value={newPassword}
+            placeholder="Enter staff password..."
+            onChangeText={(password) => setNewPassword(password)}
+            autoCapitalize="none"
+            autoCorrect={true}
+            enablesReturnKeyAutomatically
+            secureTextEntry={passwordVisibility}
+            style={{
+              flex: 1,
+              padding: 12,
+            }}
+          />
+          <Pressable
+            onPress={handlePasswordVisibility}
+            style={{ paddingRight: 12 }}
+          >
+            <Ionicons
+              name={rightIcon}
+              size={SIZES.xLarge}
+              color={COLORS.grayDark}
+            />
+          </Pressable>
         </TextInputWrapper>
       </ScrollView>
     </SafeAreaView>

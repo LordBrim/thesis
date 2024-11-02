@@ -4,7 +4,16 @@
     "paths": {
       "@/*": ["src/*"],
       "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
-    }
+    },
+    "target": "esnext", // Specify ECMAScript target version
+    "module": "commonjs", // Specify module code generation
+    "lib": ["dom", "esnext"], // Specify library files to be included
+    "jsx": "react-native", // Specify JSX code generation
+    "strict": true, // Enable all strict type-checking options
+    "moduleResolution": "node", // Specify module resolution strategy
+    "esModuleInterop": true, // Enable esModuleInterop
+    "skipLibCheck": true, // Skip type checking of declaration files
+    "forceConsistentCasingInFileNames": true // Disallow inconsistently-cased references to the same file
   },
   "extends": "expo/tsconfig.base",
   "include": [
@@ -13,5 +22,6 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "app/(app)/(user)/(tabs)/maps-tab.jsx"
-  ]
+  ],
+  "exclude": ["node_modules", "dist", "build"]
 }

@@ -1,9 +1,56 @@
 import { StyleSheet, View, Text, FlatList, Image } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getAuth } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+
+interface Ticket {
+  selectedHospital: string;
+  selectedDate: string;
+  selectedTime: string;
+  ticketNumber: string;
+  status: string;
+  userUID: string;
+}
 
 export default function UpcomingAppointments() {
-  const [hasAppointments, setHasAppointments] = useState(true);
+  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
+  const auth = getAuth();
+  const db = getFirestore();
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      if (currentUser) {
+        const q = query(
+          collection(db, "ticketDonate"),
+          where("userUID", "==", currentUser.uid),
+          where("status", "==", "accepted")
+        );
+        const querySnapshot = await getDocs(q);
+        const fetchedTickets = querySnapshot.docs.map(
+          (doc) => doc.data() as Ticket
+        );
+        setTickets(fetchedTickets);
+      }
+      setLoading(false);
+    };
+
+    fetchTickets();
+  }, [currentUser]);
+
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+
+  const hasAppointments = tickets.length > 0;
 
   return (
     <View style={styles.container}>
@@ -12,15 +59,15 @@ export default function UpcomingAppointments() {
       </View>
       {hasAppointments ? (
         <FlatList
-          data={sampleAppointment}
+          data={tickets}
           renderItem={({ item }) => (
             <AppointmentCard
-              location={item.location}
-              date={item.date}
-              time={item.time}
+              location={item.selectedHospital}
+              date={item.selectedDate}
+              time={item.selectedTime}
             />
           )}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.ticketNumber}
           numColumns={1}
           scrollEnabled={false}
           contentContainerStyle={styles.flatlist}
@@ -127,17 +174,8 @@ const card = StyleSheet.create({
     width: 2,
     height: "100%",
     position: "absolute",
-    backgroundColor: COLORS.line,
+    backgroundColor: COLORS.grayDark,
     left: 43.3,
     bottom: 0,
   },
 });
-
-const sampleAppointment = [
-  {
-    id: "0",
-    location: "Makati Medical Center",
-    date: "Feb 15, 2024",
-    time: "5:00pm-5:30pm",
-  },
-];

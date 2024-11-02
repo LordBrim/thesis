@@ -5,28 +5,25 @@ import {
   FlatList,
   Image,
   ScrollView,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import { useNavigation } from "expo-router";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "app/store";
-import { FontAwesome6, Fontisto } from "@expo/vector-icons";
-import CircularProgress from "react-native-circular-progress-indicator";
+import { router, useNavigation } from "expo-router";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
+import { Fontisto } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
-import CallToActionBtn from "components/common/CallToActionBtn";
 
 export default function ManageIncentives() {
   const { user } = useSelector((state: RootState) => state.user);
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const incentives = hospitals.find(
-    (section) => section.name === user.hospitalName
-  ).incentives;
   const hospital = hospitals.find(
     (section) => section.name === user.hospitalName
   );
+  const incentives = hospitals.find(
+    (section) => section.name === user.hospitalName
+  ).incentives;
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -39,24 +36,25 @@ export default function ManageIncentives() {
     });
   }, []);
   const size = 40;
-  const data = Array.from(
-    { length: incentives.incentivesNo },
-    (_, i) => i + 1
-  ).map((number) => {
-    const items = incentives.data.filter((item) => item.incentiveNo === number);
-    const uniqueIncentives = [...new Set(items.map((item) => item.incentive))];
-    return {
-      incentiveNo: number,
-      incentive: uniqueIncentives.length > 0 ? uniqueIncentives.join("") : null,
-    };
-  });
-  const [simulation, setSimulation] = useState(incentives.incentivesNo);
-
+  const data = Array.from({ length: incentives.number }, (_, i) => i + 1).map(
+    (number) => {
+      const items = incentives.data.filter((item) => item.position === number);
+      const uniqueIncentives = [
+        ...new Set(items.map((item) => item.incentive)),
+      ];
+      return {
+        incentiveNo: number,
+        incentive:
+          uniqueIncentives.length > 0 ? uniqueIncentives.join("") : null,
+      };
+    }
+  );
+  const [simulation, setSimulation] = useState(incentives.number);
   const handleSimulation = () => {
     setSimulation(-1);
     const incrementSimulation = () => {
       setSimulation((prev) => {
-        if (prev < incentives.incentivesNo) {
+        if (prev < incentives.number) {
           setTimeout(incrementSimulation, 1000);
           return prev + 1;
         }
@@ -64,6 +62,27 @@ export default function ManageIncentives() {
       });
     };
     incrementSimulation();
+  };
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 60,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={handleUpdate}
+        >
+          <Text style={{ fontWeight: "bold" }}>Edit</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
+  const handleUpdate = () => {
+    router.push("(app)/(admin)/(home)/manage-incentives-update");
   };
   return (
     <SafeAreaView style={styles.container}>

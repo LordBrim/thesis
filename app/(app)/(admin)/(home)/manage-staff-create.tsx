@@ -39,7 +39,7 @@ export default function ManageStaffCreate() {
             justifyContent: "center",
             alignItems: "center",
           }}
-          onPress={handleCreate}
+          onPress={register}
         >
           <Text style={{ fontWeight: "bold" }}>Add</Text>
         </TouchableOpacity>
@@ -67,7 +67,6 @@ export default function ManageStaffCreate() {
     addFAQToFirebase(newTitle, newQuestion, newAnswer);
     router.back();
   };
-  const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();

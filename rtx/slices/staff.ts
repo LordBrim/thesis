@@ -60,7 +60,60 @@ const initialState: StaffState = {
 const staffSlice = createSlice({
   name: "staff",
   initialState,
-  reducers: {},
+  reducers: {
+    //   createQuestion: (
+    //     state,
+    //     {
+    //       payload: { title, newQuestion },
+    //     }: PayloadAction<{ title: string; newQuestion: StaffState }>
+    //   ) => {
+    //     let faq = state.faqs.find((faq) => faq.title === title);
+    //     if (faq) {
+    //       faq.data = faq.data || [];
+    //       faq.data.push(newQuestion);
+    //     } else {
+    //       state.faqs.push({ title, data: [newQuestion] });
+    //     }
+    //   },
+    //   updateQuestion: (
+    //     state,
+    //     action: PayloadAction<{
+    //       title: string;
+    //       oldQuestion: StaffState;
+    //       updatedQuestion: StaffState;
+    //     }>
+    //   ) => {
+    //     const { title, oldQuestion, updatedQuestion } = action.payload;
+    //     const { question, answer } = updatedQuestion;
+    //     const faqIndex = state.faqs.findIndex((faq) => faq.title === title);
+    //     if (faqIndex !== -1) {
+    //       const questionIndex = state.faqs[faqIndex].data.findIndex(
+    //         (q) => q.question === oldQuestion.question
+    //       );
+    //       if (questionIndex !== -1) {
+    //         state.faqs[faqIndex].data[questionIndex] = {
+    //           question,
+    //           answer,
+    //         };
+    //       }
+    //     }
+    //   },
+    //   deleteQuestion: (
+    //     state,
+    //     action: PayloadAction<{ title: string; deletedQuestion: datatate }>
+    //   ) => {
+    //     const { title, deletedQuestion } = action.payload;
+    //     const faq = state.faqs.find((faq) => faq.title === title);
+    //     if (faq) {
+    //       faq.data = faq.data.filter(
+    //         (q) =>
+    //           q.question !== deletedQuestion.question ||
+    //           q.answer !== deletedQuestion.answer
+    //       );
+    //     }
+    //   },
+    // },
+  },
   extraReducers: (builder) => {
     builder.addCase(getHopitalStaff.fulfilled, (state, action) => {
       if (action.payload && action.payload.length > 0) {

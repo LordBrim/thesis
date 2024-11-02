@@ -14,14 +14,14 @@ import { getHopitalStaff } from "rtx/slices/staff";
 export default function ManageStaff() {
   const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getHopitalStaff(user.hospitalName));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getHopitalStaff(user.hospitalName));
+  // }, []);
   const { staff } = useSelector((state: RootState) => state.staff);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: " Staff",
+      headerTitle: "Staff",
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
@@ -36,7 +36,9 @@ export default function ManageStaff() {
         <IconBtn
           icon="plus"
           size={18}
-          onPress={() => router.push("(app)/(admin)/(home)/manage-faq-create")}
+          onPress={() =>
+            router.push("/(app)/(admin)/(home)/manage-staff-create")
+          }
         />
       ),
     });
@@ -90,7 +92,7 @@ export function StaffCard({ uuid, displayName, email }: IStaffCard) {
     // });
   };
   // const dispatch = useDispatch();
-  const handleDelete = (title, deletedQuestion) => {
+  const handleDelete = (uuid) => {
     // dispatch(
     //   deleteQuestion({
     //     title: title,

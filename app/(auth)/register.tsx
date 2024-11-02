@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { Alert, Image } from "react-native";
+import { Alert } from "react-native";
 import {
   View,
   Text,
@@ -12,13 +12,7 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-btr";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import {
-  SIZES,
-  FONT,
-  COLORS,
-  HORIZONTAL_SCREEN_MARGIN,
-  GS,
-} from "../../constants";
+import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN, GS } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { firestoreOperations } from "../../firestore-services";
@@ -26,9 +20,6 @@ import { FIREBASE_AUTH } from "../../firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import LinkBtn from "components/common/LinkBtn";
-import LifelineLogo from "components/common/LifelineLogo";
-import Title from "components/common/texts/Title";
-import { setDoc, doc } from "firebase/firestore";
 import { Dimensions } from "react-native";
 
 export default function RegisterScreen() {

@@ -216,6 +216,8 @@ export default function LoginScreen() {
       href: "/(app)/(super)/(tabs)",
       icon: <FontAwesome6 name="user-tie" size={size} color={COLORS.primary} />,
       title: "Super Admin",
+      email: "andrei@mail.com",
+      password: "123456",
     },
     {
       href: "/(app)/(admin)/(tabs)",
@@ -223,6 +225,8 @@ export default function LoginScreen() {
         <FontAwesome6 name="user-doctor" size={size} color={COLORS.primary} />
       ),
       title: "Admin",
+      email: "uerm@mail.com",
+      password: "123456",
     },
     {
       href: "/(app)/(staff)/(tabs)",
@@ -230,6 +234,8 @@ export default function LoginScreen() {
         <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
       ),
       title: "Staff",
+      email: "user6@mail.com",
+      password: "123456",
     },
     {
       href: "/(app)/(user)/(tabs)",
@@ -237,6 +243,8 @@ export default function LoginScreen() {
         <FontAwesome6 name="user-injured" size={size} color={COLORS.primary} />
       ),
       title: "User",
+      email: "eloyms26@gmail.com",
+      password: "123456",
     },
   ];
 
@@ -346,6 +354,7 @@ export default function LoginScreen() {
                   <Pressable
                     style={easyLogin.press}
                     android_ripple={{ radius: 200 }}
+                    onPress={() => login(item.email, item.password)}
                   >
                     {item.icon}
                     <Text style={easyLogin.text}>{item.title}</Text>

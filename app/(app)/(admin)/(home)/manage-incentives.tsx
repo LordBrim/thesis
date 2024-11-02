@@ -5,6 +5,7 @@ import {
   FlatList,
   Image,
   ScrollView,
+  Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
@@ -47,8 +48,21 @@ export default function ManageIncentives() {
       incentive: uniqueIncentives.length > 0 ? uniqueIncentives.join("") : null,
     };
   });
-  const [isRepeatable, setIsRepeatable] = useState(incentives.repeatable);
-  const length = data.length;
+  const [simulation, setSimulation] = useState(incentives.incentivesNo);
+
+  const handleSimulation = () => {
+    setSimulation(-1);
+    const incrementSimulation = () => {
+      setSimulation((prev) => {
+        if (prev < incentives.incentivesNo) {
+          setTimeout(incrementSimulation, 1000);
+          return prev + 1;
+        }
+        return prev;
+      });
+    };
+    incrementSimulation();
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -109,7 +123,9 @@ export default function ManageIncentives() {
               <Fontisto
                 name="blood"
                 size={size}
-                color={index + 1 <= 8 ? COLORS.primary : COLORS.grayMid}
+                color={
+                  index + 1 <= simulation ? COLORS.primary : COLORS.grayMid
+                }
               />
               {item.incentive && (
                 <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
@@ -119,9 +135,9 @@ export default function ManageIncentives() {
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          numColumns={length > 5 ? Math.round(data.length / 2) : 5}
+          numColumns={data.length > 5 ? Math.round(data.length / 2) : 5}
           contentContainerStyle={[
-            length >= 4 ? styles.stockCenter : styles.stockLeft,
+            data.length >= 4 ? styles.stockCenter : styles.stockLeft,
             {
               justifyContent: "space-between",
               gap: 12,
@@ -133,6 +149,7 @@ export default function ManageIncentives() {
           }}
           scrollEnabled={false}
         />
+        <Button onPress={handleSimulation} title="Simulation" />
       </ScrollView>
     </SafeAreaView>
   );

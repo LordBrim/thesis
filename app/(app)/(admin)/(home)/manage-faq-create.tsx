@@ -5,8 +5,6 @@ import {
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
-  Pressable,
-  Button,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { COLORS } from "constants/theme";

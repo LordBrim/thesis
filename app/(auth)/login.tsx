@@ -350,16 +350,14 @@ export default function LoginScreen() {
             data={gridBtns}
             renderItem={({ item }) => (
               <View style={[easyLogin.view]}>
-                <Link asChild replace href={item.href}>
-                  <Pressable
-                    style={easyLogin.press}
-                    android_ripple={{ radius: 200 }}
-                    onPress={() => login(item.email, item.password)}
-                  >
-                    {item.icon}
-                    <Text style={easyLogin.text}>{item.title}</Text>
-                  </Pressable>
-                </Link>
+                <Pressable
+                  style={easyLogin.press}
+                  android_ripple={{ radius: 200 }}
+                  onPress={() => login(item.email, item.password)}
+                >
+                  {item.icon}
+                  <Text style={easyLogin.text}>{item.title}</Text>
+                </Pressable>
               </View>
             )}
             keyExtractor={(item) => item.href}

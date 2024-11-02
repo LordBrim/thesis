@@ -15,6 +15,7 @@ import RadioGroup from "react-native-radio-buttons-group";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 import IconModal from "../../(common)/custom-album-modal";
+
 export default function RequestBloodunitScreen({
   patientName,
   setPatientName,
@@ -34,6 +35,8 @@ export default function RequestBloodunitScreen({
   setPackedRequest,
   packedRequestInfo,
   setPackedRequestInfo,
+  errors,
+  setErrors,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [radioButtons, setRadioButtons] = useState([
@@ -43,6 +46,7 @@ export default function RequestBloodunitScreen({
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const bloodTypePickerRef = useRef();
   const relationshipPickerRef = useRef();
+  const transfusionPickerRef = useRef();
 
   const relationships = [
     { label: "Myself", value: "myself" },
@@ -70,15 +74,13 @@ export default function RequestBloodunitScreen({
     if (type === "camera") {
       result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
+        allowsEditing: false,
         quality: 1,
       });
     } else {
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
+        allowsEditing: false,
         quality: 1,
       });
     }
@@ -108,6 +110,32 @@ export default function RequestBloodunitScreen({
     }
   };
 
+  const validateField = (field, value) => {
+    let error = "";
+    switch (field) {
+      case "patientName":
+        if (!value) error = "Patient's name is required.";
+        break;
+      case "selectedBloodType":
+        if (!value) error = "Blood type is required.";
+        break;
+      case "selectedRelationship":
+        if (!value) error = "Relationship to patient is required.";
+        break;
+      case "contactNumber":
+        if (!value) error = "Contact number is required.";
+        else if (!/^\d{3} \d{3} \d{4}$/.test(value))
+          error = "Contact number is invalid.";
+        break;
+      case "emergencyReason":
+        if (isEmergency && !value) error = "Emergency reason is required.";
+        break;
+      default:
+        break;
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+  };
+
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={styles.scrollViewContainer}
@@ -130,16 +158,25 @@ export default function RequestBloodunitScreen({
         <Text style={styles.header}>Patient's Name</Text>
         <TextInput
           style={styles.inputContainer}
-          onChangeText={setPatientName}
+          onChangeText={(text) => {
+            setPatientName(text);
+            validateField("patientName", text);
+          }}
           value={patientName}
           placeholder="Enter patient's name"
         />
+        {errors.patientName && (
+          <Text style={styles.errorText}>{errors.patientName}</Text>
+        )}
         <Text style={styles.header}>Blood Type</Text>
         <View style={styles.picker}>
           <Picker
             ref={bloodTypePickerRef}
             selectedValue={selectedBloodType}
-            onValueChange={(itemValue) => setSelectedBloodType(itemValue)}
+            onValueChange={(itemValue) => {
+              setSelectedBloodType(itemValue);
+              validateField("selectedBloodType", itemValue);
+            }}
             mode="dropdown"
           >
             <Picker.Item label="A+" value="A+" />
@@ -152,12 +189,14 @@ export default function RequestBloodunitScreen({
             <Picker.Item label="O-" value="O-" />
           </Picker>
         </View>
+        {errors.selectedBloodType && (
+          <Text style={styles.errorText}>{errors.selectedBloodType}</Text>
+        )}
         <Text style={styles.header}>Transfusion</Text>
-
         <View style={styles.picker}>
           <Picker
-            ref={bloodTypePickerRef}
-            selectedValue={selectedBloodType}
+            ref={transfusionPickerRef}
+            selectedValue={packedRequest}
             onValueChange={(itemValue) => setPackedRequest(itemValue)}
             mode="dropdown"
           >
@@ -193,7 +232,10 @@ export default function RequestBloodunitScreen({
           <Picker
             ref={relationshipPickerRef}
             selectedValue={selectedRelationship}
-            onValueChange={(itemValue) => setSelectedRelationship(itemValue)}
+            onValueChange={(itemValue) => {
+              setSelectedRelationship(itemValue);
+              validateField("selectedRelationship", itemValue);
+            }}
             mode="dropdown"
           >
             {relationships.map((relationship) => (
@@ -205,6 +247,9 @@ export default function RequestBloodunitScreen({
             ))}
           </Picker>
         </View>
+        {errors.selectedRelationship && (
+          <Text style={styles.errorText}>{errors.selectedRelationship}</Text>
+        )}
         <Text style={styles.header}>Is this request an Emergency?</Text>
         <RadioGroup
           radioButtons={[
@@ -254,12 +299,20 @@ export default function RequestBloodunitScreen({
           containerStyle={styles.radioGroup}
         />
         {selectedId === "yes" && (
-          <TextInput
-            style={styles.inputContainer}
-            onChangeText={setEmergencyReason}
-            value={emergencyReason}
-            placeholder="Reasons for emergency"
-          />
+          <>
+            <TextInput
+              style={styles.inputContainer}
+              onChangeText={(text) => {
+                setEmergencyReason(text);
+                validateField("emergencyReason", text);
+              }}
+              value={emergencyReason}
+              placeholder="Reasons for emergency"
+            />
+            {errors.emergencyReason && (
+              <Text style={styles.errorText}>{errors.emergencyReason}</Text>
+            )}
+          </>
         )}
 
         <Text style={styles.header}>Contact Information</Text>
@@ -267,13 +320,19 @@ export default function RequestBloodunitScreen({
           <Text style={styles.phonePrefix}>+63</Text>
           <TextInput
             style={[styles.inputContainer, styles.phoneInput]}
-            onChangeText={handleContactNumberChange}
+            onChangeText={(text) => {
+              handleContactNumberChange(text);
+              validateField("contactNumber", text);
+            }}
             value={contactNumber}
             placeholder="912 345 6789"
             keyboardType="phone-pad"
             maxLength={12}
           />
         </View>
+        {errors.contactNumber && (
+          <Text style={styles.errorText}>{errors.contactNumber}</Text>
+        )}
 
         <Text style={styles.header}>Upload Blood Request Form</Text>
         <CustomButtonWithIcon
@@ -433,5 +492,11 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginTop: 10,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -10,
+    marginBottom: 10,
   },
 });

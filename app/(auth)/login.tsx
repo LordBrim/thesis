@@ -368,56 +368,6 @@ export default function LoginScreen() {
           />
         </View>
         {/* TODO: Remove on showcase */}
-
-        {/* <View
-        style={{
-          gap: 16,
-        }}
-      >
-        <View
-          style={{
-            position: "relative",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <View
-            style={{
-              width: "100%",
-              position: "absolute",
-              top: 10,
-              left: 0,
-              right: 0,
-              justifyContent: "center",
-              alignItems: "center",
-              borderWidth: 0.5,
-              borderColor: COLORS.grayMid,
-            }}
-          />
-          <Text style={{ backgroundColor: COLORS.background }}>
-            {" "}
-            Sign In With{" "}
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 32,
-            width: "100%",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            source={require("../../assets/icons/facebook.png")}
-            style={{ width: 34, height: 34 }}
-          />
-          <Image
-            source={require("../../assets/icons/google.png")}
-            style={{ width: 34, height: 34 }}
-          />
-        </View>
-      </View> */}
-
         <View style={styles.cBottom}>
           <Text>Don't have an account? </Text>
           <LinkBtn label="Register" href="/register" underline />

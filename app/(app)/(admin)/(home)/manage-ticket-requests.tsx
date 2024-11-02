@@ -297,7 +297,7 @@ function ManageTicketsRequestsArchived() {
 export function Card({ ticket }: CardProps) {
   const handlePress = () => {
     router.push({
-      pathname: "(app)/(admin)/(home)/manage-ticket-review",
+      pathname: "(app)/(admin)/(home)/manage-ticket-request-review",
       params: {
         ticket: JSON.stringify(ticket), // Serialize the ticket data
       },

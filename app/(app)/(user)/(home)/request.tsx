@@ -18,22 +18,31 @@ import { FIREBASE_STORAGE } from "../../../../firebase-config";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+interface Errors {
+  patientName?: string;
+  selectedBloodType?: string;
+  selectedRelationship?: string;
+  contactNumber?: string;
+  emergencyReason?: string;
+}
+
 export default function Request() {
   const stepCount = 2;
   let [screenIndex, setScreenIndex] = useState(0);
 
   const [patientName, setPatientName] = useState("");
-  const [selectedBloodType, setSelectedBloodType] = useState("");
-  const [selectedRelationship, setSelectedRelationship] = useState("");
+  const [selectedBloodType, setSelectedBloodType] = useState("A+");
+  const [selectedRelationship, setSelectedRelationship] = useState("Myself");
   const [contactNumber, setContactNumber] = useState("");
   const [imageUri, setImageUri] = useState("");
   const [isEmergency, setIsEmergency] = useState(false);
   const [emergencyReason, setEmergencyReason] = useState("");
 
-  const [packedRequest, setPackedRequest] = useState(false);
+  const [packedRequest, setPackedRequest] = useState("Whole Blood");
   const [packedRequestInfo, setPackedRequestInfo] = useState("");
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [errors, setErrors] = useState<Errors>({});
 
   const prev = () => {
     if (screenIndex > 0) {
@@ -48,12 +57,66 @@ export default function Request() {
       setScreenIndex(++screenIndex);
     }
   };
+
   const onModalClose = () => {
     setModalVisible(false);
     router.navigate("(app)/(tabs)");
   };
 
+  const validateField = (field: keyof Errors, value: string) => {
+    let error = "";
+    switch (field) {
+      case "patientName":
+        if (!value) error = "Patient's name is required.";
+        break;
+      case "selectedBloodType":
+        if (!value) error = "Blood type is required.";
+        break;
+      case "selectedRelationship":
+        if (!value) error = "Relationship to patient is required.";
+        break;
+      case "contactNumber":
+        if (!value) error = "Contact number is required.";
+        else if (!/^\d{3} \d{3} \d{4}$/.test(value))
+          error = "Contact number is invalid.";
+        break;
+      case "emergencyReason":
+        if (isEmergency && !value) error = "Emergency reason is required.";
+        break;
+      default:
+        break;
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+  };
+
+  const validateForm = () => {
+    validateField("patientName", patientName);
+    validateField("selectedBloodType", selectedBloodType);
+    validateField("selectedRelationship", selectedRelationship);
+    validateField("contactNumber", contactNumber);
+    validateField("emergencyReason", emergencyReason);
+
+    const invalidFields = Object.keys(errors).filter(
+      (key) => errors[key as keyof Errors]
+    );
+
+    return {
+      isValid: invalidFields.length === 0,
+      invalidFields,
+    };
+  };
+
   const handleSubmit = async () => {
+    const { isValid, invalidFields } = validateForm();
+
+    if (!isValid) {
+      Alert.alert(
+        "Validation Error",
+        `Please fill in all required fields: ${invalidFields.join(", ")}`
+      );
+      return;
+    }
+
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -149,13 +212,25 @@ export default function Request() {
         </View>
         <RequestBloodunitScreen
           patientName={patientName}
-          setPatientName={setPatientName}
+          setPatientName={(value) => {
+            setPatientName(value);
+            validateField("patientName", value);
+          }}
           selectedBloodType={selectedBloodType}
-          setSelectedBloodType={setSelectedBloodType}
+          setSelectedBloodType={(value) => {
+            setSelectedBloodType(value);
+            validateField("selectedBloodType", value);
+          }}
           selectedRelationship={selectedRelationship}
-          setSelectedRelationship={setSelectedRelationship}
+          setSelectedRelationship={(value) => {
+            setSelectedRelationship(value);
+            validateField("selectedRelationship", value);
+          }}
           contactNumber={contactNumber}
-          setContactNumber={setContactNumber}
+          setContactNumber={(value) => {
+            setContactNumber(value);
+            validateField("contactNumber", value);
+          }}
           packedRequest={packedRequest}
           setPackedRequest={setPackedRequest}
           packedRequestInfo={packedRequestInfo}
@@ -163,9 +238,17 @@ export default function Request() {
           setImageUri={setImageUri}
           imageUri={imageUri}
           isEmergency={isEmergency}
-          setIsEmergency={setIsEmergency}
+          setIsEmergency={(value) => {
+            setIsEmergency(value);
+            validateField("emergencyReason", emergencyReason);
+          }}
           emergencyReason={emergencyReason}
-          setEmergencyReason={setEmergencyReason}
+          setEmergencyReason={(value) => {
+            setEmergencyReason(value);
+            validateField("emergencyReason", value);
+          }}
+          errors={errors}
+          setErrors={setErrors}
         />
       </Carousel>
 

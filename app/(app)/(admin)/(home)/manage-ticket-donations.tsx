@@ -1,5 +1,12 @@
 import { useNavigation } from "expo-router";
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  RefreshControl,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
 import IconBtn from "components/common/IconButton";
@@ -22,6 +29,7 @@ import moment from "moment";
 import Divider from "constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { onAuthStateChanged } from "firebase/auth";
+import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 const Tab = createMaterialTopTabNavigator();
 
 interface TicketState {
@@ -108,6 +116,7 @@ function ManageTicketsDonationsPending() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<string>("closest");
+  const [refreshing, setRefreshing] = useState(false); // Refresh state
 
   const [hospitalName, setHospitalName] = useState<string | null>(null);
 
@@ -127,86 +136,76 @@ function ManageTicketsDonationsPending() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      if (!hospitalName) return; // Wait until hospitalName is set
-      console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
+  const fetchTickets = async () => {
+    if (!hospitalName) return; // Wait until hospitalName is set
+    console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
 
-      try {
-        const q = query(
-          collection(FIRESTORE_DB, "ticketDonate"),
-          where("type", "==", "appointment"),
-          where("selectedHospital", "==", hospitalName) // Filter by selectedHospital
-        );
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "ticketDonate"),
+        where("type", "==", "appointment"),
+        where("selectedHospital", "==", hospitalName), // Filter by selectedHospital
+        where("status", "==", "pending") // Filter by pending status
+      );
 
-        const querySnapshot = await getDocs(q);
-        const ticketsData = await Promise.all(
-          querySnapshot.docs.map(
-            async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
-              const data = docSnapshot.data() as TicketData;
-              try {
-                const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
-                const userDocSnapshot = await getDoc(userDocRef);
-                const userData = userDocSnapshot.exists()
-                  ? (userDocSnapshot.data() as UserData)
-                  : ({} as UserData);
+      const querySnapshot = await getDocs(q);
+      const ticketsData = await Promise.all(
+        querySnapshot.docs.map(
+          async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+            const data = docSnapshot.data() as TicketData;
+            try {
+              const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
+              const userDocSnapshot = await getDoc(userDocRef);
+              const userData = userDocSnapshot.exists()
+                ? (userDocSnapshot.data() as UserData)
+                : ({} as UserData);
 
-                const ticket = {
-                  id: docSnapshot.id,
-                  name: userData.displayName ?? "Unknown",
-                  status: data.status ?? "pending",
-                  userUID: data.userUID,
-                  userEmail: userData.email ?? "Unknown",
-                  age: userData.age,
-                  avatarUrl: userData.avatarUrl,
-                  city: userData.city,
-                  contactDetails: userData.contactDetails,
-                  displayName: userData.displayName,
-                  sex: userData.sex,
-                  message: data.message,
-                  selectedDate: data.selectedDate,
-                  selectedHospital: data.selectedHospital,
-                  selectedTime: data.selectedTime,
-                  ticketNumber: data.ticketNumber,
-                  type: "appointment",
-                  checklistData: data.checklistData,
-                  // Map other properties as needed
-                } as TicketState;
+              const ticket = {
+                id: docSnapshot.id,
+                name: userData.displayName ?? "Unknown",
+                status: data.status ?? "pending",
+                userUID: data.userUID,
+                userEmail: userData.email ?? "Unknown",
+                age: userData.age,
+                avatarUrl: userData.avatarUrl,
+                city: userData.city,
+                contactDetails: userData.contactDetails,
+                displayName: userData.displayName,
+                sex: userData.sex,
+                message: data.message,
+                selectedDate: data.selectedDate,
+                selectedHospital: data.selectedHospital,
+                selectedTime: data.selectedTime,
+                ticketNumber: data.ticketNumber,
+                type: "appointment",
+                checklistData: data.checklistData,
+                // Map other properties as needed
+              } as TicketState;
 
-                const ticketDate = moment(
-                  `${ticket.selectedDate} ${ticket.selectedTime}`,
-                  "YYYY-MM-DD h:mm A"
-                );
-
-                if (
-                  ticketDate.isBefore(moment()) ||
-                  ticket.status !== "pending"
-                ) {
-                  return null;
-                } else {
-                  return ticket;
-                }
-              } catch (error) {
-                console.error(
-                  `Error fetching user data for ticket ${docSnapshot.id}:`,
-                  error
-                );
-                return null;
-              }
+              return ticket;
+            } catch (error) {
+              console.error(
+                `Error fetching user data for ticket ${docSnapshot.id}:`,
+                error
+              );
+              return null;
             }
-          )
-        );
-        setTickets(
-          ticketsData.filter((ticket) => ticket !== null) as TicketState[]
-        );
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching tickets: ", error);
-        setError("Failed to load tickets");
-        setLoading(false);
-      }
-    };
+          }
+        )
+      );
+      console.log("Fetched tickets:", ticketsData); // Debugging log
+      setTickets(
+        ticketsData.filter((ticket) => ticket !== null) as TicketState[]
+      );
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching tickets: ", error);
+      setError("Failed to load tickets");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTickets();
   }, [hospitalName]);
 
@@ -236,6 +235,17 @@ function ManageTicketsDonationsPending() {
     });
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetchTickets(); // Re-fetch the tickets
+    } catch (error) {
+      console.error("Error refreshing tickets:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.centeredContainer}>
@@ -254,18 +264,51 @@ function ManageTicketsDonationsPending() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: 24 }}>
-          Pending Appointments:
-        </Text>
-        <View style={styles.filterContainer}>
-          <Picker
-            selectedValue={sortOption}
-            style={styles.picker}
-            onValueChange={(itemValue) => setSortOption(itemValue)}
-          >
-            <Picker.Item label="Closest" value="closest" />
-            <Picker.Item label="Farthest" value="farthest" />
-          </Picker>
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignContent: "center",
+            width: "100%",
+          }}
+        >
+          <CustomButtonWithIcon
+            title={"See all appointments"}
+            buttonStyle={{
+              width: "100%",
+              backgroundColor: COLORS.primary,
+              padding: 10,
+              borderRadius: 5,
+              alignItems: "center",
+              justifyContent: "center",
+              marginVertical: 10,
+            }}
+            icon={"calendar"}
+            iconColor={"#fff"}
+            iconSize={20}
+            onPress={() => {
+              router.push({
+                pathname: "(app)/(admin)/(home)/manage-ticket-all-appointments",
+                params: {
+                  tickets: JSON.stringify(tickets), // Serialize the tickets data
+                },
+              });
+            }}
+            textStyle={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
+          />
+          <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+            Pending Appointments:
+          </Text>
+          <View style={styles.filterContainer}>
+            <Picker
+              selectedValue={sortOption}
+              style={styles.picker}
+              onValueChange={(itemValue) => setSortOption(itemValue)}
+            >
+              <Picker.Item label="Closest" value="closest" />
+              <Picker.Item label="Farthest" value="farthest" />
+            </Picker>
+          </View>
         </View>
       </View>
       <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
@@ -276,6 +319,9 @@ function ManageTicketsDonationsPending() {
         data={tickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}

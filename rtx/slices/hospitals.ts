@@ -218,13 +218,10 @@ const initialState: HospitalsState = {
         },
       ],
       incentives: {
-        incentivesNo: 9,
+        incentivesNo: 4,
         repeatable: true,
-        data: [
-          { incentiveNo: 9, incentive: '"Priority"' },
-          { incentiveNo: 3, incentive: "T-Shirt" },
-        ],
-        info: 'To obtain "priority" you must have successful donations every 3 months',
+        data: [{ incentiveNo: 4, incentive: '"Priority"' }],
+        info: 'To obtain "priority" you must have successful donations every 3 months for 1 year.',
       },
     },
   ],

@@ -17,7 +17,10 @@ import { AppDispatch, RootState } from "app/store";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import IconBtn from "components/common/IconButton";
 import UpdatesIncentives from "app/(app)/(user)/(updates)/updates-incentives";
-import { updateIncentives } from "rtx/slices/hospitals";
+import {
+  updateHospitalIncentivesByUuid,
+  updateIncentives,
+} from "rtx/slices/hospitals";
 
 interface IncentiveData {
   position: number;
@@ -87,6 +90,11 @@ export default function ManageIncentivesUpdate() {
         },
       })
     );
+    updateHospitalIncentivesByUuid(hospital.uuid.toString(), {
+      info: updatedInfo,
+      number: parseInt(updatedNumber),
+      data: getIncentivesDataArray(),
+    });
     router.back();
   };
   const handleAddInput = (): void => {

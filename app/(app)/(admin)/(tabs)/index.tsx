@@ -20,7 +20,7 @@ export default function HomeTab() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getCurrentUser());
-    // dispatch(getHospitals());
+    dispatch(getHospitals());
   }, []);
   return (
     <SafeAreaView style={styles.container}>

@@ -133,6 +133,37 @@ export const updateHospitalStockByUuid = async (
   }
 };
 
+export const updateHospitalIncentivesByUuid = async (
+  uuid: string,
+  updatedIncentives: IncentiveState
+) => {
+  try {
+    const hospitalDocRef = doc(collection(FIRESTORE_DB, "hospital"), uuid);
+    const hospitalDoc = await getDoc(hospitalDocRef);
+    if (!hospitalDoc.exists()) {
+      console.error(`No hospital found with UUID ${uuid}`);
+      return;
+    }
+    const hospitalData = hospitalDoc.data() as HospitalState;
+    const currentIncentives = hospitalData.incentives || {
+      info: "",
+      number: 0,
+      data: [],
+    };
+    await updateDoc(hospitalDocRef, {
+      incentives: {
+        ...currentIncentives,
+        ...updatedIncentives,
+      },
+    });
+    console.log(
+      `Incentives for hospital with UUID ${uuid} updated successfully.`
+    );
+  } catch (error) {
+    console.error("Error updating hospital incentives:", error);
+  }
+};
+
 interface HospitalsState {
   hospitals: Array<HospitalState>;
 }

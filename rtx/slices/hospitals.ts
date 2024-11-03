@@ -36,6 +36,11 @@ export const getHospitals = createAsyncThunk("getHospitals", async () => {
         available: item.available,
         type: item.type,
       })),
+      incentives: {
+        info: doc.data().incentives.info,
+        number: doc.data().incentives.number,
+        data: doc.data().incentives.data || [],
+      },
     }));
     return hospitals;
   } catch (error) {

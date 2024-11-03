@@ -143,14 +143,6 @@ export default function EventDetailsScreen() {
         <Button mode="contained" onPress={navigateToMaps} icon="map-marker">
           Navigate to Location
         </Button>
-        <Button
-          mode="outlined"
-          onPress={() => {}}
-          icon="calendar-check"
-          style={styles.secondaryButton}
-        >
-          Register Now
-        </Button>
       </View>
     </View>
   );

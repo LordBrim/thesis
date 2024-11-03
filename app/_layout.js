@@ -1,7 +1,7 @@
 import { Stack } from "expo-router/stack";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { store } from "app/store"; // Ensure correct import path
 import Toastable from "react-native-toastable";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { TouchableOpacity, View } from "react-native";

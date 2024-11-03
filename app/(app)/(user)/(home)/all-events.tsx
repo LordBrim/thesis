@@ -32,13 +32,18 @@ interface Event {
   endDate: string;
   endTime: string;
   imageUrl: string;
+  latitude: string; // Ensure latitude is included
+  longitude: string; // Ensure longitude is included
 }
 
 export default function AllEventsScreen() {
   const dispatch: AppDispatch = useDispatch(); // Use the correct type for dispatch
-  const { events, pastEvents, loading, error } = useSelector(
-    (state: RootState) => state.events
-  );
+  const {
+    events = [],
+    pastEvents = [],
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.events);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -81,6 +86,8 @@ export default function AllEventsScreen() {
         time={`${moment(item.endDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
           item.endTime
         }`}
+        latitude={item.latitude}
+        longitude={item.longitude}
       />
     </View>
   );
@@ -99,6 +106,8 @@ export default function AllEventsScreen() {
         time={`${moment(item.endDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
           item.endTime
         }`}
+        latitude={item.latitude}
+        longitude={item.longitude}
       />
     </View>
   );
@@ -112,7 +121,7 @@ export default function AllEventsScreen() {
         <Text style={styles.buttonText}>View Past Events</Text>
       </TouchableOpacity>
       <FlatList
-        data={events}
+        data={events} // Ensure events is an array
         renderItem={renderEventItem} // Use the renderEventItem function
         keyExtractor={(item) => item.id}
         numColumns={1}
@@ -132,7 +141,7 @@ export default function AllEventsScreen() {
         <View style={styles.modalView}>
           <Text style={styles.modalTitle}>Past Events</Text>
           <FlatList
-            data={sortedPastEvents} // Use the sortedPastEvents array
+            data={sortedPastEvents} // Ensure sortedPastEvents is an array
             renderItem={renderPastEventItem} // Use the renderPastEventItem function
             keyExtractor={(item) => item.id}
             numColumns={1}

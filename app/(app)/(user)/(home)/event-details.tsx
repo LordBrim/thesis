@@ -11,6 +11,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../../firebase-config"; // Adjust the path as needed
 import { Card, Button, Icon, ProgressBar } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 export default function EventDetailsScreen() {
   const {
     title,
@@ -33,6 +34,7 @@ export default function EventDetailsScreen() {
     latitude,
     longitude
   );
+
   useEffect(() => {
     const fetchImageUri = async () => {
       if (documentId) {
@@ -56,21 +58,25 @@ export default function EventDetailsScreen() {
   }, [documentId]);
 
   const navigateToMaps = () => {
-    router.push({
-      pathname: "/(app)/(maps)/hospitalMapView",
-      params: {
-        event: JSON.stringify({
-          latitude: latitude,
-          longitude: longitude,
-          title: title,
-          description: description,
-          startDate: date,
-          startTime: time,
-          address: address,
-          mapCSS: JSON.stringify(mapCSS),
-        }),
-      },
-    });
+    if (latitude && longitude) {
+      router.push({
+        pathname: "/(app)/(maps)/hospitalMapView",
+        params: {
+          event: JSON.stringify({
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            title: title,
+            description: description,
+            startDate: date,
+            startTime: time,
+            address: address,
+            mapCSS: JSON.stringify(mapCSS),
+          }),
+        },
+      });
+    } else {
+      console.log("Latitude or Longitude is missing");
+    }
   };
 
   const donorsCount = 120;
@@ -79,7 +85,7 @@ export default function EventDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{ height: "100%" }}>
         <Card>
           {imageUri ? (
             <Card.Cover source={{ uri: imageUri }} />
@@ -250,7 +256,7 @@ const mapCSS = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     elevation: 5,
-    borderColor: COLORS.gray2,
+    borderColor: COLORS.grayDark,
   },
   buttonHospitalPressed: {
     width: "85%",
@@ -260,12 +266,12 @@ const mapCSS = StyleSheet.create({
     borderWidth: 2,
     elevation: 5,
     borderRadius: 10,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.grayDark,
   },
   textHospital: {
     fontSize: SIZES.large,
     textAlign: "left",
-    color: COLORS.black,
+    color: COLORS.grayDark,
   },
   textHospitalPressed: {
     fontSize: SIZES.large,
@@ -280,7 +286,7 @@ const mapCSS = StyleSheet.create({
     position: "absolute",
     bottom: "10%",
     alignSelf: "center",
-    backgroundColor: COLORS.red,
+    backgroundColor: COLORS.primary,
   },
   markerContainer: {
     flexDirection: "row",
@@ -305,7 +311,7 @@ const mapCSS = StyleSheet.create({
     position: "absolute",
     backgroundColor: "white",
     borderRadius: 10,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.grayDark,
     borderWidth: 1,
     width: 100,
     shadowColor: "black",

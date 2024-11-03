@@ -219,7 +219,11 @@ const initialState: HospitalsState = {
       incentives: {
         info: 'To obtain "priority" you must have successful donations every 3 months for 1 year.',
         number: 4,
-        data: [{ position: 4, incentive: '"Priority"' }],
+        data: [
+          { incentive: '"Priority"', position: 4 },
+          { incentive: "T-Shirt", position: 2 },
+          { incentive: "Meatloaf", position: 5 },
+        ],
       },
     },
   ],
@@ -279,6 +283,21 @@ export const hospitalsSlice = createSlice({
         }));
       }
     },
+    updateIncentives: (
+      state,
+      action: PayloadAction<{
+        uuid: string;
+        updatedIncentives: IncentiveState;
+      }>
+    ) => {
+      const { uuid, updatedIncentives } = action.payload;
+      const hospitalIndex = state.hospitals.findIndex(
+        (hospital) => hospital.uuid === uuid
+      );
+      if (hospitalIndex !== -1) {
+        state.hospitals[hospitalIndex].incentives = updatedIncentives;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getHospitals.fulfilled, (state, action) => {
@@ -296,6 +315,7 @@ export const {
   updateHospital,
   deleteHospital,
   updateHospitalStock,
+  updateIncentives,
 } = hospitalsSlice.actions;
 
 export const selectCount = (state: RootState) => state.hospitals.hospitals;

@@ -27,6 +27,8 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import IconModal from "../../(common)/custom-album-modal";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -45,7 +47,6 @@ export default function AccountTab({
   const [avatar, setAvatar] = useState(avatarUrl || null);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(true); // Loading state
 
   const signOutUser = async () => {
@@ -61,8 +62,12 @@ export default function AccountTab({
       await AsyncStorage.removeItem("user_role");
 
       router.replace("/login"); // Navigate to login screen after successful logout
-    } catch (error) {
-      console.error("Error signing out:", error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error signing out:", error.message);
+      } else {
+        console.error("Unknown error signing out");
+      }
     }
   };
 
@@ -128,72 +133,41 @@ export default function AccountTab({
     fetchUserData();
   }, []);
 
-  const handleImagePicker = async (source) => {
-    let result;
-    if (source === "camera") {
-      const permissionResult =
-        await ImagePicker.requestCameraPermissionsAsync();
-      if (permissionResult.granted === false) {
-        alert("Permission to access camera is required!");
-        return;
-      }
-      result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-    } else {
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (permissionResult.granted === false) {
-        alert("Permission to access camera roll is required!");
-        return;
-      }
-      result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-      });
-    }
-
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      const source = { uri: result.assets[0].uri };
-      console.log(source);
-      uploadImage(source.uri);
-    }
-    setModalVisible(false);
-  };
-
-  const uploadImage = async (uri) => {
+  const uploadImage = async (uri: string) => {
     const response = await fetch(uri);
     const blob = await response.blob();
     const user = FIREBASE_AUTH.currentUser;
-    const storageRef = ref(FIREBASE_STORAGE, `avatars/${user.uid}.jpg`);
 
-    uploadBytes(storageRef, blob).then(async (snapshot) => {
-      console.log("Uploaded a blob or file!");
-      const downloadURL = await getDownloadURL(storageRef);
-      setAvatar(downloadURL);
+    if (user) {
+      const storageRef = ref(FIREBASE_STORAGE, `avatars/${user.uid}.jpg`);
+      uploadBytes(storageRef, blob).then(async (snapshot) => {
+        console.log("Uploaded a blob or file!");
+        const downloadURL = await getDownloadURL(storageRef);
+        setAvatar(downloadURL);
 
-      // Update the user's avatar URL in Firestore
-      const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
-      const userDoc = await getDoc(userDocRef);
+        // Update the user's avatar URL in Firestore
+        const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
+        const userDoc = await getDoc(userDocRef);
 
-      if (userDoc.exists()) {
-        await updateDoc(userDocRef, {
-          avatarUrl: downloadURL,
-        });
-      } else {
-        await setDoc(userDocRef, {
-          avatarUrl: downloadURL,
-          email: user.email,
-          displayName: user.displayName,
-          role: "user", // or any default role you want to set
-        });
-      }
-    });
+        if (userDoc.exists()) {
+          await updateDoc(userDocRef, {
+            avatarUrl: downloadURL,
+          });
+        } else {
+          await setDoc(userDocRef, {
+            avatarUrl: downloadURL,
+            email: user.email,
+            displayName: user.displayName,
+            role: "user", // or any default role you want to set
+          });
+        }
+      });
+    } else {
+      console.error("No user is logged in.");
+    }
   };
+
+  const { user } = useSelector((state: RootState) => state.user);
 
   return (
     <ScrollView style={styles.container} overScrollMode="never">
@@ -207,7 +181,6 @@ export default function AccountTab({
                 ? { uri: avatar } // Firebase URL case
                 : require("../../../../assets/images/defaultAvatar.png") // Local image case
             }
-            onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
           />
         )}
         <View style={{ flex: 1, gap: 4 }}>
@@ -222,54 +195,10 @@ export default function AccountTab({
             </>
           ) : (
             <>
-              <Text style={styles.title}>{displayName}</Text>
-              <Text style={styles.subtitle}>{email}</Text>
+              <Text style={styles.title}>{user.displayName}</Text>
+              <Text style={styles.subtitle}>{user.email}</Text>
             </>
           )}
-        </View>
-      </View>
-
-      <View style={styles.donations}>
-        <View style={styles.donation}>
-          <Text
-            style={[
-              styles.title,
-              {
-                color: COLORS.text,
-                fontSize: SIZES.small,
-                textAlign: "center",
-              },
-            ]}
-          >
-            Donation Status:{"\n"}
-            {status ? (
-              <Text style={{ color: "green", fontSize: SIZES.large }}>
-                Available
-              </Text>
-            ) : (
-              <Text style={{ color: "red", fontSize: SIZES.large }}>
-                Locked{"\n"}(3 Months)
-              </Text>
-            )}
-          </Text>
-        </View>
-
-        <View style={styles.donation}>
-          <Text
-            style={[
-              styles.title,
-              {
-                color: COLORS.text,
-                fontSize: SIZES.small,
-                textAlign: "center",
-              },
-            ]}
-          >
-            Units Donated:{"\n"}
-            <Text style={{ fontSize: SIZES.large, color: COLORS.text }}>
-              25
-            </Text>
-          </Text>
         </View>
       </View>
 
@@ -332,11 +261,6 @@ export default function AccountTab({
           </Pressable>
         </View>
       </View>
-      <IconModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        handleImagePicker={handleImagePicker}
-      />
     </ScrollView>
   );
 }
@@ -366,28 +290,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  donations: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    overflow: "hidden",
-    backgroundColor: COLORS.background,
-    minHeight: 110,
-  },
-  donation: {
-    flex: 1,
-    alignItems: "center",
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 24,
-    borderColor: COLORS.slate100,
-  },
-  title: {
-    fontSize: SIZES.large,
-    fontWeight: "bold",
-    textTransform: "capitalize",
-    color: COLORS.primary,
-  },
+
   subtitle: {
     fontSize: SIZES.small,
     color: COLORS.text,
@@ -437,5 +340,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    fontSize: SIZES.large,
+    fontWeight: "bold",
+    textTransform: "capitalize",
+    color: COLORS.primary,
   },
 });

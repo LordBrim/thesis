@@ -46,6 +46,13 @@ export default function StackLayout() {
             headerTitle: getHeaderTitle(route),
           })}
         />
+        <Stack.Screen
+          name="(app)/(user)/(account)/profile"
+          options={({ route }) => ({
+            headerTitle: "Profile Settings",
+          })}
+        />
+        
         {/* User Level Home Screens */}
         <Stack.Screen name="(app)/(user)/(home)/request" />
         <Stack.Screen name="(app)/(user)/(home)/event-details" />
@@ -78,10 +85,17 @@ export default function StackLayout() {
         {/* Admin Level Home Screens */}
         <Stack.Screen name="(app)/(admin)/(home)/manage-staff" />
         {/* Account Screens */}
-        <Stack.Screen name="(app)/(user)/(account)/about" />
+        <Stack.Screen name="(app)/(user)/(account)/about" 
+          options={{
+            headerTitle: "About Us",
+          }}
+        />
         <Stack.Screen name="(app)/(user)/(account)/donation-history" />
-        <Stack.Screen name="(app)/(user)/(account)/help" />
-        <Stack.Screen name="(app)/(user)/(account)/profile" />
+        <Stack.Screen name="(app)/(user)/(account)/help" 
+          options={{
+            headerTitle: "Help",
+          }}
+        />
         <Stack.Screen name="(app)/(user)/(account)/settings" />
         {/* QR Code Screens */}
         <Stack.Screen name="(app)/(user)/(qr)/qr-scanner" />

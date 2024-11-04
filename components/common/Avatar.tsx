@@ -10,13 +10,13 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 type IAvatar = {
   avatarUrl: string | null;
-  onEdit: () => void;
+  onEdit?: () => void; // Make onEdit optional
 };
 
 export default function Avatar({ avatarUrl, onEdit }: IAvatar) {
   return (
     <View>
-      <Pressable onPress={onEdit} style={styles.container}>
+      <Pressable onPress={onEdit ? onEdit : undefined} style={styles.container}>
         <Image
           style={styles.image}
           source={
@@ -27,12 +27,14 @@ export default function Avatar({ avatarUrl, onEdit }: IAvatar) {
           resizeMode="cover"
         />
       </Pressable>
-      <MaterialIcons
-        name="edit"
-        size={24}
-        color="white"
-        style={styles.editIcon}
-      />
+      {onEdit && (
+        <MaterialIcons
+          name="edit"
+          size={24}
+          color="white"
+          style={styles.editIcon}
+        />
+      )}
     </View>
   );
 }

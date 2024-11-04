@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   },
   emptyDateText: {
     fontSize: 16,
-    color: COLORS.gray,
+    color: COLORS.grayDark,
     textAlign: "center", // Center align the text
     paddingHorizontal: 20, // Add padding for better readability
   },

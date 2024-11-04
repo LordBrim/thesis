@@ -200,8 +200,8 @@ const ProfileEditScreen = () => {
               image
                 ? { uri: image } // Show selected image if available
                 : avatar
-                  ? { uri: avatar } // Firebase URL case
-                  : require("../../../../assets/images/defaultAvatar.png") // Local image case
+                ? { uri: avatar } // Firebase URL case
+                : require("../../../../assets/images/defaultAvatar.png") // Local image case
             }
             onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
           />
@@ -335,7 +335,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    color: COLORS.secondary,
+    color: COLORS.text,
+    marginLeft: 20,
   },
   picker: {
     flex: 1,

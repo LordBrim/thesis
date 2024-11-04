@@ -7,6 +7,8 @@ import {
   SectionList,
   Pressable,
   TouchableOpacity,
+  Modal,
+  Image,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -25,24 +27,139 @@ import { AppDispatch, RootState } from "app/store";
 import { getFAQs } from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
 
+const FAQ_DATA = [
+  {
+    title: "GENERAL",
+    data: [
+      {
+        question: "Who can donate blood?",
+        answer:
+          "Generally, individuals aged 16-65 can donate blood, provided they meet the eligibility criteria. Minors are required to provide written parental consent.",
+      },
+      {
+        question:
+          "I have health conditions that may affect my eligibility. Can I still donate blood?",
+        answer:
+          "You can still schedule a donation appointment at your preferred hospital. Authorized hospital staff will conduct a comprehensive screening to determine your eligibility to donate.",
+      },
+      {
+        question: "How should I prepare for my blood donation appointment?",
+        answer:
+          "To prepare for your donation, make sure to stay hydrated, eat a healthy meal, and get plenty of sleep. Additionally, please avoid alcohol or caffeine the day before your appointment.",
+      },
+      {
+        question: "What side effects after donating should I be aware of?",
+        answer:
+          "Common side effects can include lightheadedness, nausea, or bruising at the needle site. These typically last only for a few minutes. However, if you experience any lasting or severe symptoms, please inform the hospital staff immediately.",
+      },
+    ],
+  },
+  {
+    title: "DONATION",
+    data: [
+      {
+        question: "How do I schedule a donation appointment?",
+        answer:
+          "You can schedule a donation appointment by going to the main dashboard and clicking on ‘Donate’. This will direct you to the donation page, which consists of two (2) parts: the assessment section and the schedule section. Please read the eligibility notice thoroughly before proceeding. In the assessment section, please answer all questions truthfully, as this will serve as your initial assessment that will be forwarded to the hospital staff. Then, you can select your preferred hospital, date, and time for your appointment in the schedule section. A code will be provided at the end. Make sure to save it or take a screenshot, as this code will be required at your appointment to validate your incentive eligibility.",
+      },
+      {
+        question: "Is it necessary to fill out the preliminary checklist?",
+        answer:
+          "Yes, it is necessary. To schedule a donation appointment using Lifeline, you would have to answer the preliminary checklist, as this serves as an initial evaluation of your potential eligibility to donate. Please keep in mind that while this checklist doesn’t guarantee final eligibility, it provides the hospital staff an overview of your health status prior to your appointment. You would still need to undergo a comprehensive screening with the hospital staff on the day of your appointment.",
+      },
+      {
+        question: "How can I locate the nearest hospital for blood donation?",
+        answer:
+          "To locate the nearest hospital, go to the main dashboard and click on ‘Maps’ in the navigation bar.",
+      },
+      {
+        question: "I have the appointment code. What are the next steps?",
+        answer:
+          "Please make sure to arrive on time for your appointment. Kindly show your appointment code to the hospital staff for validation. If your code is valid, the appointment should count towards your incentive progress.",
+      },
+      {
+        question: "What incentives can I earn for donating blood?",
+        answer:
+          "Incentives may vary per partnered hospitals. For instance, Ace Medical Mandaluyong: After four (4) successful donations, you will be placed on a priority list should you ever need a blood bag. UERM Medical Center: After four (4) successful donations, a complimentary T-shirt will be given.",
+      },
+      {
+        question: "What is the validity period of my earned incentives?",
+        answer:
+          "This may vary per partnered hospital. Please inquire with them directly for details on the validity period.",
+      },
+      {
+        question: "Can I transfer my earned incentives to someone else?",
+        answer: "No, earned incentives are non-transferable.",
+      },
+    ],
+  },
+  {
+    title: "REQUEST",
+    data: [
+      {
+        question: "How do I request blood?",
+        answer:
+          "You can submit a request by going to the main dashboard and clicking on ‘Request’. Please read the guidelines thoroughly before proceeding. In the request form, provide the following information: the patient’s name, specific blood type and transfusion needed, your relationship to the patient (whether it’s for yourself or someone else), required documents, and any additional information you wish to include. You will be notified in-app once there are updates to your request.",
+      },
+      {
+        question: "What information will be needed to request blood?",
+        answer: "Kindly refer to the question above.",
+      },
+      {
+        question: "Is there a fee for requesting blood through Lifeline?",
+        answer:
+          "There is no fee for submitting a request through Lifeline. However, please note that hospital fees may still apply. For example, there is a blood screening fee to ensure that each blood bag is safe from transmissible infections, which may vary per hospital.",
+      },
+      {
+        question: "How will I know if my request has been accepted?",
+        answer:
+          "You will be notified in-app once there are updates to your request. However, should your request be rejected, please keep in mind that Lifeline serves only as a platform for convenience between you and the hospital. We do not have the authority to accept or reject requests, as that decision lies solely with the issuing hospital. For assistance and/or clarifications regarding your request, please contact the issuing hospital directly.",
+      },
+      {
+        question: "Why is my request rejected?",
+        answer:
+          "There may be several reasons why your request has been rejected, namely: Incomplete information: Your request may lack necessary information or documents. Insufficient stock: The requested blood type may not be available in all our partnered hospitals. Ineligibility: The request may not meet the hospital’s guidelines or eligibility criteria. If you have any questions or concerns regarding your specific case, please contact the issuing hospital directly for assistance and/or clarification.",
+      },
+      {
+        question: "Can my request be expedited?",
+        answer: "No, requests cannot be expedited.",
+      },
+      {
+        question:
+          "What happens if the blood type I requested is not available?",
+        answer:
+          "If the requested blood type is not available, you will be notified and may need to wait until it becomes available.",
+      },
+      {
+        question:
+          "I don’t have the required documents to request blood. Can I still submit a request?",
+        answer:
+          "Unfortunately, you will need to submit the required documents (i.e., blood request form provided by the hospital) to submit a request. Please gather the necessary documents before proceeding.",
+      },
+      {
+        question: "Can I request blood for someone else?",
+        answer:
+          "Yes, you can request blood for someone else. In the ‘Request’ page, kindly fill out the form using the patient’s information, then indicate your relationship to the patient.",
+      },
+    ],
+  },
+];
+
 export default function FAQTab() {
-  const { faqs } = useSelector((state: RootState) => state.faqs);
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    dispatch(getFAQs());
-  }, []);
-
   const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState(FAQ_DATA);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  // TODO: Nasira ko ulit lol paayos na lng mamaya @angelomunar
-  const [filteredData, setFilteredData] = useState([]);
   const handleSearch = (text) => {
     setSearchText(text);
-    const filtered = FAQuestions.filter(
-      (item) =>
-        item.question.toLowerCase().includes(text.toLowerCase()) ||
-        item.answer.toLowerCase().includes(text.toLowerCase())
-    ).map((item) => ({ id: item.id, title: item.question }));
+    const filtered = FAQ_DATA.map((section) => ({
+      ...section,
+      data: section.data.filter(
+        (item) =>
+          item.question.toLowerCase().includes(text.toLowerCase()) ||
+          item.answer.toLowerCase().includes(text.toLowerCase())
+      ),
+    })).filter((section) => section.data.length > 0);
     setFilteredData(filtered);
   };
 
@@ -79,12 +196,15 @@ export default function FAQTab() {
         </View>
 
         <View style={styles.panels}>
-          <FlatList
-            data={faqs}
+          <SectionList
+            sections={filteredData}
             renderItem={({ item }) => (
-              <QuestionPanel questions={item.questions} />
+              <QuestionCard question={item.question} answer={item.answer} />
             )}
-            keyExtractor={(item) => item.title}
+            renderSectionHeader={({ section: { title } }) => (
+              <Text style={panel.title}>{title}</Text>
+            )}
+            keyExtractor={(item) => item.question}
             overScrollMode="never"
             scrollEnabled={false}
             contentContainerStyle={{ gap: 16 }}
@@ -164,6 +284,27 @@ const styles = StyleSheet.create({
   panels: {
     gap: 20,
   },
+  modalView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalImage: {
+    width: "80%",
+    height: "80%",
+    resizeMode: "contain",
+  },
+  closeButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: COLORS.primary,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
 });
 
 const panel = StyleSheet.create({
@@ -173,7 +314,9 @@ const panel = StyleSheet.create({
   },
   title: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingVertical: 8,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: COLORS.primary,
   },
 });
 
@@ -202,5 +345,7 @@ const card = StyleSheet.create({
   answer: {
     flex: 1,
     flexDirection: "row",
+    textAlign: "justify",
+    fontSize: 16,
   },
 });

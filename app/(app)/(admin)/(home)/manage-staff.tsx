@@ -9,15 +9,19 @@ import { FlatList, Pressable } from "react-native";
 import { ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { disableStaff, getHopitalStaff } from "rtx/slices/staff";
+import {
+  disableStaff,
+  disableStaffInFirebase,
+  getHopitalStaff,
+} from "rtx/slices/staff";
 
 export default function ManageStaff() {
   const { user } = useSelector((state: RootState) => state.user);
   const { staff } = useSelector((state: RootState) => state.staff);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    // dispatch(getHopitalStaff(user.hospitalName));
-  }, [staff]);
+    dispatch(getHopitalStaff(user.hospitalName));
+  }, []);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -97,7 +101,7 @@ export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
         disabled: !disabled,
       })
     );
-    // disableStaff(uuid);
+    disableStaffInFirebase(uuid, !disabled);
   };
   return (
     <>

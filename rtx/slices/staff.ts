@@ -7,6 +7,7 @@ import {
   doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 
@@ -46,6 +47,20 @@ export const deleteStaffInFirebase = async (uuid: string) => {
     });
   } catch (error) {
     console.error("Error deleting staff:", error);
+  }
+};
+
+export const disableStaffInFirebase = async (
+  uuid: string,
+  disabled: boolean
+) => {
+  try {
+    const userDocRef = doc(FIRESTORE_DB, "User", uuid);
+    await updateDoc(userDocRef, { disabled });
+
+    console.log(`Staff with UUID ${uuid} updated with disabled = ${disabled}`);
+  } catch (error) {
+    console.error("Error updating staff disabled status:", error);
   }
 };
 

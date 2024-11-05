@@ -1,4 +1,4 @@
-import { COLORS } from "constants";
+import { COLORS } from "../../../../constants";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 
 export default function About() {

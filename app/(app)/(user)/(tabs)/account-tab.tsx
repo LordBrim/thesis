@@ -12,15 +12,15 @@ import { COLORS, SIZES } from "../../../../constants/theme";
 import { Link } from "expo-router";
 import { FontAwesome6, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import SkeletonText from "components/common/SkeletonText";
+import SkeletonText from "../../../../components/common/SkeletonText";
 import {
   FIREBASE_AUTH,
   FIREBASE_STORAGE,
   FIRESTORE_DB,
 } from "../../../../firebase-config";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import { IAccountCard } from "constants/Interfaces";
-import Avatar from "components/common/Avatar";
+import { IAccountCard } from "../../../../constants/Interfaces";
+import Avatar from "../../../../components/common/Avatar";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";

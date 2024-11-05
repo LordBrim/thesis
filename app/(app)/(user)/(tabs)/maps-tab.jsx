@@ -11,11 +11,11 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES } from "../../../../constants/theme";
-import TextInputWrapper from "components/common/TextInputWrapper";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { HORIZONTAL_SCREEN_MARGIN } from "constants";
-import Description from "components/common/texts/Description";
-import { GS } from "constants";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
+import Description from "../../../../components/common/texts/Description";
+import { GS } from "../../../../constants/style";
 import { useRouter } from "expo-router";
 import { FIRESTORE_DB } from "../../../../firebase-config";
 import { getDocs, collection } from "firebase/firestore";

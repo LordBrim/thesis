@@ -1,15 +1,15 @@
 import { AppDispatch, RootState } from "app/store";
-import IconBtn from "components/common/IconButton";
-import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
-import { GS } from "constants/style";
-import { COLORS } from "constants/theme";
+import IconBtn from "../../../../components/common/IconButton";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants/measurements";
+import { GS } from "../../../../constants/style";
+import { COLORS } from "../../../../constants/theme";
 import { router, useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { FlatList, Pressable } from "react-native";
 import { ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteStaff, getHopitalStaff } from "rtx/slices/staff";
+import { deleteStaff, getHopitalStaff } from "../../../../rtx/slices/staff";
 
 export default function ManageStaff() {
   const { user } = useSelector((state: RootState) => state.user);

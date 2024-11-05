@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
-import IconBtn from "components/common/IconButton";
+import IconBtn from "../../../../components/common/IconButton";
 import { router } from "expo-router";
-import { FIRESTORE_DB } from "firebase-config";
+import { FIRESTORE_DB } from "../../../../firebase-config";
 import {
   collection,
   getDocs,

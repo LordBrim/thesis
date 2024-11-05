@@ -10,14 +10,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
+import { COLORS } from "../../../../constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
-import IconBtn from "components/common/IconButton";
+import IconBtn from "../../../../components/common/IconButton";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
-import { FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
+import { FIRESTORE_DB, FIREBASE_STORAGE } from "../../../../firebase-config";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";

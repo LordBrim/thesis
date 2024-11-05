@@ -10,7 +10,7 @@ import {
   Modal,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchEvents } from "rtx/slices/events";
+import { fetchEvents } from "../../../../rtx/slices/events";
 import type { AppDispatch } from "app/store"; // Import the correct type for dispatch
 import { RootState } from "app/store";
 import EventCard from "../../../../components/home/EventCard";

@@ -24,8 +24,8 @@ import Description from "../../../../components/common/texts/Description";
 import TextInputWrapper from "../../../../components/common/TextInputWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { getFAQs } from "rtx/slices/faq";
-import IconBtn from "components/common/IconButton";
+import { getFAQs } from "../../../../rtx/slices/faq";
+import IconBtn from "../../../../components/common/IconButton";
 
 const FAQ_DATA = [
   {

@@ -19,7 +19,7 @@ import { firestoreOperations } from "../../firestore-services";
 import { FIREBASE_AUTH } from "../../firebase-config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
-import LinkBtn from "components/common/LinkBtn";
+import LinkBtn from "../../components/common/LinkBtn";
 import { Dimensions } from "react-native";
 
 export default function RegisterScreen() {

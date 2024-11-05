@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import React from "react";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import IconBtn from "components/common/IconButton";
 import { router } from "expo-router";
+import IconBtn from "../../../../components/common/IconButton";
 
 export default function ManageBankTransfers() {
   return (

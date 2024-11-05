@@ -2,9 +2,9 @@ import { useNavigation } from "expo-router";
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
-import IconBtn from "components/common/IconButton";
+import IconBtn from "../../../../components/common/IconButton";
 import { router } from "expo-router";
-import { FIRESTORE_DB, FIREBASE_AUTH } from "firebase-config";
+import { FIRESTORE_DB, FIREBASE_AUTH } from "../../../../firebase-config";
 import {
   collection,
   getDocs,
@@ -15,7 +15,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import Divider from "constants/divider";
+import Divider from "../../../../constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 const Tab = createMaterialTopTabNavigator();
 

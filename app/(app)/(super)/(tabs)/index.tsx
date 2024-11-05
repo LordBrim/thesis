@@ -1,8 +1,8 @@
 import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import SuperAdminDashboard from "components/home/SuperAdminDashboard";
-import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import SuperAdminDashboard from "../../../../components/home/SuperAdminDashboard";
+import SingleBtnModal from "../../../../components/common/modals/SingleBtnModal";
 import { COLORS, SPACES } from "../../../../constants/theme";
 import { router } from "expo-router";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
@@ -10,7 +10,7 @@ import { getAuth } from "firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
-import { getCurrentUser } from "rtx/slices/user";
+import { getCurrentUser } from "../../../../rtx/slices/user";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false

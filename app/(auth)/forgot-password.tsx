@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import axios from "axios";
-import CallToActionBtn from "components/common/CallToActionBtn";
+import CallToActionBtn from "../../components/common/CallToActionBtn";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import {
   View,
@@ -11,20 +11,20 @@ import {
   Alert,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import TextInputWrapper from "components/common/TextInputWrapper";
-import Description from "components/common/texts/Description";
-import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import TextInputWrapper from "../../components/common/TextInputWrapper";
+import Description from "../../components/common/texts/Description";
+import SingleBtnModal from "../../components/common/modals/SingleBtnModal";
 import { useRouter } from "expo-router";
 import { OtpInput } from "react-native-otp-entry";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import LinkBtnTouch from "components/common/LinkBtnTouch";
+import LinkBtnTouch from "../../components/common/LinkBtnTouch";
 import CountDownTimer from "react-native-countdown-timer-hooks";
 import {
   sendPasswordResetEmail,
   confirmPasswordReset,
   verifyPasswordResetCode,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "firebase-config";
+import { FIREBASE_AUTH } from "../../firebase-config";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");

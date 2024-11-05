@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { collection, getDocs } from 'firebase/firestore';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { FIRESTORE_DB, FIREBASE_STORAGE } from 'firebase-config';
+import { FIRESTORE_DB, FIREBASE_STORAGE } from '../../firebase-config';
 import moment from 'moment';
 
 interface Event {

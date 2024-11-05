@@ -11,11 +11,14 @@ import {
   Switch,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
-import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
-import TextInputWrapper from "components/common/TextInputWrapper";
+import { COLORS } from "../../../../constants/theme";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants/measurements";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { addHospitalToFirebase, createHospital } from "rtx/slices/hospitals";
+import {
+  addHospitalToFirebase,
+  createHospital,
+} from "../../../../rtx/slices/hospitals";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageFaqCreate() {

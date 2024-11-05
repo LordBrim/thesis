@@ -14,8 +14,8 @@ import {
   deleteQuestion,
   deleteQuestionInFirebase,
   getFAQs,
-} from "rtx/slices/faq";
-import IconBtn from "components/common/IconButton";
+} from "../../../../rtx/slices/faq";
+import IconBtn from "../../../../components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageAdmins() {

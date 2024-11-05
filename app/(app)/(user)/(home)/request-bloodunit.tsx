@@ -8,12 +8,12 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../../constants";
-import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
+import { MINOR_COMPONENT_HEIGHT } from "../../../../constants/measurements";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import RadioGroup from "react-native-radio-buttons-group";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
+import CustomButtonWithIcon from "../../../../components/common/CustomButtonWithIcons";
 import IconModal from "../../(common)/custom-album-modal";
 
 export default function RequestBloodunitScreen({

@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { router } from "expo-router";
-import ActionBtn from "components/home/ActionBtn";
+import ActionBtn from "../../../../components/home/ActionBtn";
 // Import your Firebase config
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../../../firebase-config";
 import AdminDonate from "./admin-donate";

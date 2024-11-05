@@ -8,14 +8,14 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import TextInputWrapper from "components/common/TextInputWrapper";
-import CallToActionBtn from "components/common/CallToActionBtn";
+import TextInputWrapper from "../../components/common/TextInputWrapper";
+import CallToActionBtn from "../../components/common/CallToActionBtn";
 import { Octicons, Ionicons } from "@expo/vector-icons";
-import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
+import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import SingleBtnModal from "../../components/common/modals/SingleBtnModal";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { FIREBASE_AUTH } from "firebase-config";
+import { FIREBASE_AUTH } from "../../firebase-config";
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 import { confirmPasswordReset } from "firebase/auth";
 

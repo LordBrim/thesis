@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
-import IconBtn from "components/common/IconButton";
+import IconBtn from "../../../../components/common/IconButton";
 import { router } from "expo-router";
-import { FIRESTORE_DB, FIREBASE_AUTH } from "firebase-config";
+import { FIRESTORE_DB, FIREBASE_AUTH } from "../../../../firebase-config";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Picker } from "@react-native-picker/picker"; // Import Picker from the new package
@@ -26,10 +26,10 @@ import {
   where,
 } from "firebase/firestore";
 import moment from "moment";
-import Divider from "constants/divider";
+import Divider from "../../../../constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { onAuthStateChanged } from "firebase/auth";
-import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
+import CustomButtonWithIcon from "../../../../components/common/CustomButtonWithIcons";
 const Tab = createMaterialTopTabNavigator();
 
 interface TicketState {

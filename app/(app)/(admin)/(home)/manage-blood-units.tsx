@@ -14,7 +14,7 @@ import { RootState } from "app/store";
 import {
   updateHospitalStock,
   updateHospitalStockByUuid,
-} from "rtx/slices/hospitals";
+} from "../../../../rtx/slices/hospitals";
 
 export default function ManageBloodUnits() {
   const { user } = useSelector((state: RootState) => state.user);

@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { SafeAreaView, StyleSheet, View, Dimensions } from "react-native";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import CallToActionBtn from "components/common/CallToActionBtn";
+import CallToActionBtn from "../../../../components/common/CallToActionBtn";
 import { router } from "expo-router";
-import StepsIndicator from "components/common/StepsIndicator";
+import StepsIndicator from "../../../../components/common/StepsIndicator";
 import ScheduleAppointmentScreen from "./schedule-appointment";
-import PreliminaryChecklist from "components/home/PreliminaryChecklist";
+import PreliminaryChecklist from "../../../../components/home/PreliminaryChecklist";
 import Carousel from "pinar";
-import SingleBtnModal from "components/common/modals/SingleBtnModal"; // Adjust the path as necessary
+import SingleBtnModal from "../../../../components/common/modals/SingleBtnModal"; // Adjust the path as necessary
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function DonateScreen() {

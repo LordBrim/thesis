@@ -34,13 +34,13 @@ import ABloodType from "../../../../assets/icons/A_bloodType";
 import ABBloodType from "../../../../assets/icons/AB_bloodType";
 import BBloodType from "../../../../assets/icons/B_bloodType";
 import OBloodType from "../../../../assets/icons/O_bloodType";
-import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
+import CustomButtonWithIcon from "../../../../components/common/CustomButtonWithIcons";
 import { getDistance } from "geolib";
 import { collection, getDocs } from "firebase/firestore";
-import { FIRESTORE_DB } from "firebase-config";
+import { FIRESTORE_DB } from "../../../../firebase-config";
 import axios from "axios";
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { mapStyle } from "components/maps/mapStyle";
+import { mapStyle } from "../../../../components/maps/mapStyle";
 import BottomSheet, {
   BottomSheetView,
   BottomSheetScrollView,

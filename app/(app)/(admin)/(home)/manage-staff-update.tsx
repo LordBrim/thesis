@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
-import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
-import TextInputWrapper from "components/common/TextInputWrapper";
+import { COLORS } from "../../../../constants/theme";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants/measurements";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
 import { useDispatch, useSelector } from "react-redux";
-import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
+import { addFAQToFirebase, createQuestion } from "../../../../rtx/slices/faq";
 import { router, useNavigation } from "expo-router";
 import { RootState } from "app/store";
 

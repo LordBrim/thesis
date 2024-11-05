@@ -1,4 +1,4 @@
-import { firestoreOperations } from "firestore-services";
+import { firestoreOperations } from "../firestore-services";
 export async function generateUniqueTicketCode() {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const digits = "0123456789";

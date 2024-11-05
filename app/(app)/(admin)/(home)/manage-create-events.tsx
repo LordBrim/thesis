@@ -14,11 +14,15 @@ import {
 import { COLORS } from "../../../../constants/theme";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
-import AddressSearchComponent from "components/common/AddressSearch";
-import { FIREBASE_STORAGE, FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
+import AddressSearchComponent from "../../../../components/common/AddressSearch";
+import {
+  FIREBASE_STORAGE,
+  FIREBASE_AUTH,
+  FIRESTORE_DB,
+} from "../../../../firebase-config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { firestoreOperations } from "firestore-services";
-import TextInputWrapper from "components/common/TextInputWrapper";
+import { firestoreOperations } from "../../../../firestore-services";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getDoc, doc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";

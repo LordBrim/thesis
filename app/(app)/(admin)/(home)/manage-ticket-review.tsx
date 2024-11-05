@@ -7,13 +7,13 @@ import {
   Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
+import { COLORS } from "../../../../constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
-import IconBtn from "components/common/IconButton";
+import IconBtn from "../../../../components/common/IconButton";
 import { doc, updateDoc } from "firebase/firestore";
-import { FIRESTORE_DB } from "firebase-config";
+import { FIRESTORE_DB } from "../../../../firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 interface TicketState {
   id: string;
@@ -139,7 +139,8 @@ export default function ManageTicketReview() {
         </Text>
         {ticketData.status == "accepted" ? (
           <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
-            Status: {!ticketData.isComplete ? "IN-REVIEW" : "COMPLETED"}
+            Donation Update:{" "}
+            {!ticketData.isComplete ? "IN-REVIEW" : "COMPLETED"}
           </Text>
         ) : null}
       </View>

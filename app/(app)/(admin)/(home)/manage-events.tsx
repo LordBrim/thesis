@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { COLORS } from "../../../../constants/theme";
-import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
+import {
+  FIREBASE_AUTH,
+  FIRESTORE_DB,
+  FIREBASE_STORAGE,
+} from "../../../../firebase-config";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { getDownloadURL, ref } from "firebase/storage";
 import { Agenda } from "react-native-calendars";
 import moment from "moment";
 import { router } from "expo-router";
-import EventCard from "components/home/EventCard";
-import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
+import EventCard from "../../../../components/home/EventCard";
+import CustomButtonWithIcon from "../../../../components/common/CustomButtonWithIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function ManageEvents({ navigation }) {

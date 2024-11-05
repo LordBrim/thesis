@@ -10,12 +10,12 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
-import { COLORS } from "constants/theme";
-import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
+import { COLORS } from "../../../../constants/theme";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants/measurements";
 import { useSelector } from "react-redux";
 import { RootState } from "app/store";
-import TextInputWrapper from "components/common/TextInputWrapper";
-import IconBtn from "components/common/IconButton";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
+import IconBtn from "../../../../components/common/IconButton";
 
 export default function ManageIncentivesUpdate() {
   const { user } = useSelector((state: RootState) => state.user);

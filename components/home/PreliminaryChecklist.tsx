@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native";
-import Description from "components/common/texts/Description";
+import Description from "../../components/common/texts/Description";
 import ChecklistItem from "./ChecklistItem";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import { checklistQuestions } from "../../constants/database"; // Adjust the path to your database.js file

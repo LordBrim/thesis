@@ -12,8 +12,8 @@ import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import {
   usePushNotification,
   CustomNotification,
-} from "hooks/usePushNotification";
-import useFirestoreListener from "hooks/useFirestoreListener";
+} from "../../../../hooks/usePushNotification";
+import useFirestoreListener from "../../../../hooks/useFirestoreListener";
 import UpdateCard from "../(updates)/update-card";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

@@ -9,8 +9,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import EventCard from "./EventCard";
-import LinkBtn from "components/common/LinkBtn";
-import { FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
+import LinkBtn from "../common/LinkBtn";
+import { FIRESTORE_DB, FIREBASE_STORAGE } from "../../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import moment from "moment"; // Import moment for date formatting

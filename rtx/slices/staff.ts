@@ -1,6 +1,6 @@
 import type { RootState } from "../../app/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebase-config";
 import {
   collection,
   deleteDoc,

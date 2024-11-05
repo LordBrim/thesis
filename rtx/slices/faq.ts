@@ -1,6 +1,6 @@
 import type { RootState } from "../../app/store";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FIRESTORE_DB } from "firebase-config";
+import { FIRESTORE_DB } from "../../firebase-config";
 import {
   addDoc,
   arrayUnion,

@@ -1,14 +1,14 @@
 import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import AdminDashboard from "components/home/AdminDashboard";
-import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import AdminDashboard from "../../../../components/home/AdminDashboard";
+import SingleBtnModal from "../../../../components/common/modals/SingleBtnModal";
 import { COLORS, SPACES } from "../../../../constants/theme";
 import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
-import { getCurrentUser } from "rtx/slices/user";
+import { getCurrentUser } from "../../../../rtx/slices/user";
 import { getHospitals } from "rtx/slices/hospitals";
 
 export default function HomeTab() {

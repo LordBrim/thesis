@@ -15,9 +15,9 @@ import * as ImagePicker from "expo-image-picker";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import Avatar from "components/common/Avatar";
-import TextInputWrapper from "components/common/TextInputWrapper";
-import RadioButton from "components/common/RadioButton";
+import Avatar from "../../../../components/common/Avatar";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
+import RadioButton from "../../../../components/common/RadioButton";
 import CustomButtonWithIcon from "../../../../components/common/CustomButtonWithIcons";
 import IconModal from "../../(common)/custom-album-modal";
 import {

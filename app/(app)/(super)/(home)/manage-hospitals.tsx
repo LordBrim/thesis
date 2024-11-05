@@ -16,8 +16,8 @@ import {
   deleteHospital,
   deleteHospitalInFirebase,
   getHospitals,
-} from "rtx/slices/hospitals";
-import IconBtn from "components/common/IconButton";
+} from "../../../../rtx/slices/hospitals";
+import IconBtn from "../../../../components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageHospitals() {

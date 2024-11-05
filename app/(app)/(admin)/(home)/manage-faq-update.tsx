@@ -6,13 +6,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
-import TextInputWrapper from "components/common/TextInputWrapper";
-import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
+import { COLORS } from "../../../../constants/theme";
+import TextInputWrapper from "../../../../components/common/TextInputWrapper";
+import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants/measurements";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { Text } from "react-native";
 import { useDispatch } from "react-redux";
-import { updateFAQInFirebase, updateQuestion } from "rtx/slices/faq";
+import {
+  updateFAQInFirebase,
+  updateQuestion,
+} from "../../../../rtx/slices/faq";
 
 export default function ManageFaqUpdate() {
   const { title, question, answer } = useLocalSearchParams();

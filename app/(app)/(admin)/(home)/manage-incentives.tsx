@@ -36,19 +36,15 @@ export default function ManageIncentives() {
     });
   }, []);
   const size = 40;
-  const data = Array.from({ length: incentives.number }, (_, i) => i + 1).map(
-    (number) => {
-      const items = incentives.data.filter((item) => item.position === number);
-      const uniqueIncentives = [
-        ...new Set(items.map((item) => item.incentive)),
-      ];
-      return {
-        incentiveNo: number,
-        incentive:
-          uniqueIncentives.length > 0 ? uniqueIncentives.join("") : null,
-      };
-    }
-  );
+  const data = Array.from({ length: incentives.number }, (_, i) => {
+    const items = incentives.data.filter((item) => item.position === i + 1);
+    const uniqueIncentives = [...new Set(items.map((item) => item.incentive))];
+    return {
+      incentiveNo: i + 1,
+      incentive:
+        uniqueIncentives.length > 0 ? uniqueIncentives.join(", ") : null,
+    };
+  });
   const [simulation, setSimulation] = useState(incentives.number);
   const handleSimulation = () => {
     setSimulation(-1);

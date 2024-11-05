@@ -4,7 +4,7 @@ import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import AdminDashboard from "components/home/AdminDashboard";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { COLORS, SPACES } from "../../../../constants/theme";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
@@ -20,7 +20,7 @@ export default function HomeTab() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getCurrentUser());
-    // dispatch(getHospitals());
+    dispatch(getHospitals());
   }, []);
   return (
     <SafeAreaView style={styles.container}>

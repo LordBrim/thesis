@@ -12,7 +12,6 @@ import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import {
-  addHospitalToFirebase,
   deleteHospital,
   deleteHospitalInFirebase,
   getHospitals,
@@ -50,7 +49,6 @@ export default function ManageHospitals() {
       ),
     });
   }, [navigation]);
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView overScrollMode="never" persistentScrollbar={true}>

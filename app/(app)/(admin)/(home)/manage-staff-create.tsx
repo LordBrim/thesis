@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Pressable,
+  View,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { COLORS, SIZES } from "constants/theme";
@@ -21,6 +22,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "firebase-config";
 import { firestoreOperations } from "../../../../firestore-services";
 import { createStaff, getHopitalStaff } from "rtx/slices/staff";
+import IconBtn from "components/common/IconButton";
 
 export default function ManageStaffCreate() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -69,6 +71,7 @@ export default function ManageStaffCreate() {
         newPassword
       );
       const documentData = {
+        disabled: false,
         email: newEmail,
         password: newPassword,
         displayName: newUsername,
@@ -83,6 +86,7 @@ export default function ManageStaffCreate() {
       dispatch(
         createStaff({
           newStaff: {
+            disabled: false,
             email: newEmail,
             password: newPassword,
             displayName: newUsername,
@@ -158,6 +162,13 @@ export default function ManageStaffCreate() {
             />
           </Pressable>
         </TextInputWrapper>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <IconBtn icon="circle-info" size={18} color="red" />
+          <Text style={{ flexShrink: 1 }}>
+            Accounts cannot be deleted, only disabled. Please make sure to input
+            the proper account credentials.
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

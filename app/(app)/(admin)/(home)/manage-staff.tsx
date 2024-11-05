@@ -4,12 +4,16 @@ import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { GS } from "constants/style";
 import { COLORS } from "constants/theme";
 import { router, useNavigation, useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, Pressable } from "react-native";
 import { ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteStaff, getHopitalStaff } from "rtx/slices/staff";
+import {
+  disableStaff,
+  disableStaffInFirebase,
+  getHopitalStaff,
+} from "rtx/slices/staff";
 
 export default function ManageStaff() {
   const { user } = useSelector((state: RootState) => state.user);
@@ -55,7 +59,7 @@ export default function ManageStaff() {
           data={staff}
           renderItem={({ item }) => (
             <StaffCard
-              title={user.hospitalName}
+              disabled={item.disabled}
               uuid={item.uuid}
               displayName={item.displayName}
               email={item.email}
@@ -74,45 +78,59 @@ export default function ManageStaff() {
 }
 
 type IStaffCard = {
-  title: string;
   uuid: string;
+  disabled: boolean;
   displayName: string;
   email: string;
 };
 
-export function StaffCard({ uuid, displayName, email }: IStaffCard) {
-  const handleUpdate = (uuid) => {
-    router.push({
-      pathname: "(app)/(admin)/(home)/manage-staff-update",
-      params: {
-        uuid: uuid,
-      },
-    });
-  };
+export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
+  // const handleUpdate = (uuid) => {
+  //   router.push({
+  //     pathname: "(app)/(admin)/(home)/manage-staff-update",
+  //     params: {
+  //       uuid: uuid,
+  //     },
+  //   });
+  // };
   const dispatch = useDispatch();
-  const handleDelete = (uuid) => {
+  const handleDisable = (uuid) => {
     dispatch(
-      deleteStaff({
+      disableStaff({
         uuid: uuid,
+        disabled: !disabled,
       })
     );
-    deleteStaff(uuid);
+    disableStaffInFirebase(uuid, !disabled);
   };
   return (
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
         <Text style={[GS.h2, card.question]}>{displayName}</Text>
-        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} />
-        <IconBtn
-          icon="trash"
-          size={18}
-          onPress={() => handleDelete(uuid)}
-          color="red"
-        />
+        {/* <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} /> */}
+        {disabled ? (
+          <IconBtn
+            icon="circle-minus"
+            size={18}
+            color="gray"
+            onPress={() => handleDisable(uuid)}
+          />
+        ) : (
+          <IconBtn
+            icon="circle-minus"
+            size={18}
+            color="red"
+            onPress={() => handleDisable(uuid)}
+          />
+        )}
       </Pressable>
       <View style={card.aContainer}>
         <Text style={card.answer}>
-          UUID:<Text style={{ fontWeight: "normal" }}> {uuid}</Text>
+          Disabled:
+          <Text style={{ fontWeight: "normal" }}>
+            {" "}
+            {disabled ? "true" : "false"}
+          </Text>
         </Text>
         <Text style={card.answer}>
           Email:<Text style={{ fontWeight: "normal" }}> {email}</Text>

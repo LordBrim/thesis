@@ -37,6 +37,7 @@ interface UserState {
       claimed: number;
       timesCompleted: number;
     }[];
+    disabled: boolean;
   };
 }
 
@@ -54,6 +55,7 @@ const initialState: UserState = {
         timesCompleted: 3,
       },
     ],
+    disabled: false,
   },
 };
 

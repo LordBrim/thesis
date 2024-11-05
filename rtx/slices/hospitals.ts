@@ -36,6 +36,11 @@ export const getHospitals = createAsyncThunk("getHospitals", async () => {
         available: item.available,
         type: item.type,
       })),
+      incentives: {
+        info: doc.data().incentives.info,
+        number: doc.data().incentives.number,
+        data: doc.data().incentives.data || [],
+      },
     }));
     return hospitals;
   } catch (error) {
@@ -133,6 +138,37 @@ export const updateHospitalStockByUuid = async (
   }
 };
 
+export const updateHospitalIncentivesByUuid = async (
+  uuid: string,
+  updatedIncentives: IncentiveState
+) => {
+  try {
+    const hospitalDocRef = doc(collection(FIRESTORE_DB, "hospital"), uuid);
+    const hospitalDoc = await getDoc(hospitalDocRef);
+    if (!hospitalDoc.exists()) {
+      console.error(`No hospital found with UUID ${uuid}`);
+      return;
+    }
+    const hospitalData = hospitalDoc.data() as HospitalState;
+    const currentIncentives = hospitalData.incentives || {
+      info: "",
+      number: 0,
+      data: [],
+    };
+    await updateDoc(hospitalDocRef, {
+      incentives: {
+        ...currentIncentives,
+        ...updatedIncentives,
+      },
+    });
+    console.log(
+      `Incentives for hospital with UUID ${uuid} updated successfully.`
+    );
+  } catch (error) {
+    console.error("Error updating hospital incentives:", error);
+  }
+};
+
 interface HospitalsState {
   hospitals: Array<HospitalState>;
 }
@@ -219,7 +255,11 @@ const initialState: HospitalsState = {
       incentives: {
         info: 'To obtain "priority" you must have successful donations every 3 months for 1 year.',
         number: 4,
-        data: [{ position: 4, incentive: '"Priority"' }],
+        data: [
+          { incentive: '"Priority"', position: 4 },
+          { incentive: "T-Shirt", position: 2 },
+          { incentive: "Meatloaf", position: 5 },
+        ],
       },
     },
   ],
@@ -279,6 +319,21 @@ export const hospitalsSlice = createSlice({
         }));
       }
     },
+    updateIncentives: (
+      state,
+      action: PayloadAction<{
+        uuid: string;
+        updatedIncentives: IncentiveState;
+      }>
+    ) => {
+      const { uuid, updatedIncentives } = action.payload;
+      const hospitalIndex = state.hospitals.findIndex(
+        (hospital) => hospital.uuid === uuid
+      );
+      if (hospitalIndex !== -1) {
+        state.hospitals[hospitalIndex].incentives = updatedIncentives;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getHospitals.fulfilled, (state, action) => {
@@ -296,6 +351,7 @@ export const {
   updateHospital,
   deleteHospital,
   updateHospitalStock,
+  updateIncentives,
 } = hospitalsSlice.actions;
 
 export const selectCount = (state: RootState) => state.hospitals.hospitals;

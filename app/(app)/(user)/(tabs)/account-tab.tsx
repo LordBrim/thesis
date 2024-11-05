@@ -46,6 +46,7 @@ export default function AccountTab({
   const [displayName, setDisplayName] = useState("");
   const [avatar, setAvatar] = useState(avatarUrl || null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [donateStatus, setDonateStatus] = useState(true);
 
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -201,7 +202,47 @@ export default function AccountTab({
           )}
         </View>
       </View>
+      <View style={styles.donations}>
+        <View style={styles.donation}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: COLORS.text,
+                fontSize: SIZES.small,
+                textAlign: "center",
+              },
+            ]}
+          >
+            Donation Status:{"\n"}
+            {donateStatus ? (
+              <Text style={{ color: "green", fontSize: SIZES.large }}>
+                Available
+              </Text>
+            ) : (
+              <Text style={{ color: "red", fontSize: SIZES.large }}>
+                Locked{"\n"}(3 Months)
+              </Text>
+            )}
+          </Text>
+        </View>
 
+        <View style={styles.donation}>
+          <Text
+            style={[
+              styles.title,
+              {
+                color: COLORS.text,
+                fontSize: SIZES.small,
+                textAlign: "center",
+              },
+            ]}
+          >
+            Units Donated:{"\n"}
+            <Text style={{ fontSize: SIZES.large, color: COLORS.text }}>0</Text>
+          </Text>
+        </View>
+      </View>
       <View style={styles.section}>
         <Text style={styles.sectionHeading}>Account</Text>
         <View style={styles.flatlist}>
@@ -346,5 +387,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "capitalize",
     color: COLORS.primary,
+  },
+  donations: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    overflow: "hidden",
+    backgroundColor: COLORS.background,
+    minHeight: 110,
+  },
+  donation: {
+    flex: 1,
+    alignItems: "center",
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 24,
+    borderColor: COLORS.slate100,
   },
 });

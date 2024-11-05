@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  Pressable,
+} from "react-native";
 import { COLORS } from "../../../../constants/theme";
 import { Agenda } from "react-native-calendars";
 import moment from "moment";
@@ -10,11 +16,15 @@ import {
   query,
   where,
   getDocs,
+  doc as firestoreDoc,
+  getDoc,
 } from "firebase/firestore";
+import { useRouter } from "expo-router";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser, selectUser } from "rtx/slices/user";
 
 interface TicketState {
   id: string;
-  name: string;
   status: "pending" | "rejected" | "accepted" | "denied";
   userUID: string;
   userEmail: string;
@@ -35,11 +45,22 @@ interface TicketState {
 }
 
 export default function ManageTicketAllAppointments() {
+  const router = useRouter();
+
   const [ticketList, setTicketList] = useState<TicketState[]>([]);
   const [markedDates, setMarkedDates] = useState({});
   const [agendaItems, setAgendaItems] = useState({});
   const [loading, setLoading] = useState(false); // Loading state
   const [emptyDateMessage, setEmptyDateMessage] = useState(""); // New state for empty date message
+
+  const handleAppointmentPress = async (item) => {
+    router.push({
+      pathname: "(app)/(admin)/(home)/manage-ticket-review",
+      params: {
+        ticket: JSON.stringify(item), // Serialize the combined data
+      },
+    });
+  };
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -49,15 +70,38 @@ export default function ManageTicketAllAppointments() {
         collection(db, "ticketDonate"),
         where("status", "==", "accepted")
       );
-      const querySnapshot = await getDocs(q);
-      const fetchedTickets = querySnapshot.docs.map(
-        (doc) => ({ id: doc.id, ...doc.data() } as TicketState)
-      );
-      console.log("Fetched Tickets:", fetchedTickets); // Debugging
-      setTicketList(fetchedTickets);
-      markAppointmentDates(fetchedTickets); // Mark appointments on calendar
-      transformAppointmentsToAgendaItems(fetchedTickets); // Transform appointments for Agenda
-      setLoading(false);
+
+      try {
+        const querySnapshot = await getDocs(q);
+        const fetchedTickets = [];
+
+        for (let doc of querySnapshot.docs) {
+          const ticketData = { id: doc.id, ...doc.data() } as TicketState;
+          const userDocRef = firestoreDoc(db, "User", ticketData.userUID);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const combinedData = { ...ticketData, ...userData };
+            fetchedTickets.push(combinedData);
+          } else {
+            console.error(
+              "User document does not exist for userUID:",
+              ticketData.userUID
+            );
+            fetchedTickets.push(ticketData); // Add the ticket even if user data is missing
+          }
+        }
+
+        console.log("Fetched Tickets with User Data:", fetchedTickets);
+        setTicketList(fetchedTickets);
+        markAppointmentDates(fetchedTickets); // Mark appointments on calendar
+        transformAppointmentsToAgendaItems(fetchedTickets); // Transform appointments for Agenda
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchTickets();
@@ -101,12 +145,19 @@ export default function ManageTicketAllAppointments() {
 
       items[formattedDate].push({
         id: appointment.id,
-        name: appointment.name,
         selectedDate: appointment.selectedDate,
         selectedTime: appointment.selectedTime,
         selectedHospital: appointment.selectedHospital,
         status: appointment.status,
         ticketNumber: appointment.ticketNumber,
+        userUID: appointment.userUID, // Ensure userUID is included
+        displayName: appointment.displayName, // Ensure displayName is included
+        userEmail: appointment.userEmail, // Ensure userEmail is included
+        age: appointment.age,
+        avatarUrl: appointment.avatarUrl,
+        city: appointment.city,
+        contactDetails: appointment.contactDetails,
+        sex: appointment.sex,
       });
     });
 
@@ -115,18 +166,21 @@ export default function ManageTicketAllAppointments() {
   };
 
   const renderAppointmentItem = (item) => (
-    <View style={styles.appointmentContainer}>
+    <Pressable
+      style={styles.appointmentContainer}
+      onPress={() => handleAppointmentPress(item)}
+    >
       <Text style={styles.appointmentText}>
         Ticket Number: {item.ticketNumber}
       </Text>
-      <Text style={styles.appointmentText}>Name: {item.displ}</Text>
+      <Text style={styles.appointmentText}>Name: {item.displayName}</Text>
       <Text style={styles.appointmentText}>Date: {item.selectedDate}</Text>
       <Text style={styles.appointmentText}>Time: {item.selectedTime}</Text>
       <Text style={styles.appointmentText}>
         Hospital: {item.selectedHospital}
       </Text>
       <Text style={styles.appointmentText}>Status: {item.status}</Text>
-    </View>
+    </Pressable>
   );
 
   // Custom renderEmptyDate to show a message or loader when no appointments are available on a specific date

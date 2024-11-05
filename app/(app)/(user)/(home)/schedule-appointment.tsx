@@ -56,7 +56,7 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
   };
   const handleCloseModal = () => {
     setShowModal(false);
-    router.navigate("(app)/(tabs)");
+    router.navigate("(app)/(user)/(tabs)/");
   };
 
   const handleNextButtonPress = async (answers) => {
@@ -98,7 +98,8 @@ const ScheduleAppointmentScreen = forwardRef((props, ref) => {
           status: "pending",
           checklistData,
           message: "sent",
-          type: "appointment", // Include the mapped checklist data
+          type: "appointment",
+          isComplete: false,
         };
         await firestoreOperations.createDocument("ticketDonate", ticketData);
 

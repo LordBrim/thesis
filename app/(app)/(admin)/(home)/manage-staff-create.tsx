@@ -69,6 +69,7 @@ export default function ManageStaffCreate() {
         newPassword
       );
       const documentData = {
+        disabled: false,
         email: newEmail,
         password: newPassword,
         displayName: newUsername,
@@ -83,6 +84,7 @@ export default function ManageStaffCreate() {
       dispatch(
         createStaff({
           newStaff: {
+            disabled: false,
             email: newEmail,
             password: newPassword,
             displayName: newUsername,

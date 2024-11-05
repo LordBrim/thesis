@@ -51,6 +51,7 @@ export const deleteStaffInFirebase = async (uuid: string) => {
 
 interface StaffMember {
   uuid?: string;
+  disabled: boolean;
   displayName: string;
   email: string;
   password: string;
@@ -65,6 +66,7 @@ const initialState: StaffState = {
   staff: [
     {
       uuid: "dOpturiUmjxzWMhFf7Qv",
+      disabled: false,
       displayName: "Andrei Sager",
       email: "andrei@mail.com",
       password: "123456",
@@ -73,6 +75,7 @@ const initialState: StaffState = {
     },
     {
       uuid: "wLBJcMvAmdONhDpQSlGbbXsL3KS2",
+      disabled: false,
       displayName: "Angelo Munar",
       email: "angelo@mail.com",
       password: "123456",
@@ -122,9 +125,15 @@ const staffSlice = createSlice({
     //       }
     //     }
     //   },
-    deleteStaff: (state, action: PayloadAction<{ uuid: string }>) => {
-      const { uuid } = action.payload;
-      state.staff = state.staff.filter((staff) => staff.uuid !== uuid);
+    disableStaff: (
+      state,
+      action: PayloadAction<{ uuid: string; disabled: boolean }>
+    ) => {
+      const { uuid, disabled } = action.payload;
+      const staff = state.staff.find((staff) => staff.uuid === uuid);
+      if (staff) {
+        staff.disabled = disabled;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -138,7 +147,7 @@ const staffSlice = createSlice({
   },
 });
 
-export const { createStaff, updateStaff, deleteStaff } = staffSlice.actions;
+export const { createStaff, disableStaff } = staffSlice.actions;
 
 export const selectCount = (state: RootState) => state.staff;
 

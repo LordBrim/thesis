@@ -7,7 +7,6 @@ import { showLongToast, showShortToast } from "hooks/useToast";
 
 export default function Authentication() {
   const [initialLaunch, setInitialLaunch] = useState(true);
-
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       if (!state.isConnected) {
@@ -23,10 +22,8 @@ export default function Authentication() {
         }
       }
     });
-
     unsubscribe();
   }, []);
-
   return (
     <SafeAreaProvider>
       <Login />

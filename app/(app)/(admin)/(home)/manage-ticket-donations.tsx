@@ -77,6 +77,7 @@ interface TicketData {
   ticketNumber?: string;
   type: "appointment";
   checklistData?: any;
+  isComplete?: boolean;
   // Add other properties as needed
 }
 
@@ -179,10 +180,20 @@ function ManageTicketsDonationsPending() {
                 ticketNumber: data.ticketNumber,
                 type: "appointment",
                 checklistData: data.checklistData,
+                isComplete: data.isComplete,
                 // Map other properties as needed
               } as TicketState;
 
-              return ticket;
+              const ticketDate = moment(
+                `${ticket.selectedDate} ${ticket.selectedTime}`,
+                "YYYY-MM-DD h:mm A"
+              );
+
+              if (ticketDate.isAfter(moment())) {
+                return ticket;
+              } else {
+                return null;
+              }
             } catch (error) {
               console.error(
                 `Error fetching user data for ticket ${docSnapshot.id}:`,
@@ -397,6 +408,7 @@ function ManageTicketsDonationsArchived() {
                   ticketNumber: data.ticketNumber,
                   type: "appointment",
                   checklistData: data.checklistData,
+                  isComplete: data.isComplete,
                   // Map other properties as needed
                 } as TicketState;
 
@@ -548,6 +560,15 @@ export function Card({ ticket }: CardProps) {
       pathname: "(app)/(admin)/(home)/manage-ticket-review",
       params: {
         ticket: JSON.stringify(ticket), // Serialize the ticket data
+        user: JSON.stringify({
+          displayName: ticket.displayName,
+          email: ticket.userEmail,
+          age: ticket.age,
+          avatarUrl: ticket.avatarUrl,
+          city: ticket.city,
+          contactDetails: ticket.contactDetails,
+          sex: ticket.sex,
+        }), // Serialize the user data
       },
     });
   };

@@ -4,7 +4,14 @@ import {
   SIZES,
   SPACES,
 } from "../../../../constants";
-import { FlatList, StyleSheet, Text, View, Alert } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  ScrollView,
+} from "react-native";
 import Carousel from "pinar";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router } from "expo-router";
@@ -60,7 +67,7 @@ export default function Request() {
 
   const onModalClose = () => {
     setModalVisible(false);
-    router.navigate("(app)/(tabs)");
+    router.navigate("(app)/(user)/(tabs)");
   };
 
   const validateField = (field: keyof Errors, value: string) => {
@@ -195,20 +202,22 @@ export default function Request() {
         >
           <Text style={styles.title}>Guidelines For Requesting Blood</Text>
 
-          <FlatList
-            scrollEnabled={true}
-            data={sampleGuidelines}
-            renderItem={({ item }) => (
-              <View style={{ gap: 4 }}>
-                <Text style={styles.header}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
-              </View>
-            )}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={1}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.flatlist}
-          />
+          <ScrollView>
+            <FlatList
+              scrollEnabled={false}
+              data={sampleGuidelines}
+              renderItem={({ item }) => (
+                <View style={{ gap: 4 }}>
+                  <Text style={styles.header}>{item.title}</Text>
+                  <Text style={styles.description}>{item.description}</Text>
+                </View>
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              numColumns={1}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.flatlist}
+            />
+          </ScrollView>
         </View>
         <RequestBloodunitScreen
           patientName={patientName}
@@ -291,7 +300,7 @@ const styles = StyleSheet.create({
   },
   flatlist: {
     rowGap: 8,
-    marginBottom: 12,
+    marginBottom: 70,
   },
   title: {
     fontSize: SIZES.large,
@@ -304,6 +313,7 @@ const styles = StyleSheet.create({
   },
   description: {
     flex: 1,
+    textAlign: "justify",
   },
   buttons: {
     flexDirection: "row",
@@ -320,12 +330,32 @@ const styles = StyleSheet.create({
 const sampleGuidelines = [
   {
     id: 1,
-    title: "Hello",
-    description: "some descriptions",
+    title: "Lifeline as a Platform",
+    description:
+      "Lifeline serves as a platform of convenience between you and our partnered hospitals. Our goal is to simplify the process of connecting with hospitals, providing you with more options without exerting much effort. However, please note that Lifeline does not have the ability to accept or expedite your requests, as there are multiple factors whether a partnered hospital will be able to accommodate your request. **By continuing, you acknowledge and understand this limitation.**",
   },
   {
     id: 2,
-    title: "Guideline #2",
-    description: "you need to go to this ",
+    title: "Complete the Request Form",
+    description:
+      "The information you provide will be forwarded to our partnered hospitals. As such, the request form must be complete and accurate in order to process the request. Incomplete submissions may lead to rejection.",
+  },
+  {
+    id: 3,
+    title: "Understand Possible Rejections",
+    description:
+      "Please be aware that requests can be rejected by our partnered hospitals for reasons such as incomplete documentation, insufficient stock of blood types, or other hospital-specific criteria. If your request is rejected, you may opt to resubmit or explore other options outside of Lifeline.",
+  },
+  {
+    id: 4,
+    title: "Check for Fees",
+    description:
+      "While requesting blood through Lifeline is free, please note that hospital fees may still apply, such as blood screening fees to ensure that each blood bag is safe from transmissible infections (i.e., HIV, Syphilis).",
+  },
+  {
+    id: 5,
+    title: "Requesting for Others",
+    description:
+      "If you are requesting blood for someone else, please make sure to fill out the form accurately and to indicate your relationship to the patient.",
   },
 ];

@@ -148,9 +148,13 @@ export default function UpdatesTab() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} overScrollMode="never">
-        {filteredData.map((item, index) => (
-          <UpdateCard key={item.id + item.timestamp || index} update={item} />
-        ))}
+        {filteredData.length === 0 ? (
+          <Text style={styles.noDataText}>There are no notifications yet</Text>
+        ) : (
+          filteredData.map((item, index) => (
+            <UpdateCard key={item.id + item.timestamp || index} update={item} />
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -166,5 +170,10 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     width: "100%",
+  },
+  noDataText: {
+    marginTop: 20,
+    textAlign: "center",
+    color: COLORS.text,
   },
 });

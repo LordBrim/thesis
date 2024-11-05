@@ -33,7 +33,8 @@ interface TicketState {
   selectedTime?: string;
   ticketNumber?: string;
   type?: string;
-  checklistData?: { [key: string]: string }; // Add checklistData as an optional property
+  checklistData?: { [key: string]: string };
+  isComplete: boolean; // Add checklistData as an optional property
   // Add other properties as needed
 }
 
@@ -47,6 +48,7 @@ export default function ManageTicketReview() {
     if (ticket) {
       setTicketData(JSON.parse(ticket as string)); // Deserialize the ticket data
     }
+    console.log("TICKET REVIEW SCREEN" + ticket);
   }, [ticket]);
 
   if (!ticketData) {
@@ -114,7 +116,9 @@ export default function ManageTicketReview() {
         >
           <FontAwesome6 name="calendar-day" size={18} color="black" />
           <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 7 }}>
-            {formatDate(ticketData.selectedDate)}
+            {ticketData.selectedDate
+              ? formatDate(ticketData.selectedDate)
+              : "N/A"}
           </Text>
         </View>
         <View
@@ -133,6 +137,11 @@ export default function ManageTicketReview() {
         <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
           Status: {ticketData.status}
         </Text>
+        {ticketData.status == "accepted" ? (
+          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+            Status: {!ticketData.isComplete ? "IN-REVIEW" : "COMPLETED"}
+          </Text>
+        ) : null}
       </View>
 
       <Pressable
@@ -161,7 +170,9 @@ export default function ManageTicketReview() {
       </Pressable>
       {openUserDetails ? (
         <View style={styles.checklistContainer}>
-          <Text style={styles.textDetails}>Name: {ticketData.name}</Text>
+          <Text style={styles.textDetails}>
+            Name: {ticketData.name || ticketData.displayName}
+          </Text>
           <Text style={styles.textDetails}>City: {ticketData.city}</Text>
           <Text style={styles.textDetails}>
             Contact Details: {ticketData.contactDetails}

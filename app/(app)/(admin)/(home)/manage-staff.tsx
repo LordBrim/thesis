@@ -85,14 +85,14 @@ type IStaffCard = {
 };
 
 export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
-  const handleUpdate = (uuid) => {
-    router.push({
-      pathname: "(app)/(admin)/(home)/manage-staff-update",
-      params: {
-        uuid: uuid,
-      },
-    });
-  };
+  // const handleUpdate = (uuid) => {
+  //   router.push({
+  //     pathname: "(app)/(admin)/(home)/manage-staff-update",
+  //     params: {
+  //       uuid: uuid,
+  //     },
+  //   });
+  // };
   const dispatch = useDispatch();
   const handleDisable = (uuid) => {
     dispatch(
@@ -107,7 +107,7 @@ export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
         <Text style={[GS.h2, card.question]}>{displayName}</Text>
-        <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} />
+        {/* <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} /> */}
         {disabled ? (
           <IconBtn
             icon="circle-minus"

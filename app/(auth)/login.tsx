@@ -31,6 +31,8 @@ import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { FlatList } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { showToastable } from "react-native-toastable";
+import { showLongToast } from "hooks/useToast";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -128,20 +130,26 @@ export default function LoginScreen() {
 
       const docRef = doc(FIRESTORE_DB, "User", user.uid);
       const docSnap = await getDoc(docRef);
+      const role = docSnap.data().role;
+      const disabled = docSnap.data().disabled;
 
-      switch (docSnap.data().role) {
-        case "super":
-          router.replace("/(app)/(super)/(tabs)");
-          break;
-        case "admin":
-          router.replace("/(app)/(admin)/(tabs)");
-          break;
-        case "staff":
-          router.replace("/(app)/(staff)/(tabs)");
-          break;
-        default:
-          router.replace("/(app)/(user)/(tabs)");
-          break;
+      if (!disabled) {
+        switch (role) {
+          case "super":
+            router.replace("/(app)/(super)/(tabs)");
+            break;
+          case "admin":
+            router.replace("/(app)/(admin)/(tabs)");
+            break;
+          case "staff":
+            router.replace("/(app)/(staff)/(tabs)");
+            break;
+          default:
+            router.replace("/(app)/(user)/(tabs)");
+            break;
+        }
+      } else {
+        showLongToast("Your account is disabled. 🚫");
       }
     } catch (error) {
       setModalVisible(true);

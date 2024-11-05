@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Login } from "./screens";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { showToastable } from "react-native-toastable";
 import { Restart } from "fiction-expo-restart";
 import NetInfo from "@react-native-community/netinfo";
+import { showLongToast, showShortToast } from "hooks/useToast";
 
 export default function Authentication() {
   const [initialLaunch, setInitialLaunch] = useState(true);
@@ -11,18 +11,12 @@ export default function Authentication() {
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       if (!state.isConnected) {
-        showToastable({
-          message: "📡 You are offline. Some features may not be available.",
-          status: "success",
-          duration: 36000000,
-        });
+        showLongToast(
+          "📡 You are offline. Some features may not be available."
+        );
       } else {
         if (!initialLaunch) {
-          showToastable({
-            message: "📡 You are back online.",
-            status: "success",
-            duration: 4000,
-          });
+          showShortToast("📡 You are back online.");
           Restart();
         } else {
           setInitialLaunch(false);

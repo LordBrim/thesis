@@ -168,12 +168,7 @@ export default function FAQTab() {
       <ScrollView overScrollMode="never">
         <View style={styles.cTop}>
           <View style={{ gap: 8 }}>
-            <Text style={GS.h1}>
-              If you have any questions on Lifeline, We're here to answer them
-              the best we can!
-            </Text>
-
-            <Description description="At Lifeline we like to help you to easily understand our app and how you can use it properly without any worries! Feel free to check answers for your questions." />
+            <Text style={GS.h1}>How may we help you?</Text>
           </View>
 
           <TextInputWrapper>

@@ -7,12 +7,12 @@ import {
   Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
+import { COLORS } from "../../../../constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
-import IconBtn from "components/common/IconButton";
-import { doc, updateDoc } from "firebase/firestore";
+import IconBtn from "../../../../components/common/IconButton";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 interface TicketState {
@@ -37,6 +37,50 @@ interface TicketState {
   isComplete: boolean; // Add checklistData as an optional property
   // Add other properties as needed
 }
+
+const CustomButton = ({ title, onPress, color, isReject }) => (
+  <Pressable
+    onPress={onPress}
+    style={({ pressed }) => [
+      {
+        backgroundColor: color,
+        padding: 10,
+        borderRadius: 5,
+        opacity: pressed ? 0.8 : 1,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5, // For Android shadow
+      },
+    ]}
+  >
+    {isReject ? (
+      <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
+        {title}
+      </Text>
+    ) : (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <FontAwesome6 name="check" size={24} color="white" />
+        <Text
+          style={{
+            marginLeft: 5,
+            color: "white",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          {title}
+        </Text>
+      </View>
+    )}
+  </Pressable>
+);
 
 export default function ManageTicketReview() {
   const { ticket } = useLocalSearchParams();
@@ -81,6 +125,38 @@ export default function ManageTicketReview() {
       setTicketData(updatedTicketData);
     } catch (error) {
       console.error("Error updating ticket:", error);
+    }
+  };
+
+  const handleCompleteTransaction = async () => {
+    if (!ticketData) return;
+
+    const updatedTicketData = {
+      ...ticketData,
+      message: "incentives",
+      isComplete: true,
+    };
+
+    try {
+      const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
+      await updateDoc(ticketDocRef, {
+        isComplete: true,
+      });
+      setTicketData(updatedTicketData);
+    } catch (error) {
+      console.error("Error completing transaction:", error);
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!ticketData) return;
+
+    try {
+      const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
+      await deleteDoc(ticketDocRef);
+      setTicketData(null); // Optionally, you can navigate away or show a message
+    } catch (error) {
+      console.error("Error canceling ticket:", error);
     }
   };
 
@@ -135,11 +211,12 @@ export default function ManageTicketReview() {
           </Text>
         </View>
         <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
-          Status: {ticketData.status}
+          Status: {ticketData.status.toUpperCase()}
         </Text>
         {ticketData.status == "accepted" ? (
           <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
-            Status: {!ticketData.isComplete ? "IN-REVIEW" : "COMPLETED"}
+            Appoinment Result:{" "}
+            {!ticketData.isComplete ? "IN-REVIEW" : "COMPLETED"}
           </Text>
         ) : null}
       </View>
@@ -241,15 +318,26 @@ export default function ManageTicketReview() {
       ) : null}
 
       <View style={styles.buttonContainer}>
-        <Button
-          title="Accept"
-          onPress={() => handleUpdateStatus("accepted")}
-          color="green"
-        />
-        <Button
-          title="Reject"
-          onPress={() => handleUpdateStatus("denied")}
+        {ticketData.status === "accepted" ? (
+          <CustomButton
+            title="Complete Transaction"
+            onPress={handleCompleteTransaction}
+            color="#10b500"
+            isReject={false}
+          />
+        ) : (
+          <CustomButton
+            title="Accept"
+            onPress={() => handleUpdateStatus("accepted")}
+            color="#10b500"
+            isReject={false}
+          />
+        )}
+        <CustomButton
+          title="Cancel"
+          onPress={handleCancel}
           color={COLORS.primary}
+          isReject={true}
         />
       </View>
     </ScrollView>

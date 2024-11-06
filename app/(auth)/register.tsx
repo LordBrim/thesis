@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { Alert } from "react-native";
+import { Alert, Touchable } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   View,
   Text,
@@ -9,7 +10,10 @@ import {
   StyleSheet,
   SafeAreaView,
   ScrollView,
+  Button,
 } from "react-native";
+import RadioButton from "components/common/RadioButton";
+import axios from "axios";
 import { CheckBox } from "react-native-btr";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN, GS } from "../../constants";
@@ -21,24 +25,183 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import LinkBtn from "components/common/LinkBtn";
 import { Dimensions } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import moment from "moment";
 
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
   const cpToggle = useTogglePasswordVisibility();
+  const [sex, setSex] = useState("");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
-
   const [toggleTerms, setToggleTerms] = useState(false);
   const [toggleAlerts, setToggleAlerts] = useState(false);
-
+  const [userAge, setUserAge] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [otpCode, setOtpCode] = useState();
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpInput, setOtpInput] = useState();
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const [showModalEmail, setShowModalEmail] = useState(false);
+  const fbAuth = FIREBASE_AUTH;
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+  };
 
-  const auth = FIREBASE_AUTH;
+  const showDatepicker = () => {
+    setShow(true);
+  };
+  const sendOTP = async (email) => {
+    const API_KEY = "d1440a571533e6c003ef72358ff55e5a-f6fe91d3-6d5fa136";
+    const DOMAIN = "lifeline-ph.tech";
+
+    const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
+
+    const data = new URLSearchParams({
+      from: "Lifeline Support <support@lifeline.com>",
+      to: email,
+      subject: "Your Lifeline OTP Code",
+      text: `Your OTP code is: ${otp}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333;">Lifeline Verification Code</h2>
+          <p style="color: #555;">Dear User,</p>
+          <p style="color: #555;">Thank you for registering with Lifeline. To complete your registration, please use the following One-Time Password (OTP) to verify your email address:</p>
+          <div style="text-align: center; margin: 20px 0;">
+            <span style="display: inline-block; padding: 10px 20px; font-size: 24px; color: #fff; background-color: #007bff; border-radius: 5px;">${otp}</span>
+          </div>
+          <p style="color: #555;">If you did not request this code, please ignore this email.</p>
+          <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+        </div>
+      `,
+    });
+
+    try {
+      const response = await axios.post(
+        `https://api.mailgun.net/v3/${DOMAIN}/messages`,
+        data,
+        {
+          auth: {
+            username: "api",
+            password: API_KEY,
+          },
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+      console.log("OTP sent successfully:", response.data);
+      setOtpCode(otp.toString());
+      setOtpSent(true);
+      setShowModalEmail(true);
+    } catch (error) {
+      console.error(
+        "Error sending OTP:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+  const handleButtonPress = () => {
+    if (otpSent) {
+      // Handle OTP verification logic here
+      if (otpInput === otpCode) {
+        console.log("OTP verified successfully:", otpInput);
+        setOtpVerified(true);
+      } else {
+        console.error("Incorrect OTP entered:", otpInput);
+        // Optionally, show an error message to the user
+      }
+    } else {
+      sendOTP(email);
+    }
+  };
+
+  const today = new Date();
+  const eighteenYearsAgo = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  );
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  const isValidPassword = (password) => {
+    const passwordRegex =
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+  const isValidFullName = (fullName) => {
+    const fullNameRegex = /^[a-zA-Z\s]+$/;
+    return fullNameRegex.test(fullName) && fullName.trim().length > 0;
+  };
+  const isValidDateOfBirth = (date) => {
+    const today = new Date();
+    const eighteenYearsAgo = new Date(
+      today.getFullYear() - 18,
+      today.getMonth(),
+      today.getDate()
+    );
+    return date <= eighteenYearsAgo;
+  };
+  const isValidOTP = (otp) => {
+    const otpRegex = /^\d{6}$/;
+    return otpRegex.test(otp);
+  };
+
+  const calculateAge = (birthDate) => {
+    return moment().diff(moment(birthDate, "YYYY-MM-DD"), "years");
+  };
 
   const register = async () => {
+    if (!isValidFullName(fullName)) {
+      Alert.alert("Invalid Full Name", "Please enter a valid full name.");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      Alert.alert("Invalid Email", "Please enter a valid email address.");
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      Alert.alert(
+        "Weak Password",
+        "Password must be at least 8 characters long and include a number and a special character."
+      );
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert("Password Mismatch", "Passwords do not match.");
+      return;
+    }
+
+    if (!otpVerified) {
+      Alert.alert("Email Verification", "Please verify your email address.");
+      return;
+    }
+
+    if (!isValidDateOfBirth(date)) {
+      Alert.alert(
+        "Invalid Date of Birth",
+        "You must be at least 18 years old."
+      );
+      return;
+    }
     if (!toggleTerms) {
       Alert.alert(
         "Terms and Conditions",
@@ -56,11 +219,14 @@ export default function RegisterScreen() {
       Alert.alert("Password Mismatch", "Passwords do not match.");
       return;
     }
-
+    if (!otpVerified) {
+      Alert.alert("Email Verification", "Please verify your email address.");
+      return;
+    }
     setLoading(true);
     try {
       const response = await createUserWithEmailAndPassword(
-        auth,
+        fbAuth,
         email,
         password
       );
@@ -68,12 +234,18 @@ export default function RegisterScreen() {
 
       const displayName = fullName;
 
+      const formattedDate = date.toISOString().split("T")[0];
+      const age = calculateAge(formattedDate);
+
       // Add user data to the Firestore in "User" collection with auto-generated document ID
       const documentData = {
         email: email,
         password: password,
         displayName: displayName,
+        dateOfBirth: formattedDate,
+        sex: sex,
         role: "user",
+        age: age,
       };
 
       await firestoreOperations.addDocument(
@@ -82,7 +254,7 @@ export default function RegisterScreen() {
         response.user.uid
       );
       router.back();
-      router.replace("/(app)/(tabs)/");
+      router.replace("/(app)");
     } catch (error) {
       console.log(error);
       alert("Registration Failed:" + error.message);
@@ -100,7 +272,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
@@ -131,10 +303,109 @@ export default function RegisterScreen() {
                   placeholder="Enter your email address..."
                   onChangeText={(email) => setEmail(email)}
                   autoCapitalize="none"
-                  autoCorrect={true}
+                  autoCorrect={false}
                   enablesReturnKeyAutomatically
                 />
+
+                {otpVerified ? (
+                  <Text style={{ color: "green", marginRight: 10 }}>
+                    Email Verified
+                  </Text>
+                ) : null}
               </TextInputWrapper>
+              <SingleBtnModal
+                visible={showModalEmail}
+                onRequestClose={() => {
+                  setShowModalEmail(false);
+                }}
+                onPress={() => {
+                  setShowModalEmail(false);
+                }}
+                icon={<FontAwesome5 name="envelope" size={40} color="black" />}
+                title="Email Sent!"
+                description={
+                  <Text style={{ textAlign: "justify" }}>
+                    We have sent the OTP code to your{" "}
+                    <Text style={{ fontWeight: "700", textAlign: "justify" }}>
+                      email address {email}. Please check in the spam folder if
+                      you don't see it in your inbox.
+                    </Text>
+                  </Text>
+                }
+                btnLabel="Close"
+              ></SingleBtnModal>
+
+              <View style={{ flexDirection: "row" }}>
+                <TextInput
+                  style={styles.emailInput}
+                  value={otpInput}
+                  placeholder="6 PIN NUMBER"
+                  onChangeText={(otpInput) => setOtpInput(otpInput)}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  maxLength={6}
+                  keyboardType="numeric" // Set the keyboard type to numeric
+                />
+                {otpSent ? (
+                  <View style={{ margin: 5 }}>
+                    <Button
+                      title="Resend OTP"
+                      onPress={() => {
+                        sendOTP(email);
+                      }}
+                      color={COLORS.primary}
+                    />
+                  </View>
+                ) : null}
+                {otpSent ? (
+                  <View style={{ margin: 5 }}>
+                    <Button
+                      color="green"
+                      title="Verify OTP"
+                      onPress={handleButtonPress}
+                    />
+                  </View>
+                ) : (
+                  <View style={{ margin: 5 }}>
+                    <Button title="Send OTP" onPress={handleButtonPress} />
+                  </View>
+                )}
+              </View>
+
+              <TextInputWrapper label="Date of Birth">
+                <TouchableOpacity onPress={showDatepicker}>
+                  <Text style={styles.input}>{date.toDateString()}</Text>
+                </TouchableOpacity>
+                {show && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode="date"
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                    maximumDate={eighteenYearsAgo}
+                  />
+                )}
+              </TextInputWrapper>
+
+              <TextInputWrapper label="Sex">
+                <View style={styles.radioContainer}>
+                  <RadioButton
+                    label="Male"
+                    value="male"
+                    selected={sex === "male"}
+                    onPress={() => setSex("male")}
+                  />
+                  <RadioButton
+                    label="Female"
+                    value="female"
+                    selected={sex === "female"}
+                    onPress={() => setSex("female")}
+                  />
+                </View>
+              </TextInputWrapper>
+
               <TextInputWrapper label="Password">
                 <TextInput
                   style={styles.input}
@@ -261,7 +532,7 @@ export default function RegisterScreen() {
           </View> */}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </GestureHandlerRootView>
   );
 }
 
@@ -273,9 +544,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignContent: "center",
   },
+  emailVerificationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 12,
+  },
+  emailInput: {
+    padding: 10,
+    flex: 1,
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    marginRight: 8,
+  },
   scrollview: {
     height: Dimensions.get("window").height,
     maxHeight: Dimensions.get("window").height - 82,
+  },
+  radioContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
   },
   cTop: {
     gap: SIZES.xxxLarge,
@@ -300,7 +590,7 @@ const styles = StyleSheet.create({
     padding: SIZES.xSmall,
     width: "100%",
     borderTopWidth: 1,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.grayDark,
     marginTop: SIZES.xLarge,
   },
   formCta: {
@@ -308,13 +598,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: SIZES.medium,
-    color: COLORS.white,
+    color: COLORS.background,
     backgroundColor: COLORS.primary,
     borderRadius: SIZES.xSmall,
   },
   formCtaText: {
     fontSize: SIZES.medium,
     textTransform: "capitalize",
-    color: COLORS.white,
+    color: COLORS.background,
   },
 });

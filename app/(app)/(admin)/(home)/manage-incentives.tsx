@@ -115,44 +115,166 @@ export default function ManageIncentives() {
             </View>
           </View>
         </View>
-        <FlatList
-          data={data}
-          renderItem={({ item, index }) => (
-            <View
-              style={{
-                justifyContent: "flex-start",
-                alignItems: "center",
-                width: 70,
-                gap: 4,
-              }}
-            >
-              <Text>{index + 1}</Text>
-              <Fontisto
-                name="blood"
-                size={size}
-                color={
-                  index + 1 <= simulation ? COLORS.primary : COLORS.grayMid
-                }
-              />
-              {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
-              )}
-            </View>
-          )}
-          keyExtractor={(item, index) => {
-            return index.toString();
-          }}
-          numColumns={data.length > 5 ? Math.round(data.length / 2) : 5}
-          contentContainerStyle={{
-            alignItems: "center",
-            gap: 12,
-          }}
-          columnWrapperStyle={{
-            justifyContent: "center",
-            gap: 12,
-          }}
-          scrollEnabled={false}
-        />
+        {data.length < 5 && (
+          <FlatList
+            data={data}
+            renderItem={({ item, index }) => (
+              <View
+                style={{
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  width: 70,
+                  gap: 4,
+                }}
+              >
+                <Text>{index + 1}</Text>
+                <Fontisto
+                  name="blood"
+                  size={size}
+                  color={
+                    index + 1 <= simulation ? COLORS.primary : COLORS.grayMid
+                  }
+                />
+                {item.incentive && (
+                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                )}
+              </View>
+            )}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            numColumns={4}
+            contentContainerStyle={{
+              alignItems: "center",
+              gap: 12,
+            }}
+            columnWrapperStyle={{
+              justifyContent: "center",
+              gap: 12,
+            }}
+            scrollEnabled={false}
+          />
+        )}
+        {(data.length == 5 || data.length == 6) && (
+          <FlatList
+            data={data}
+            renderItem={({ item, index }) => (
+              <View
+                style={{
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  width: 70,
+                  gap: 4,
+                }}
+              >
+                <Text>{index + 1}</Text>
+                <Fontisto
+                  name="blood"
+                  size={size}
+                  color={
+                    index + 1 <= simulation ? COLORS.primary : COLORS.grayMid
+                  }
+                />
+                {item.incentive && (
+                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                )}
+              </View>
+            )}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            numColumns={3}
+            contentContainerStyle={{
+              alignItems: "center",
+              gap: 12,
+            }}
+            columnWrapperStyle={{
+              justifyContent: "center",
+              gap: 12,
+            }}
+            scrollEnabled={false}
+          />
+        )}
+        {(data.length == 7 || data.length == 8) && (
+          <FlatList
+            data={data}
+            renderItem={({ item, index }) => (
+              <View
+                style={{
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  width: 70,
+                  gap: 4,
+                }}
+              >
+                <Text>{index + 1}</Text>
+                <Fontisto
+                  name="blood"
+                  size={size}
+                  color={
+                    index + 1 <= simulation ? COLORS.primary : COLORS.grayMid
+                  }
+                />
+                {item.incentive && (
+                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                )}
+              </View>
+            )}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            numColumns={4}
+            contentContainerStyle={{
+              alignItems: "center",
+              gap: 12,
+            }}
+            columnWrapperStyle={{
+              justifyContent: "center",
+              gap: 12,
+            }}
+            scrollEnabled={false}
+          />
+        )}
+        {(data.length == 9 || data.length == 10) && (
+          <FlatList
+            data={data}
+            renderItem={({ item, index }) => (
+              <View
+                style={{
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  width: 70,
+                  gap: 4,
+                }}
+              >
+                <Text>{index + 1}</Text>
+                <Fontisto
+                  name="blood"
+                  size={size}
+                  color={
+                    index + 1 <= simulation ? COLORS.primary : COLORS.grayMid
+                  }
+                />
+                {item.incentive && (
+                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                )}
+              </View>
+            )}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            numColumns={5}
+            contentContainerStyle={{
+              alignItems: "center",
+              gap: 12,
+            }}
+            columnWrapperStyle={{
+              justifyContent: "center",
+              gap: 12,
+            }}
+            scrollEnabled={false}
+          />
+        )}
         <TouchableOpacity
           style={{
             padding: 12,

@@ -31,9 +31,7 @@ export default function ManageIncentivesUpdate() {
   const { user } = useSelector((state: RootState) => state.user);
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
   const hospital = hospitals.find((section) => section.uuid === uuid);
-  const incentives = hospitals.find(
-    (section) => section.name === user.hospitalName
-  )?.incentives || { info: "", number: 0, data: [] };
+  const incentives = hospital.incentives;
   const navigation = useNavigation();
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
@@ -46,7 +44,7 @@ export default function ManageIncentivesUpdate() {
   }, []);
   const [updatedInfo, setUpdatedInfo] = useState(incentives.info);
   const [updatedNumber, setUpdatedNumber] = useState(
-    incentives.number === null ? "4" : "10"
+    incentives.number === null ? "4" : incentives.number.toString()
   );
   const [inputs, setInputs] = useState(incentives.data);
   const getIncentivesDataArray = (): IncentiveData[] => {
@@ -119,7 +117,7 @@ export default function ManageIncentivesUpdate() {
   const handleNumber = (number) => {
     if (number > 10) {
       setUpdatedNumber("10");
-    } else if (number > 2) {
+    } else if (number < 0) {
       setUpdatedNumber("1");
     } else {
       setUpdatedNumber(number);

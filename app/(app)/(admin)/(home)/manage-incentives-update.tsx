@@ -121,7 +121,7 @@ export default function ManageIncentivesUpdate() {
   const handleNumber = (number) => {
     if (number > 10) {
       setUpdatedNumber("10");
-    } else if (number > 2) {
+    } else if (number < 0) {
       setUpdatedNumber("1");
     } else {
       setUpdatedNumber(number);

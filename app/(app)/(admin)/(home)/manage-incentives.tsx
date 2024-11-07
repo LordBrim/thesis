@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    paddingVertical: 16,
+    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   scrollview: {

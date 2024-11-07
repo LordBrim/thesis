@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     gap: 24,
+    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
   },
   title: {
     minWidth: "100%",

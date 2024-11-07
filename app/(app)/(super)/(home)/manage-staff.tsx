@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
-    paddingTop: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
   },
   scrollview: {
     gap: 20,

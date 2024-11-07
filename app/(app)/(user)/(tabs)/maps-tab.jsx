@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     backgroundColor: COLORS.background,
-    paddingTop: HORIZONTAL_SCREEN_MARGIN,
+    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
   },
   cTop: {
     width: "100%",

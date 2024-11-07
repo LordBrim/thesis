@@ -152,6 +152,7 @@ export default function Request() {
       emergencyReason,
       packedRequest,
       packedRequestInfo,
+      // Exclude appointmentDate, appointmentTime, and selectedHospital
     };
 
     console.log("Form Data:", formData);

@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Button,
+} from "react-native";
 import React, { useState, forwardRef, useImperativeHandle } from "react";
 import Description from "components/common/texts/Description";
 import {
@@ -10,14 +17,34 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import { MINOR_COMPONENT_HEIGHT } from "constants/measurements";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
-  const [open, setOpen] = useState(false);
+  const [openHospital, setOpenHospital] = useState(false);
+  const [openTimeBlock, setOpenTimeBlock] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(new Date());
-  const [showTimePicker, setShowTimePicker] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTimeBlock, setSelectedTimeBlock] = useState(null);
+
+  const timeBlocks = [
+    { label: "10:00 AM - 10:30 AM", value: "10:00 AM" },
+    { label: "10:30 AM - 11:00 AM", value: "10:30 AM" },
+    { label: "11:00 AM - 11:30 AM", value: "11:00 AM" },
+    { label: "11:30 AM - 12:00 PM", value: "11:30 AM" },
+    { label: "12:00 PM - 12:30 PM", value: "12:00 PM" },
+    { label: "12:30 PM - 1:00 PM", value: "12:30 PM" },
+    { label: "1:00 PM - 1:30 PM", value: "1:00 PM" },
+    { label: "1:30 PM - 2:00 PM", value: "1:30 PM" },
+    { label: "2:00 PM - 2:30 PM", value: "2:00 PM" },
+    { label: "2:30 PM - 3:00 PM", value: "2:30 PM" },
+    { label: "3:00 PM - 3:30 PM", value: "3:00 PM" },
+    { label: "3:30 PM - 4:00 PM", value: "3:30 PM" },
+    { label: "4:00 PM - 4:30 PM", value: "4:00 PM" },
+    { label: "4:30 PM - 5:00 PM", value: "4:30 PM" },
+  ];
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -29,12 +56,6 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
     setShowDatePicker(false);
   };
 
-  const handleTimeChange = (event, selectedTime) => {
-    const currentTime = selectedTime || selectedTime;
-    setSelectedTime(currentTime);
-    setShowTimePicker(false);
-  };
-
   const handleNextButtonPress = (answers) => {
     console.log("Received answers:", answers); // Log the received answers
 
@@ -44,19 +65,14 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
     }
 
     const formattedDate = selectedDate.toISOString().slice(0, 10);
-    const formattedTime = selectedTime.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    });
 
     console.log("Formatted Date:", formattedDate); // Log the formatted date
-    console.log("Formatted Time:", formattedTime); // Log the formatted time
     console.log("Selected Hospital:", selectedHospital); // Log the selected hospital
+    console.log("Selected Time Block:", selectedTimeBlock); // Log the selected time block
 
     // Update answers state in DonateScreen
     updateAnswers("appointmentDate", formattedDate);
-    updateAnswers("appointmentTime", formattedTime);
+    updateAnswers("appointmentTime", selectedTimeBlock);
     updateAnswers("selectedHospital", selectedHospital);
   };
 
@@ -68,10 +84,6 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
     handleNextButtonPress,
     updateAnswersState,
   }));
-
-  const toggleTimePicker = () => {
-    setShowTimePicker(!showTimePicker);
-  };
 
   const hospitals = [
     { label: "UERM Hospital", value: "UERM Hospital" },
@@ -103,14 +115,15 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
       <View style={styles.contentContainer}>
         <Text style={styles.header}>Preferred Hospital</Text>
         <DropDownPicker
-          open={open}
+          open={openHospital}
           value={selectedHospital}
           items={hospitals}
-          setOpen={setOpen}
+          setOpen={setOpenHospital}
           setValue={setSelectedHospital}
           placeholder="Select a hospital"
           style={styles.inputContainer}
           labelStyle={styles.inputLabel}
+          onOpen={() => setOpenTimeBlock(false)} // Close time block drop-down when hospital drop-down is opened
         />
 
         <Text style={styles.header}>Preferred Date</Text>
@@ -134,28 +147,31 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
         )}
 
         <Text style={styles.header}>Preferred Time</Text>
-        <TouchableOpacity
-          onPress={toggleTimePicker}
+        <DropDownPicker
+          open={openTimeBlock}
+          value={selectedTimeBlock}
+          items={timeBlocks}
+          setOpen={setOpenTimeBlock}
+          setValue={setSelectedTimeBlock}
+          placeholder="Select a time block"
           style={styles.inputContainer}
-        >
-          <Text style={styles.inputLabel}>
-            {selectedTime.toLocaleTimeString("en-US", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </Text>
-        </TouchableOpacity>
-        {showTimePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={selectedTime}
-            mode="time"
-            is24Hour={false}
-            display="spinner"
-            onChange={handleTimeChange}
-          />
-        )}
+          labelStyle={styles.inputLabel}
+          onOpen={() => setOpenHospital(false)} // Close hospital drop-down when time block drop-down is opened
+        />
       </View>
+
+      <SingleBtnModal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        onPress={() => setModalVisible(false)}
+        title="Invalid Time"
+        icon={
+          <Ionicons name="information-circle-outline" size={42} color="black" />
+        }
+        animation={true}
+        btnLabel="OK"
+        description="Please select a time between 10 AM and 5 PM."
+      />
     </View>
   );
 });
@@ -192,6 +208,25 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     paddingHorizontal: 4,
     borderRadius: 50,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
 

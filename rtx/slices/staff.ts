@@ -11,32 +11,26 @@ import {
   where,
 } from "firebase/firestore";
 
-export const getHospitalsStaff = createAsyncThunk<
-  Record<string, StaffState["staff"]>,
-  void
->("getHospitalStaff", async () => {
-  try {
-    const staffQuery = query(
-      collection(FIRESTORE_DB, "User"),
-      where("role", "==", "staff")
-    );
-    const querySnapshot = await getDocs(staffQuery);
-    const staffByHospital: Record<string, StaffState["staff"]> = {};
-    querySnapshot.docs.forEach((doc) => {
-      const { hospitalName, ...staffData } = doc.data();
-      if (hospitalName) {
-        if (!staffByHospital[hospitalName]) {
-          staffByHospital[hospitalName] = [];
-        }
-        staffByHospital[hospitalName].push(staffData);
-      }
-    });
-    return staffByHospital;
-  } catch (error) {
-    console.error("Error fetching staff:", error);
-    return {};
+export const getAllStaff = createAsyncThunk<StaffState["staff"], void>(
+  "getAllStaff",
+  async () => {
+    try {
+      const staffQuery = query(
+        collection(FIRESTORE_DB, "User"),
+        where("role", "==", "staff")
+      );
+      const querySnapshot = await getDocs(staffQuery);
+      const staff = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        uuid: doc.id,
+      })) as StaffState["staff"];
+      return staff;
+    } catch (error) {
+      console.error("Error fetching staff:", error);
+      return [];
+    }
   }
-});
+);
 
 export const getHopitalStaff = createAsyncThunk<StaffState["staff"], string>(
   "getHopitalStaff",
@@ -113,7 +107,7 @@ const initialState: StaffState = {
       email: "andrei@mail.com",
       password: "123456",
       role: "staff",
-      hospitalName: "STI Sta. Mesa",
+      hospitalName: "UERM Hospital",
     },
     {
       uuid: "wLBJcMvAmdONhDpQSlGbbXsL3KS2",
@@ -122,7 +116,7 @@ const initialState: StaffState = {
       email: "angelo@mail.com",
       password: "123456",
       role: "staff",
-      hospitalName: "STI Sta. Mesa",
+      hospitalName: "UERM Hospital",
     },
   ],
 };
@@ -179,13 +173,17 @@ const staffSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getHopitalStaff.fulfilled, (state, action) => {
-      if (action.payload && action.payload.length > 0) {
+    builder
+      .addCase(getHopitalStaff.fulfilled, (state, action) => {
+        if (action.payload && action.payload.length > 0) {
+          state.staff = action.payload;
+        } else {
+          state.staff = initialState.staff;
+        }
+      })
+      .addCase(getAllStaff.fulfilled, (state, action) => {
         state.staff = action.payload;
-      } else {
-        state.staff = initialState.staff;
-      }
-    });
+      });
   },
 });
 

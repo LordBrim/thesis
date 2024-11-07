@@ -11,20 +11,18 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   disableStaff,
   disableStaffInFirebase,
-  getHospitalsStaff,
+  getAllStaff,
 } from "rtx/slices/staff";
 
 export default function ManageStaff() {
+  const { hospitals } = useSelector((state: RootState) => state.hospitals);
   const { staff } = useSelector((state: RootState) => state.staff);
-  const dispatch = useDispatch<AppDispatch>();
-  // TODO: Get all the hospital staff
-  useEffect(() => {
-    dispatch(getHospitalsStaff());
-  }, []);
 
-  // useEffect(() => {
-  //   dispatch(getHopitalStaff(user.hospitalName));
-  // }, [staff]);
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(getAllStaff());
+    console.log(staff);
+  }, []);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -53,16 +51,11 @@ export default function ManageStaff() {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={staff}
+        data={hospitals}
         renderItem={({ item }) => (
           <View>
-            <Text style={[GS.h3, styles.title]}>{item.hospitalName}</Text>
-            <StaffCard
-              disabled={item.disabled}
-              uuid={item.uuid}
-              displayName={item.displayName}
-              email={item.email}
-            />
+            <Text style={[GS.h2, styles.title]}>{item.name}</Text>
+            <StaffPanel hospitalName={item.name} />
           </View>
         )}
         keyExtractor={(item, index) => {
@@ -70,8 +63,47 @@ export default function ManageStaff() {
         }}
         overScrollMode="never"
         persistentScrollbar={true}
+        contentContainerStyle={{ gap: 24, flex: 1 }}
       />
     </SafeAreaView>
+  );
+}
+
+function StaffPanel({ hospitalName }) {
+  const { staff } = useSelector((state: RootState) => state.staff);
+  const hospitalStaff = staff.filter(
+    (staffMember) => staffMember.hospitalName === hospitalName
+  );
+  return (
+    <>
+      {hospitalStaff.length > 0 ? (
+        <FlatList
+          data={staff}
+          renderItem={({ item }) => (
+            <StaffCard
+              disabled={item.disabled}
+              uuid={item.uuid}
+              displayName={item.displayName}
+              email={item.email}
+            />
+          )}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          overScrollMode="never"
+          scrollEnabled={false}
+          persistentScrollbar={true}
+        />
+      ) : (
+        <View
+          style={{
+            paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+          }}
+        >
+          <Text>There are no staff created.</Text>
+        </View>
+      )}
+    </>
   );
 }
 
@@ -82,7 +114,7 @@ type IStaffCard = {
   email: string;
 };
 
-export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
+function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
   const dispatch = useDispatch();
   const handleDisable = (uuid) => {
     dispatch(
@@ -93,11 +125,29 @@ export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
     );
     disableStaffInFirebase(uuid, !disabled);
   };
-  // TODO: Get the hospital staff based on hospital uuid
   return (
-    <>
-      <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
-        <Text style={[GS.h3, styles.title]}>{displayName}</Text>
+    <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
+      <View style={card.aContainer}>
+        <Text style={card.answer}>
+          UUID:
+          <Text style={{ fontWeight: "normal" }}> {uuid}</Text>
+        </Text>
+        <Text style={card.answer}>
+          Display Name:
+          <Text style={{ fontWeight: "normal" }}> {displayName}</Text>
+        </Text>
+        <Text style={card.answer}>
+          Disabled:
+          <Text style={{ fontWeight: "normal" }}>
+            {" "}
+            {disabled ? "true" : "false"}
+          </Text>
+        </Text>
+        <Text style={card.answer}>
+          Email:<Text style={{ fontWeight: "normal" }}> {email}</Text>
+        </Text>
+      </View>
+      <View>
         {disabled ? (
           <IconBtn
             icon="circle-minus"
@@ -113,26 +163,13 @@ export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
             onPress={() => handleDisable(uuid)}
           />
         )}
-      </Pressable>
-      <View style={card.aContainer}>
-        <Text style={card.answer}>
-          Disabled:
-          <Text style={{ fontWeight: "normal" }}>
-            {" "}
-            {disabled ? "true" : "false"}
-          </Text>
-        </Text>
-        <Text style={card.answer}>
-          Email:<Text style={{ fontWeight: "normal" }}> {email}</Text>
-        </Text>
       </View>
-    </>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",
@@ -142,7 +179,6 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   title: {
-    flex: 1,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
 });
@@ -153,22 +189,17 @@ const card = StyleSheet.create({
     minHeight: 35,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-start",
     padding: 2,
   },
-  question: {
-    flex: 1,
-    fontWeight: "bold",
-  },
   aContainer: {
-    width: "100%",
+    width: "85%",
     minHeight: 35,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingTop: 8,
-    paddingBottom: 16,
+    padding: 8,
   },
   answer: {
-    flex: 1,
+    width: "100%",
     flexDirection: "row",
     fontWeight: "bold",
   },

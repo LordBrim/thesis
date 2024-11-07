@@ -45,6 +45,8 @@ export default function ManageBloodUnits() {
             stock={item.stock}
           />
         )}
+        persistentScrollbar={true}
+        overScrollMode="never"
       />
     </SafeAreaView>
   );

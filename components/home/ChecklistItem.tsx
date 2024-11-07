@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     padding: 10,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
     borderRadius: 8,
     borderColor: COLORS.primary,
     borderWidth: 1,
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectedButton: {
-    backgroundColor: COLORS.redTop,
+    backgroundColor: COLORS.primary,
   },
   buttonText: {
     color: "#000",
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   selectedButtonText: {
-    color: COLORS.white,
+    color: COLORS.background,
   },
   dateButton: {
     borderWidth: 1,

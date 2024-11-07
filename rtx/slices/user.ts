@@ -38,6 +38,7 @@ interface UserState {
       timesCompleted: number;
     }[];
     disabled: boolean;
+    sex: "male" | "female"; // Add sex property
   };
 }
 
@@ -56,6 +57,7 @@ const initialState: UserState = {
       },
     ],
     disabled: false,
+    sex: "male", // Set default sex
   },
 };
 

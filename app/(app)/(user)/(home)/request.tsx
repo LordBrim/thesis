@@ -262,12 +262,14 @@ export default function Request() {
       </Carousel>
 
       <View style={styles.fixed}>
-        <CallToActionBtn
-          label="previous"
-          onPress={() => prev()}
-          style={{ flex: 1 }}
-          secondary
-        />
+        {screenIndex === stepCount - 1 ? (
+          <CallToActionBtn
+            label="previous"
+            onPress={() => prev()}
+            style={{ flex: 1 }}
+            secondary
+          />
+        ) : null}
         <CallToActionBtn
           label={screenIndex === stepCount - 1 ? "submit" : "next"}
           onPress={screenIndex === stepCount - 1 ? handleSubmit : next}

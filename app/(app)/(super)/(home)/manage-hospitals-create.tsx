@@ -86,7 +86,6 @@ export default function ManageFaqCreate() {
         },
       })
     );
-    dispatch(getHospitals());
     addHospitalToFirebase(
       newHospitalName,
       newLogoUrl,
@@ -105,6 +104,7 @@ export default function ManageFaqCreate() {
         { type: "O-", available: false },
       ]
     );
+    dispatch(getHospitals());
     router.back();
   };
   return (

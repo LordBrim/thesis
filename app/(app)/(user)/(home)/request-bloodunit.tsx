@@ -5,6 +5,7 @@ import {
   TextInput,
   Image,
   Platform,
+  Alert,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../../constants";
@@ -37,6 +38,7 @@ export default function RequestBloodunitScreen({
   setPackedRequestInfo,
   errors,
   setErrors,
+  next,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [radioButtons, setRadioButtons] = useState([
@@ -134,6 +136,37 @@ export default function RequestBloodunitScreen({
         break;
     }
     setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+  };
+
+  const handleNext = () => {
+    const fields = [
+      { field: "patientName", value: patientName },
+      { field: "selectedBloodType", value: selectedBloodType },
+      { field: "selectedRelationship", value: selectedRelationship },
+      { field: "contactNumber", value: contactNumber },
+    ];
+
+    if (isEmergency) {
+      fields.push({ field: "emergencyReason", value: emergencyReason });
+    }
+
+    let allValid = true;
+    const newErrors = {};
+
+    fields.forEach(({ field, value }) => {
+      if (!value) {
+        newErrors[field] = "This field is required.";
+        allValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+
+    if (allValid) {
+      next();
+    } else {
+      Alert.alert("Validation Error", "Please fill in all required fields.");
+    }
   };
 
   return (

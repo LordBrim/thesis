@@ -11,6 +11,9 @@ import {
   View,
   Alert,
   ScrollView,
+  Modal,
+  TouchableOpacity,
+  Image, // Add this import
 } from "react-native";
 import Carousel from "pinar";
 import CallToActionBtn from "components/common/CallToActionBtn";
@@ -24,6 +27,7 @@ import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { FIREBASE_STORAGE } from "../../../../firebase-config";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import RequestReviewScreen from "./request-review";
 
 interface Errors {
   patientName?: string;
@@ -34,7 +38,7 @@ interface Errors {
 }
 
 export default function Request() {
-  const stepCount = 2;
+  const stepCount = 3;
   let [screenIndex, setScreenIndex] = useState(0);
 
   const [patientName, setPatientName] = useState("");
@@ -50,6 +54,9 @@ export default function Request() {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+  const [warningModalVisible, setWarningModalVisible] = useState(false);
+  const [warningMessage, setWarningMessage] = useState("");
 
   const prev = () => {
     if (screenIndex > 0) {
@@ -97,30 +104,39 @@ export default function Request() {
   };
 
   const validateForm = () => {
-    validateField("patientName", patientName);
-    validateField("selectedBloodType", selectedBloodType);
-    validateField("selectedRelationship", selectedRelationship);
-    validateField("contactNumber", contactNumber);
-    validateField("emergencyReason", emergencyReason);
+    const fields = [
+      { field: "patientName", value: patientName },
+      { field: "selectedBloodType", value: selectedBloodType },
+      { field: "selectedRelationship", value: selectedRelationship },
+      { field: "contactNumber", value: contactNumber },
+    ];
 
-    const invalidFields = Object.keys(errors).filter(
-      (key) => errors[key as keyof Errors]
-    );
+    if (isEmergency) {
+      fields.push({ field: "emergencyReason", value: emergencyReason });
+    }
 
-    return {
-      isValid: invalidFields.length === 0,
-      invalidFields,
-    };
+    let allValid = true;
+    const newErrors: Errors = {};
+
+    fields.forEach(({ field, value }) => {
+      if (!value) {
+        newErrors[field as keyof Errors] = "This field is required.";
+        allValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+
+    if (!allValid) {
+      setWarningMessage("Please fill in all required fields.");
+      setWarningModalVisible(true);
+    }
+
+    return allValid;
   };
 
   const handleSubmit = async () => {
-    const { isValid, invalidFields } = validateForm();
-
-    if (!isValid) {
-      Alert.alert(
-        "Validation Error",
-        `Please fill in all required fields: ${invalidFields.join(", ")}`
-      );
+    if (!validateForm()) {
       return;
     }
 
@@ -180,7 +196,7 @@ export default function Request() {
     }
   };
 
-  const Screens = ["Request\nGuidelines", "File A\nRequest"];
+  const Screens = ["Request\nGuidelines", "File A\nRequest", "Review\nRequest"];
 
   return (
     <View style={styles.container}>
@@ -258,18 +274,32 @@ export default function Request() {
           }}
           errors={errors}
           setErrors={setErrors}
+          setImageModalVisible={setImageModalVisible}
+          next={next}
+        />
+        <RequestReviewScreen
+          patientName={patientName}
+          selectedBloodType={selectedBloodType}
+          selectedRelationship={selectedRelationship}
+          contactNumber={contactNumber}
+          packedRequest={packedRequest}
+          packedRequestInfo={packedRequestInfo}
+          imageUri={imageUri}
+          isEmergency={isEmergency}
+          emergencyReason={emergencyReason}
+          setImageModalVisible={setImageModalVisible}
         />
       </Carousel>
 
       <View style={styles.fixed}>
-        {screenIndex === stepCount - 1 ? (
+        {screenIndex > 0 && (
           <CallToActionBtn
             label="previous"
             onPress={() => prev()}
             style={{ flex: 1 }}
             secondary
           />
-        ) : null}
+        )}
         <CallToActionBtn
           label={screenIndex === stepCount - 1 ? "submit" : "next"}
           onPress={screenIndex === stepCount - 1 ? handleSubmit : next}
@@ -289,6 +319,29 @@ export default function Request() {
         btnLabel="Okay"
         description="Your ticket request has been successfully submitted. You will be notified once a donor has been found."
       />
+
+      <SingleBtnModal
+        visible={warningModalVisible}
+        icon={<Ionicons name="warning-outline" size={42} color="black" />}
+        onRequestClose={() => setWarningModalVisible(false)}
+        onPress={() => setWarningModalVisible(false)}
+        animation={true}
+        title="Validation Error"
+        btnLabel="Okay"
+        description={warningMessage}
+      />
+
+      <Modal visible={imageModalVisible} transparent={true}>
+        <View style={styles.modalContainer}>
+          <TouchableOpacity
+            style={styles.modalCloseButton}
+            onPress={() => setImageModalVisible(false)}
+          >
+            <Ionicons name="close" size={36} color="white" />
+          </TouchableOpacity>
+          <Image source={{ uri: imageUri }} style={styles.modalImage} />
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -326,6 +379,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     flexDirection: "row",
     gap: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+  },
+  modalCloseButton: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 1,
+  },
+  modalImage: {
+    width: "90%",
+    height: "70%",
+    resizeMode: "contain",
   },
 });
 

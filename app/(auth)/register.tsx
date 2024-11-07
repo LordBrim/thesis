@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
 import { Alert, Touchable } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -21,7 +21,10 @@ import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { firestoreOperations } from "../../firestore-services";
 import { FIREBASE_AUTH } from "../../firebase-config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import LinkBtn from "components/common/LinkBtn";
 import { Dimensions } from "react-native";
@@ -37,6 +40,7 @@ export default function RegisterScreen() {
   const [sex, setSex] = useState("");
 
   const [email, setEmail] = useState("");
+  const [debouncedEmail, setDebouncedEmail] = useState(email);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -51,6 +55,7 @@ export default function RegisterScreen() {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [showModalEmail, setShowModalEmail] = useState(false);
+  const [emailError, setEmailError] = useState("");
   const fbAuth = FIREBASE_AUTH;
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -114,7 +119,7 @@ export default function RegisterScreen() {
       );
     }
   };
-  const handleButtonPress = () => {
+  const handleButtonPress = async () => {
     if (otpSent) {
       // Handle OTP verification logic here
       if (otpInput === otpCode) {
@@ -125,16 +130,20 @@ export default function RegisterScreen() {
         // Optionally, show an error message to the user
       }
     } else {
-      sendOTP(email);
+      const emailExists = await checkEmailExists(email);
+      console.log(`Email ${email} exists:`, emailExists);
+      if (emailExists) {
+        setEmailError("Email is already registered.");
+        console.log("Email is already registered. OTP not sent.");
+      } else {
+        console.log("Email is not registered. Sending OTP.");
+        sendOTP(email);
+      }
     }
   };
 
   const today = new Date();
-  const eighteenYearsAgo = new Date(
-    today.getFullYear() - 18,
-    today.getMonth(),
-    today.getDate()
-  );
+  const eighteenYearsAgo = new Date(today.getDate());
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -164,6 +173,47 @@ export default function RegisterScreen() {
 
   const calculateAge = (birthDate) => {
     return moment().diff(moment(birthDate, "YYYY-MM-DD"), "years");
+  };
+
+  const checkEmailExists = async (email) => {
+    try {
+      const signInMethods = await fetchSignInMethodsForEmail(fbAuth, email);
+      console.log(`Sign-in methods for ${email}:`, signInMethods);
+      return signInMethods.length > 0;
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedEmail(email);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [email]);
+
+  useEffect(() => {
+    const checkEmail = async () => {
+      if (isValidEmail(debouncedEmail)) {
+        if (await checkEmailExists(debouncedEmail)) {
+          setEmailError("Email is already registered.");
+        } else {
+          setEmailError("");
+        }
+      } else {
+        setEmailError("");
+      }
+    };
+
+    checkEmail();
+  }, [debouncedEmail]);
+
+  const handleEmailChange = (email) => {
+    setEmail(email);
   };
 
   const register = async () => {
@@ -301,13 +351,16 @@ export default function RegisterScreen() {
                   style={styles.input}
                   value={email}
                   placeholder="Enter your email address..."
-                  onChangeText={(email) => setEmail(email)}
+                  onChangeText={handleEmailChange}
                   autoCapitalize="none"
                   autoCorrect={false}
                   enablesReturnKeyAutomatically
                 />
-
-                {otpVerified ? (
+                {emailError ? (
+                  <Text style={{ color: "red", marginRight: 10 }}>
+                    {emailError}
+                  </Text>
+                ) : otpVerified ? (
                   <Text style={{ color: "green", marginRight: 10 }}>
                     Email Verified
                   </Text>

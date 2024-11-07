@@ -4,16 +4,16 @@ import {
   StyleSheet,
   FlatList,
   Image,
-  ScrollView,
   TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { router, useNavigation } from "expo-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "app/store";
 import { Fontisto } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native";
+import { addEmptyIncentivesToAllHospitals } from "rtx/actions/initializers/ini-hospitals";
 
 export default function ManageIncentives() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
@@ -28,25 +28,6 @@ export default function ManageIncentives() {
       headerTitleAlign: "center",
     });
   }, []);
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => (
-  //       <TouchableOpacity
-  //         style={{
-  //           padding: 12,
-  //           borderRadius: 10,
-  //           width: 60,
-  //           justifyContent: "center",
-  //           alignItems: "center",
-  //         }}
-  //         onPress={handleUpdate}
-  //       >
-  //         <Text style={{ fontWeight: "bold" }}>Edit</Text>
-  //       </TouchableOpacity>
-  //     ),
-  //   });
-  // }, [navigation]);
-
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -63,7 +44,7 @@ export default function ManageIncentives() {
         )}
         persistentScrollbar={true}
         overScrollMode="never"
-        contentContainerStyle={{ gap: 16 }}
+        contentContainerStyle={{ gap: 4 }}
       />
     </SafeAreaView>
   );
@@ -114,15 +95,12 @@ function IncentivesCard({ name, logoUrl, incentives }: IIncentivesCard) {
     };
     incrementSimulation();
   };
-
   return (
-    <View>
+    <View style={card.container}>
       <View
         style={{
           justifyContent: "space-between",
           alignItems: "center",
-          gap: 12,
-          paddingHorizontal: 12,
         }}
       >
         <View
@@ -136,11 +114,11 @@ function IncentivesCard({ name, logoUrl, incentives }: IIncentivesCard) {
               flexDirection: "column",
               flexShrink: 1,
               justifyContent: "center",
-              paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+              marginLeft: 12,
             }}
           >
-            <Text style={[GS.h3, styles.title]}>{name} Incentives</Text>
-            <Text>{incentives.info}</Text>
+            <Text style={[GS.h3, card.title]}>{name}</Text>
+            {incentives.info && <Text>{incentives.info}</Text>}
           </View>
         </View>
       </View>
@@ -170,33 +148,50 @@ function IncentivesCard({ name, logoUrl, incentives }: IIncentivesCard) {
           return index.toString();
         }}
         numColumns={data.length > 5 ? Math.round(data.length / 2) : 5}
-        contentContainerStyle={[
-          data.length >= 4 ? styles.stockCenter : styles.stockLeft,
-          {
-            justifyContent: "space-between",
-            gap: 12,
-          },
-        ]}
-        columnWrapperStyle={{
+        contentContainerStyle={{
+          alignItems: "center",
           gap: 12,
-          paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+        }}
+        columnWrapperStyle={{
+          justifyContent: "center",
+          gap: 12,
         }}
         scrollEnabled={false}
       />
-      <TouchableOpacity
-        style={{
-          padding: 12,
-          borderRadius: 10,
-          width: 90,
-          justifyContent: "center",
-          alignItems: "center",
-          borderWidth: 1,
-          marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
-        }}
-        onPress={handleSimulation}
-      >
-        <Text style={{ fontWeight: "bold" }}>Simulate</Text>
-      </TouchableOpacity>
+      <View style={{ flexDirection: "row", gap: 12 }}>
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 60,
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 1,
+          }}
+          onPress={handleUpdate}
+        >
+          <Text style={{ fontWeight: "bold" }}>Edit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 90,
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 1,
+          }}
+          onPress={handleSimulation}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+            }}
+          >
+            Simulate
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -204,19 +199,22 @@ function IncentivesCard({ name, logoUrl, incentives }: IIncentivesCard) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
     gap: 24,
+  },
+});
+
+const card = StyleSheet.create({
+  container: {
+    flex: 1,
+    gap: 24,
+    backgroundColor: COLORS.background,
+    paddingVertical: 16,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   scrollview: {
     gap: 24,
   },
   title: {
     minWidth: "100%",
-  },
-  stockLeft: {
-    alignItems: "baseline",
-  },
-  stockCenter: {
-    alignItems: "center",
   },
 });

@@ -48,7 +48,7 @@ export default function ManageIncentivesUpdate() {
   }, []);
   const [updatedInfo, setUpdatedInfo] = useState(incentives.info);
   const [updatedNumber, setUpdatedNumber] = useState(
-    incentives.number > 10 ? "10" : incentives.number.toString()
+    incentives.number === null ? "4" : "10"
   );
   const [inputs, setInputs] = useState(incentives.data);
   const getIncentivesDataArray = (): IncentiveData[] => {
@@ -121,6 +121,8 @@ export default function ManageIncentivesUpdate() {
   const handleNumber = (number) => {
     if (number > 10) {
       setUpdatedNumber("10");
+    } else if (number > 2) {
+      setUpdatedNumber("1");
     } else {
       setUpdatedNumber(number);
     }

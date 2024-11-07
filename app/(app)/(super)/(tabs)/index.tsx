@@ -11,6 +11,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
+import { getHospitals } from "rtx/slices/hospitals";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false

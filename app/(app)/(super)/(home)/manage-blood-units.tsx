@@ -20,6 +20,7 @@ import { Pressable } from "react-native";
 
 export default function ManageBloodUnits() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
+  console.log(hospitals);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({

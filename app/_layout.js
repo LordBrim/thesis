@@ -12,7 +12,10 @@ export default function StackLayout() {
         screenOptions={{ headerTitle: "" }}
       >
         {/* Authentication Screens */}
-        <Stack.Screen name="(auth)/login" />
+        <Stack.Screen
+          name="(auth)/login"
+          options={{ headerShadowVisible: false }}
+        />
         <Stack.Screen name="(auth)/register" />
         <Stack.Screen name="(auth)/forgot-password" />
         <Stack.Screen name="(auth)/new-password" />

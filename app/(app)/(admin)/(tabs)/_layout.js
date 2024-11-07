@@ -12,19 +12,27 @@ export default function TabLayout() {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity
+        <View
           style={{
+            overflow: "hidden",
             borderRadius: 10,
             width: 40,
             height: 40,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "gray",
           }}
-          onPress={handleLogout}
         >
-          <Text style={{ color: "white" }}>A</Text>
-        </TouchableOpacity>
+          <Pressable
+            style={{
+              width: 40,
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            android_ripple={{ radius: 100 }}
+            onPress={handleLogout}
+          >
+            <FontAwesome6 name="power-off" size={24} color="red" />
+          </Pressable>
+        </View>
       ),
     });
   }, []);

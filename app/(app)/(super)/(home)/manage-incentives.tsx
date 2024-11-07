@@ -37,6 +37,7 @@ export default function ManageIncentives() {
         }}
         renderItem={({ item }) => (
           <IncentivesCard
+            uuid={item.uuid}
             name={item.name}
             logoUrl={item.logoUrl}
             incentives={item.incentives}
@@ -51,6 +52,7 @@ export default function ManageIncentives() {
 }
 
 interface IIncentivesCard {
+  uuid: string;
   name: string;
   logoUrl: string;
   incentives: IncentiveState;
@@ -67,10 +69,13 @@ interface IncentiveData {
   incentive: string;
 }
 
-function IncentivesCard({ name, logoUrl, incentives }: IIncentivesCard) {
+function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
   const size = 40;
   const handleUpdate = () => {
-    router.push("(app)/(admin)/(home)/manage-incentives-update");
+    router.push({
+      pathname: "(app)/(super)/(home)/manage-incentives-update",
+      params: { uuid },
+    });
   };
   const data = Array.from({ length: incentives.number }, (_, i) => {
     const items = incentives.data.filter((item) => item.position === i + 1);

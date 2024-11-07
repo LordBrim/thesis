@@ -92,7 +92,6 @@ export default function ManageIncentives() {
             justifyContent: "space-between",
             alignItems: "center",
             gap: 12,
-            paddingHorizontal: 12,
           }}
         >
           <View
@@ -100,28 +99,19 @@ export default function ManageIncentives() {
               flexDirection: "row",
             }}
           >
-            {/* TODO: Show on user home screen */}
-            {/* <CircularProgress
-              value={9}
-              maxValue={incentives.incentivesNo}
-              radius={35}
-              activeStrokeColor={COLORS.primary}
-              activeStrokeSecondaryColor={COLORS.accent}
-              inActiveStrokeColor={COLORS.grayLight}
-            /> */}
             <Image width={70} height={70} source={{ uri: hospital.logoUrl }} />
             <View
               style={{
                 flexDirection: "column",
                 flexShrink: 1,
                 justifyContent: "center",
-                paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+                marginLeft: 12,
               }}
             >
               <Text style={[GS.h3, styles.title]}>
                 {user.hospitalName} Incentives
               </Text>
-              <Text>{incentives.info}</Text>
+              {incentives.info && <Text>{incentives.info}</Text>}
             </View>
           </View>
         </View>
@@ -153,16 +143,13 @@ export default function ManageIncentives() {
             return index.toString();
           }}
           numColumns={data.length > 5 ? Math.round(data.length / 2) : 5}
-          contentContainerStyle={[
-            data.length >= 4 ? styles.stockCenter : styles.stockLeft,
-            {
-              justifyContent: "space-between",
-              gap: 12,
-            },
-          ]}
-          columnWrapperStyle={{
+          contentContainerStyle={{
+            alignItems: "center",
             gap: 12,
-            paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+          }}
+          columnWrapperStyle={{
+            justifyContent: "center",
+            gap: 12,
           }}
           scrollEnabled={false}
         />
@@ -174,7 +161,6 @@ export default function ManageIncentives() {
             justifyContent: "center",
             alignItems: "center",
             borderWidth: 1,
-            marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
           }}
           onPress={handleSimulation}
         >
@@ -189,7 +175,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    gap: 24,
+    paddingVertical: 16,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   scrollview: {
     gap: 24,

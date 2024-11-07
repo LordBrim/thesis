@@ -10,22 +10,14 @@ import {
 import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "app/store";
-import {
-  deleteHospital,
-  deleteHospitalInFirebase,
-  getHospitals,
-} from "rtx/slices/hospitals";
+import { RootState } from "app/store";
+import { deleteHospital, deleteHospitalInFirebase } from "rtx/slices/hospitals";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageHospitals() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-  useEffect(() => {
-    dispatch(getHospitals());
-  }, [hospitals]);
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Hospitals",

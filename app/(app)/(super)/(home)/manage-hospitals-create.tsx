@@ -15,8 +15,13 @@ import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { addHospitalToFirebase, createHospital } from "rtx/slices/hospitals";
+import {
+  addHospitalToFirebase,
+  createHospital,
+  getHospitals,
+} from "rtx/slices/hospitals";
 import { router, useNavigation } from "expo-router";
+import { AppDispatch } from "app/store";
 
 export default function ManageFaqCreate() {
   const [newHospitalName, setNewHospitalName] = useState("");
@@ -25,7 +30,7 @@ export default function ManageFaqCreate() {
   const [newContactNumber, setNewContactNumber] = useState("");
   const [newLatitude, setNewLatitude] = useState("");
   const [newLongitude, setNewLongitude] = useState("");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -81,6 +86,7 @@ export default function ManageFaqCreate() {
         },
       })
     );
+    dispatch(getHospitals());
     addHospitalToFirebase(
       newHospitalName,
       newLogoUrl,

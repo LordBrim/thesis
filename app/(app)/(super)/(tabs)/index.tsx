@@ -48,6 +48,7 @@ export default function HomeTab() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getCurrentUser());
+    dispatch(getHospitals());
   }, []);
 
   return (

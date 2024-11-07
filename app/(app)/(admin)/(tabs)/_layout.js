@@ -1,10 +1,11 @@
 import { router, useNavigation } from "expo-router";
 import HomeTab from "./index";
 import { useEffect } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Pressable, View } from "react-native";
 import { Alert } from "react-native";
 import { getAuth } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 export default function TabLayout() {
   const navigation = useNavigation();

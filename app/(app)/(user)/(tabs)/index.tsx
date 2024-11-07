@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingTop: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
   },
   scrollView: { gap: SPACES.xxl, paddingBottom: HORIZONTAL_SCREEN_MARGIN },

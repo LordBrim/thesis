@@ -1,16 +1,14 @@
-import { router, Tabs, useNavigation } from "expo-router";
-import { COLORS } from "../../../../constants";
-import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { router, useNavigation } from "expo-router";
 import { useEffect } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Pressable, View } from "react-native";
 import { Alert } from "react-native";
 import { getAuth } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeTab from "./index";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 export default function TabLayout() {
   const navigation = useNavigation();
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -38,11 +36,9 @@ export default function TabLayout() {
       ),
     });
   }, []);
-
   const handleDropdown = () => {
     console.log("Open dropdown!");
   };
-
   const handleLogout = () => {
     Alert.alert(
       "Confirm Logout",
@@ -58,7 +54,6 @@ export default function TabLayout() {
       { cancelable: false }
     );
   };
-
   const signOutUser = async () => {
     try {
       const auth = getAuth();
@@ -75,6 +70,5 @@ export default function TabLayout() {
       console.error("Error signing out:", error.message);
     }
   };
-
   return <HomeTab />;
 }

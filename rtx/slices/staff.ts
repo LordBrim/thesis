@@ -11,6 +11,33 @@ import {
   where,
 } from "firebase/firestore";
 
+export const getHospitalsStaff = createAsyncThunk<
+  Record<string, StaffState["staff"]>,
+  void
+>("getHospitalStaff", async () => {
+  try {
+    const staffQuery = query(
+      collection(FIRESTORE_DB, "User"),
+      where("role", "==", "staff")
+    );
+    const querySnapshot = await getDocs(staffQuery);
+    const staffByHospital: Record<string, StaffState["staff"]> = {};
+    querySnapshot.docs.forEach((doc) => {
+      const { hospitalName, ...staffData } = doc.data();
+      if (hospitalName) {
+        if (!staffByHospital[hospitalName]) {
+          staffByHospital[hospitalName] = [];
+        }
+        staffByHospital[hospitalName].push(staffData);
+      }
+    });
+    return staffByHospital;
+  } catch (error) {
+    console.error("Error fetching staff:", error);
+    return {};
+  }
+});
+
 export const getHopitalStaff = createAsyncThunk<StaffState["staff"], string>(
   "getHopitalStaff",
   async (hospitalName) => {

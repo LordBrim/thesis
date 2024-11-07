@@ -17,7 +17,6 @@ import {
 export default function ManageStaff() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
   const { staff } = useSelector((state: RootState) => state.staff);
-
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getAllStaff());

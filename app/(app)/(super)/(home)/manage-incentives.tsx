@@ -136,6 +136,7 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 alignItems: "center",
                 width: 70,
                 gap: 4,
+                minHeight: 90,
               }}
             >
               <Text>{index + 1}</Text>
@@ -157,12 +158,12 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
           numColumns={4}
           contentContainerStyle={{
             alignItems: "center",
-            gap: 12,
           }}
           columnWrapperStyle={{
             justifyContent: "center",
             gap: 12,
           }}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           scrollEnabled={false}
         />
       )}
@@ -176,6 +177,7 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 alignItems: "center",
                 width: 70,
                 gap: 4,
+                minHeight: 90,
               }}
             >
               <Text>{index + 1}</Text>
@@ -197,12 +199,12 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
           numColumns={3}
           contentContainerStyle={{
             alignItems: "center",
-            gap: 12,
           }}
           columnWrapperStyle={{
             justifyContent: "center",
             gap: 12,
           }}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           scrollEnabled={false}
         />
       )}
@@ -216,6 +218,7 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 alignItems: "center",
                 width: 70,
                 gap: 4,
+                minHeight: 90,
               }}
             >
               <Text>{index + 1}</Text>
@@ -227,7 +230,13 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -237,12 +246,12 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
           numColumns={4}
           contentContainerStyle={{
             alignItems: "center",
-            gap: 12,
           }}
           columnWrapperStyle={{
             justifyContent: "center",
             gap: 12,
           }}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           scrollEnabled={false}
         />
       )}
@@ -256,6 +265,7 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 alignItems: "center",
                 width: 70,
                 gap: 4,
+                minHeight: 90,
               }}
             >
               <Text>{index + 1}</Text>
@@ -277,12 +287,12 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
           numColumns={5}
           contentContainerStyle={{
             alignItems: "center",
-            gap: 12,
           }}
           columnWrapperStyle={{
             justifyContent: "center",
             gap: 12,
           }}
+          ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
           scrollEnabled={false}
         />
       )}

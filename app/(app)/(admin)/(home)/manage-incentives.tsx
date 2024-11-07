@@ -125,6 +125,7 @@ export default function ManageIncentives() {
                   alignItems: "center",
                   width: 70,
                   gap: 4,
+                  minHeight: 90,
                 }}
               >
                 <Text>{index + 1}</Text>
@@ -165,6 +166,7 @@ export default function ManageIncentives() {
                   alignItems: "center",
                   width: 70,
                   gap: 4,
+                  minHeight: 90,
                 }}
               >
                 <Text>{index + 1}</Text>
@@ -205,6 +207,7 @@ export default function ManageIncentives() {
                   alignItems: "center",
                   width: 70,
                   gap: 4,
+                  minHeight: 90,
                 }}
               >
                 <Text>{index + 1}</Text>
@@ -245,6 +248,7 @@ export default function ManageIncentives() {
                   alignItems: "center",
                   width: 70,
                   gap: 4,
+                  minHeight: 90,
                 }}
               >
                 <Text>{index + 1}</Text>
@@ -282,7 +286,6 @@ export default function ManageIncentives() {
             width: 90,
             justifyContent: "center",
             alignItems: "center",
-            borderWidth: 1,
           }}
           onPress={handleSimulation}
         >

@@ -5,14 +5,15 @@ import {
   ScrollView,
   Pressable,
   Button,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import IconBtn from "../../../../components/common/IconButton";
-import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
@@ -172,7 +173,29 @@ export default function ManageTicketReview() {
       await updateDoc(ticketDocRef, {
         isComplete: true,
       });
+
+      const userDocRef = doc(FIRESTORE_DB, "User", ticketData.userUID);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const newIncentiveCount = (userData.incentive || 0) + 1;
+        const nextDonationDate = moment().add(3, "months").format("YYYY-MM-DD");
+        await updateDoc(userDocRef, {
+          incentive: newIncentiveCount,
+          nextDonationDate: nextDonationDate,
+        });
+      }
+
       setTicketData(updatedTicketData);
+
+      // Inform the admin about the next available donation date
+      Alert.alert(
+        "Donation Completed",
+        `The user will be eligible to donate again on ${moment()
+          .add(3, "months")
+          .format("MMMM D, YYYY")}.`
+      );
+      router.back();
     } catch (error) {
       console.error("Error completing transaction:", error);
     }

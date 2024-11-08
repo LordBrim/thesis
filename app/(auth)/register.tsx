@@ -300,6 +300,7 @@ export default function RegisterScreen() {
         sex: sex,
         role: "user",
         age: age,
+        incentive: 0,
       };
 
       await firestoreOperations.addDocument(

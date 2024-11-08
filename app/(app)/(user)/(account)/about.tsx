@@ -1,5 +1,5 @@
-import { COLORS } from "constants";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { COLORS } from "../../../../constants";
 
 export default function About() {
   return (
@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: "bold",
+    color: COLORS.primary,
     marginBottom: 10,
   },
   text: {

@@ -30,11 +30,11 @@ import { router } from "expo-router";
 import IconModal from "../../(common)/custom-album-modal";
 import { useSelector } from "react-redux";
 import { RootState } from "app/store";
+import moment from "moment"; // Import moment for date formatting
 
 type IAccountTab = {
   avatarUrl: string;
   username: string;
-  email: string;
   phoneNumber?: string;
 };
 
@@ -48,6 +48,8 @@ export default function AccountTab({
   const [avatar, setAvatar] = useState(avatarUrl || null);
   const [modalVisible, setModalVisible] = useState(false);
   const [donateStatus, setDonateStatus] = useState(true);
+  const [incentives, setIncentives] = useState(0); // New state for incentives
+  const [nextDonationDate, setNextDonationDate] = useState(""); // New state for next donation date
 
   const [loading, setLoading] = useState(true); // Loading state
 
@@ -103,6 +105,8 @@ export default function AccountTab({
           const userData = userDoc.data();
           setEmail(userData.email);
           setDisplayName(userData.displayName);
+          setIncentives(userData.incentive || 0); // Set incentives
+          setNextDonationDate(userData.nextDonationDate || ""); // Set next donation date
         } else {
           console.log("No such document!");
         }
@@ -217,13 +221,14 @@ export default function AccountTab({
               ]}
             >
               Donation Status:{"\n"}
-              {donateStatus ? (
-                <Text style={{ color: "green", fontSize: SIZES.large }}>
-                  Available
+              {nextDonationDate ? (
+                <Text style={{ color: COLORS.primary, fontSize: SIZES.medium }}>
+                  Next donation in{" "}
+                  {moment(nextDonationDate).format("MMMM D, YYYY")}
                 </Text>
               ) : (
-                <Text style={{ color: "red", fontSize: SIZES.large }}>
-                  Locked{"\n"}(3 Months)
+                <Text style={{ color: "green", fontSize: SIZES.large }}>
+                  Available
                 </Text>
               )}
             </Text>
@@ -242,7 +247,7 @@ export default function AccountTab({
             >
               Units Donated:{"\n"}
               <Text style={{ fontSize: SIZES.large, color: COLORS.text }}>
-                0
+                {incentives}
               </Text>
             </Text>
           </View>
@@ -284,7 +289,7 @@ export default function AccountTab({
                   color={COLORS.text}
                 />
               }
-              label="about"
+              label="about us"
             />
             <Card
               href="/help"

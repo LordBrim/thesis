@@ -45,7 +45,6 @@ export default function FAQTab() {
     ).map((item) => ({ id: item.id, title: item.question }));
     setFilteredData(filtered);
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView overScrollMode="never">
@@ -73,9 +72,7 @@ export default function FAQTab() {
         <View style={styles.panels}>
           <FlatList
             data={faqs}
-            renderItem={({ item }) => (
-              <QuestionPanel questions={item.questions} />
-            )}
+            renderItem={({ item }) => <QuestionPanel questions={item.data} />}
             keyExtractor={(item) => item.title}
             overScrollMode="never"
             scrollEnabled={false}

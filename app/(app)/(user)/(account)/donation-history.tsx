@@ -197,7 +197,8 @@ const styles = StyleSheet.create({
   },
   bar: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: SIZES.medium,

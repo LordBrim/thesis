@@ -238,6 +238,19 @@ const HospitalMapView = () => {
     })();
   }, [selectedHospital]);
 
+  const isActiveEvent = (startDate, startTime, endDate, endTime) => {
+    const now = moment();
+    const start = moment(`${startDate} ${startTime}`, "MM/DD/YYYY hh:mm A");
+    const end = moment(`${endDate} ${endTime}`, "MM/DD/YYYY hh:mm A");
+    return now.isBetween(start, end);
+  };
+
+  const isUpcomingEvent = (startDate, startTime) => {
+    const now = moment();
+    const start = moment(`${startDate} ${startTime}`, "MM/DD/YYYY hh:mm A");
+    return now.isBefore(start);
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -246,8 +259,12 @@ const HospitalMapView = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        setEvents(eventsData);
-        console.log(eventsData);
+        const filteredEvents = eventsData.filter(event =>
+          isActiveEvent(event.startDate, event.startTime, event.endDate, event.endTime) ||
+          isUpcomingEvent(event.startDate, event.startTime)
+        );
+        setEvents(filteredEvents);
+        console.log(filteredEvents);
       } catch (error) {
         console.error("Error fetching events: ", error);
       }

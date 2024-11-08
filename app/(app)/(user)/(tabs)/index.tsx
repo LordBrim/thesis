@@ -67,7 +67,7 @@ export default function HomeTab() {
           </Text>
         </View>
 
-        <Welcome toDonate="/donate" toRequest="/request" />
+        <Welcome toDonate="/donate" toRequest="/request" currentUser={user} />
         <UpcomingAppointments />
         <Events />
       </ScrollView>

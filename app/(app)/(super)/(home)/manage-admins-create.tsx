@@ -24,7 +24,7 @@ import IconBtn from "components/common/IconButton";
 import DropDownPicker from "react-native-dropdown-picker";
 import { createAdmins } from "rtx/slices/admins";
 
-export default function ManageStaffCreate() {
+export default function ManageAdminsCreate() {
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -80,7 +80,7 @@ export default function ManageStaffCreate() {
         email: newEmail,
         password: newPassword,
         displayName: newUsername,
-        role: "admins",
+        role: "admin",
         hospitalName: selectedHospital,
       };
       await firestoreOperations.addDocument(

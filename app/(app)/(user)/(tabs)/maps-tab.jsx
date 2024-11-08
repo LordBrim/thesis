@@ -111,8 +111,8 @@ function Maps({ setMapBackground, setMapHeader }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.cTop}>
         <View style={{ gap: 8 }}>
-          <Text style={GS.h1}>Find a medical institution</Text>
-          <Description description="At Lifeline, we partner with medical institutions to help patients easily find blood banks based on location, specialty, and services." />
+          <Text style={GS.h1}>Locate a Hospital</Text>
+          <Description description="Select a partnered hospital to locate" />
         </View>
 
         <TextInputWrapper>

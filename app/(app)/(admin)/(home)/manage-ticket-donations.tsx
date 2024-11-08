@@ -5,7 +5,7 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  RefreshControl,
+  RefreshControl, // Add RefreshControl import
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
@@ -346,6 +346,7 @@ function ManageTicketsDonationsArchived() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<string>("closest");
+  const [refreshing, setRefreshing] = useState(false); // Add refreshing state
 
   const [hospitalName, setHospitalName] = useState<string | null>(null);
 
@@ -365,92 +366,92 @@ function ManageTicketsDonationsArchived() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      if (!hospitalName) return; // Wait until hospitalName is set
-      console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
+  const fetchTickets = async () => {
+    if (!hospitalName) return; // Wait until hospitalName is set
+    console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
 
-      try {
-        const q = query(
-          collection(FIRESTORE_DB, "ticketDonate"),
-          where("type", "==", "appointment"),
-          where("selectedHospital", "==", hospitalName) // Filter by selectedHospital
-        );
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "ticketDonate"),
+        where("type", "==", "appointment"),
+        where("selectedHospital", "==", hospitalName) // Filter by selectedHospital
+      );
 
-        const querySnapshot = await getDocs(q);
-        const ticketsData = await Promise.all(
-          querySnapshot.docs.map(
-            async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
-              const data = docSnapshot.data() as TicketData;
-              try {
-                const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
-                const userDocSnapshot = await getDoc(userDocRef);
-                const userData = userDocSnapshot.exists()
-                  ? (userDocSnapshot.data() as UserData)
-                  : ({} as UserData);
+      const querySnapshot = await getDocs(q);
+      const ticketsData = await Promise.all(
+        querySnapshot.docs.map(
+          async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+            const data = docSnapshot.data() as TicketData;
+            try {
+              const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
+              const userDocSnapshot = await getDoc(userDocRef);
+              const userData = userDocSnapshot.exists()
+                ? (userDocSnapshot.data() as UserData)
+                : ({} as UserData);
 
-                const ticket = {
-                  id: docSnapshot.id,
-                  name: userData.displayName ?? "Unknown",
-                  status: data.status ?? "pending",
-                  userUID: data.userUID,
-                  userEmail: userData.email ?? "Unknown",
-                  age: userData.age,
-                  avatarUrl: userData.avatarUrl,
-                  city: userData.city,
-                  contactDetails: userData.contactDetails,
-                  displayName: userData.displayName,
-                  sex: userData.sex,
-                  message: data.message,
-                  selectedDate: data.selectedDate,
-                  selectedHospital: data.selectedHospital,
-                  selectedTime: data.selectedTime,
-                  ticketNumber: data.ticketNumber,
-                  type: "appointment",
-                  checklistData: data.checklistData,
-                  isComplete: data.isComplete,
-                  // Map other properties as needed
-                } as TicketState;
+              const ticket = {
+                id: docSnapshot.id,
+                name: userData.displayName ?? "Unknown",
+                status: data.status ?? "pending",
+                userUID: data.userUID,
+                userEmail: userData.email ?? "Unknown",
+                age: userData.age,
+                avatarUrl: userData.avatarUrl,
+                city: userData.city,
+                contactDetails: userData.contactDetails,
+                displayName: userData.displayName,
+                sex: userData.sex,
+                message: data.message,
+                selectedDate: data.selectedDate,
+                selectedHospital: data.selectedHospital,
+                selectedTime: data.selectedTime,
+                ticketNumber: data.ticketNumber,
+                type: "appointment",
+                checklistData: data.checklistData,
+                isComplete: data.isComplete,
+                // Map other properties as needed
+              } as TicketState;
 
-                const ticketDate = moment(
-                  `${ticket.selectedDate} ${ticket.selectedTime}`,
-                  "YYYY-MM-DD h:mm A"
-                );
+              const ticketDate = moment(
+                `${ticket.selectedDate} ${ticket.selectedTime}`,
+                "YYYY-MM-DD h:mm A"
+              );
 
-                if (
-                  ticketDate.isBefore(moment()) &&
-                  ticket.status === "pending"
-                ) {
-                  return ticket;
-                } else if (
-                  ticket.status === "denied" ||
-                  ticket.status === "accepted"
-                ) {
-                  return ticket;
-                } else {
-                  return null;
-                }
-              } catch (error) {
-                console.error(
-                  `Error fetching user data for ticket ${docSnapshot.id}:`,
-                  error
-                );
+              if (
+                ticketDate.isBefore(moment()) &&
+                ticket.status === "pending"
+              ) {
+                return ticket;
+              } else if (
+                ticket.status === "denied" ||
+                ticket.status === "accepted"
+              ) {
+                return ticket;
+              } else {
                 return null;
               }
+            } catch (error) {
+              console.error(
+                `Error fetching user data for ticket ${docSnapshot.id}:`,
+                error
+              );
+              return null;
             }
-          )
-        );
-        setTickets(
-          ticketsData.filter((ticket) => ticket !== null) as TicketState[]
-        );
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching tickets: ", error);
-        setError("Failed to load tickets");
-        setLoading(false);
-      }
-    };
+          }
+        )
+      );
+      setTickets(
+        ticketsData.filter((ticket) => ticket !== null) as TicketState[]
+      );
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching tickets: ", error);
+      setError("Failed to load tickets");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTickets();
   }, [hospitalName]);
 
@@ -478,6 +479,17 @@ function ManageTicketsDonationsArchived() {
         return dateB.valueOf() - dateA.valueOf();
       }
     });
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetchTickets(); // Re-fetch the tickets
+    } catch (error) {
+      console.error("Error refreshing tickets:", error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   if (loading) {
@@ -536,6 +548,9 @@ function ManageTicketsDonationsArchived() {
         data={missedTickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
@@ -547,6 +562,9 @@ function ManageTicketsDonationsArchived() {
         data={rejectedTickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}

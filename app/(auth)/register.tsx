@@ -177,9 +177,13 @@ export default function RegisterScreen() {
 
   const checkEmailExists = async (email) => {
     try {
-      const signInMethods = await fetchSignInMethodsForEmail(fbAuth, email);
-      console.log(`Sign-in methods for ${email}:`, signInMethods);
-      return signInMethods.length > 0;
+      const q = query(
+        collection(FIRESTORE_DB, "User"),
+        where("email", "==", email)
+      );
+      const querySnapshot = await getDocs(q);
+      console.log(`Documents found for ${email}:`, querySnapshot.size);
+      return !querySnapshot.empty;
     } catch (error) {
       console.error("Error checking email:", error);
       return false;

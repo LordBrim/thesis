@@ -5,23 +5,17 @@ import {
   View,
   ActivityIndicator,
   Pressable,
+  RefreshControl,
 } from "react-native";
 import { COLORS } from "../../../../constants/theme";
 import { Agenda } from "react-native-calendars";
 import moment from "moment";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  doc as firestoreDoc,
-  getDoc,
-} from "firebase/firestore";
 import { useRouter } from "expo-router";
 import { useDispatch, useSelector } from "react-redux";
-import { getCurrentUser, selectUser } from "rtx/slices/user";
+import { fetchTicketsForCurrentUser } from "rtx/slices/tickets";
+import { RootState } from "app/store";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 interface TicketState {
   id: string;
@@ -46,11 +40,13 @@ interface TicketState {
 
 export default function ManageTicketAllAppointments() {
   const router = useRouter();
-
-  const [ticketList, setTicketList] = useState<TicketState[]>([]);
+  const dispatch = useDispatch();
+  const tickets = useSelector((state: RootState) => state.tickets.tickets);
+  const [ticketList, setTicketList] = useState<TicketState[]>([]); // Define ticketList state
   const [markedDates, setMarkedDates] = useState({});
   const [agendaItems, setAgendaItems] = useState({});
   const [loading, setLoading] = useState(false); // Loading state
+  const [refreshing, setRefreshing] = useState(false); // Refreshing state
   const [emptyDateMessage, setEmptyDateMessage] = useState(""); // New state for empty date message
 
   const handleAppointmentPress = async (item) => {
@@ -62,50 +58,54 @@ export default function ManageTicketAllAppointments() {
     });
   };
 
+  const fetchTickets = async () => {
+    setLoading(true);
+    await dispatch(fetchTicketsForCurrentUser());
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchTickets = async () => {
-      setLoading(true);
+    fetchTickets();
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchUserDataForTickets = async () => {
       const db = getFirestore();
-      const q = query(
-        collection(db, "ticketDonate"),
-        where("status", "==", "accepted")
+      const acceptedTickets = tickets.filter(
+        (ticket) => ticket.status === "accepted"
       );
 
-      try {
-        const querySnapshot = await getDocs(q);
-        const fetchedTickets = [];
-
-        for (let doc of querySnapshot.docs) {
-          const ticketData = { id: doc.id, ...doc.data() } as TicketState;
-          const userDocRef = firestoreDoc(db, "User", ticketData.userUID);
+      const ticketsWithUserData = await Promise.all(
+        acceptedTickets.map(async (ticket) => {
+          const userDocRef = doc(db, "User", ticket.userUID);
           const userDoc = await getDoc(userDocRef);
 
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            const combinedData = { ...ticketData, ...userData };
-            fetchedTickets.push(combinedData);
+            return { ...ticket, ...userData };
           } else {
             console.error(
               "User document does not exist for userUID:",
-              ticketData.userUID
+              ticket.userUID
             );
-            fetchedTickets.push(ticketData); // Add the ticket even if user data is missing
+            return ticket; // Return the ticket even if user data is missing
           }
-        }
+        })
+      );
 
-        console.log("Fetched Tickets with User Data:", fetchedTickets);
-        setTicketList(fetchedTickets);
-        markAppointmentDates(fetchedTickets); // Mark appointments on calendar
-        transformAppointmentsToAgendaItems(fetchedTickets); // Transform appointments for Agenda
-      } catch (error) {
-        console.error("Error fetching tickets:", error);
-      } finally {
-        setLoading(false);
-      }
+      setTicketList(ticketsWithUserData);
+      markAppointmentDates(ticketsWithUserData); // Mark appointments on calendar
+      transformAppointmentsToAgendaItems(ticketsWithUserData); // Transform appointments for Agenda
     };
 
-    fetchTickets();
-  }, []);
+    fetchUserDataForTickets();
+  }, [tickets]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchTickets();
+    setRefreshing(false);
+  };
 
   // Marking appointment dates in the calendar
   const markAppointmentDates = (appointments: TicketState[]) => {
@@ -248,6 +248,9 @@ export default function ManageTicketAllAppointments() {
         renderEmptyDate={renderEmptyDate}
         renderEmptyData={renderEmptyData} // Custom empty data handling
         markedDates={markedDates}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         renderKnob={() => (
           <FontAwesome name="caret-down" size={30} color={COLORS.primary} />
         )}

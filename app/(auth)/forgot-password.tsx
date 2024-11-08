@@ -25,7 +25,8 @@ import {
   verifyPasswordResetCode,
   fetchSignInMethodsForEmail,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "firebase-config";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { FIRESTORE_DB, FIREBASE_AUTH } from "firebase-config";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -42,14 +43,32 @@ export default function ForgotPassword() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };
 
+  const checkEmailExists = async (email) => {
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "User"),
+        where("email", "==", email.toLowerCase())
+      );
+      const querySnapshot = await getDocs(q);
+      console.log(`Documents found for ${email}:`, querySnapshot.size);
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return false;
+    }
+  };
+
   const sendPin = async () => {
     try {
-      const signInMethods = await fetchSignInMethodsForEmail(
-        FIREBASE_AUTH,
-        email
-      );
-      if (signInMethods.length === 0) {
+      console.log("Checking email:", email);
+      const emailExists = await checkEmailExists(email);
+      console.log(`Email ${email} exists:`, emailExists);
+      if (!emailExists) {
         setEmailError("The email address is not registered.");
+        return;
+      }
+      if (email.length == 0) {
+        setEmailError("Plase input an email.");
         return;
       }
       setEmailError("");

@@ -15,10 +15,17 @@ import IconBtn from "../../../../components/common/IconButton";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+
 interface TicketState {
   id: string;
   name: string;
-  status: "pending" | "rejected" | "accepted" | "denied";
+  status:
+    | "pending"
+    | "rejected"
+    | "accepted"
+    | "denied"
+    | "completed"
+    | "cancelled";
   userUID: string;
   userEmail: string;
   age?: number;
@@ -56,9 +63,24 @@ const CustomButton = ({ title, onPress, color, isReject }) => (
     ]}
   >
     {isReject ? (
-      <Text style={{ color: "white", fontWeight: "bold", textAlign: "center" }}>
-        {title}
-      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <FontAwesome6 name="xmark" size={24} color="white" />
+        <Text
+          style={{
+            marginLeft: 5,
+            color: "white",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          {title}
+        </Text>
+      </View>
     ) : (
       <View
         style={{
@@ -107,7 +129,15 @@ export default function ManageTicketReview() {
     return moment(dateString, "YYYY-MM-DD").format("MMMM D, YYYY");
   };
 
-  const handleUpdateStatus = async (status: "accepted" | "denied") => {
+  const handleUpdateStatus = async (
+    status:
+      | "pending"
+      | "rejected"
+      | "accepted"
+      | "denied"
+      | "completed"
+      | "cancelled"
+  ) => {
     if (!ticketData) return;
 
     const updatedTicketData = {
@@ -333,12 +363,21 @@ export default function ManageTicketReview() {
             isReject={false}
           />
         )}
-        <CustomButton
-          title="Cancel"
-          onPress={handleCancel}
-          color={COLORS.primary}
-          isReject={true}
-        />
+        {ticketData.status === "pending" ? (
+          <CustomButton
+            title="Reject"
+            onPress={() => handleUpdateStatus("denied")}
+            color={COLORS.primary}
+            isReject={true}
+          />
+        ) : (
+          <CustomButton
+            title="Reject"
+            onPress={() => handleUpdateStatus("cancelled")}
+            color={COLORS.primary}
+            isReject={true}
+          />
+        )}
       </View>
     </ScrollView>
   );

@@ -4,6 +4,7 @@ import staffSlice from "../rtx/slices/staff";
 import faqsSlice from "rtx/slices/faq";
 import hospitalsSlice from "rtx/slices/hospitals";
 import eventsReducer from 'rtx/slices/events';
+import ticketsReducer from 'rtx/slices/tickets';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     faqs: faqsSlice,
     hospitals: hospitalsSlice,
     events: eventsReducer,
+    tickets: ticketsReducer,
   },
 });
 

@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "../rtx/slices/user";
 import staffSlice from "../rtx/slices/staff";
+import adminsSlice from "../rtx/slices/admins";
 import faqsSlice from "rtx/slices/faq";
 import hospitalsSlice from "rtx/slices/hospitals";
 import eventsReducer from 'rtx/slices/events';
@@ -10,6 +11,7 @@ export const store = configureStore({
   reducer: {
     user: userSlice,
     staff: staffSlice,
+    admins: adminsSlice,
     faqs: faqsSlice,
     hospitals: hospitalsSlice,
     events: eventsReducer,

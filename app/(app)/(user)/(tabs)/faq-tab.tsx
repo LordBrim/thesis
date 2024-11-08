@@ -162,15 +162,11 @@ export default function FAQTab() {
     })).filter((section) => section.data.length > 0);
     setFilteredData(filtered);
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView overScrollMode="never">
         <View style={styles.cTop}>
-          <View style={{ gap: 8 }}>
-            <Text style={GS.h1}>How may we help you?</Text>
-          </View>
-
+          <Text style={GS.h1}>How can we help you?</Text>
           <TextInputWrapper>
             <TextInput
               placeholder="Find a question..."
@@ -191,15 +187,10 @@ export default function FAQTab() {
         </View>
 
         <View style={styles.panels}>
-          <SectionList
-            sections={filteredData}
-            renderItem={({ item }) => (
-              <QuestionCard question={item.question} answer={item.answer} />
-            )}
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={panel.title}>{title}</Text>
-            )}
-            keyExtractor={(item) => item.question}
+          <FlatList
+            data={faqs}
+            renderItem={({ item }) => <QuestionPanel questions={item.data} />}
+            keyExtractor={(item) => item.title}
             overScrollMode="never"
             scrollEnabled={false}
             contentContainerStyle={{ gap: 16 }}

@@ -9,7 +9,7 @@ export default function StackLayout() {
     <Provider store={store}>
       <Stack
         initialRouteName="(auth)/login"
-        screenOptions={{ headerTitle: "", headerTitleStyle: { fontSize: 16 } }}
+        screenOptions={{ headerTitle: "" }}
       >
         {/* Authentication Screens */}
         <Stack.Screen

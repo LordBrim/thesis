@@ -5,7 +5,7 @@ import { GS } from "constants/style";
 import { COLORS } from "constants/theme";
 import { router, useNavigation, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable } from "react-native";
+import { FlatList, Pressable, ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,11 +16,9 @@ import {
 
 export default function ManageStaff() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const { staff } = useSelector((state: RootState) => state.staff);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getAllStaff());
-    console.log(staff);
   }, []);
   const navigation = useNavigation();
   useEffect(() => {
@@ -41,7 +39,7 @@ export default function ManageStaff() {
           icon="plus"
           size={18}
           onPress={() =>
-            router.push("/(app)/(admin)/(home)/manage-staff-create")
+            router.push("/(app)/(super)/(home)/manage-staff-create")
           }
         />
       ),
@@ -49,21 +47,26 @@ export default function ManageStaff() {
   }, [navigation]);
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={hospitals}
-        renderItem={({ item }) => (
-          <View>
-            <Text style={[GS.h2, styles.title]}>{item.name}</Text>
-            <StaffPanel hospitalName={item.name} />
-          </View>
-        )}
-        keyExtractor={(item, index) => {
-          return index.toString();
-        }}
+      <ScrollView
         overScrollMode="never"
         persistentScrollbar={true}
-        contentContainerStyle={{ gap: 24, flex: 1 }}
-      />
+        style={styles.scrollview}
+      >
+        <FlatList
+          data={hospitals}
+          renderItem={({ item }) => (
+            <>
+              <Text style={[GS.h2, styles.title]}>{item.name}</Text>
+              <StaffPanel hospitalName={item.name} />
+            </>
+          )}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          contentContainerStyle={{ gap: 24, paddingBottom: 16 }}
+          scrollEnabled={false}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -73,26 +76,21 @@ function StaffPanel({ hospitalName }) {
   const hospitalStaff = staff.filter(
     (staffMember) => staffMember.hospitalName === hospitalName
   );
+
+  console.log(hospitalName);
+  console.log(hospitalStaff);
   return (
     <>
       {hospitalStaff.length > 0 ? (
-        <FlatList
-          data={staff}
-          renderItem={({ item }) => (
-            <StaffCard
-              disabled={item.disabled}
-              uuid={item.uuid}
-              displayName={item.displayName}
-              email={item.email}
-            />
-          )}
-          keyExtractor={(item, index) => {
-            return index.toString();
-          }}
-          overScrollMode="never"
-          scrollEnabled={false}
-          persistentScrollbar={true}
-        />
+        hospitalStaff.map((item, index) => (
+          <StaffCard
+            key={index}
+            disabled={item.disabled}
+            uuid={item.uuid}
+            displayName={item.displayName}
+            email={item.email}
+          />
+        ))
       ) : (
         <View
           style={{
@@ -170,12 +168,11 @@ function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.background,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
+    flex: 1,
   },
   scrollview: {
     gap: 20,
+    paddingTop: HORIZONTAL_SCREEN_MARGIN,
   },
   title: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
@@ -189,7 +186,6 @@ const card = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    padding: 2,
   },
   aContainer: {
     width: "85%",

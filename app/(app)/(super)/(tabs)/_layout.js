@@ -1,10 +1,11 @@
 import { router, useNavigation } from "expo-router";
 import HomeTab from "./index";
 import { useEffect } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { Alert } from "react-native";
 import { getAuth } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome6 } from "@expo/vector-icons";
 
 export default function TabLayout() {
   const navigation = useNavigation();
@@ -12,19 +13,27 @@ export default function TabLayout() {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity
+        <View
           style={{
+            overflow: "hidden",
             borderRadius: 10,
             width: 40,
             height: 40,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "gray",
           }}
-          onPress={handleLogout}
         >
-          <Text style={{ color: "white" }}>A</Text>
-        </TouchableOpacity>
+          <Pressable
+            style={{
+              width: 40,
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            android_ripple={{ radius: 100 }}
+            onPress={handleLogout}
+          >
+            <FontAwesome6 name="power-off" size={24} color="red" />
+          </Pressable>
+        </View>
       ),
     });
   }, []);

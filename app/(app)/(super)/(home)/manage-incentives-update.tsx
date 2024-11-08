@@ -9,14 +9,13 @@ import {
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { router, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import IconBtn from "components/common/IconButton";
-import UpdatesIncentives from "app/(app)/(user)/(updates)/updates-incentives";
 import {
   updateHospitalIncentivesByUuid,
   updateIncentives,
@@ -28,14 +27,11 @@ interface IncentiveData {
 }
 
 export default function ManageIncentivesUpdate() {
+  const { uuid } = useLocalSearchParams();
   const { user } = useSelector((state: RootState) => state.user);
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const hospital = hospitals.find(
-    (section) => section.name === user.hospitalName
-  );
-  const incentives = hospitals.find(
-    (section) => section.name === user.hospitalName
-  )?.incentives || { info: "", number: 0, data: [] };
+  const hospital = hospitals.find((section) => section.uuid === uuid);
+  const incentives = hospital.incentives;
   const navigation = useNavigation();
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {

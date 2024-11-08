@@ -109,7 +109,6 @@ function Maps({ setMapBackground, setMapHeader }) {
   };
   return (
     <SafeAreaView style={styles.container}>
-      {/* TODO: Add search function for multiple hospitals */}
       <View style={styles.cTop}>
         <View style={{ gap: 8 }}>
           <Text style={GS.h1}>Find a medical institution</Text>
@@ -151,7 +150,7 @@ function Maps({ setMapBackground, setMapHeader }) {
           <Pressable
             style={styles.hContainer}
             key={hospital.id}
-            android_ripple={{ radius: 200 }}
+            android_ripple={{ radius: 250 }}
             onPress={() => focusMap(hospital)}
           >
             <Text style={styles.hName}>{hospital.name}</Text>
@@ -175,6 +174,7 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     backgroundColor: COLORS.background,
+    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
   },
   cTop: {
     width: "100%",
@@ -187,8 +187,7 @@ const styles = StyleSheet.create({
   hContainer: {
     flex: 1,
     width: "100%",
-    borderColor: COLORS.slate100,
-    borderWidth: 1,
+
     flexDirection: "row",
     alignItems: "center",
     maxHeight: 50,

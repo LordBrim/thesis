@@ -10,22 +10,14 @@ import {
 import React, { useEffect } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "app/store";
-import {
-  deleteHospital,
-  deleteHospitalInFirebase,
-  getHospitals,
-} from "rtx/slices/hospitals";
+import { RootState } from "app/store";
+import { deleteHospital, deleteHospitalInFirebase } from "rtx/slices/hospitals";
 import IconBtn from "components/common/IconButton";
 import { router, useNavigation } from "expo-router";
 
 export default function ManageHospitals() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
-  useEffect(() => {
-    dispatch(getHospitals());
-  }, [hospitals]);
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Hospitals",
@@ -49,6 +41,7 @@ export default function ManageHospitals() {
       ),
     });
   }, [navigation]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView overScrollMode="never" persistentScrollbar={true}>
@@ -62,7 +55,6 @@ export default function ManageHospitals() {
               address={item.address}
               contactNumber={item.contactNumber}
               coordinates={item.coordinates}
-              stock={item.stock}
             />
           )}
           keyExtractor={(item, index) => {
@@ -83,7 +75,6 @@ type IHospitalCard = {
   address: string;
   contactNumber: string;
   coordinates: CoordinatesState;
-  stock: Array<StockState>;
 };
 
 interface CoordinatesState {
@@ -103,7 +94,6 @@ export function HospitalCard({
   address,
   contactNumber,
   coordinates,
-  stock,
 }: IHospitalCard) {
   const handleUpdate = (uuid) => {
     router.push({
@@ -149,24 +139,13 @@ export function HospitalCard({
         </Text>
         <Text style={card.detail}>Coordinates:</Text>
         <Text style={card.detail}>
-          {"\t\t\t\t"}Latitude:
+          {"\t\t"}Latitude:
           <Text style={{ fontWeight: "normal" }}> {coordinates.latitude}</Text>
         </Text>
         <Text style={card.detail}>
-          {"\t\t\t\t"}Longitude:
+          {"\t\t"}Longitude:
           <Text style={{ fontWeight: "normal" }}> {coordinates.longitude}</Text>
         </Text>
-        <Text style={card.detail}>Stock:</Text>
-        {stock.map((item, index) => (
-          <Text style={card.detail} key={index}>
-            {"\t\t\t\t"}
-            {item.type}:
-            <Text style={{ fontWeight: "normal" }}>
-              {" "}
-              {item.available ? "true" : "false"}
-            </Text>
-          </Text>
-        ))}
       </View>
     </View>
   );

@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
   },
-  scrollView: { gap: SPACES.xxl, paddingBottom: HORIZONTAL_SCREEN_MARGIN },
+  scrollView: { gap: SPACES.xxl, paddingVertical: HORIZONTAL_SCREEN_MARGIN },
 
   title: {
     fontSize: SIZES.large,

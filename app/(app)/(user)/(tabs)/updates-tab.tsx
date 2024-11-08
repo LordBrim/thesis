@@ -8,7 +8,7 @@ import {
   Button,
   Alert,
 } from "react-native";
-import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
+import { SIZES, COLORS } from "../../../../constants";
 import {
   usePushNotification,
   CustomNotification,

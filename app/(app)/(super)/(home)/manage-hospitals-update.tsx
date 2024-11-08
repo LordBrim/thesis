@@ -33,15 +33,6 @@ export default function ManageFaqUpdate() {
   const [updatedLongitude, setUpdatedLongitude] = useState(
     hospital.coordinates.longitude.toString()
   );
-  const [updatedStock, setUpdatedStock] = useState(hospital.stock);
-  const [isEnabledAplus, toggleAplus] = useState(updatedStock[0].available);
-  const [isEnabledAminus, toggleAminus] = useState(updatedStock[1].available);
-  const [isEnabledBplus, toggleBplus] = useState(updatedStock[2].available);
-  const [isEnabledBminus, toggleBminus] = useState(updatedStock[3].available);
-  const [isEnabledABplus, toggleABplus] = useState(updatedStock[4].available);
-  const [isEnabledABminus, toggleABminus] = useState(updatedStock[5].available);
-  const [isEnabledOplus, toggleOplus] = useState(updatedStock[6].available);
-  const [isEnabledOminus, toggleOminus] = useState(updatedStock[7].available);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   useEffect(() => {
@@ -69,15 +60,6 @@ export default function ManageFaqUpdate() {
     updatedContactNumber,
     updatedLatitude,
     updatedLongitude,
-    updatedStock,
-    isEnabledAplus,
-    isEnabledAminus,
-    isEnabledBplus,
-    isEnabledBminus,
-    isEnabledABplus,
-    isEnabledABminus,
-    isEnabledOplus,
-    isEnabledOminus,
   ]);
   const handleUpdate = () => {
     dispatch(
@@ -93,16 +75,8 @@ export default function ManageFaqUpdate() {
             latitude: parseFloat(updatedLatitude),
             longitude: parseFloat(updatedLongitude),
           },
-          stock: [
-            { type: updatedStock[0].type, available: isEnabledAplus },
-            { type: updatedStock[1].type, available: isEnabledAminus },
-            { type: updatedStock[2].type, available: isEnabledBplus },
-            { type: updatedStock[3].type, available: isEnabledBminus },
-            { type: updatedStock[4].type, available: isEnabledABplus },
-            { type: updatedStock[5].type, available: isEnabledABminus },
-            { type: updatedStock[6].type, available: isEnabledOplus },
-            { type: updatedStock[7].type, available: isEnabledOminus },
-          ],
+          stock: hospital.stock,
+          incentives: hospital.incentives,
         },
       })
     );
@@ -115,16 +89,6 @@ export default function ManageFaqUpdate() {
         latitude: parseFloat(updatedLatitude),
         longitude: parseFloat(updatedLongitude),
       },
-      stock: [
-        { type: updatedStock[0].type, available: isEnabledAplus },
-        { type: updatedStock[1].type, available: isEnabledAminus },
-        { type: updatedStock[2].type, available: isEnabledBplus },
-        { type: updatedStock[3].type, available: isEnabledBminus },
-        { type: updatedStock[4].type, available: isEnabledABplus },
-        { type: updatedStock[5].type, available: isEnabledABminus },
-        { type: updatedStock[6].type, available: isEnabledOplus },
-        { type: updatedStock[7].type, available: isEnabledOminus },
-      ],
     });
     router.back();
   };
@@ -224,93 +188,6 @@ export default function ManageFaqUpdate() {
             }}
           />
         </TextInputWrapper>
-
-        <View style={styles.row}>
-          {/* Type A */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[0].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledAplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleAplus(!isEnabledAplus)}
-                value={isEnabledAplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[1].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledAminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleAminus(!isEnabledAminus)}
-                value={isEnabledAminus}
-              />
-            </View>
-          </View>
-          {/* Type B */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[2].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledBplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleBplus(!isEnabledBplus)}
-                value={isEnabledBplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[3].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledBminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleBminus(!isEnabledBminus)}
-                value={isEnabledBminus}
-              />
-            </View>
-          </View>
-          {/* Type AB */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[4].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledABplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleABplus(!isEnabledABplus)}
-                value={isEnabledABplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[5].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledABminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleABminus(!isEnabledABminus)}
-                value={isEnabledABminus}
-              />
-            </View>
-          </View>
-          {/* Type O */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[6].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOplus(!isEnabledOplus)}
-                value={isEnabledOplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>{updatedStock[7].type}</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOminus(!isEnabledOminus)}
-                value={isEnabledOminus}
-              />
-            </View>
-          </View>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );

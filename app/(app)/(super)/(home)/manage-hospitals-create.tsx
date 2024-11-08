@@ -15,8 +15,13 @@ import { COLORS } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch } from "react-redux";
-import { addHospitalToFirebase, createHospital } from "rtx/slices/hospitals";
+import {
+  addHospitalToFirebase,
+  createHospital,
+  getHospitals,
+} from "rtx/slices/hospitals";
 import { router, useNavigation } from "expo-router";
+import { AppDispatch } from "app/store";
 
 export default function ManageFaqCreate() {
   const [newHospitalName, setNewHospitalName] = useState("");
@@ -25,15 +30,7 @@ export default function ManageFaqCreate() {
   const [newContactNumber, setNewContactNumber] = useState("");
   const [newLatitude, setNewLatitude] = useState("");
   const [newLongitude, setNewLongitude] = useState("");
-  const [isEnabledOplus, toggleOplus] = useState(false);
-  const [isEnabledOminus, toggleOminus] = useState(false);
-  const [isEnabledAplus, toggleAplus] = useState(false);
-  const [isEnabledAminus, toggleAminus] = useState(false);
-  const [isEnabledBplus, toggleBplus] = useState(false);
-  const [isEnabledBminus, toggleBminus] = useState(false);
-  const [isEnabledABplus, toggleABplus] = useState(false);
-  const [isEnabledABminus, toggleABminus] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -60,14 +57,6 @@ export default function ManageFaqCreate() {
     newContactNumber,
     newLatitude,
     newLongitude,
-    isEnabledAplus,
-    isEnabledAminus,
-    isEnabledBplus,
-    isEnabledBminus,
-    isEnabledABplus,
-    isEnabledABminus,
-    isEnabledOplus,
-    isEnabledOminus,
   ]);
   const handleCreate = () => {
     dispatch(
@@ -81,15 +70,20 @@ export default function ManageFaqCreate() {
           longitude: parseFloat(newLongitude),
         },
         stock: [
-          { type: "O+", available: isEnabledOplus },
-          { type: "O-", available: isEnabledOminus },
-          { type: "A+", available: isEnabledAplus },
-          { type: "A-", available: isEnabledAminus },
-          { type: "B+", available: isEnabledBplus },
-          { type: "B-", available: isEnabledBminus },
-          { type: "AB+", available: isEnabledABplus },
-          { type: "AB-", available: isEnabledABminus },
+          { type: "O+", available: false },
+          { type: "O-", available: false },
+          { type: "A+", available: false },
+          { type: "A-", available: false },
+          { type: "B+", available: false },
+          { type: "B-", available: false },
+          { type: "AB+", available: false },
+          { type: "AB-", available: false },
         ],
+        incentives: {
+          info: "",
+          number: 4,
+          data: [],
+        },
       })
     );
     addHospitalToFirebase(
@@ -100,16 +94,17 @@ export default function ManageFaqCreate() {
       parseFloat(newLatitude),
       parseFloat(newLongitude),
       [
-        { type: "A+", available: isEnabledAplus },
-        { type: "A-", available: isEnabledAminus },
-        { type: "B+", available: isEnabledBplus },
-        { type: "B-", available: isEnabledBminus },
-        { type: "AB+", available: isEnabledABplus },
-        { type: "AB-", available: isEnabledABminus },
-        { type: "O+", available: isEnabledOplus },
-        { type: "O-", available: isEnabledOminus },
+        { type: "A+", available: false },
+        { type: "A-", available: false },
+        { type: "B+", available: false },
+        { type: "B-", available: false },
+        { type: "AB+", available: false },
+        { type: "AB-", available: false },
+        { type: "O+", available: false },
+        { type: "O-", available: false },
       ]
     );
+    dispatch(getHospitals());
     router.back();
   };
   return (
@@ -209,92 +204,6 @@ export default function ManageFaqCreate() {
             }}
           />
         </TextInputWrapper>
-        <View style={styles.row}>
-          {/* Type A */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>A+</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledAplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleAplus(!isEnabledAplus)}
-                value={isEnabledAplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>A-</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledAminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleAminus(!isEnabledAminus)}
-                value={isEnabledAminus}
-              />
-            </View>
-          </View>
-          {/* Type B */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>B+</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledBplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleBplus(!isEnabledBplus)}
-                value={isEnabledBplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>B-</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledBminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleBminus(!isEnabledBminus)}
-                value={isEnabledBminus}
-              />
-            </View>
-          </View>
-          {/* Type AB */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>AB+</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledABplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleABplus(!isEnabledABplus)}
-                value={isEnabledABplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>AB-</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledABminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleABminus(!isEnabledABminus)}
-                value={isEnabledABminus}
-              />
-            </View>
-          </View>
-          {/* Type O */}
-          <View style={styles.column}>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>O+</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOplus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOplus(!isEnabledOplus)}
-                value={isEnabledOplus}
-              />
-            </View>
-            <View style={styles.blood}>
-              <Text style={styles.detail}>O-</Text>
-              <Switch
-                trackColor={{ false: "#767577", true: COLORS.primary }}
-                thumbColor={isEnabledOminus ? "white" : "#f4f3f4"}
-                onValueChange={() => toggleOminus(!isEnabledOminus)}
-                value={isEnabledOminus}
-              />
-            </View>
-          </View>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );

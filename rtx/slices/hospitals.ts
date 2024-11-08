@@ -99,7 +99,6 @@ export const updateHospitalByUuid = async (
     contactNumber: string;
     logoUrl: string;
     coordinates: { latitude: number; longitude: number };
-    stock: { type: string; available: boolean }[];
   }
 ) => {
   try {

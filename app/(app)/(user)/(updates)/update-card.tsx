@@ -9,7 +9,7 @@ const UpdateCard = ({ update }) => {
   const lowerCaseStatus = status?.toLowerCase();
   console.log(update.message, update.status, update.type);
   return (
-    <Pressable android_ripple={{ radius: 200 }} style={styles.cardContainer}>
+    <Pressable android_ripple={{ radius: 250 }} style={styles.cardContainer}>
       <View style={{ height: 35, width: 35 }}>
         {message === "thanks" && (
           <View

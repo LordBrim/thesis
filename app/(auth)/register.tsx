@@ -331,9 +331,7 @@ export default function RegisterScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         overScrollMode="never"
-        contentContainerStyle={{
-          paddingBottom: HORIZONTAL_SCREEN_MARGIN,
-        }}
+        contentContainerStyle={styles.scrollview}
       >
         <View style={styles.cTop}>
           <Text style={GS.h1}>Register</Text>
@@ -619,6 +617,7 @@ const styles = StyleSheet.create({
   scrollview: {
     height: Dimensions.get("window").height,
     maxHeight: Dimensions.get("window").height - 82,
+    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
   },
   radioContainer: {
     flexDirection: "row",

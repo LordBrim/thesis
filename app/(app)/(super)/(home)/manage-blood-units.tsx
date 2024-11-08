@@ -1,9 +1,10 @@
 import {
   View,
-  Text,
   StyleSheet,
-  Pressable,
+  FlatList,
+  Text,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
@@ -15,15 +16,11 @@ import {
   updateHospitalStock,
   updateHospitalStockByUuid,
 } from "rtx/slices/hospitals";
+import { Pressable } from "react-native";
 
 export default function ManageBloodUnits() {
-  const { user } = useSelector((state: RootState) => state.user);
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const hospital = hospitals.find(
-    (section) => section.name === user.hospitalName
-  );
   const navigation = useNavigation();
-  const size = 40;
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Blood Units",
@@ -34,49 +31,54 @@ export default function ManageBloodUnits() {
       headerTitleAlign: "center",
     });
   }, []);
-  const [isEnabledAplus, toggleAplus] = useState(hospital.stock[0].available);
-  const [isEnabledAminus, toggleAminus] = useState(hospital.stock[1].available);
-  const [isEnabledBplus, toggleBplus] = useState(hospital.stock[2].available);
-  const [isEnabledBminus, toggleBminus] = useState(hospital.stock[3].available);
-  const [isEnabledABplus, toggleABplus] = useState(hospital.stock[4].available);
-  const [isEnabledABminus, toggleABminus] = useState(
-    hospital.stock[5].available
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={hospitals}
+        keyExtractor={(item, index) => {
+          return index.toString();
+        }}
+        renderItem={({ item }) => (
+          <BloodUnitsCard
+            uuid={item.uuid}
+            title={item.name}
+            stock={item.stock}
+          />
+        )}
+        persistentScrollbar={true}
+        overScrollMode="never"
+        contentContainerStyle={{ gap: 16 }}
+      />
+    </SafeAreaView>
   );
-  const [isEnabledOplus, toggleOplus] = useState(hospital.stock[6].available);
-  const [isEnabledOminus, toggleOminus] = useState(hospital.stock[7].available);
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          style={{
-            padding: 12,
-            borderRadius: 10,
-            width: 60,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onPress={handleUpdate}
-        >
-          <Text style={{ fontWeight: "bold" }}>Save</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [
-    navigation,
-    isEnabledAplus,
-    isEnabledAminus,
-    isEnabledBplus,
-    isEnabledBminus,
-    isEnabledABplus,
-    isEnabledABminus,
-    isEnabledOplus,
-    isEnabledOminus,
-  ]);
+}
+
+interface IBloodUnitsCard {
+  uuid?: string;
+  title: string;
+  stock: Array<IBloodUnit>;
+}
+
+interface IBloodUnit {
+  type: string;
+  available: boolean;
+}
+
+function BloodUnitsCard({ uuid, title, stock }: IBloodUnitsCard) {
+  const size = 40;
+  const [isEnabledAplus, toggleAplus] = useState(stock[0].available);
+  const [isEnabledAminus, toggleAminus] = useState(stock[1].available);
+  const [isEnabledBplus, toggleBplus] = useState(stock[2].available);
+  const [isEnabledBminus, toggleBminus] = useState(stock[3].available);
+  const [isEnabledABplus, toggleABplus] = useState(stock[4].available);
+  const [isEnabledABminus, toggleABminus] = useState(stock[5].available);
+  const [isEnabledOplus, toggleOplus] = useState(stock[6].available);
+  const [isEnabledOminus, toggleOminus] = useState(stock[7].available);
   const dispatch = useDispatch();
   const handleUpdate = () => {
     dispatch(
       updateHospitalStock({
-        uuid: hospital.uuid.toString(),
+        uuid: uuid,
         updatedStock: [
           { type: "A+", available: isEnabledAplus },
           { type: "A-", available: isEnabledAminus },
@@ -89,7 +91,7 @@ export default function ManageBloodUnits() {
         ],
       })
     );
-    updateHospitalStockByUuid(hospital.uuid.toString(), [
+    updateHospitalStockByUuid(uuid, [
       { type: "A+", available: isEnabledAplus },
       { type: "A-", available: isEnabledAminus },
       { type: "B+", available: isEnabledBplus },
@@ -99,19 +101,33 @@ export default function ManageBloodUnits() {
       { type: "O+", available: isEnabledOplus },
       { type: "O-", available: isEnabledOminus },
     ]);
-    navigation.goBack();
   };
+
   return (
-    <View style={styles.container}>
-      <Text style={[GS.h3, styles.title]}>{user.hospitalName}</Text>
-      <View style={styles.row}>
+    <View style={card.container}>
+      <View style={card.header}>
+        <Text style={[GS.h3, card.title]}>{title}</Text>
+        <TouchableOpacity
+          style={{
+            padding: 12,
+            borderRadius: 10,
+            width: 60,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={handleUpdate}
+        >
+          <Text style={{ fontWeight: "bold" }}>Save</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={card.row}>
         {/* Type A */}
-        <View style={styles.column}>
+        <View style={card.column}>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleAplus(!isEnabledAplus)}
           >
-            <Text style={styles.detail}>A+</Text>
+            <Text style={card.detail}>A+</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -119,10 +135,10 @@ export default function ManageBloodUnits() {
             />
           </Pressable>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleAminus(!isEnabledAminus)}
           >
-            <Text style={styles.detail}>A-</Text>
+            <Text style={card.detail}>A-</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -131,12 +147,12 @@ export default function ManageBloodUnits() {
           </Pressable>
         </View>
         {/* Type B */}
-        <View style={styles.column}>
+        <View style={card.column}>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleBplus(!isEnabledBplus)}
           >
-            <Text style={styles.detail}>B+</Text>
+            <Text style={card.detail}>B+</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -144,10 +160,10 @@ export default function ManageBloodUnits() {
             />
           </Pressable>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleBminus(!isEnabledBminus)}
           >
-            <Text style={styles.detail}>B-</Text>
+            <Text style={card.detail}>B-</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -156,12 +172,12 @@ export default function ManageBloodUnits() {
           </Pressable>
         </View>
         {/* Type AB */}
-        <View style={styles.column}>
+        <View style={card.column}>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleABplus(!isEnabledABplus)}
           >
-            <Text style={styles.detail}>AB+</Text>
+            <Text style={card.detail}>AB+</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -169,10 +185,10 @@ export default function ManageBloodUnits() {
             />
           </Pressable>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleABminus(!isEnabledABminus)}
           >
-            <Text style={styles.detail}>AB-</Text>
+            <Text style={card.detail}>AB-</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -181,12 +197,12 @@ export default function ManageBloodUnits() {
           </Pressable>
         </View>
         {/* Type O */}
-        <View style={styles.column}>
+        <View style={card.column}>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleOplus(!isEnabledOplus)}
           >
-            <Text style={styles.detail}>O+</Text>
+            <Text style={card.detail}>O+</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -194,10 +210,10 @@ export default function ManageBloodUnits() {
             />
           </Pressable>
           <Pressable
-            style={styles.blood}
+            style={card.blood}
             onPress={() => toggleOminus(!isEnabledOminus)}
           >
-            <Text style={styles.detail}>O-</Text>
+            <Text style={card.detail}>O-</Text>
             <Fontisto
               name="blood"
               size={size}
@@ -215,11 +231,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     gap: 24,
-    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
+  },
+});
+
+const card = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    gap: 24,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    gap: 8,
   },
   title: {
-    minWidth: "100%",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    flex: 1,
   },
   row: {
     flexDirection: "row",

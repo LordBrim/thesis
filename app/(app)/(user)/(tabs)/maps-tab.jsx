@@ -115,7 +115,7 @@ function Maps({ setMapBackground, setMapHeader }) {
           <Description description="Select a partnered hospital to locate" />
         </View>
 
-        <TextInputWrapper>
+        {/* <TextInputWrapper>
           <TextInput
             placeholder="Find a medical institution..."
             style={{
@@ -126,7 +126,7 @@ function Maps({ setMapBackground, setMapHeader }) {
           <TouchableOpacity style={{ paddingRight: 12 }} onPress={handleSearch}>
             <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
           </TouchableOpacity>
-        </TextInputWrapper>
+        </TextInputWrapper> */}
       </View>
       {loading ? (
         <View style={styles.skeletonContainer}>

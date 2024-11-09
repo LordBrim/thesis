@@ -188,7 +188,7 @@ export default function FAQTab() {
 
         <View style={styles.panels}>
           <FlatList
-            data={faqs}
+            data={FAQ_DATA}
             renderItem={({ item }) => <QuestionPanel questions={item.data} />}
             keyExtractor={(item) => item.title}
             overScrollMode="never"

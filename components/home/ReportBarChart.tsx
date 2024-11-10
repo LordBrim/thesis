@@ -73,12 +73,13 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
       </View>
 
       <BarChart
+        data={data}
         barWidth={15}
         noOfSections={5}
         barBorderRadius={4}
         frontColor="lightgray"
-        data={data}
         initialSpacing={0}
+        endSpacing={-17}
         yAxisThickness={0}
         xAxisThickness={0}
         scrollToEnd={true}

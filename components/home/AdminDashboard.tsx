@@ -6,6 +6,8 @@ import ReportBarChart from "./ReportBarChart";
 import { useState } from "react";
 import ReportLineChart from "./ReportLineChart";
 import { FlatList } from "react-native";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
 
 export default function AdminDashboard() {
   const size = 40;
@@ -56,6 +58,77 @@ export default function AdminDashboard() {
       title: "Bank\nTransfers",
     },
   ];
+  const { reports } = useSelector((state: RootState) => state.reports);
+  const formatYearlyData = (yearlyData) => {
+    return yearlyData.flatMap((item, index) => [
+      {
+        value: item.donations,
+        label: item.year,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: item.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
+  const formatMonthlyData = (monthlyData) => {
+    return monthlyData.flatMap((item, index) => [
+      {
+        value: item.donations,
+        label: item.month,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: item.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
+  const formatWeeklyData = (weeklyData) => {
+    return weeklyData.flatMap((item, index) => [
+      {
+        value: item.donations,
+        label: item.week,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: item.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
+  interface DailyDataEntry {
+    day: string;
+    donations: number;
+    requests: number;
+  }
+
+  const formatDailyData = (dailyData: Record<string, DailyDataEntry>) => {
+    return Object.entries(dailyData).flatMap(([date, data]) => [
+      {
+        value: data.donations,
+        label: data.day,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: data.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.section}>
@@ -167,12 +240,27 @@ export default function AdminDashboard() {
         </View>
       </View>
 
-      {chart == "Daily" && <ReportBarChart title="Daily" data={dailyData} />}
-      {chart == "Weekly" && <ReportBarChart title="Weekly" data={weeklyData} />}
-      {chart == "Monthly" && (
-        <ReportBarChart title="Monthly" data={monthlyData} />
+      {chart == "Daily" && (
+        <ReportBarChart title="Daily" data={formatDailyData(reports.daily)} />
       )}
-      {chart == "Yearly" && <ReportBarChart title="Yearly" data={yearlyData} />}
+      {chart == "Weekly" && (
+        <ReportBarChart
+          title="Weekly"
+          data={formatWeeklyData(reports.weekly)}
+        />
+      )}
+      {chart == "Monthly" && (
+        <ReportBarChart
+          title="Monthly"
+          data={formatMonthlyData(reports.monthly)}
+        />
+      )}
+      {chart == "Yearly" && (
+        <ReportBarChart
+          title="Yearly"
+          data={formatYearlyData(reports.yearly)}
+        />
+      )}
 
       <ReportBarChart title="Donations From Events" data={eventsData} />
       {/* <ReportLineChart /> */}

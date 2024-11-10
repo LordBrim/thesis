@@ -25,6 +25,7 @@ import {
   FIREBASE_STORAGE,
   FIRESTORE_DB,
 } from "../../../../firebase-config";
+import moment from "moment";
 import { black } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 
 const metroCities = [
@@ -55,6 +56,7 @@ const ProfileEditScreen = () => {
   const [city, setCity] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [dateOfBirth, setDateOfBirth] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -76,6 +78,9 @@ const ProfileEditScreen = () => {
           const userData = userDoc.data();
           setFullName(userData.displayName || "");
           setSex(userData.sex || "");
+          setDateOfBirth(
+            moment(userData.dateOfBirth).format("MMMM D, YYYY") || ""
+          );
           setAge(userData.age ? userData.age.toString() : "");
           setContactDetails(userData.contactDetails || "");
           setCity(userData.city || "");
@@ -208,9 +213,9 @@ const ProfileEditScreen = () => {
         )}
       </View>
       <View style={styles.inputContainer}>
-        <TextInputWrapper label="Full Name (cannot be changed)">
+        <TextInputWrapper label="Full Name">
           <TextInput
-            style={styles.input}
+            style={styles.inputGrayed}
             value={fullName}
             placeholder={fullName}
             editable={false}
@@ -225,13 +230,15 @@ const ProfileEditScreen = () => {
               label="Male"
               value="male"
               selected={sex === "male"}
-              onPress={() => setSex("male")}
+              onPress={() => null}
+              isDisable={true}
             />
             <RadioButton
               label="Female"
               value="female"
               selected={sex === "female"}
-              onPress={() => setSex("female")}
+              onPress={() => null}
+              isDisable={true}
             />
           </View>
         </TextInputWrapper>
@@ -239,11 +246,16 @@ const ProfileEditScreen = () => {
 
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Age">
+          <TextInput style={styles.inputGrayed} value={age} editable={false} />
+        </TextInputWrapper>
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInputWrapper label="Date of Birth">
           <TextInput
-            style={styles.input}
-            value={age}
-            onChangeText={setAge}
+            style={styles.inputGrayed}
+            value={dateOfBirth}
             keyboardType="numeric"
+            editable={false}
           />
         </TextInputWrapper>
       </View>
@@ -338,6 +350,12 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     marginLeft: 20,
   },
+  inputGrayed: {
+    flex: 1,
+    height: 40,
+    marginLeft: 20,
+    color: COLORS.grayDark,
+  },
   picker: {
     flex: 1,
     height: 40,
@@ -346,6 +364,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
+    marginBottom: 50,
   },
   disabledButton: {
     backgroundColor: "#ccc",
@@ -364,8 +383,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   radioContainer: {
+    marginLeft: 15,
     flexDirection: "row",
     alignItems: "center",
+  },
+  disabledRadioButton: {
+    opacity: 0.6, // Optional: Make the button appear disabled
   },
 });
 

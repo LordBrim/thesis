@@ -15,11 +15,6 @@ import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
 
 export default function HomeTab() {
-  const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
-  const onModalClose = () => {
-    setModalVisible(false);
-    router.navigate("(app)/(account)/profile");
-  };
   useEffect(() => {
     const checkUserInfo = async () => {
       const auth = getAuth();
@@ -71,18 +66,6 @@ export default function HomeTab() {
         <UpcomingAppointments />
         <Events />
       </ScrollView>
-      <SingleBtnModal
-        onPress={onModalClose}
-        icon={
-          <Ionicons name="information-circle-outline" size={42} color="black" />
-        }
-        onRequestClose={onModalClose}
-        title="Profile Information Incomplete"
-        btnLabel="I Understand"
-        visible={modalVisible}
-        animation={true}
-        description="Complete your profile to unlock all features and personalize your journey with us. It only takes a moment!"
-      />
     </SafeAreaView>
   );
 }

@@ -7,6 +7,7 @@ import {
   Modal,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { COLORS, SIZES, SPACES } from "../../../../constants/theme";
 import { useState, useEffect } from "react";
@@ -18,14 +19,17 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-
+import { Ionicons } from "@expo/vector-icons";
+import moment from "moment";
 interface Ticket {
   selectedHospital: string;
   selectedDate: string;
   selectedTime: string;
   ticketNumber: string;
   status: string;
+  incentives: number;
   userUID: string;
+  isComplete: boolean;
 }
 
 export default function DonationHistory() {
@@ -58,7 +62,12 @@ export default function DonationHistory() {
   }, [currentUser]);
 
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
   }
 
   const hasAppointments = tickets.length > 0;
@@ -84,7 +93,10 @@ export default function DonationHistory() {
             (ticket) => ticket.isComplete && ticket.userUID === currentUser?.uid
           )}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handlePress(item)}>
+            <TouchableOpacity
+              onPress={() => handlePress(item)}
+              style={styles.cardContainer}
+            >
               <AppointmentCard
                 location={item.selectedHospital}
                 date={item.selectedDate}
@@ -94,19 +106,15 @@ export default function DonationHistory() {
           )}
           keyExtractor={(item) => item.ticketNumber}
           numColumns={1}
-          scrollEnabled={false}
           contentContainerStyle={styles.flatlist}
         />
       ) : (
         <View style={styles.empty}>
           <Image
             source={require("../../../../assets/images/no-appointments.png")}
-            style={{
-              width: "10%",
-              height: 50,
-            }}
+            style={styles.emptyImage}
           />
-          <Text style={{ color: COLORS.text }}>No Scheduled Appointments</Text>
+          <Text style={styles.emptyText}>No Scheduled Appointments</Text>
         </View>
       )}
       <Modal
@@ -129,7 +137,7 @@ export default function DonationHistory() {
                 <View style={styles.modalDetails}>
                   <Text style={styles.modalLabel}>Date:</Text>
                   <Text style={styles.modalValue}>
-                    {selectedTicket.selectedDate}
+                    {moment(selectedTicket.selectedDate).format("MMMM D, YYYY")}
                   </Text>
                 </View>
                 <View style={styles.modalDetails}>
@@ -146,7 +154,15 @@ export default function DonationHistory() {
                 </View>
                 <View style={styles.modalDetails}>
                   <Text style={styles.modalLabel}>Status:</Text>
-                  <Text style={styles.modalValue}>{selectedTicket.status}</Text>
+                  <Text style={styles.modalValue}>
+                    {selectedTicket.status.toUpperCase()}
+                  </Text>
+                </View>
+                <View style={styles.modalDetails}>
+                  <Text style={styles.modalLabel}>Donation Result:</Text>
+                  <Text style={styles.modalValue}>
+                    {selectedTicket.isComplete ? "COMPLETE" : "Error"}
+                  </Text>
                 </View>
                 <TouchableOpacity
                   onPress={closeModal}
@@ -185,7 +201,7 @@ export function AppointmentCard({ location, date, time }: IAppointmentCard) {
           <Text style={card.details}> • {time}</Text>
         </View>
       </View>
-      <View style={card.line} />
+      <Ionicons name="chevron-forward" size={24} color={COLORS.grayDark} />
     </View>
   );
 }
@@ -194,15 +210,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: SPACES.xs,
+    backgroundColor: COLORS.background,
+    padding: SPACES.md,
   },
   bar: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: SPACES.md,
   },
   title: {
-    fontSize: SIZES.medium,
+    fontSize: SIZES.xLarge,
     fontWeight: "bold",
+    color: COLORS.primary,
   },
   flatlist: {
     flex: 1,
@@ -211,11 +231,28 @@ const styles = StyleSheet.create({
   },
   empty: {
     flex: 1,
-    height: 70,
-    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 16,
+  },
+  emptyImage: {
+    width: 100,
+    height: 100,
+    marginBottom: SPACES.md,
+  },
+  emptyText: {
+    color: COLORS.text,
+    fontSize: SIZES.medium,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: SPACES.md,
+    fontSize: SIZES.medium,
+    color: COLORS.text,
   },
   modalOverlay: {
     flex: 1,
@@ -239,7 +276,7 @@ const styles = StyleSheet.create({
   },
   modalDetails: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
     marginBottom: 10,
@@ -264,6 +301,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  cardContainer: {
+    margin: 25,
+  },
 });
 
 const card = StyleSheet.create({
@@ -280,6 +320,7 @@ const card = StyleSheet.create({
     position: "relative",
     maxHeight: 70,
     minHeight: 70,
+    alignItems: "center",
   },
   image: { height: 45, width: 25 },
   text: {
@@ -292,6 +333,7 @@ const card = StyleSheet.create({
   },
   details: {
     fontSize: SIZES.small,
+    color: COLORS.grayDark,
   },
   line: {
     width: 2,

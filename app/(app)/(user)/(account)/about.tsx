@@ -1,9 +1,16 @@
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Image } from "react-native";
 import { COLORS } from "../../../../constants";
 
 export default function About() {
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require("../../../../assets/images/op_logo_text.png")} // Update the path to your logo image
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </View>
       <View style={styles.section}>
         <Text style={styles.header}>ABOUT US</Text>
         <Text style={styles.text}>
@@ -95,5 +102,13 @@ const styles = StyleSheet.create({
     textAlign: "justify",
     fontSize: 16,
     lineHeight: 24,
+  },
+  logoContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logo: {
+    width: 300,
+    height: 100,
   },
 });

@@ -20,7 +20,7 @@ import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN, GS } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { firestoreOperations } from "../../firestore-services";
-import { FIREBASE_AUTH } from "../../firebase-config";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebase-config";
 import {
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
@@ -33,7 +33,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import moment from "moment";
-
+import { collection, query, where, getDocs } from "firebase/firestore";
 export default function RegisterScreen() {
   const pToggle = useTogglePasswordVisibility();
   const cpToggle = useTogglePasswordVisibility();
@@ -52,11 +52,21 @@ export default function RegisterScreen() {
   const [otpSent, setOtpSent] = useState(false);
   const [otpInput, setOtpInput] = useState();
   const [otpVerified, setOtpVerified] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const today = new Date();
+
+  const [date, setDate] = useState(
+    new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
+  );
   const [show, setShow] = useState(false);
   const [showModalEmail, setShowModalEmail] = useState(false);
   const [emailError, setEmailError] = useState("");
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalDescription, setModalDescription] = useState("");
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
   const fbAuth = FIREBASE_AUTH;
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(false);
@@ -142,8 +152,11 @@ export default function RegisterScreen() {
     }
   };
 
-  const today = new Date();
-  const eighteenYearsAgo = new Date(today.getDate());
+  const eighteenYearsAgo = new Date(
+    today.getFullYear() - 18,
+    today.getMonth(),
+    today.getDate()
+  );
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -172,6 +185,7 @@ export default function RegisterScreen() {
   };
 
   const calculateAge = (birthDate) => {
+    console.log("calculate" + birthDate);
     return moment().diff(moment(birthDate, "YYYY-MM-DD"), "years");
   };
 
@@ -222,59 +236,55 @@ export default function RegisterScreen() {
 
   const register = async () => {
     if (!isValidFullName(fullName)) {
-      Alert.alert("Invalid Full Name", "Please enter a valid full name.");
+      setModalTitle("Invalid Full Name");
+      setModalDescription("Please enter a valid full name.");
+      setModalVisible(true);
       return;
     }
 
     if (!isValidEmail(email)) {
-      Alert.alert("Invalid Email", "Please enter a valid email address.");
+      setModalTitle("Invalid Email");
+      setModalDescription("Please enter a valid email address.");
+      setModalVisible(true);
       return;
     }
 
     if (!isValidPassword(password)) {
-      Alert.alert(
-        "Weak Password",
+      setModalTitle("Weak Password");
+      setModalDescription(
         "Password must be at least 8 characters long and include a number and a special character."
       );
+      setModalVisible(true);
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Password Mismatch", "Passwords do not match.");
+      setModalTitle("Password Mismatch");
+      setModalDescription("Passwords do not match.");
+      setModalVisible(true);
       return;
     }
 
     if (!otpVerified) {
-      Alert.alert("Email Verification", "Please verify your email address.");
+      setModalTitle("Email Verification");
+      setModalDescription("Please verify your email address.");
+      setModalVisible(true);
       return;
     }
 
     if (!isValidDateOfBirth(date)) {
-      Alert.alert(
-        "Invalid Date of Birth",
-        "You must be at least 18 years old."
-      );
+      setModalTitle("Invalid Date of Birth");
+      setModalDescription("You must be at least 18 years old.");
+      setModalVisible(true);
       return;
     }
+
     if (!toggleTerms) {
-      Alert.alert(
-        "Terms and Conditions",
+      setModalTitle("Terms and Conditions");
+      setModalDescription(
         "You must agree to the terms and conditions to use the app."
       );
-      return;
-    }
-
-    if (!fullName) {
-      Alert.alert("Missing Information", "Full name is required.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert("Password Mismatch", "Passwords do not match.");
-      return;
-    }
-    if (!otpVerified) {
-      Alert.alert("Email Verification", "Please verify your email address.");
+      setModalVisible(true);
       return;
     }
     setLoading(true);
@@ -290,7 +300,7 @@ export default function RegisterScreen() {
 
       const formattedDate = date.toISOString().split("T")[0];
       const age = calculateAge(formattedDate);
-
+      console.log(age);
       // Add user data to the Firestore in "User" collection with auto-generated document ID
       const documentData = {
         email: email,
@@ -308,8 +318,8 @@ export default function RegisterScreen() {
         documentData,
         response.user.uid
       );
+
       router.back();
-      router.replace("/(app)");
     } catch (error) {
       console.log(error);
       alert("Registration Failed:" + error.message);
@@ -429,8 +439,11 @@ export default function RegisterScreen() {
               </View>
 
               <TextInputWrapper label="Date of Birth">
-                <TouchableOpacity onPress={showDatepicker}>
-                  <Text style={styles.input}>{date.toDateString()}</Text>
+                <TouchableOpacity
+                  style={styles.inputTouchable}
+                  onPress={showDatepicker}
+                >
+                  <Text>{moment(date).format("MMMM D, YYYY")}</Text>
                 </TouchableOpacity>
                 {show && (
                   <DateTimePicker
@@ -441,6 +454,7 @@ export default function RegisterScreen() {
                     display="default"
                     onChange={onChange}
                     maximumDate={eighteenYearsAgo}
+                    minimumDate={new Date(1959, 11, 31)} // December 31, 1959
                   />
                 )}
               </TextInputWrapper>
@@ -588,11 +602,43 @@ export default function RegisterScreen() {
           </View> */}
         </View>
       </ScrollView>
+
+      <SingleBtnModal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        onPress={() => setModalVisible(false)}
+        title={modalTitle}
+        description={modalDescription}
+        btnLabel="Close"
+      />
+      <SingleBtnModal
+        visible={successModalVisible}
+        animation={true}
+        icon={<FontAwesome5 name="check-circle" size={40} color="black" />}
+        onRequestClose={() => {
+          setSuccessModalVisible(false);
+          router.back(); // Replace "Login" with the name of your login screen
+        }}
+        onPress={() => {
+          setSuccessModalVisible(false);
+          router.back(); // Replace "Login" with the name of your login screen
+        }}
+        title="Registration Successful"
+        description="Your account has been created successfully. Please log in to continue."
+        btnLabel="Go to Login"
+      />
     </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
+  inputTouchable: {
+    alignContent: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    marginRight: 16,
+  },
   container: {
     flex: 1,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,

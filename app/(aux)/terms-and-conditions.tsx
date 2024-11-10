@@ -7,144 +7,74 @@ export default function TermsAndConditionsScreen() {
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <Text style={styles.title}>Terms and Conditions</Text>
         <Text style={styles.paragraph}>
-          Effective Date: [November 11, 2024]
+          Welcome to Lifeline! By accessing or using the application, you agree
+          to be bound by the following terms and conditions. Please read them
+          carefully before proceeding. If you do not agree with these terms and
+          conditions, please refrain from using the application.
+        </Text>
+        <Text style={styles.heading}>1. Intended Purpose</Text>
+        <Text style={styles.paragraph}>
+          Lifeline is intended solely for educational purposes as part of the
+          thesis requirements for the Bachelor of Science in Computer Science
+          degree. Any use beyond this context is not permitted.
+        </Text>
+        <Text style={styles.heading}>2. User Registration</Text>
+        <Text style={styles.paragraph}>
+          Access to the application is reserved for registered users only. You
+          must not share your login credentials with others or access any
+          accounts other than your own. Unauthorized activity may result in the
+          termination of your account.
+        </Text>
+        <Text style={styles.heading}>3. User Responsibility</Text>
+        <Text style={styles.paragraph}>
+          You agree to use Lifeline responsibly and not engage in activities
+          that may damage, disable, or impair its functionality or security.
+        </Text>
+        <Text style={styles.heading}>4. Third-Party Access</Text>
+        <Text style={styles.paragraph}>
+          Lifeline may be integrated with, or may otherwise interact with,
+          third-party websites and services, including but not limited to Google
+          and Facebook. By using these services, you consent to the additional
+          terms and conditions set by the applicable third parties and
+          acknowledge that Lifeline does not maintain or control these services
+          and is not responsible for their content or practices.
+        </Text>
+        <Text style={styles.heading}>5. Security Measures</Text>
+        <Text style={styles.paragraph}>
+          While we implement security measures to protect your data and
+          information, we cannot guarantee absolute security. By using Lifeline,
+          you acknowledge the inherent risks associated with transferring
+          information over the internet and agree to do so at your own risk.
+        </Text>
+        <Text style={styles.heading}>6. Termination of Access</Text>
+        <Text style={styles.paragraph}>
+          Lifeline reserves the right to terminate, suspend, or restrict your
+          access at any time and for any reason without prior notice. We may
+          also update, modify, or discontinue any aspect of the application
+          without liability.
+        </Text>
+        <Text style={styles.heading}>7. Changes to Terms and Conditions</Text>
+        <Text style={styles.paragraph}>
+          We may update the terms and conditions from time to time. Any changes
+          will be effective immediately upon notification to all users. By
+          continuing to use Lifeline after modifications, you agree to the
+          revised terms.
+        </Text>
+        <Text style={styles.heading}>8. Governing Law</Text>
+        <Text style={styles.paragraph}>
+          These terms shall be governed by and construed in accordance with the
+          laws of the Philippines.
         </Text>
         <Text style={styles.paragraph}>
-          Welcome to Lifeline! By accessing or using our application, you agree
-          to abide by the following Terms and Conditions. These terms govern
-          your use of our application, including registration, scheduling
-          appointments, and requesting blood units.
+          If you have any questions or concerns regarding these terms, please
+          contact us at sanchez.210927@stamesa.sti.edu.ph or
+          cruz.191253@stamesa.sti.edu.ph.
         </Text>
+        <Text style={styles.paragraph}>Thank you for using Lifeline!</Text>
         <Text style={styles.paragraph}>
-          1. <Text style={styles.bold}>User Registration</Text>
-        </Text>
-        <Text style={styles.paragraph}>
-          1.1. <Text style={styles.bold}>Account Creation:</Text> Users must
-          register an account to access our application. During registration,
-          users must provide their full name, email, and password. Once
-          registration is complete, users are redirected to their account
-          settings to update their City, Age, Sex, and contact details.
-        </Text>
-        <Text style={styles.paragraph}>
-          1.2. <Text style={styles.bold}>User Responsibility:</Text> Users agree
-          to provide accurate and complete information during registration and
-          account setup. Maintaining up-to-date information is the
-          responsibility of the user.
-        </Text>
-        <Text style={styles.paragraph}>
-          1.3. <Text style={styles.bold}>Privacy:</Text> We value user privacy
-          and are committed to protecting personal data. For more information on
-          how we collect and use personal information, please refer to our
-          Privacy Policy.
-        </Text>
-        <Text style={styles.paragraph}>
-          2.{" "}
-          <Text style={styles.bold}>
-            Scheduling Appointments for Blood Donation
-          </Text>
-        </Text>
-        <Text style={styles.paragraph}>
-          2.1. <Text style={styles.bold}>Eligibility Check:</Text> Users may
-          schedule blood donation appointments through our application. To
-          confirm eligibility, users must complete a preliminary health
-          checklist. This checklist will be reviewed by an administrator of our
-          affiliated hospital to ensure suitability for blood donation.
-        </Text>
-        <Text style={styles.paragraph}>
-          2.2. <Text style={styles.bold}>Pending Status:</Text> Once users
-          submit the appointment request, it will be marked as “Pending” until
-          the affiliated hospital admin confirms the appointment date and time.
-        </Text>
-        <Text style={styles.paragraph}>
-          2.3. <Text style={styles.bold}>Commitment to Appointment:</Text> By
-          scheduling an appointment, users agree to attend as scheduled unless
-          canceled with prior notice.
-        </Text>
-        <Text style={styles.paragraph}>
-          3. <Text style={styles.bold}>Blood Unit Requests</Text>
-        </Text>
-        <Text style={styles.paragraph}>
-          3.1. <Text style={styles.bold}>Request Form:</Text> Users can request
-          blood units through the application for any affiliated hospital. The
-          request form requires the following details:
-        </Text>
-        <Text style={styles.paragraph}>- Patient Name</Text>
-        <Text style={styles.paragraph}>- Blood Type</Text>
-        <Text style={styles.paragraph}>
-          - Blood Unit Type (e.g., Whole Blood, Platelets, WBC)
-        </Text>
-        <Text style={styles.paragraph}>
-          - Additional Information and Relationship to Patient
-        </Text>
-        <Text style={styles.paragraph}>
-          - Emergency Status (Emergency or Non-Emergency)
-        </Text>
-        <Text style={styles.paragraph}>- Contact Details</Text>
-        <Text style={styles.paragraph}>
-          - Health Form: A photo of the hospital-issued health form signed by a
-          doctor, verifying the necessity for blood.
-        </Text>
-        <Text style={styles.paragraph}>
-          3.2. <Text style={styles.bold}>Guidelines Compliance:</Text> Users are
-          required to read and comply with the general blood request guidelines
-          posted by affiliated hospitals. Failure to comply with these
-          guidelines may result in rejection of the blood request.
-        </Text>
-        <Text style={styles.paragraph}>
-          3.3. <Text style={styles.bold}>Request Review:</Text> All blood
-          requests will be reviewed by the affiliated hospital admin. Users will
-          be informed of the status of their request once the review is
-          complete.
-        </Text>
-        <Text style={styles.paragraph}>
-          4. <Text style={styles.bold}>General User Conduct</Text>
-        </Text>
-        <Text style={styles.paragraph}>
-          4.1. <Text style={styles.bold}>Accurate Information:</Text> Users are
-          responsible for providing accurate information. False or misleading
-          information may result in termination of the account.
-        </Text>
-        <Text style={styles.paragraph}>
-          4.2. <Text style={styles.bold}>Respectful Usage:</Text> Users agree to
-          interact with the application respectfully and ethically. Any misuse,
-          including inappropriate language or unauthorized use of data, may lead
-          to suspension or termination of access.
-        </Text>
-        <Text style={styles.paragraph}>
-          5. <Text style={styles.bold}>Data Privacy and Security</Text>
-        </Text>
-        <Text style={styles.paragraph}>
-          5.1. <Text style={styles.bold}>Data Usage:</Text> We take the security
-          of user information seriously and use data only as necessary to
-          provide and improve the application’s services.
-        </Text>
-        <Text style={styles.paragraph}>
-          5.2. <Text style={styles.bold}>Third-Party Affiliates:</Text> By using
-          our service, users consent to sharing relevant information with
-          affiliated hospitals strictly for the purposes of managing blood
-          donation and blood requests.
-        </Text>
-        <Text style={styles.paragraph}>
-          6. <Text style={styles.bold}>Modification of Terms</Text>
-        </Text>
-        <Text style={styles.paragraph}>
-          We may update or modify these Terms and Conditions at any time. Users
-          will be notified of any significant changes, and continued use of the
-          application constitutes acceptance of the new terms.
-        </Text>
-        <Text style={styles.paragraph}>
-          7. <Text style={styles.bold}>Limitation of Liability</Text>
-        </Text>
-        <Text style={styles.paragraph}>
-          The Blood Bank Management System and its affiliates are not
-          responsible for any damages resulting from the use or inability to use
-          the service, including but not limited to inaccuracies in the
-          availability of blood units or scheduling errors.
-        </Text>
-        <Text style={styles.paragraph}>
-          By registering an account and using this application, you acknowledge
-          and agree to these Terms and Conditions. If you have any questions,
-          please contact us at [lifelineisthebest4@gmail.com].
+          Reference: ACEMC Mandaluyong Terms And Conditions. (n.d.). Terms and
+          Conditions. Retrieved from
+          https://www.acemandaluyong.com.ph/ace-termsAndConditions
         </Text>
       </ScrollView>
     </View>
@@ -154,24 +84,27 @@ export default function TermsAndConditionsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    padding: 20,
+    padding: 16,
+    backgroundColor: "#fff",
   },
   scrollViewContent: {
-    paddingBottom: 20,
+    paddingVertical: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 16,
     textAlign: "center",
+  },
+  heading: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 16,
+    marginBottom: 8,
   },
   paragraph: {
     fontSize: 16,
-    marginBottom: 15,
-    lineHeight: 24,
-  },
-  bold: {
-    fontWeight: "bold",
+    marginBottom: 16,
+    textAlign: "justify",
   },
 });

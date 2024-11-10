@@ -36,6 +36,7 @@
         "backgroundColor": "#FF3642"
       }
     },
-    "owner": "lifeline"
+    "owner": "lifeline",
+    "orientation": "portrait"
   }
 }

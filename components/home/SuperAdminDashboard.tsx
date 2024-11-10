@@ -1,24 +1,15 @@
 import { Link } from "expo-router";
-import {
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { FontAwesome6, Fontisto, Ionicons, Octicons } from "@expo/vector-icons";
-import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import { BarChart } from "react-native-gifted-charts";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
+import { COLORS, GS } from "../../constants";
 import ReportBarChart from "./ReportBarChart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReportLineChart from "./ReportLineChart";
 import { FlatList } from "react-native";
 
 export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
-
   const gridBtns1 = [
     {
       href: "/(app)/(super)/(home)/manage-hospitals",
@@ -60,53 +51,12 @@ export default function AdminDashboard() {
       title: "Blood Units",
     },
   ];
-
-  const gridBtns2 = [
-    {
-      href: "/(app)/(super)/(home)/manage-ticket-donations",
-      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
-      title: "User\nDonations",
-    },
-    {
-      href: "/(app)/(super)/(home)/manage-ticket-requests",
-      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
-      title: "User\nRequests",
-    },
-    {
-      href: "/(app)/(super)/(home)/manage-ticket-transfers",
-      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
-      title: "Bank\nTransfers",
-    },
-  ];
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ gap: 8 }}>
         <Text style={GS.h2}>Dashboard</Text>
         <FlatList
           data={gridBtns1}
-          renderItem={({ item }) => (
-            <View style={[styles.dBtnView]}>
-              <Link asChild push href={item.href}>
-                <Pressable
-                  style={styles.dBtnPress}
-                  android_ripple={{ radius: 200 }}
-                >
-                  {item.icon}
-                  <Text style={styles.dBtnText}>{item.title}</Text>
-                </Pressable>
-              </Link>
-            </View>
-          )}
-          keyExtractor={(item) => item.href}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          numColumns={4}
-          scrollEnabled={false}
-        />
-        <Text style={GS.h2}>Transactions</Text>
-        <FlatList
-          data={gridBtns2}
           renderItem={({ item }) => (
             <View style={[styles.dBtnView]}>
               <Link asChild push href={item.href}>

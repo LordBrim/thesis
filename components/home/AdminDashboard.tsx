@@ -1,30 +1,15 @@
 import { Link } from "expo-router";
-import {
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import {
-  FontAwesome6,
-  Fontisto,
-  Ionicons,
-  Octicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReportLineChart from "./ReportLineChart";
 import { FlatList } from "react-native";
 
 export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
-
   const gridBtns1 = [
     {
       href: "/(app)/(admin)/(home)/manage-staff",
@@ -54,7 +39,6 @@ export default function AdminDashboard() {
       title: "Blood Units",
     },
   ];
-
   const gridBtns2 = [
     {
       href: "/(app)/(admin)/(home)/manage-ticket-donations",
@@ -72,10 +56,9 @@ export default function AdminDashboard() {
       title: "Bank\nTransfers",
     },
   ];
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ gap: 8 }}>
+      <View style={styles.section}>
         <Text style={GS.h2}>Dashboard</Text>
         <FlatList
           data={gridBtns1}
@@ -98,6 +81,9 @@ export default function AdminDashboard() {
           numColumns={4}
           scrollEnabled={false}
         />
+      </View>
+
+      <View style={styles.section}>
         <Text style={GS.h2}>Transactions</Text>
         <FlatList
           data={gridBtns2}
@@ -122,60 +108,62 @@ export default function AdminDashboard() {
         />
       </View>
 
-      <Text style={GS.h2}>Reports</Text>
+      <View style={styles.section}>
+        <Text style={GS.h2}>Reports</Text>
 
-      <View style={{ flexDirection: "row", gap: 2 }}>
-        <View
-          style={[
-            styles.sBtnView,
-            { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
-          ]}
-        >
-          <Pressable
-            onPress={() => setChart("Daily")}
-            android_ripple={{ radius: 200 }}
-            style={styles.sBtnPress}
-          >
-            <Text>Daily</Text>
-          </Pressable>
-        </View>
-
-        <View style={[styles.sBtnView]}>
-          <Pressable
-            onPress={() => setChart("Weekly")}
-            android_ripple={{ radius: 200 }}
-            style={styles.sBtnPress}
-          >
-            <Text>Weekly</Text>
-          </Pressable>
-        </View>
-
-        <View style={[styles.sBtnView]}>
-          <Pressable
-            onPress={() => setChart("Monthly")}
-            android_ripple={{ radius: 200 }}
-            style={styles.sBtnPress}
-          >
-            <Text>Monthly</Text>
-          </Pressable>
-        </View>
-
-        <View
-          style={[
-            styles.sBtnView,
-            { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
-          ]}
-        >
-          <Pressable
-            onPress={() => setChart("Yearly")}
-            android_ripple={{ radius: 200 }}
+        <View style={{ flexDirection: "row", gap: 2 }}>
+          <View
             style={[
-              styles.sBtnPress,
+              styles.sBtnView,
+              { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
+            ]}
+          >
+            <Pressable
+              onPress={() => setChart("Daily")}
+              android_ripple={{ radius: 200 }}
+              style={styles.sBtnPress}
+            >
+              <Text>Daily</Text>
+            </Pressable>
+          </View>
+
+          <View style={[styles.sBtnView]}>
+            <Pressable
+              onPress={() => setChart("Weekly")}
+              android_ripple={{ radius: 200 }}
+              style={styles.sBtnPress}
+            >
+              <Text>Weekly</Text>
+            </Pressable>
+          </View>
+
+          <View style={[styles.sBtnView]}>
+            <Pressable
+              onPress={() => setChart("Monthly")}
+              android_ripple={{ radius: 200 }}
+              style={styles.sBtnPress}
+            >
+              <Text>Monthly</Text>
+            </Pressable>
+          </View>
+
+          <View
+            style={[
+              styles.sBtnView,
               { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
             ]}
           >
-            <Text>Yearly</Text>
-          </Pressable>
+            <Pressable
+              onPress={() => setChart("Yearly")}
+              android_ripple={{ radius: 200 }}
+              style={[
+                styles.sBtnPress,
+                { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
+              ]}
+            >
+              <Text>Yearly</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
 
@@ -187,7 +175,7 @@ export default function AdminDashboard() {
       {chart == "Yearly" && <ReportBarChart title="Yearly" data={yearlyData} />}
 
       <ReportBarChart title="Donations From Events" data={eventsData} />
-      <ReportLineChart />
+      {/* <ReportLineChart /> */}
     </SafeAreaView>
   );
 }
@@ -197,6 +185,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     gap: 16,
+    backgroundColor: COLORS.background,
+  },
+  scrollview: {},
+  section: {
+    gap: 8,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   dBtnText: {
     fontWeight: "500",

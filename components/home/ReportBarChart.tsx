@@ -106,10 +106,7 @@ const styles = StyleSheet.create({
   chart: {
     width: "100%",
     paddingVertical: HORIZONTAL_SCREEN_MARGIN,
-    paddingHorizontal: 12,
-    borderRadius: 15,
-    elevation: 3,
-    shadowColor: "#52006A",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
   },
 });

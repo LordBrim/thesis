@@ -5,6 +5,28 @@ import { store } from "app/store"; // Ensure correct import path
 import Toastable from "react-native-toastable";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect } from "react";
+import { setCustomText } from "react-native-global-props";
+import {
+  Montserrat_100Thin,
+  Montserrat_100Thin_Italic,
+  Montserrat_200ExtraLight,
+  Montserrat_300Light,
+  Montserrat_300Light_Italic,
+  Montserrat_400Regular,
+  Montserrat_400Regular_Italic,
+  Montserrat_500Medium,
+  Montserrat_500Medium_Italic,
+  Montserrat_600SemiBold,
+  Montserrat_600SemiBold_Italic,
+  Montserrat_700Bold,
+  Montserrat_700Bold_Italic,
+  Montserrat_800ExtraBold,
+  Montserrat_800ExtraBold_Italic,
+  Montserrat_900Black,
+  Montserrat_900Black_Italic,
+} from "@expo-google-fonts/montserrat";
+import { useFonts } from "expo-font";
+import { Text } from "react-native";
 
 export default function StackLayout() {
   async function changeScreenOrientation() {
@@ -12,10 +34,38 @@ export default function StackLayout() {
       ScreenOrientation.OrientationLock.PORTRAIT_UP
     );
   }
+  const [fontsLoaded] = useFonts({
+    Montserrat_100Thin,
+    Montserrat_100Thin_Italic,
+    Montserrat_200ExtraLight,
+    Montserrat_200ExtraLight,
+    Montserrat_300Light,
+    Montserrat_300Light_Italic,
+    Montserrat_400Regular,
+    Montserrat_400Regular_Italic,
+    Montserrat_500Medium,
+    Montserrat_500Medium_Italic,
+    Montserrat_600SemiBold,
+    Montserrat_600SemiBold_Italic,
+    Montserrat_700Bold,
+    Montserrat_700Bold_Italic,
+    Montserrat_800ExtraBold,
+    Montserrat_800ExtraBold_Italic,
+    Montserrat_900Black,
+    Montserrat_900Black_Italic,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading fonts...</Text>;
+  }
+  const customTextProps = {
+    style: {
+      fontFamily: "Montserrat_400Regular",
+    },
+  };
   useEffect(() => {
     changeScreenOrientation();
+    setCustomText(customTextProps);
   }, []);
-
   return (
     <Provider store={store}>
       <Stack

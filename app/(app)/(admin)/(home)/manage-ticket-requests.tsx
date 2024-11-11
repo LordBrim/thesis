@@ -1,5 +1,12 @@
 import { useNavigation } from "expo-router";
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  RefreshControl,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
 import IconBtn from "components/common/IconButton";
@@ -18,6 +25,7 @@ import {
 import Divider from "constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 const Tab = createMaterialTopTabNavigator();
+
 interface TicketState {
   id: string;
   patientName: string;
@@ -88,59 +96,67 @@ export default function ManageTicketsRequests() {
 function ManageTicketsRequestsPending() {
   const [tickets, setTickets] = useState<TicketState[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchTickets = async () => {
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "ticketRequest"),
+        where("type", "==", "request"),
+        where("status", "==", "pending") // Filter by status
+      );
+
+      const querySnapshot = await getDocs(q);
+      const ticketsData = querySnapshot.docs.map(
+        (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+          const data = docSnapshot.data() as TicketData;
+          const ticket = {
+            id: docSnapshot.id,
+            patientName: data.patientName ?? "Unknown",
+            status: data.status ?? "pending",
+            userId: data.userId,
+            contactNumber: data.contactNumber,
+            emergencyReason: data.emergencyReason,
+            imageUrl: data.imageUrl,
+            isEmergency: data.isEmergency,
+            message: data.message,
+            packedRequest: data.packedRequest,
+            packedRequestInfo: data.packedRequestInfo,
+            selectedBloodType: data.selectedBloodType,
+            selectedRelationship: data.selectedRelationship,
+            type: "request",
+            // Map other properties as needed
+          } as TicketState;
+
+          return ticket;
+        }
+      );
+
+      // Sort tickets based on isEmergency field
+      ticketsData.sort(
+        (a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0)
+      );
+
+      setTickets(ticketsData);
+      setLoading(false);
+      setRefreshing(false);
+    } catch (error) {
+      console.error("Error fetching tickets: ", error);
+      setError("Failed to load tickets");
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        const q = query(
-          collection(FIRESTORE_DB, "ticketRequest"),
-          where("type", "==", "request"),
-          where("status", "==", "pending") // Filter by status
-        );
-
-        const querySnapshot = await getDocs(q);
-        const ticketsData = querySnapshot.docs.map(
-          (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
-            const data = docSnapshot.data() as TicketData;
-            const ticket = {
-              id: docSnapshot.id,
-              patientName: data.patientName ?? "Unknown",
-              status: data.status ?? "pending",
-              userId: data.userId,
-              contactNumber: data.contactNumber,
-              emergencyReason: data.emergencyReason,
-              imageUrl: data.imageUrl,
-              isEmergency: data.isEmergency,
-              message: data.message,
-              packedRequest: data.packedRequest,
-              packedRequestInfo: data.packedRequestInfo,
-              selectedBloodType: data.selectedBloodType,
-              selectedRelationship: data.selectedRelationship,
-              type: "request",
-              // Map other properties as needed
-            } as TicketState;
-
-            return ticket;
-          }
-        );
-
-        // Sort tickets based on isEmergency field
-        ticketsData.sort(
-          (a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0)
-        );
-
-        setTickets(ticketsData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching tickets: ", error);
-        setError("Failed to load tickets");
-        setLoading(false);
-      }
-    };
-
     fetchTickets();
   }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchTickets();
+  };
 
   if (loading) {
     return (
@@ -175,6 +191,9 @@ function ManageTicketsRequestsPending() {
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
@@ -183,58 +202,66 @@ function ManageTicketsRequestsPending() {
 function ManageTicketsRequestsArchived() {
   const [tickets, setTickets] = useState<TicketState[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchTickets = async () => {
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "ticketRequest"),
+        where("type", "==", "request")
+      );
+
+      const querySnapshot = await getDocs(q);
+      const ticketsData = querySnapshot.docs.map(
+        (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+          const data = docSnapshot.data() as TicketData;
+          const ticket = {
+            id: docSnapshot.id,
+            patientName: data.patientName ?? "Unknown",
+            status: data.status ?? "pending",
+            userId: data.userId,
+            contactNumber: data.contactNumber,
+            emergencyReason: data.emergencyReason,
+            imageUrl: data.imageUrl,
+            isEmergency: data.isEmergency,
+            message: data.message,
+            packedRequest: data.packedRequest,
+            packedRequestInfo: data.packedRequestInfo,
+            selectedBloodType: data.selectedBloodType,
+            selectedRelationship: data.selectedRelationship,
+            type: "request",
+            // Map other properties as needed
+          } as TicketState;
+
+          return ticket;
+        }
+      );
+
+      // Sort tickets based on isEmergency field
+      ticketsData.sort(
+        (a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0)
+      );
+
+      setTickets(ticketsData);
+      setLoading(false);
+      setRefreshing(false);
+    } catch (error) {
+      console.error("Error fetching tickets: ", error);
+      setError("Failed to load tickets");
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTickets = async () => {
-      try {
-        const q = query(
-          collection(FIRESTORE_DB, "ticketRequest"),
-          where("type", "==", "request")
-        );
-
-        const querySnapshot = await getDocs(q);
-        const ticketsData = querySnapshot.docs.map(
-          (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
-            const data = docSnapshot.data() as TicketData;
-            const ticket = {
-              id: docSnapshot.id,
-              patientName: data.patientName ?? "Unknown",
-              status: data.status ?? "pending",
-              userId: data.userId,
-              contactNumber: data.contactNumber,
-              emergencyReason: data.emergencyReason,
-              imageUrl: data.imageUrl,
-              isEmergency: data.isEmergency,
-              message: data.message,
-              packedRequest: data.packedRequest,
-              packedRequestInfo: data.packedRequestInfo,
-              selectedBloodType: data.selectedBloodType,
-              selectedRelationship: data.selectedRelationship,
-              type: "request",
-              // Map other properties as needed
-            } as TicketState;
-
-            return ticket;
-          }
-        );
-
-        // Sort tickets based on isEmergency field
-        ticketsData.sort(
-          (a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0)
-        );
-
-        setTickets(ticketsData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching tickets: ", error);
-        setError("Failed to load tickets");
-        setLoading(false);
-      }
-    };
-
     fetchTickets();
   }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchTickets();
+  };
 
   if (loading) {
     return (
@@ -252,9 +279,6 @@ function ManageTicketsRequestsArchived() {
     );
   }
 
-  const missedTickets = tickets.filter(
-    (ticket) => ticket.status === "pending" && ticket.isEmergency
-  );
   const rejectedTickets = tickets.filter(
     (ticket) => ticket.status === "denied"
   );
@@ -270,15 +294,6 @@ function ManageTicketsRequestsArchived() {
         Click tickets to view more details.
       </Text>
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
-      <Text style={{ fontWeight: "bold", fontSize: 20 }}>Missed Requests:</Text>
-      <FlatList
-        data={missedTickets}
-        renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.id} // Use the unique ID as the key
-        overScrollMode="never"
-        scrollEnabled={true}
-        persistentScrollbar={true}
-      />
       <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 20 }}>
         Rejected Requests:
       </Text>
@@ -289,6 +304,9 @@ function ManageTicketsRequestsArchived() {
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
@@ -297,7 +315,7 @@ function ManageTicketsRequestsArchived() {
 export function Card({ ticket }: CardProps) {
   const handlePress = () => {
     router.push({
-      pathname: "(app)/(admin)/(home)/manage-ticket-review",
+      pathname: "(app)/(admin)/(home)/manage-ticket-request-review",
       params: {
         ticket: JSON.stringify(ticket), // Serialize the ticket data
       },

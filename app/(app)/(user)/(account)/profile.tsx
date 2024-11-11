@@ -25,6 +25,7 @@ import {
   FIREBASE_STORAGE,
   FIRESTORE_DB,
 } from "../../../../firebase-config";
+import moment from "moment";
 import { black } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 
 const metroCities = [
@@ -55,6 +56,7 @@ const ProfileEditScreen = () => {
   const [city, setCity] = useState("");
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [dateOfBirth, setDateOfBirth] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -76,6 +78,9 @@ const ProfileEditScreen = () => {
           const userData = userDoc.data();
           setFullName(userData.displayName || "");
           setSex(userData.sex || "");
+          setDateOfBirth(
+            moment(userData.dateOfBirth).format("MMMM D, YYYY") || ""
+          );
           setAge(userData.age ? userData.age.toString() : "");
           setContactDetails(userData.contactDetails || "");
           setCity(userData.city || "");
@@ -200,17 +205,17 @@ const ProfileEditScreen = () => {
               image
                 ? { uri: image } // Show selected image if available
                 : avatar
-                  ? { uri: avatar } // Firebase URL case
-                  : require("../../../../assets/images/defaultAvatar.png") // Local image case
+                ? { uri: avatar } // Firebase URL case
+                : require("../../../../assets/images/defaultAvatar.png") // Local image case
             }
             onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
           />
         )}
       </View>
       <View style={styles.inputContainer}>
-        <TextInputWrapper label="Full Name (cannot be changed)">
+        <TextInputWrapper label="Full Name">
           <TextInput
-            style={styles.input}
+            style={styles.inputGrayed}
             value={fullName}
             placeholder={fullName}
             editable={false}
@@ -221,29 +226,23 @@ const ProfileEditScreen = () => {
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Sex">
           <View style={styles.radioContainer}>
-            <RadioButton
-              label="Male"
-              value="male"
-              selected={sex === "male"}
-              onPress={() => setSex("male")}
-            />
-            <RadioButton
-              label="Female"
-              value="female"
-              selected={sex === "female"}
-              onPress={() => setSex("female")}
-            />
+            <Text style={{ color: COLORS.grayDark }}>{sex.toUpperCase()}</Text>
           </View>
         </TextInputWrapper>
       </View>
 
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Age">
+          <TextInput style={styles.inputGrayed} value={age} editable={false} />
+        </TextInputWrapper>
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInputWrapper label="Date of Birth">
           <TextInput
-            style={styles.input}
-            value={age}
-            onChangeText={setAge}
+            style={styles.inputGrayed}
+            value={dateOfBirth}
             keyboardType="numeric"
+            editable={false}
           />
         </TextInputWrapper>
       </View>
@@ -301,7 +300,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
   },
   imageContainer: {
     alignItems: "center",
@@ -335,7 +334,14 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    color: COLORS.secondary,
+    color: COLORS.text,
+    marginLeft: 20,
+  },
+  inputGrayed: {
+    flex: 1,
+    height: 40,
+    marginLeft: 20,
+    color: COLORS.grayDark,
   },
   picker: {
     flex: 1,
@@ -345,6 +351,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
+    marginBottom: 50,
   },
   disabledButton: {
     backgroundColor: "#ccc",
@@ -363,8 +370,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   radioContainer: {
+    marginLeft: 15,
     flexDirection: "row",
     alignItems: "center",
+  },
+  disabledRadioButton: {
+    opacity: 0.6, // Optional: Make the button appear disabled
   },
 });
 

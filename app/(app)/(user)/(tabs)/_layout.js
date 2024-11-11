@@ -10,25 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function TabLayout() {
   const navigation = useNavigation();
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          style={{
-            borderRadius: 10,
-            width: 40,
-            height: 40,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "gray",
-          }}
-          onPress={handleLogout}
-        >
-          <Text style={{ color: "white" }}>A</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, []);
+  
 
   const handleDropdown = () => {
     console.log("Open dropdown!");
@@ -121,6 +103,19 @@ export default function TabLayout() {
           tabBarIcon: ({ focused, color, size }) => (
             <AntDesign
               name={focused ? "questioncircle" : "questioncircleo"}
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+        <Tabs.Screen
+        name="account-tab"
+        options={{
+          title: "Account",
+          tabBarIcon: ({ focused, color, size }) => (
+            <FontAwesome5
+              name={focused ? "user-alt" : "user"}
               size={size}
               color={color}
             />

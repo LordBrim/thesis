@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { SIZES, SPACES } from "../../constants/theme";
 import ActionBtn from "./ActionBtn";
 
-export default function Welcome({ toDonate, toRequest }) {
+export default function Welcome({ toDonate, toRequest, currentUser }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Get Started</Text>
@@ -13,6 +13,7 @@ export default function Welcome({ toDonate, toRequest }) {
           title="Donate"
           subtitle="Donate blood to someone in need."
           cta
+          currentUser={currentUser}
         />
         <ActionBtn
           href={toRequest}

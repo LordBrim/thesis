@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../rtx/slices/user"; // Adjust the path to your user slice
 import Description from "components/common/texts/Description";
 import ChecklistItem from "./ChecklistItem";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
@@ -18,10 +20,23 @@ const HeaderComponent = () => (
 );
 
 export default function PreliminaryChecklist({ answers, handleAnswerChange }) {
+  const user = useSelector(selectUser);
+
+  const filteredQuestions = checklistQuestions.filter(
+    (question) => !question.applicableTo || question.applicableTo === user.sex
+  );
+
+  const handleAnswerChangeWrapper = (questionId, answer) => {
+    const questionText = checklistQuestions.find(
+      (q) => q.id === questionId
+    ).question;
+    handleAnswerChange(questionText, answer);
+  };
+
   const renderItem = ({ item, index }) => (
     <ChecklistItem
       question={item}
-      onAnswerChange={handleAnswerChange}
+      onAnswerChange={handleAnswerChangeWrapper}
       index={index}
     />
   );
@@ -29,7 +44,7 @@ export default function PreliminaryChecklist({ answers, handleAnswerChange }) {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={checklistQuestions}
+        data={filteredQuestions}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={HeaderComponent}

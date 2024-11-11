@@ -1,10 +1,16 @@
-import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Pressable,
+  Text,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import AdminDashboard from "components/home/AdminDashboard";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-import { COLORS, SPACES } from "../../../../constants/theme";
-import { router, useNavigation } from "expo-router";
+import { COLORS, SPACES, SIZES } from "../../../../constants/theme";
+import { router, useNavigation, Link } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
@@ -30,6 +36,18 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
+        <Link
+          asChild
+          href={"/(app)/(admin)/manage-request-unit"}
+          style={[styles.ctaContainer]}
+        >
+          <Pressable android_ripple={{ radius: 200 }}>
+            <Text style={[styles.ctaTitle]}>Request</Text>
+            <Text style={[styles.ctaSubtitle]}>
+              Request a blood unit to other hospital
+            </Text>
+          </Pressable>
+        </Link>
         <AdminDashboard />
       </ScrollView>
       <SingleBtnModal
@@ -53,6 +71,27 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: COLORS.background,
+  },
+  ctaContainer: {
+    flex: 1,
+    backgroundColor: COLORS.primary,
+
+    width: "50%",
+    aspectRatio: 16 / 9,
+    borderRadius: SIZES.small,
+    padding: SPACES.md,
+    justifyContent: "space-between",
+    overflow: "hidden",
+  },
+  ctaTitle: {
+    fontSize: 18,
+    color: COLORS.background,
+
+    fontWeight: "bold",
+  },
+  ctaSubtitle: {
+    fontSize: SIZES.small,
+    color: COLORS.background,
   },
   scrollView: { gap: SPACES.xxl, paddingVertical: HORIZONTAL_SCREEN_MARGIN },
 });

@@ -59,6 +59,18 @@ const UpdateCard = ({ update }) => {
             <Ionicons name="close-circle" size={size} color="#ff3333" />
           </View>
         )}
+        {message === "deliberation" && lowerCaseStatus === "missing" && (
+          <View
+            style={[
+              styles.cardIcon,
+              {
+                backgroundColor: "#ffb1b1",
+              },
+            ]}
+          >
+            <Ionicons name="alert-circle" size={24} color="#ff3333" />
+          </View>
+        )}
         {message === "incentives" && (
           <View
             style={[
@@ -97,7 +109,7 @@ const UpdateCard = ({ update }) => {
             .
           </Text>
         )}
-        {message === "deliberation" && (
+        {message === "deliberation" && lowerCaseStatus !== "missing" && (
           <Text style={styles.cardMessage}>
             Your request for a{" "}
             {type === "appointment" && "donation appointment"}
@@ -117,7 +129,7 @@ const UpdateCard = ({ update }) => {
             </Text>
           </Text>
         )}
-        {message === "incentives" && (
+        {message === "incentives" && lowerCaseStatus !== "missing" && (
           <Text style={styles.cardMessage}>
             You are now qualified to claim the incentives for{" "}
             <Text style={{ fontWeight: "700" }}>
@@ -126,6 +138,15 @@ const UpdateCard = ({ update }) => {
             </Text>
           </Text>
         )}
+        {message === "deliberation" && lowerCaseStatus === "missing" ? (
+          <Text style={styles.cardMessage}>
+            You have not showed up for the appointment at
+            <Text style={{ fontWeight: "700" }}>
+              {" "}
+              {hospital || "the hospital"}
+            </Text>
+          </Text>
+        ) : null}
         <Text style={styles.cardDatetime}>
           {date || "Unknown date"} At {time || "Unknown time"}
         </Text>

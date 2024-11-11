@@ -45,6 +45,8 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
+
+import { useRouter } from "expo-router"; 
 const DisplayedIcons = [
   {
     Icon: ABloodType,
@@ -65,6 +67,7 @@ const DisplayedIcons = [
 ];
 
 const HospitalMapView = () => {
+  const router = useRouter(); // Initialize the router
   const navigation = useNavigation();
   const route = useRoute();
   const { event } = route.params || {};
@@ -238,6 +241,19 @@ const HospitalMapView = () => {
     })();
   }, [selectedHospital]);
 
+  const isActiveEvent = (startDate, startTime, endDate, endTime) => {
+    const now = moment();
+    const start = moment(`${startDate} ${startTime}`, "MM/DD/YYYY hh:mm A");
+    const end = moment(`${endDate} ${endTime}`, "MM/DD/YYYY hh:mm A");
+    return now.isBetween(start, end);
+  };
+
+  const isUpcomingEvent = (startDate, startTime) => {
+    const now = moment();
+    const start = moment(`${startDate} ${startTime}`, "MM/DD/YYYY hh:mm A");
+    return now.isBefore(start);
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -246,8 +262,12 @@ const HospitalMapView = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        setEvents(eventsData);
-        console.log(eventsData);
+        const filteredEvents = eventsData.filter(event =>
+          isActiveEvent(event.startDate, event.startTime, event.endDate, event.endTime) ||
+          isUpcomingEvent(event.startDate, event.startTime)
+        );
+        setEvents(filteredEvents);
+        console.log(filteredEvents);
       } catch (error) {
         console.error("Error fetching events: ", error);
       }
@@ -461,7 +481,21 @@ const HospitalMapView = () => {
                   </View>
                 ))}
               </View>
-
+              <CustomButtonWithIcon
+                icon={"plus-square"}
+                iconSize={20}
+                title={"Donate Blood"}
+                onPress={() => router.push("/(app)/(user)/(home)/donate")}
+                buttonStyle={{
+                  borderRadius: 30,
+                  width: "80%",
+                  backgroundColor: "white",
+                  borderColor: COLORS.primary,
+                  borderWidth: 1,
+                }}
+                iconColor={COLORS.primary}
+                textStyle={{ fontSize: 15, color: COLORS.primary }}
+              />
               <CustomButtonWithIcon
                 icon={"location-arrow"}
                 iconSize={20}
@@ -477,6 +511,7 @@ const HospitalMapView = () => {
                 iconColor={COLORS.primary}
                 textStyle={{ fontSize: 15, color: COLORS.primary }}
               />
+             
             </View>
           ) : selectedMarker && selectedMarker.type !== "hospital" ? (
             <View style={styles.topAlignedContent}>

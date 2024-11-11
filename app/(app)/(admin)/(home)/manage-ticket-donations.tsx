@@ -1,5 +1,13 @@
 import { useNavigation } from "expo-router";
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  ActivityIndicator, // Add RefreshControl import
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
 import IconBtn from "components/common/IconButton";
@@ -22,12 +30,13 @@ import moment from "moment";
 import Divider from "constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { onAuthStateChanged } from "firebase/auth";
+import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 const Tab = createMaterialTopTabNavigator();
 
 interface TicketState {
   id: string;
   name: string;
-  status: "pending" | "rejected" | "accepted" | "denied";
+  status: "pending" | "rejected" | "accepted" | "denied" | missing;
   userUID: string;
   userEmail: string;
   age?: number;
@@ -69,6 +78,7 @@ interface TicketData {
   ticketNumber?: string;
   type: "appointment";
   checklistData?: any;
+  isComplete?: boolean;
   // Add other properties as needed
 }
 
@@ -98,7 +108,8 @@ export default function ManageTicketsDonations() {
       }}
     >
       <Tab.Screen name="Pending" component={ManageTicketsDonationsPending} />
-      <Tab.Screen name="Archived" component={ManageTicketsDonationsArchived} />
+      <Tab.Screen name="Active" component={ManageTicketDonationsActive} />
+      <Tab.Screen name="Closed" component={ManageTicketsDonationsArchived} />
     </Tab.Navigator>
   );
 }
@@ -108,6 +119,7 @@ function ManageTicketsDonationsPending() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<string>("closest");
+  const [refreshing, setRefreshing] = useState(false); // Refresh state
 
   const [hospitalName, setHospitalName] = useState<string | null>(null);
 
@@ -127,86 +139,86 @@ function ManageTicketsDonationsPending() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      if (!hospitalName) return; // Wait until hospitalName is set
-      console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
+  const fetchTickets = async () => {
+    if (!hospitalName) return; // Wait until hospitalName is set
+    console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
 
-      try {
-        const q = query(
-          collection(FIRESTORE_DB, "ticketDonate"),
-          where("type", "==", "appointment"),
-          where("selectedHospital", "==", hospitalName) // Filter by selectedHospital
-        );
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "ticketDonate"),
+        where("type", "==", "appointment"),
+        where("selectedHospital", "==", hospitalName), // Filter by selectedHospital
+        where("status", "==", "pending") // Filter by pending status
+      );
 
-        const querySnapshot = await getDocs(q);
-        const ticketsData = await Promise.all(
-          querySnapshot.docs.map(
-            async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
-              const data = docSnapshot.data() as TicketData;
-              try {
-                const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
-                const userDocSnapshot = await getDoc(userDocRef);
-                const userData = userDocSnapshot.exists()
-                  ? (userDocSnapshot.data() as UserData)
-                  : ({} as UserData);
+      const querySnapshot = await getDocs(q);
+      const ticketsData = await Promise.all(
+        querySnapshot.docs.map(
+          async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+            const data = docSnapshot.data() as TicketData;
+            try {
+              const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
+              const userDocSnapshot = await getDoc(userDocRef);
+              const userData = userDocSnapshot.exists()
+                ? (userDocSnapshot.data() as UserData)
+                : ({} as UserData);
 
-                const ticket = {
-                  id: docSnapshot.id,
-                  name: userData.displayName ?? "Unknown",
-                  status: data.status ?? "pending",
-                  userUID: data.userUID,
-                  userEmail: userData.email ?? "Unknown",
-                  age: userData.age,
-                  avatarUrl: userData.avatarUrl,
-                  city: userData.city,
-                  contactDetails: userData.contactDetails,
-                  displayName: userData.displayName,
-                  sex: userData.sex,
-                  message: data.message,
-                  selectedDate: data.selectedDate,
-                  selectedHospital: data.selectedHospital,
-                  selectedTime: data.selectedTime,
-                  ticketNumber: data.ticketNumber,
-                  type: "appointment",
-                  checklistData: data.checklistData,
-                  // Map other properties as needed
-                } as TicketState;
+              const ticket = {
+                id: docSnapshot.id,
+                name: userData.displayName ?? "Unknown",
+                status: data.status ?? "pending",
+                userUID: data.userUID,
+                userEmail: userData.email ?? "Unknown",
+                age: userData.age,
+                avatarUrl: userData.avatarUrl,
+                city: userData.city,
+                contactDetails: userData.contactDetails,
+                displayName: userData.displayName,
+                sex: userData.sex,
+                message: data.message,
+                selectedDate: data.selectedDate,
+                selectedHospital: data.selectedHospital,
+                selectedTime: data.selectedTime,
+                ticketNumber: data.ticketNumber,
+                type: "appointment",
+                checklistData: data.checklistData,
+                isComplete: data.isComplete,
+                // Map other properties as needed
+              } as TicketState;
 
-                const ticketDate = moment(
-                  `${ticket.selectedDate} ${ticket.selectedTime}`,
-                  "YYYY-MM-DD h:mm A"
-                );
+              const ticketDate = moment(
+                `${ticket.selectedDate} ${ticket.selectedTime}`,
+                "YYYY-MM-DD h:mm A"
+              );
 
-                if (
-                  ticketDate.isBefore(moment()) ||
-                  ticket.status !== "pending"
-                ) {
-                  return null;
-                } else {
-                  return ticket;
-                }
-              } catch (error) {
-                console.error(
-                  `Error fetching user data for ticket ${docSnapshot.id}:`,
-                  error
-                );
+              if (ticketDate.isAfter(moment())) {
+                return ticket;
+              } else {
                 return null;
               }
+            } catch (error) {
+              console.error(
+                `Error fetching user data for ticket ${docSnapshot.id}:`,
+                error
+              );
+              return null;
             }
-          )
-        );
-        setTickets(
-          ticketsData.filter((ticket) => ticket !== null) as TicketState[]
-        );
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching tickets: ", error);
-        setError("Failed to load tickets");
-        setLoading(false);
-      }
-    };
+          }
+        )
+      );
+      console.log("Fetched tickets:", ticketsData); // Debugging log
+      setTickets(
+        ticketsData.filter((ticket) => ticket !== null) as TicketState[]
+      );
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching tickets: ", error);
+      setError("Failed to load tickets");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTickets();
   }, [hospitalName]);
 
@@ -216,15 +228,15 @@ function ManageTicketsDonationsPending() {
 
   const sortTickets = (tickets: TicketState[], option: string) => {
     return tickets.sort((a, b) => {
-      const dateA = moment(
-        `${a.selectedDate} ${a.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      const dateB = moment(
-        `${b.selectedDate} ${b.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      if (!dateA.isValid() || !dateB.isValid()) {
+      const dateA =
+        a.selectedDate && a.selectedTime
+          ? moment(`${a.selectedDate} ${a.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      const dateB =
+        b.selectedDate && b.selectedTime
+          ? moment(`${b.selectedDate} ${b.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      if (!dateA || !dateB || !dateA.isValid() || !dateB.isValid()) {
         console.warn("Invalid date parsing in ticket data.");
         return 0; // No change if parsing fails
       }
@@ -234,6 +246,17 @@ function ManageTicketsDonationsPending() {
         return dateB.valueOf() - dateA.valueOf();
       }
     });
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetchTickets(); // Re-fetch the tickets
+    } catch (error) {
+      console.error("Error refreshing tickets:", error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   if (loading) {
@@ -254,18 +277,51 @@ function ManageTicketsDonationsPending() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: 24 }}>
-          Pending Appointments:
-        </Text>
-        <View style={styles.filterContainer}>
-          <Picker
-            selectedValue={sortOption}
-            style={styles.picker}
-            onValueChange={(itemValue) => setSortOption(itemValue)}
-          >
-            <Picker.Item label="Closest" value="closest" />
-            <Picker.Item label="Farthest" value="farthest" />
-          </Picker>
+        <View
+          style={{
+            flexDirection: "column",
+            justifyContent: "center",
+            alignContent: "center",
+            width: "100%",
+          }}
+        >
+          <CustomButtonWithIcon
+            title={"See all appointments"}
+            buttonStyle={{
+              width: "100%",
+              backgroundColor: COLORS.primary,
+              padding: 10,
+              borderRadius: 5,
+              alignItems: "center",
+              justifyContent: "center",
+              marginVertical: 10,
+            }}
+            icon={"calendar"}
+            iconColor={"#fff"}
+            iconSize={20}
+            onPress={() => {
+              router.push({
+                pathname: "(app)/(admin)/(home)/manage-ticket-all-appointments",
+                params: {
+                  tickets: JSON.stringify(tickets), // Serialize the tickets data
+                },
+              });
+            }}
+            textStyle={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
+          />
+          <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+            Pending Appointments:
+          </Text>
+          <View style={styles.filterContainer}>
+            <Picker
+              selectedValue={sortOption}
+              style={styles.picker}
+              onValueChange={(itemValue) => setSortOption(itemValue)}
+            >
+              <Picker.Item label="Closest" value="closest" />
+              <Picker.Item label="Farthest" value="farthest" />
+            </Picker>
+          </View>
         </View>
       </View>
       <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
@@ -276,6 +332,9 @@ function ManageTicketsDonationsPending() {
         data={tickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
@@ -289,6 +348,7 @@ function ManageTicketsDonationsArchived() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sortOption, setSortOption] = useState<string>("closest");
+  const [refreshing, setRefreshing] = useState(false); // Add refreshing state
 
   const [hospitalName, setHospitalName] = useState<string | null>(null);
 
@@ -308,91 +368,92 @@ function ManageTicketsDonationsArchived() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      if (!hospitalName) return; // Wait until hospitalName is set
-      console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
+  const fetchTickets = async () => {
+    if (!hospitalName) return; // Wait until hospitalName is set
+    console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
 
-      try {
-        const q = query(
-          collection(FIRESTORE_DB, "ticketDonate"),
-          where("type", "==", "appointment"),
-          where("selectedHospital", "==", hospitalName) // Filter by selectedHospital
-        );
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "ticketDonate"),
+        where("type", "==", "appointment"),
+        where("selectedHospital", "==", hospitalName) // Filter by selectedHospital
+      );
 
-        const querySnapshot = await getDocs(q);
-        const ticketsData = await Promise.all(
-          querySnapshot.docs.map(
-            async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
-              const data = docSnapshot.data() as TicketData;
-              try {
-                const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
-                const userDocSnapshot = await getDoc(userDocRef);
-                const userData = userDocSnapshot.exists()
-                  ? (userDocSnapshot.data() as UserData)
-                  : ({} as UserData);
+      const querySnapshot = await getDocs(q);
+      const ticketsData = await Promise.all(
+        querySnapshot.docs.map(
+          async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+            const data = docSnapshot.data() as TicketData;
+            try {
+              const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
+              const userDocSnapshot = await getDoc(userDocRef);
+              const userData = userDocSnapshot.exists()
+                ? (userDocSnapshot.data() as UserData)
+                : ({} as UserData);
 
-                const ticket = {
-                  id: docSnapshot.id,
-                  name: userData.displayName ?? "Unknown",
-                  status: data.status ?? "pending",
-                  userUID: data.userUID,
-                  userEmail: userData.email ?? "Unknown",
-                  age: userData.age,
-                  avatarUrl: userData.avatarUrl,
-                  city: userData.city,
-                  contactDetails: userData.contactDetails,
-                  displayName: userData.displayName,
-                  sex: userData.sex,
-                  message: data.message,
-                  selectedDate: data.selectedDate,
-                  selectedHospital: data.selectedHospital,
-                  selectedTime: data.selectedTime,
-                  ticketNumber: data.ticketNumber,
-                  type: "appointment",
-                  checklistData: data.checklistData,
-                  // Map other properties as needed
-                } as TicketState;
+              const ticket = {
+                id: docSnapshot.id,
+                name: userData.displayName ?? "Unknown",
+                status: data.status ?? "pending",
+                userUID: data.userUID,
+                userEmail: userData.email ?? "Unknown",
+                age: userData.age,
+                avatarUrl: userData.avatarUrl,
+                city: userData.city,
+                contactDetails: userData.contactDetails,
+                displayName: userData.displayName,
+                sex: userData.sex,
+                message: data.message,
+                selectedDate: data.selectedDate,
+                selectedHospital: data.selectedHospital,
+                selectedTime: data.selectedTime,
+                ticketNumber: data.ticketNumber,
+                type: "appointment",
+                checklistData: data.checklistData,
+                isComplete: data.isComplete,
+                // Map other properties as needed
+              } as TicketState;
 
-                const ticketDate = moment(
-                  `${ticket.selectedDate} ${ticket.selectedTime}`,
-                  "YYYY-MM-DD h:mm A"
-                );
+              const ticketDate = moment(
+                `${ticket.selectedDate} ${ticket.selectedTime}`,
+                "YYYY-MM-DD h:mm A"
+              );
 
-                if (
-                  ticketDate.isBefore(moment()) &&
-                  ticket.status === "pending"
-                ) {
-                  return ticket;
-                } else if (
-                  ticket.status === "denied" ||
-                  ticket.status === "accepted"
-                ) {
-                  return ticket;
-                } else {
-                  return null;
-                }
-              } catch (error) {
-                console.error(
-                  `Error fetching user data for ticket ${docSnapshot.id}:`,
-                  error
-                );
+              if (
+                ticketDate.isBefore(moment()) &&
+                ticket.status === "pending"
+              ) {
+                return ticket;
+              } else if (
+                ticket.status === "denied" ||
+                ticket.status === "accepted"
+              ) {
+                return ticket;
+              } else {
                 return null;
               }
+            } catch (error) {
+              console.error(
+                `Error fetching user data for ticket ${docSnapshot.id}:`,
+                error
+              );
+              return null;
             }
-          )
-        );
-        setTickets(
-          ticketsData.filter((ticket) => ticket !== null) as TicketState[]
-        );
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching tickets: ", error);
-        setError("Failed to load tickets");
-        setLoading(false);
-      }
-    };
+          }
+        )
+      );
+      setTickets(
+        ticketsData.filter((ticket) => ticket !== null) as TicketState[]
+      );
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching tickets: ", error);
+      setError("Failed to load tickets");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTickets();
   }, [hospitalName]);
 
@@ -402,15 +463,15 @@ function ManageTicketsDonationsArchived() {
 
   const sortTickets = (tickets: TicketState[], option: string) => {
     return tickets.sort((a, b) => {
-      const dateA = moment(
-        `${a.selectedDate} ${a.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      const dateB = moment(
-        `${b.selectedDate} ${b.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      );
-      if (!dateA.isValid() || !dateB.isValid()) {
+      const dateA =
+        a.selectedDate && a.selectedTime
+          ? moment(`${a.selectedDate} ${a.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      const dateB =
+        b.selectedDate && b.selectedTime
+          ? moment(`${b.selectedDate} ${b.selectedTime}`, "YYYY-MM-DD h:mm A")
+          : null;
+      if (!dateA || !dateB || !dateA.isValid() || !dateB.isValid()) {
         console.warn("Invalid date parsing in ticket data.");
         return 0; // No change if parsing fails
       }
@@ -420,6 +481,17 @@ function ManageTicketsDonationsArchived() {
         return dateB.valueOf() - dateA.valueOf();
       }
     });
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetchTickets(); // Re-fetch the tickets
+    } catch (error) {
+      console.error("Error refreshing tickets:", error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   if (loading) {
@@ -441,6 +513,8 @@ function ManageTicketsDonationsArchived() {
   const missedTickets = tickets.filter(
     (ticket) =>
       ticket.status === "pending" &&
+      ticket.selectedDate &&
+      ticket.selectedTime &&
       moment(
         `${ticket.selectedDate} ${ticket.selectedTime}`,
         "YYYY-MM-DD h:mm A"
@@ -476,6 +550,9 @@ function ManageTicketsDonationsArchived() {
         data={missedTickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
@@ -487,6 +564,9 @@ function ManageTicketsDonationsArchived() {
         data={rejectedTickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
@@ -500,6 +580,15 @@ export function Card({ ticket }: CardProps) {
       pathname: "(app)/(admin)/(home)/manage-ticket-review",
       params: {
         ticket: JSON.stringify(ticket), // Serialize the ticket data
+        user: JSON.stringify({
+          displayName: ticket.displayName,
+          email: ticket.userEmail,
+          age: ticket.age,
+          avatarUrl: ticket.avatarUrl,
+          city: ticket.city,
+          contactDetails: ticket.contactDetails,
+          sex: ticket.sex,
+        }), // Serialize the user data
       },
     });
   };
@@ -535,10 +624,15 @@ export function Card({ ticket }: CardProps) {
         {ticket.status === "rejected" && (
           <IconBtn icon="user-times" size={18} color="black" />
         )}
+        {ticket.status === "missing" && (
+          <IconBtn icon="user-slash" size={18} color={COLORS.primary} />
+        )}
         <View style={{ flexDirection: "column", justifyContent: "center" }}>
           <Text style={card.name}>{ticket.ticketNumber}</Text>
-          <Text style={card.text}> {formatDate(ticket.selectedDate)}</Text>
-          <Text style={card.text}> {ticket.selectedTime}</Text>
+          <Text style={card.text}>
+            {ticket.selectedDate ? formatDate(ticket.selectedDate) : ""}
+          </Text>
+          <Text style={card.text}>{ticket.selectedTime || ""}</Text>
         </View>
       </View>
       <IconBtn icon="angle-right" size={18} onPress={handlePress} />
@@ -546,6 +640,88 @@ export function Card({ ticket }: CardProps) {
   );
 }
 
+const ManageTicketDonationsActive = () => {
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const auth = FIREBASE_AUTH;
+  const db = FIRESTORE_DB;
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      if (currentUser) {
+        // Get the current user's hospitalName
+        const userDocRef = doc(db, "User", currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const hospitalName = userData.hospitalName;
+
+          // Query the ticketDonate collection
+          const q = query(
+            collection(db, "ticketDonate"),
+            where("selectedHospital", "==", hospitalName),
+            where("status", "in", ["accepted", "missing"])
+          );
+          const querySnapshot = await getDocs(q);
+          const fetchedTickets = querySnapshot.docs.map((doc) => doc.data());
+          setTickets(fetchedTickets);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchTickets();
+  }, [currentUser]);
+
+  if (loading) {
+    return (
+      <View style={ACTIVE.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+        <Text style={ACTIVE.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={ACTIVE.container}>
+      <Text style={ACTIVE.title}>Active Tickets</Text>
+      <FlatList
+        data={tickets}
+        renderItem={({ item }) => <Card ticket={item} />}
+        keyExtractor={(item) => item.ticketNumber}
+      />
+    </View>
+  );
+};
+
+const ACTIVE = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: COLORS.primary,
+    marginBottom: 20,
+  },
+  flatlist: {
+    flex: 1,
+    gap: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 20,
+    fontSize: 18,
+    color: COLORS.text,
+  },
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,

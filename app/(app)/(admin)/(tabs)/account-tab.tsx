@@ -348,7 +348,7 @@ const Card = ({ href, icon, label, sublabel }: IAccountCard) => (
       <Text style={styles.label}>{label}</Text>
       {sublabel && <Text style={styles.label}>{label}</Text>}
       <View style={styles.icon}>
-        <FontAwesome6 name="chevron-right" size={18} color={COLORS.darkGray} />
+        <FontAwesome6 name="chevron-right" size={18} color={COLORS.grayDark} />
       </View>
     </Pressable>
   </Link>

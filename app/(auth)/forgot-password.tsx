@@ -23,8 +23,10 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset,
   verifyPasswordResetCode,
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
-import { FIREBASE_AUTH } from "firebase-config";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { FIRESTORE_DB, FIREBASE_AUTH } from "firebase-config";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -33,6 +35,7 @@ export default function ForgotPassword() {
   const [enteredPin, setEnteredPin] = useState("");
   const [timerEnd, setTimerEnd] = useState(false);
   const [remainingTime, setRemainingTime] = useState(300);
+  const [emailError, setEmailError] = useState("");
   const router = useRouter();
   const refTimer = useRef(null);
   const [showModalEmail, setShowModalEmail] = useState(false);
@@ -40,39 +43,78 @@ export default function ForgotPassword() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };
 
-  const sendPin = async () => {
-    const pin = generatePin();
-    setGeneratedPin(pin);
-
-    const data = {
-      personalizations: [
-        {
-          to: [{ email: email }],
-          subject: "Your Password Reset OTP",
-        },
-      ],
-      from: { email: "lifelineisthebest4@gmail.com" }, // Verified sender email
-      content: [
-        {
-          type: "text/plain",
-          value: `Your OTP code is ${pin}. It will expire in 5 minutes.`,
-        },
-      ],
-    };
-
+  const checkEmailExists = async (email) => {
     try {
+      const q = query(
+        collection(FIRESTORE_DB, "User"),
+        where("email", "==", email.toLowerCase())
+      );
+      const querySnapshot = await getDocs(q);
+      console.log(`Documents found for ${email}:`, querySnapshot.size);
+      return !querySnapshot.empty;
+    } catch (error) {
+      console.error("Error checking email:", error);
+      return false;
+    }
+  };
+
+  const sendPin = async () => {
+    try {
+      console.log("Checking email:", email);
+      const emailExists = await checkEmailExists(email);
+      console.log(`Email ${email} exists:`, emailExists);
+      if (!emailExists) {
+        setEmailError("The email address is not registered.");
+        return;
+      }
+      if (email.length == 0) {
+        setEmailError("Plase input an email.");
+        return;
+      }
+      setEmailError("");
+
+      const pin = generatePin();
+      setGeneratedPin(pin);
+
+      const API_KEY = "d1440a571533e6c003ef72358ff55e5a-f6fe91d3-6d5fa136";
+      const DOMAIN = "lifeline-ph.tech";
+
+      const data = new URLSearchParams({
+        from: "Lifeline Support <support@lifeline.com>",
+        to: email,
+        subject: "Your Password Reset OTP",
+        text: `Your OTP code is: ${pin}. It will expire in 5 minutes.`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+            <h2 style="color: #333;">Lifeline Password Reset OTP</h2>
+            <p style="color: #555;">Dear User,</p>
+            <p style="color: #555;">To reset your password, please use the following One-Time Password (OTP):</p>
+            <div style="text-align: center; margin: 20px 0;">
+              <span style="display: inline-block; padding: 10px 20px; font-size: 24px; color: #fff; background-color: #007bff; border-radius: 5px;">${pin}</span>
+            </div>
+            <p style="color: #555;">If you did not request this code, please ignore this email.</p>
+            <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+            <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+          </div>
+        `,
+      });
+
       const response = await axios.post(
-        "https://api.sendgrid.com/v3/mail/send",
+        `https://api.mailgun.net/v3/${DOMAIN}/messages`,
         data,
         {
+          auth: {
+            username: "api",
+            password: API_KEY,
+          },
           headers: {
-            Authorization: `Bearer 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`,
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       );
 
-      if (response.status === 202) {
+      if (response.status === 200) {
         console.log("OTP email sent successfully");
         console.log("Generated PIN:", pin); // Log the generated PIN value
         setShowModal(true);
@@ -123,7 +165,7 @@ export default function ForgotPassword() {
         <Description description="Enter the email you used to sign in." />
       </View>
 
-      <View style={{ gap: 24, width: "100%" }}>
+      <View style={{ gap: 15, width: "100%" }}>
         <TextInputWrapper label="Email">
           <TextInput
             value={email}
@@ -138,7 +180,7 @@ export default function ForgotPassword() {
             }}
           />
         </TextInputWrapper>
-
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
         <CallToActionBtn label="Reset Password" onPress={sendPin} />
       </View>
       <SingleBtnModal
@@ -241,5 +283,8 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     gap: 40,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+  },
+  errorText: {
+    color: "red",
   },
 });

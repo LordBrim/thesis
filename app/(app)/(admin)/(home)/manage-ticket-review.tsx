@@ -5,20 +5,36 @@ import {
   ScrollView,
   Pressable,
   Button,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { COLORS } from "constants/theme";
+import { COLORS } from "../../../../constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import moment from "moment";
-import IconBtn from "components/common/IconButton";
-import { doc, updateDoc } from "firebase/firestore";
+import IconBtn from "../../../../components/common/IconButton";
+import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+type CustomButtonProps = {
+  title: string;
+  onPress: () => void;
+  color: string;
+  isReject?: boolean;
+  isMissing?: boolean;
+};
+
 interface TicketState {
   id: string;
   name: string;
-  status: "pending" | "rejected" | "accepted" | "denied";
+  status:
+    | "pending"
+    | "rejected"
+    | "accepted"
+    | "denied"
+    | "completed"
+    | "cancelled"
+    | "missing";
   userUID: string;
   userEmail: string;
   age?: number;
@@ -33,9 +49,46 @@ interface TicketState {
   selectedTime?: string;
   ticketNumber?: string;
   type?: string;
-  checklistData?: { [key: string]: string }; // Add checklistData as an optional property
+  checklistData?: { [key: string]: string };
+  isComplete: boolean; // Add checklistData as an optional property
   // Add other properties as needed
 }
+
+const CustomButton: React.FC<CustomButtonProps> = ({
+  title,
+  onPress,
+  color,
+  isReject,
+  isMissing,
+}) => (
+  <Pressable
+    onPress={onPress}
+    style={({ pressed }) => [
+      {
+        backgroundColor: color,
+        padding: 10,
+        borderRadius: 5,
+        opacity: pressed ? 0.8 : 1,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5, // For Android shadow
+      },
+    ]}
+  >
+    <View style={styles.buttonContent}>
+      {isReject && <FontAwesome6 name="xmark" size={24} color="white" />}
+      {isMissing && (
+        <FontAwesome6 name="person-circle-question" size={24} color="white" />
+      )}
+      {!isReject && !isMissing && (
+        <FontAwesome6 name="check" size={24} color="white" />
+      )}
+      <Text style={styles.buttonText}>{title}</Text>
+    </View>
+  </Pressable>
+);
 
 export default function ManageTicketReview() {
   const { ticket } = useLocalSearchParams();
@@ -47,6 +100,7 @@ export default function ManageTicketReview() {
     if (ticket) {
       setTicketData(JSON.parse(ticket as string)); // Deserialize the ticket data
     }
+    console.log("TICKET REVIEW SCREEN" + ticket);
   }, [ticket]);
 
   if (!ticketData) {
@@ -61,7 +115,16 @@ export default function ManageTicketReview() {
     return moment(dateString, "YYYY-MM-DD").format("MMMM D, YYYY");
   };
 
-  const handleUpdateStatus = async (status: "accepted" | "denied") => {
+  const handleUpdateStatus = async (
+    status:
+      | "pending"
+      | "rejected"
+      | "accepted"
+      | "denied"
+      | "completed"
+      | "cancelled"
+      | "missing"
+  ) => {
     if (!ticketData) return;
 
     const updatedTicketData = {
@@ -79,6 +142,61 @@ export default function ManageTicketReview() {
       setTicketData(updatedTicketData);
     } catch (error) {
       console.error("Error updating ticket:", error);
+    }
+  };
+
+  const handleCompleteTransaction = async () => {
+    if (!ticketData) return;
+
+    const updatedTicketData = {
+      ...ticketData,
+      message: "incentives",
+      isComplete: true,
+    };
+
+    try {
+      const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
+      await updateDoc(ticketDocRef, {
+        isComplete: true,
+      });
+
+      const userDocRef = doc(FIRESTORE_DB, "User", ticketData.userUID);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const newIncentiveCount = (userData.incentive || 0) + 1;
+        const nextDonationDate = moment().add(3, "months").format("YYYY-MM-DD");
+        await updateDoc(userDocRef, {
+          incentive: newIncentiveCount,
+          nextDonationDate: nextDonationDate,
+          status: "thanks",
+        });
+      }
+
+      setTicketData(updatedTicketData);
+
+      // Inform the admin about the next available donation date
+      Alert.alert(
+        "Donation Completed",
+        `The user will be eligible to donate again on ${moment()
+          .add(3, "months")
+          .format("MMMM D, YYYY")}.`
+      );
+      router.back();
+    } catch (error) {
+      console.error("Error completing transaction:", error);
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!ticketData) return;
+
+    try {
+      const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
+      await deleteDoc(ticketDocRef);
+      setTicketData(null); // Optionally, you can navigate away or show a message
+    } catch (error) {
+      console.error("Error canceling ticket:", error);
     }
   };
 
@@ -114,7 +232,9 @@ export default function ManageTicketReview() {
         >
           <FontAwesome6 name="calendar-day" size={18} color="black" />
           <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 7 }}>
-            {formatDate(ticketData.selectedDate)}
+            {ticketData.selectedDate
+              ? formatDate(ticketData.selectedDate)
+              : "N/A"}
           </Text>
         </View>
         <View
@@ -131,8 +251,14 @@ export default function ManageTicketReview() {
           </Text>
         </View>
         <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
-          Status: {ticketData.status}
+          Status: {ticketData.status.toUpperCase()}
         </Text>
+        {ticketData.status == "accepted" ? (
+          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+            Appoinment Result:{" "}
+            {!ticketData.isComplete ? "IN-REVIEW" : "COMPLETED"}
+          </Text>
+        ) : null}
       </View>
 
       <Pressable
@@ -161,7 +287,9 @@ export default function ManageTicketReview() {
       </Pressable>
       {openUserDetails ? (
         <View style={styles.checklistContainer}>
-          <Text style={styles.textDetails}>Name: {ticketData.name}</Text>
+          <Text style={styles.textDetails}>
+            Name: {ticketData.name || ticketData.displayName}
+          </Text>
           <Text style={styles.textDetails}>City: {ticketData.city}</Text>
           <Text style={styles.textDetails}>
             Contact Details: {ticketData.contactDetails}
@@ -230,17 +358,46 @@ export default function ManageTicketReview() {
       ) : null}
 
       <View style={styles.buttonContainer}>
-        <Button
-          title="Accept"
-          onPress={() => handleUpdateStatus("accepted")}
-          color="green"
-        />
-        <Button
-          title="Reject"
-          onPress={() => handleUpdateStatus("denied")}
-          color={COLORS.primary}
-        />
+        {ticketData.status === "accepted" ? (
+          <CustomButton
+            title="Complete Transaction"
+            onPress={handleCompleteTransaction}
+            color="#10b500"
+            isReject={false}
+          />
+        ) : (
+          <CustomButton
+            title="Accept"
+            onPress={() => handleUpdateStatus("accepted")}
+            color="#10b500"
+            isReject={false}
+          />
+        )}
+        {ticketData.status === "pending" ? (
+          <CustomButton
+            title="Reject"
+            onPress={() => handleUpdateStatus("denied")}
+            color={COLORS.primary}
+            isReject={true}
+          />
+        ) : (
+          <CustomButton
+            title="Reject"
+            onPress={() => handleUpdateStatus("cancelled")}
+            color={COLORS.primary}
+            isReject={true}
+          />
+        )}
       </View>
+      {ticketData.status === "accepted" ? (
+        <CustomButton
+          title="User No-Show"
+          onPress={() => handleUpdateStatus("missing")}
+          color={COLORS.primary}
+          isMissing={true}
+          // isReject={true}
+        />
+      ) : null}
     </ScrollView>
   );
 }
@@ -280,6 +437,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginTop: 20,
     width: "100%",
+    margin: 20,
   },
   bullet: {
     width: 8,
@@ -293,6 +451,16 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     color: COLORS.grayMid,
     marginTop: 10,
+  },
+  buttonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  buttonText: {
+    marginLeft: 5,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

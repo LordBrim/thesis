@@ -15,11 +15,6 @@ import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
 
 export default function HomeTab() {
-  const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
-  const onModalClose = () => {
-    setModalVisible(false);
-    router.navigate("(app)/(account)/profile");
-  };
   useEffect(() => {
     const checkUserInfo = async () => {
       const auth = getAuth();
@@ -44,7 +39,6 @@ export default function HomeTab() {
     };
     checkUserInfo();
   }, []);
-  const [donateStatus, setDonateStatus] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getCurrentUser());
@@ -67,66 +61,11 @@ export default function HomeTab() {
             </Text>
           </Text>
         </View>
-        <View style={styles.donations}>
-          <View style={styles.donation}>
-            <Text
-              style={[
-                styles.title,
-                {
-                  color: COLORS.text,
-                  fontSize: SIZES.small,
-                  textAlign: "center",
-                },
-              ]}
-            >
-              Donation Status:{"\n"}
-              {donateStatus ? (
-                <Text style={{ color: "green", fontSize: SIZES.large }}>
-                  Available
-                </Text>
-              ) : (
-                <Text style={{ color: "red", fontSize: SIZES.large }}>
-                  Locked{"\n"}(3 Months)
-                </Text>
-              )}
-            </Text>
-          </View>
 
-          <View style={styles.donation}>
-            <Text
-              style={[
-                styles.title,
-                {
-                  color: COLORS.text,
-                  fontSize: SIZES.small,
-                  textAlign: "center",
-                },
-              ]}
-            >
-              Units Donated:{"\n"}
-              <Text style={{ fontSize: SIZES.large, color: COLORS.text }}>
-                25
-              </Text>
-            </Text>
-          </View>
-        </View>
-
-        <Welcome toDonate="/donate" toRequest="/request" />
+        <Welcome toDonate="/donate" toRequest="/request" currentUser={user} />
         <UpcomingAppointments />
         <Events />
       </ScrollView>
-      <SingleBtnModal
-        onPress={onModalClose}
-        icon={
-          <Ionicons name="information-circle-outline" size={42} color="black" />
-        }
-        onRequestClose={onModalClose}
-        title="Profile Information Incomplete"
-        btnLabel="I Understand"
-        visible={modalVisible}
-        animation={true}
-        description="Complete your profile to unlock all features and personalize your journey with us. It only takes a moment!"
-      />
     </SafeAreaView>
   );
 }
@@ -139,22 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   scrollView: { gap: SPACES.xxl, paddingVertical: HORIZONTAL_SCREEN_MARGIN },
-  donations: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    overflow: "hidden",
-    backgroundColor: COLORS.background,
-    minHeight: 110,
-  },
-  donation: {
-    flex: 1,
-    alignItems: "center",
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 24,
-    borderColor: COLORS.slate100,
-  },
+
   title: {
     fontSize: SIZES.large,
     fontWeight: "bold",

@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Modal,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 import {
   HORIZONTAL_SCREEN_MARGIN,
   COLORS,
@@ -11,6 +21,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../../firebase-config"; // Adjust the path as needed
 import { Card, Button, Icon, ProgressBar } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 export default function EventDetailsScreen() {
   const {
     title,
@@ -23,6 +34,7 @@ export default function EventDetailsScreen() {
     longitude,
   } = useLocalSearchParams();
   const [imageUri, setImageUri] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   console.log(
     title,
     description,
@@ -33,6 +45,7 @@ export default function EventDetailsScreen() {
     latitude,
     longitude
   );
+
   useEffect(() => {
     const fetchImageUri = async () => {
       if (documentId) {
@@ -56,21 +69,46 @@ export default function EventDetailsScreen() {
   }, [documentId]);
 
   const navigateToMaps = () => {
-    router.push({
-      pathname: "/(app)/(maps)/hospitalMapView",
-      params: {
-        event: JSON.stringify({
-          latitude: latitude,
-          longitude: longitude,
-          title: title,
-          description: description,
-          startDate: date,
-          startTime: time,
-          address: address,
-          mapCSS: JSON.stringify(mapCSS),
-        }),
-      },
-    });
+    if (typeof latitude === "string" && typeof longitude === "string") {
+      router.push({
+        pathname: "/(app)/(maps)/hospitalMapView",
+        params: {
+          event: JSON.stringify({
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            title: title,
+            description: description,
+            startDate: date,
+            startTime: time,
+            address: address,
+            mapCSS: JSON.stringify(mapCSS),
+          }),
+        },
+      });
+    } else {
+      console.log("Latitude or Longitude is missing or not a string");
+    }
+  };
+
+  const downloadImage = async () => {
+    try {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission to access media library is required!");
+        return;
+      }
+
+      const fileUri = FileSystem.documentDirectory + "image.jpg";
+      await FileSystem.downloadAsync(imageUri, fileUri);
+      await MediaLibrary.createAssetAsync(fileUri);
+      alert("Image downloaded successfully!");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error downloading image:", error.message);
+      } else {
+        console.error("Unknown error downloading image");
+      }
+    }
   };
 
   const donorsCount = 120;
@@ -79,10 +117,12 @@ export default function EventDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{ height: "100%" }}>
         <Card>
           {imageUri ? (
-            <Card.Cover source={{ uri: imageUri }} />
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Card.Cover source={{ uri: imageUri }} resizeMode="contain" />
+            </TouchableOpacity>
           ) : (
             <View style={styles.placeholder}>
               <Text>Loading image...</Text>
@@ -105,51 +145,31 @@ export default function EventDetailsScreen() {
               <Text style={styles.address}>{address}</Text>
             </View>
             <Text style={styles.description}>{description}</Text>
-
-            <View style={styles.infoContainer}>
-              <View style={styles.infoItem}>
-                <MaterialCommunityIcons
-                  name="water"
-                  size={24}
-                  color="#3498db"
-                />
-                <Text style={styles.infoText}>
-                  Blood Types Needed: A+, O-, B+
-                </Text>
-              </View>
-              <View style={styles.infoItem}>
-                <MaterialCommunityIcons
-                  name="clock-time-four"
-                  size={24}
-                  color="#2ecc71"
-                />
-                <Text style={styles.infoText}>
-                  Estimated Time: 30-45 minutes
-                </Text>
-              </View>
-              <View style={styles.infoItem}>
-                <MaterialCommunityIcons
-                  name="food-apple"
-                  size={24}
-                  color="#e67e22"
-                />
-                <Text style={styles.infoText}>Refreshments Provided</Text>
-              </View>
-            </View>
           </Card.Content>
         </Card>
       </ScrollView>
+
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Image
+              source={{ uri: imageUri }}
+              style={styles.fullImage}
+              resizeMode="contain"
+            />
+            <Button onPress={() => setModalVisible(false)}>Close</Button>
+            <Button onPress={downloadImage}>Download Image</Button>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.buttonContainer}>
         <Button mode="contained" onPress={navigateToMaps} icon="map-marker">
           Navigate to Location
-        </Button>
-        <Button
-          mode="outlined"
-          onPress={() => {}}
-          icon="calendar-check"
-          style={styles.secondaryButton}
-        >
-          Register Now
         </Button>
       </View>
     </View>
@@ -188,6 +208,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   description: {
+    textAlign: "justify",
+    fontSize: 16,
+    fontWeight: "bold",
     marginVertical: 10,
     lineHeight: 20,
   },
@@ -233,6 +256,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#e0e0e0",
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "90%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+  fullImage: {
+    width: "100%",
+    height: 300,
+    marginBottom: 20,
+  },
 });
 
 const mapCSS = StyleSheet.create({
@@ -258,7 +299,7 @@ const mapCSS = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 10,
     elevation: 5,
-    borderColor: COLORS.gray2,
+    borderColor: COLORS.grayDark,
   },
   buttonHospitalPressed: {
     width: "85%",
@@ -268,12 +309,12 @@ const mapCSS = StyleSheet.create({
     borderWidth: 2,
     elevation: 5,
     borderRadius: 10,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.grayDark,
   },
   textHospital: {
     fontSize: SIZES.large,
     textAlign: "left",
-    color: COLORS.black,
+    color: COLORS.grayDark,
   },
   textHospitalPressed: {
     fontSize: SIZES.large,
@@ -288,7 +329,7 @@ const mapCSS = StyleSheet.create({
     position: "absolute",
     bottom: "10%",
     alignSelf: "center",
-    backgroundColor: COLORS.red,
+    backgroundColor: COLORS.primary,
   },
   markerContainer: {
     flexDirection: "row",
@@ -313,7 +354,7 @@ const mapCSS = StyleSheet.create({
     position: "absolute",
     backgroundColor: "white",
     borderRadius: 10,
-    borderColor: COLORS.gray,
+    borderColor: COLORS.grayDark,
     borderWidth: 1,
     width: 100,
     shadowColor: "black",

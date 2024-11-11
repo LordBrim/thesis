@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 
-export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
+export const getCurrentUser = createAsyncThunk("getCurrentUser", async (userUID: string) => {
   try {
     const user = FIREBASE_AUTH.currentUser;
 
@@ -38,6 +38,7 @@ interface UserState {
       timesCompleted: number;
     }[];
     disabled: boolean;
+    sex: "male" | "female"; // Add sex property
   };
 }
 
@@ -56,6 +57,7 @@ const initialState: UserState = {
       },
     ],
     disabled: false,
+    sex: "male", // Set default sex
   },
 };
 
@@ -75,5 +77,6 @@ export const userSlice = createSlice({
 });
 
 export const selectCount = (state: RootState) => state.user.user;
+export const selectUser = (state: RootState) => state.user.user;
 
 export default userSlice.reducer;

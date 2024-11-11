@@ -43,6 +43,9 @@ export default function CreateEvent({ navigation }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [inputHeight, setInputHeight] = useState(50);
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
@@ -232,6 +235,9 @@ export default function CreateEvent({ navigation }) {
     setShowStartDatePicker(false);
     if (selectedDate) {
       setStartDate(selectedDate);
+      if (selectedDate > endDate) {
+        setEndDate(selectedDate);
+      }
     }
   };
 
@@ -245,10 +251,13 @@ export default function CreateEvent({ navigation }) {
   const handleEndDateChange = (event, selectedDate) => {
     setShowEndDatePicker(false);
     if (selectedDate) {
-      setEndDate(selectedDate);
+      if (selectedDate < startDate) {
+        Alert.alert("Invalid Date", "End date cannot be before start date.");
+      } else {
+        setEndDate(selectedDate);
+      }
     }
   };
-
   const handleEndTimeChange = (event, selectedTime) => {
     setShowEndTimePicker(false);
     if (selectedTime) {
@@ -306,7 +315,7 @@ export default function CreateEvent({ navigation }) {
             mode="date"
             display="default"
             onChange={handleStartDateChange}
-            minimumDate={new Date()}
+            minimumDate={tomorrow}
           />
         )}
       </View>
@@ -440,8 +449,8 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     flex: 1,
-
-    color: COLORS.secondary,
+    marginLeft: 10,
+    color: COLORS.grayDark,
   },
   image: {
     width: "100%",

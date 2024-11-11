@@ -25,7 +25,7 @@
       "backgroundColor": "#ffffff"
     },
     "android": {
-      "package": "com.andreisager.lifeline",
+      "package": "com.lifeline",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCG2UV8weM9nFuWYQNkEbG9f8wwITMiCRk"

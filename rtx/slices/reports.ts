@@ -81,76 +81,77 @@ const reportsSlice = createSlice({
   name: "reports",
   initialState,
   reducers: {
-    reducers: {
-      incYearlyDonations: (state, action: PayloadAction<{ year: string }>) => {
-        const { year } = action.payload;
-        const yearData = state.reports.yearly.find(
-          (entry) => entry.year === year
-        );
-        if (yearData) {
-          yearData.donations++;
-        }
-      },
-      incrementRequestYearly: (state, action) => {
-        const { year, requestAmount } = action.payload;
-        const yearData = state.reports.yearly.find(
-          (entry) => entry.year === year
-        );
-        if (yearData) {
-          yearData.requests += requestAmount;
-        }
-      },
-      incrementDonationMonthly: (state, action) => {
-        const { month, donationAmount } = action.payload;
-        const monthData = state.reports.monthly.find(
-          (entry) => entry.month === month
-        );
-        if (monthData) {
-          monthData.donations += donationAmount;
-        }
-      },
-      incrementRequestMonthly: (state, action) => {
-        const { month, requestAmount } = action.payload;
-        const monthData = state.reports.monthly.find(
-          (entry) => entry.month === month
-        );
-        if (monthData) {
-          monthData.requests += requestAmount;
-        }
-      },
+    incrementDonationYearly: (
+      state,
+      action: PayloadAction<{ year: string }>
+    ) => {
+      const { year } = action.payload;
+      const yearData = state.reports.yearly.find(
+        (entry) => entry.year === year
+      );
+      if (yearData) {
+        yearData.donations++;
+      }
+    },
+    incrementRequestYearly: (state, action) => {
+      const { year, requestAmount } = action.payload;
+      const yearData = state.reports.yearly.find(
+        (entry) => entry.year === year
+      );
+      if (yearData) {
+        yearData.requests += requestAmount;
+      }
+    },
+    incrementDonationMonthly: (state, action) => {
+      const { month, donationAmount } = action.payload;
+      const monthData = state.reports.monthly.find(
+        (entry) => entry.month === month
+      );
+      if (monthData) {
+        monthData.donations += donationAmount;
+      }
+    },
+    incrementRequestMonthly: (state, action) => {
+      const { month, requestAmount } = action.payload;
+      const monthData = state.reports.monthly.find(
+        (entry) => entry.month === month
+      );
+      if (monthData) {
+        monthData.requests += requestAmount;
+      }
+    },
 
-      incrementDonationWeekly: (state, action) => {
-        const { week, donationAmount } = action.payload;
-        const weekData = state.reports.weekly.find(
-          (entry) => entry.week === week
-        );
-        if (weekData) {
-          weekData.donations += donationAmount;
-        }
-      },
-      incrementRequestWeekly: (state, action) => {
-        const { week, requestAmount } = action.payload;
-        const weekData = state.reports.weekly.find(
-          (entry) => entry.week === week
-        );
-        if (weekData) {
-          weekData.requests += requestAmount;
-        }
-      },
-      incrementDonationDaily: (state, action) => {
-        const { date, donationAmount } = action.payload;
-        const dayData = state.reports.daily[date];
-        if (dayData) {
-          dayData.donations += donationAmount;
-        }
-      },
-      incrementRequestDaily: (state, action) => {
-        const { date, requestAmount } = action.payload;
-        const dayData = state.reports.daily[date];
-        if (dayData) {
-          dayData.requests += requestAmount;
-        }
-      },
+    incrementDonationWeekly: (state, action) => {
+      const { week, donationAmount } = action.payload;
+      const weekData = state.reports.weekly.find(
+        (entry) => entry.week === week
+      );
+      if (weekData) {
+        weekData.donations += donationAmount;
+      }
+    },
+    incrementRequestWeekly: (state, action) => {
+      const { week, requestAmount } = action.payload;
+      const weekData = state.reports.weekly.find(
+        (entry) => entry.week === week
+      );
+      if (weekData) {
+        weekData.requests += requestAmount;
+      }
+    },
+    incrementDonationDaily: (state, action) => {
+      const { date, donationAmount } = action.payload;
+      const dayData = state.reports.daily[date];
+      if (dayData) {
+        dayData.donations += donationAmount;
+      }
+    },
+    incrementRequestDaily: (state, action) => {
+      const { date, requestAmount } = action.payload;
+      const dayData = state.reports.daily[date];
+      if (dayData) {
+        dayData.requests += requestAmount;
+      }
     },
   },
 });

@@ -5,7 +5,8 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  RefreshControl, // Add RefreshControl import
+  RefreshControl,
+  ActivityIndicator, // Add RefreshControl import
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
@@ -35,7 +36,7 @@ const Tab = createMaterialTopTabNavigator();
 interface TicketState {
   id: string;
   name: string;
-  status: "pending" | "rejected" | "accepted" | "denied";
+  status: "pending" | "rejected" | "accepted" | "denied" | missing;
   userUID: string;
   userEmail: string;
   age?: number;
@@ -107,7 +108,8 @@ export default function ManageTicketsDonations() {
       }}
     >
       <Tab.Screen name="Pending" component={ManageTicketsDonationsPending} />
-      <Tab.Screen name="Archived" component={ManageTicketsDonationsArchived} />
+      <Tab.Screen name="Active" component={ManageTicketDonationsActive} />
+      <Tab.Screen name="Closed" component={ManageTicketsDonationsArchived} />
     </Tab.Navigator>
   );
 }
@@ -622,6 +624,9 @@ export function Card({ ticket }: CardProps) {
         {ticket.status === "rejected" && (
           <IconBtn icon="user-times" size={18} color="black" />
         )}
+        {ticket.status === "missing" && (
+          <IconBtn icon="user-slash" size={18} color={COLORS.primary} />
+        )}
         <View style={{ flexDirection: "column", justifyContent: "center" }}>
           <Text style={card.name}>{ticket.ticketNumber}</Text>
           <Text style={card.text}>
@@ -635,6 +640,88 @@ export function Card({ ticket }: CardProps) {
   );
 }
 
+const ManageTicketDonationsActive = () => {
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const auth = FIREBASE_AUTH;
+  const db = FIRESTORE_DB;
+  const currentUser = auth.currentUser;
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      if (currentUser) {
+        // Get the current user's hospitalName
+        const userDocRef = doc(db, "User", currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const hospitalName = userData.hospitalName;
+
+          // Query the ticketDonate collection
+          const q = query(
+            collection(db, "ticketDonate"),
+            where("selectedHospital", "==", hospitalName),
+            where("status", "in", ["accepted", "missing"])
+          );
+          const querySnapshot = await getDocs(q);
+          const fetchedTickets = querySnapshot.docs.map((doc) => doc.data());
+          setTickets(fetchedTickets);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchTickets();
+  }, [currentUser]);
+
+  if (loading) {
+    return (
+      <View style={ACTIVE.loadingContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+        <Text style={ACTIVE.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={ACTIVE.container}>
+      <Text style={ACTIVE.title}>Active Tickets</Text>
+      <FlatList
+        data={tickets}
+        renderItem={({ item }) => <Card ticket={item} />}
+        keyExtractor={(item) => item.ticketNumber}
+      />
+    </View>
+  );
+};
+
+const ACTIVE = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: COLORS.primary,
+    marginBottom: 20,
+  },
+  flatlist: {
+    flex: 1,
+    gap: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 20,
+    fontSize: 18,
+    color: COLORS.text,
+  },
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,

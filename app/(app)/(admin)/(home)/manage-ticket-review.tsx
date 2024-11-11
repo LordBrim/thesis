@@ -16,6 +16,13 @@ import IconBtn from "../../../../components/common/IconButton";
 import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+type CustomButtonProps = {
+  title: string;
+  onPress: () => void;
+  color: string;
+  isReject?: boolean;
+  isMissing?: boolean;
+};
 
 interface TicketState {
   id: string;
@@ -26,7 +33,8 @@ interface TicketState {
     | "accepted"
     | "denied"
     | "completed"
-    | "cancelled";
+    | "cancelled"
+    | "missing";
   userUID: string;
   userEmail: string;
   age?: number;
@@ -46,7 +54,13 @@ interface TicketState {
   // Add other properties as needed
 }
 
-const CustomButton = ({ title, onPress, color, isReject }) => (
+const CustomButton: React.FC<CustomButtonProps> = ({
+  title,
+  onPress,
+  color,
+  isReject,
+  isMissing,
+}) => (
   <Pressable
     onPress={onPress}
     style={({ pressed }) => [
@@ -63,45 +77,16 @@ const CustomButton = ({ title, onPress, color, isReject }) => (
       },
     ]}
   >
-    {isReject ? (
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <FontAwesome6 name="xmark" size={24} color="white" />
-        <Text
-          style={{
-            marginLeft: 5,
-            color: "white",
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        >
-          {title}
-        </Text>
-      </View>
-    ) : (
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
+    <View style={styles.buttonContent}>
+      {isReject && <FontAwesome6 name="xmark" size={24} color="white" />}
+      {isMissing && (
+        <FontAwesome6 name="person-circle-question" size={24} color="white" />
+      )}
+      {!isReject && !isMissing && (
         <FontAwesome6 name="check" size={24} color="white" />
-        <Text
-          style={{
-            marginLeft: 5,
-            color: "white",
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        >
-          {title}
-        </Text>
-      </View>
-    )}
+      )}
+      <Text style={styles.buttonText}>{title}</Text>
+    </View>
   </Pressable>
 );
 
@@ -138,6 +123,7 @@ export default function ManageTicketReview() {
       | "denied"
       | "completed"
       | "cancelled"
+      | "missing"
   ) => {
     if (!ticketData) return;
 
@@ -403,6 +389,15 @@ export default function ManageTicketReview() {
           />
         )}
       </View>
+      {ticketData.status === "accepted" ? (
+        <CustomButton
+          title="User No-Show"
+          onPress={() => handleUpdateStatus("missing")}
+          color={COLORS.primary}
+          isMissing={true}
+          // isReject={true}
+        />
+      ) : null}
     </ScrollView>
   );
 }
@@ -442,6 +437,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     marginTop: 20,
     width: "100%",
+    margin: 20,
   },
   bullet: {
     width: 8,
@@ -455,6 +451,16 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     color: COLORS.grayMid,
     marginTop: 10,
+  },
+  buttonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  buttonText: {
+    marginLeft: 5,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

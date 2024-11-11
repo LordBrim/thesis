@@ -191,10 +191,8 @@ export default function LoginScreen() {
       if (nextAppState === "background" || nextAppState === "inactive") {
         const userLoggedIn = await AsyncStorage.getItem("user_logged_in");
         if (userLoggedIn !== "true") {
-          const auth = getAuth();
-          await auth.signOut();
           console.log(
-            "User signed out because app went to background and Remember Me was not checked"
+            "App went to background or inactive state, but Remember Me is checked, so user remains logged in."
           );
         }
       }

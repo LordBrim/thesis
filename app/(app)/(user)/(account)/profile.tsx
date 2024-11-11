@@ -226,20 +226,7 @@ const ProfileEditScreen = () => {
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Sex">
           <View style={styles.radioContainer}>
-            <RadioButton
-              label="Male"
-              value="male"
-              selected={sex === "male"}
-              onPress={() => null}
-              isDisable={true}
-            />
-            <RadioButton
-              label="Female"
-              value="female"
-              selected={sex === "female"}
-              onPress={() => null}
-              isDisable={true}
-            />
+            <Text style={{ color: COLORS.grayDark }}>{sex.toUpperCase()}</Text>
           </View>
         </TextInputWrapper>
       </View>

@@ -45,6 +45,8 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
+
+import { useRouter } from "expo-router"; 
 const DisplayedIcons = [
   {
     Icon: ABloodType,
@@ -65,6 +67,7 @@ const DisplayedIcons = [
 ];
 
 const HospitalMapView = () => {
+  const router = useRouter(); // Initialize the router
   const navigation = useNavigation();
   const route = useRoute();
   const { event } = route.params || {};
@@ -478,7 +481,21 @@ const HospitalMapView = () => {
                   </View>
                 ))}
               </View>
-
+              <CustomButtonWithIcon
+                icon={"plus-square"}
+                iconSize={20}
+                title={"Donate Blood"}
+                onPress={() => router.push("/(app)/(user)/(home)/donate")}
+                buttonStyle={{
+                  borderRadius: 30,
+                  width: "80%",
+                  backgroundColor: "white",
+                  borderColor: COLORS.primary,
+                  borderWidth: 1,
+                }}
+                iconColor={COLORS.primary}
+                textStyle={{ fontSize: 15, color: COLORS.primary }}
+              />
               <CustomButtonWithIcon
                 icon={"location-arrow"}
                 iconSize={20}
@@ -494,6 +511,7 @@ const HospitalMapView = () => {
                 iconColor={COLORS.primary}
                 textStyle={{ fontSize: 15, color: COLORS.primary }}
               />
+             
             </View>
           ) : selectedMarker && selectedMarker.type !== "hospital" ? (
             <View style={styles.topAlignedContent}>

@@ -15,11 +15,14 @@ import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import moment from "moment"; // Import moment for date formatting
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useRouter } from "expo-router";
 
 export default function UpcomingEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation(); // Get the navigation object
+  const router = useRouter(); 
+
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -79,6 +82,36 @@ export default function UpcomingEvents() {
     return now.isBetween(start, end);
   };
 
+
+  
+  const navigateToMaps = (event) => {
+    const { latitude, longitude, title, description, startDate, startTime, address, mapCSS } = event;
+    console.log("Latitude:", latitude);
+    console.log("Longitude:", longitude);
+  
+    
+    if ((typeof latitude === "string" || typeof latitude === "number") && 
+    (typeof longitude === "string" || typeof longitude === "number")) {
+  router.push({
+    pathname: "/(app)/(user)/(maps)/hospitalMapView",
+    params: {
+      event: JSON.stringify({
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude),
+        title: title,
+        description: description,
+        startDate: startDate,
+        startTime: startTime,
+        address: address,
+        mapCSS: JSON.stringify(mapCSS),
+      }),
+    },
+  });
+} else {
+  console.log("Latitude or Longitude is missing or not a string/number");
+}
+  };
+
   const renderEventItem = ({ item }) => (
     <View style={styles.eventContainer}>
       {isActiveEvent(item.startDate, item.startTime, item.endDate, item.endTime) && (
@@ -104,9 +137,12 @@ export default function UpcomingEvents() {
         manageEvents={true} // Pass the manageEvents prop as true
         latitude={item.latitude} // Pass latitude to EventCard
         longitude={item.longitude} // Pass longitude to EventCard
+        onPress={() => navigateToMaps(item)}
       />
     </View>
   );
+
+
 
   return (
     <View style={styles.container}>

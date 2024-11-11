@@ -22,13 +22,13 @@ export default function About() {
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>Developers</Text>
-        <Text style={styles.text}>• Munar, Manolito Angelo S.</Text>
-        <Text style={styles.text}>• Sager, Andrei John S.</Text>
+        <Text style={styles.text}>MUNAR, MANOLITO ANGELO S.</Text>
+        <Text style={styles.text}>SAGER, ANDREI JOHN S.</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>UI DESIGN & DOCUMENTATION</Text>
-        <Text style={styles.text}>• Cruz, Jam Charmaine A.</Text>
-        <Text style={styles.text}>• Sanchez, Nicole M.</Text>
+        <Text style={styles.text}>CRUZ, JAM CHARMAINE A.</Text>
+        <Text style={styles.text}>SANCHEZ, NICOLE M.</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>LIFELINE’S BENEFITS</Text>
@@ -74,6 +74,7 @@ export default function About() {
             fontSize: 16,
             fontWeight: "bold",
             marginBottom: 30,
+            textAlign: "center",
           }}
         >
           lifelineisthebest4@gmail.com.
@@ -95,11 +96,12 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
     color: COLORS.primary,
     marginBottom: 10,
   },
   text: {
-    textAlign: "justify",
+    textAlign: "center",
     fontSize: 16,
     lineHeight: 24,
   },

@@ -287,6 +287,14 @@ export default function RegisterScreen() {
       setModalVisible(true);
       return;
     }
+    if (!sex) {
+      setModalTitle("Empty Input");
+      setModalDescription(
+        "Please select your sex to continue with the registration."
+      );
+      setModalVisible(true);
+      return;
+    }
     setLoading(true);
     try {
       const response = await createUserWithEmailAndPassword(
@@ -304,7 +312,6 @@ export default function RegisterScreen() {
       // Add user data to the Firestore in "User" collection with auto-generated document ID
       const documentData = {
         email: email,
-        password: password,
         displayName: displayName,
         dateOfBirth: formattedDate,
         sex: sex,
@@ -319,7 +326,7 @@ export default function RegisterScreen() {
         response.user.uid
       );
 
-      router.back();
+      setSuccessModalVisible(true);
     } catch (error) {
       console.log(error);
       alert("Registration Failed:" + error.message);

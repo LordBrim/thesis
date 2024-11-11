@@ -5,13 +5,11 @@ import SuperAdminDashboard from "components/home/SuperAdminDashboard";
 import { COLORS, SPACES } from "../../../../constants/theme";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
-import { getCurrentUser } from "rtx/slices/user";
 import { getHospitals } from "rtx/slices/hospitals";
 
 export default function HomeTab() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(getCurrentUser());
     dispatch(getHospitals());
   }, []);
   return (

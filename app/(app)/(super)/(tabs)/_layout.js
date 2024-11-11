@@ -6,6 +6,8 @@ import { Alert } from "react-native";
 import { getAuth } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialIcons } from "@expo/vector-icons";
+import IconBtn from "components/common/IconButton";
+import { COLORS } from "../../../../constants";
 
 export default function TabLayout() {
   const navigation = useNavigation();
@@ -15,24 +17,43 @@ export default function TabLayout() {
       headerRight: () => (
         <View
           style={{
-            overflow: "hidden",
-            borderRadius: 10,
-            width: 40,
-            height: 40,
+            flexDirection: "row",
+            gap: 4,
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <Pressable
+          <IconBtn
+            icon="plus"
+            size={18}
+            onPress={() =>
+              router.push("(app)/(super)/(home)/manage-hospitals-create")
+            }
+          />
+          <View
+            style={{ height: 30, width: 1, backgroundColor: COLORS.grayLight }}
+          ></View>
+          <View
             style={{
+              overflow: "hidden",
+              borderRadius: 10,
               width: 40,
               height: 40,
-              justifyContent: "center",
-              alignItems: "center",
             }}
-            android_ripple={{ radius: 100 }}
-            onPress={handleLogout}
           >
-            <MaterialIcons name="logout" size={24} color="gray" />
-          </Pressable>
+            <Pressable
+              style={{
+                width: 40,
+                height: 40,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              android_ripple={{ radius: 100 }}
+              onPress={handleLogout}
+            >
+              <MaterialIcons name="logout" size={24} color="gray" />
+            </Pressable>
+          </View>
         </View>
       ),
     });

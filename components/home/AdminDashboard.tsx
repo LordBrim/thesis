@@ -262,7 +262,7 @@ export default function AdminDashboard() {
         />
       )}
 
-      <ReportBarChart title="Donations From Events" data={eventsData} />
+      {/* TODO: Add a button to toggle between bar chart and line area chart  */}
       {/* <ReportLineChart /> */}
     </SafeAreaView>
   );

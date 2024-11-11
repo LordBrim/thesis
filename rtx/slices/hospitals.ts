@@ -56,7 +56,12 @@ export const addHospitalToFirebase = async (
   logoUrl: string,
   latitude: number,
   longitude: number,
-  stock: { type: string; available: boolean }[]
+  stock: { type: string; available: boolean }[],
+  incentives: {
+    info: string;
+    number: number;
+    data: Array<{ incentive: string; position: number }>;
+  }
 ) => {
   const hospitalsCollectionRef = collection(FIRESTORE_DB, "hospital");
   const existingHospitalQuery = query(
@@ -75,6 +80,7 @@ export const addHospitalToFirebase = async (
         longitude,
       },
       stock: arrayUnion(...stock),
+      incentives,
     });
   } else {
     await addDoc(hospitalsCollectionRef, {
@@ -87,6 +93,7 @@ export const addHospitalToFirebase = async (
         longitude,
       },
       stock,
+      incentives,
     });
   }
 };

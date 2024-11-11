@@ -76,17 +76,6 @@ export default function LoginScreen() {
     setModalVisible(false);
   };
 
-  const removeUserCredentials = async () => {
-    try {
-      await AsyncStorage.removeItem("user_logged_in");
-      await AsyncStorage.removeItem("user_email");
-      await AsyncStorage.removeItem("user_password");
-      await AsyncStorage.removeItem("remember_me");
-    } catch (error) {
-      console.error("Error removing user credentials:", error.message);
-    }
-  };
-
   const login = async (email, password) => {
     if (!email || !password) {
       console.log("Login blocked due to missing email or password");
@@ -125,10 +114,7 @@ export default function LoginScreen() {
       if (toggleRemember) {
         await AsyncStorage.setItem("user_logged_in", "true");
         await storeUserCredentials(email, password, toggleRemember);
-      } else {
-        await removeUserCredentials();
       }
-
       const user = FIREBASE_AUTH.currentUser;
 
       const docRef = doc(FIRESTORE_DB, "User", user.uid);

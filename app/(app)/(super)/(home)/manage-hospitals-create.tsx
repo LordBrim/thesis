@@ -61,6 +61,7 @@ export default function ManageFaqCreate() {
   const handleCreate = () => {
     dispatch(
       createHospital({
+        disabled: false,
         name: newHospitalName,
         logoUrl: newLogoUrl,
         address: newAddress,
@@ -87,6 +88,7 @@ export default function ManageFaqCreate() {
       })
     );
     addHospitalToFirebase(
+      false,
       newHospitalName,
       newLogoUrl,
       newAddress,
@@ -109,7 +111,6 @@ export default function ManageFaqCreate() {
         data: [],
       }
     );
-    dispatch(getHospitals());
     router.back();
   };
   return (

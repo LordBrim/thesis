@@ -11,7 +11,6 @@ import {
   getDocs,
   orderBy,
   query,
-  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -51,6 +50,7 @@ export const getHospitals = createAsyncThunk("getHospitals", async () => {
 });
 
 export const addHospitalToFirebase = async (
+  disabled: boolean,
   name: string,
   address: string,
   contactNumber: string,
@@ -73,6 +73,8 @@ export const addHospitalToFirebase = async (
   if (!querySnapshot.empty) {
     const hospitalDocRef = querySnapshot.docs[0].ref;
     await updateDoc(hospitalDocRef, {
+      disabled,
+      name,
       address,
       contactNumber,
       logoUrl,
@@ -85,6 +87,7 @@ export const addHospitalToFirebase = async (
     });
   } else {
     await addDoc(hospitalsCollectionRef, {
+      disabled,
       name,
       address,
       contactNumber,
@@ -299,7 +302,10 @@ export const hospitalsSlice = createSlice({
         (hospital) => hospital.name === action.payload.name
       );
       if (hospitalIndex === -1) {
-        state.hospitals.push(action.payload);
+        state.hospitals = [...state.hospitals, action.payload];
+        state.hospitals = state.hospitals
+          .slice()
+          .sort((a, b) => a.name.localeCompare(b.name));
       }
     },
     updateHospital: (

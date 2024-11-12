@@ -18,14 +18,14 @@ import {
 } from "rtx/slices/hospitals";
 import { Pressable } from "react-native";
 import IconBtn from "components/common/IconButton";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 
 export default function HomeTab() {
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getHospitals());
-  }, [hospitals]);
+  }, [hospitals.length]);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView

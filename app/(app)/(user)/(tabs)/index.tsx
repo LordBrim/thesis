@@ -83,7 +83,7 @@ export default function HomeTab() {
 
         <Welcome toDonate="/donate" toRequest="/request" currentUser={user} />
         <UpcomingAppointments />
-        <Incentives />
+        {/* <Incentives /> */}
         <Events />
       </ScrollView>
     </SafeAreaView>

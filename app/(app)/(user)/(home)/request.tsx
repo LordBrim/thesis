@@ -57,6 +57,7 @@ export default function Request() {
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [warningModalVisible, setWarningModalVisible] = useState(false);
   const [warningMessage, setWarningMessage] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const prev = () => {
     if (screenIndex > 0) {
@@ -197,6 +198,41 @@ export default function Request() {
     }
   };
 
+  const handleNext = () => {
+    if (screenIndex === 1) {
+      const fields = [
+        { field: "patientName", value: patientName },
+        { field: "selectedBloodType", value: selectedBloodType },
+        { field: "selectedRelationship", value: selectedRelationship },
+        { field: "contactNumber", value: contactNumber },
+        { field: "imageUri", value: imageUri }, // Add imageUri to validation
+      ];
+
+      if (isEmergency) {
+        fields.push({ field: "emergencyReason", value: emergencyReason });
+      }
+
+      let allValid = true;
+      const newErrors: Errors = {};
+
+      fields.forEach(({ field, value }) => {
+        if (!value) {
+          newErrors[field as keyof Errors] = "This field is required.";
+          allValid = false;
+        }
+      });
+
+      setErrors(newErrors);
+
+      if (!allValid) {
+        setValidationError("Please fill in all required fields.");
+        setWarningModalVisible(true);
+        return;
+      }
+    }
+    next();
+  };
+
   const Screens = ["Request\nGuidelines", "File A\nRequest", "Review\nRequest"];
 
   return (
@@ -303,7 +339,7 @@ export default function Request() {
         )}
         <CallToActionBtn
           label={screenIndex === stepCount - 1 ? "submit" : "next"}
-          onPress={screenIndex === stepCount - 1 ? handleSubmit : next}
+          onPress={screenIndex === stepCount - 1 ? handleSubmit : handleNext}
           style={{ flex: 1 }}
         />
       </View>
@@ -330,6 +366,7 @@ export default function Request() {
         title="Validation Error"
         btnLabel="Okay"
         description={warningMessage}
+        errorMessage={validationError}
       />
 
       <Modal visible={imageModalVisible} transparent={true}>

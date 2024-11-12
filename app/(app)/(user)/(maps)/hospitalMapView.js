@@ -94,7 +94,7 @@ const HospitalMapView = () => {
 
   // Add bottom sheet refs and state
   const bottomSheetRef = useRef(null);
-  const snapPoints = useMemo(() => [300, "60%"], []);
+  const snapPoints = useMemo(() => [400, "70%"], []);
   const handleSheetChanges = useCallback((index) => {}, []);
 
   // !for testing purpose
@@ -105,13 +105,14 @@ const HospitalMapView = () => {
     }
   };
 
-  useEffect(() => {
-    if (selectedMarker && selectedMarker !== null) {
-      openBottomSheet();
-      fetchRoute(); // Fetch route when a marker is selected
+useEffect(() => {
+    console.log("Selected Marker:", selectedMarker);
+    if (selectedMarker) {
+        openBottomSheet();
+        fetchRoute();
     }
-    console.log("ue 1 triggered")
-  }, [selectedMarker]);
+    console.log("ue 1 triggered");
+}, [selectedMarker]);
 
   const openGoogleMapsForDriving = () => {
     if (currentLocation && selectedMarker) {

@@ -23,6 +23,8 @@ export default function DonateScreen() {
   const [delayedModalVisible, setDelayedModalVisible] = useState(false);
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [ticketNumber, setTicketNumber] = useState("");
+  const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(false);
+  const [alertModalVisible, setAlertModalVisible] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,14 +50,26 @@ export default function DonateScreen() {
   };
 
   const next = () => {
-    if (screenIndex < stepCount - 1) {
-      if (screenIndex === 1 && scheduleAppointmentRef.current) {
-        scheduleAppointmentRef.current.updateAnswersState();
+    if (screenIndex === 0 && !allQuestionsAnswered) {
+      setAlertModalVisible(true);
+      return;
+    }
+    if (screenIndex === 1 && scheduleAppointmentRef.current) {
+      scheduleAppointmentRef.current.updateAnswersState();
+      if (!scheduleAppointmentRef.current.isValid()) {
+        setAlertModalVisible(true);
+        return;
       }
+    }
+    if (screenIndex < stepCount - 1) {
       console.log("Answers:", answers); // Log answers when clicking next
       this.carousel.scrollToNext();
       setScreenIndex(++screenIndex);
     }
+  };
+
+  const closeAlertModal = () => {
+    setAlertModalVisible(false);
   };
 
   const noticeDescription = `
@@ -146,6 +160,7 @@ By proceeding with this screening, you acknowledge that you understand these req
         <PreliminaryChecklist
           answers={answers}
           handleAnswerChange={handleAnswerChange}
+          allQuestionsAnswered={setAllQuestionsAnswered}
         />
         <ScheduleAppointmentScreen
           ref={scheduleAppointmentRef}
@@ -169,6 +184,7 @@ By proceeding with this screening, you acknowledge that you understand these req
             screenIndex === stepCount - 1 ? () => submit() : () => next()
           }
           style={{ flex: 1 }}
+          disabled={screenIndex === 0 && !allQuestionsAnswered}
         />
       </View>
 
@@ -184,6 +200,18 @@ By proceeding with this screening, you acknowledge that you understand these req
         renderMarkdown={true}
         description={noticeDescription}
         btnLabel="I Agree"
+        extraBtn={
+          <CallToActionBtn label={"I Disagree"} onPress={() => router.back()} />
+        }
+      />
+
+      <SingleBtnModal
+        visible={alertModalVisible}
+        onRequestClose={closeAlertModal}
+        onPress={closeAlertModal}
+        title="Incomplete Checklist"
+        description="Please answer all questions before proceeding to the next step."
+        btnLabel="OK"
       />
 
       <SingleBtnModal

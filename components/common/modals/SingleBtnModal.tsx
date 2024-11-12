@@ -23,6 +23,7 @@ interface IModal {
   extraBtn?: ReactNode;
   animation?: boolean; // Add the animation prop
   renderMarkdown?: boolean; // Add the renderMarkdown prop
+  errorMessage?: string; // Add the errorMessage prop
 }
 
 export default function SingleBtnModal({
@@ -37,6 +38,7 @@ export default function SingleBtnModal({
   extraBtn,
   animation = false, // Default to false if not provided
   renderMarkdown = false, // Default to false if not provided
+  errorMessage,
 }: IModal) {
   const opacityValue = useRef(new Animated.Value(0)).current;
 
@@ -79,6 +81,9 @@ export default function SingleBtnModal({
             <Markdown>{description}</Markdown>
           ) : (
             <Text style={styles.description}>{description}</Text>
+          )}
+          {errorMessage && (
+            <Text style={styles.description}>{errorMessage}</Text>
           )}
           {children}
           <View
@@ -131,5 +136,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  error: {
+    color: "red",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 10,
   },
 });

@@ -82,7 +82,10 @@ export default function UpcomingAppointments() {
         <FlatList
           data={tickets}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handlePress(item)}>
+            <TouchableOpacity
+              onPress={() => handlePress(item)}
+              activeOpacity={1}
+            >
               <AppointmentCard
                 location={item.selectedHospital}
                 date={item.selectedDate}
@@ -270,8 +273,7 @@ const card = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: SPACES.md,
     borderRadius: SIZES.small,
-    elevation: 3,
-    shadowColor: "#52006A",
+    elevation: 5,
     gap: SPACES.md,
     backgroundColor: COLORS.background,
     position: "relative",

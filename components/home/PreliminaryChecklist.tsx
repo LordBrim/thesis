@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, SafeAreaView, FlatList, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../rtx/slices/user"; // Adjust the path to your user slice
@@ -19,7 +19,11 @@ const HeaderComponent = () => (
   </>
 );
 
-export default function PreliminaryChecklist({ answers, handleAnswerChange }) {
+export default function PreliminaryChecklist({
+  answers,
+  handleAnswerChange,
+  allQuestionsAnswered,
+}) {
   const user = useSelector(selectUser);
 
   const filteredQuestions = checklistQuestions.filter(
@@ -32,6 +36,15 @@ export default function PreliminaryChecklist({ answers, handleAnswerChange }) {
     ).question;
     handleAnswerChange(questionText, answer);
   };
+
+  useEffect(() => {
+    const allAnswered = filteredQuestions.every(
+      (question) =>
+        answers[question.question] !== undefined &&
+        answers[question.question] !== ""
+    );
+    allQuestionsAnswered(allAnswered);
+  }, [answers]);
 
   const renderItem = ({ item, index }) => (
     <ChecklistItem

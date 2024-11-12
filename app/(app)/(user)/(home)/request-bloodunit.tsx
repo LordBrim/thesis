@@ -144,6 +144,7 @@ export default function RequestBloodunitScreen({
       { field: "selectedBloodType", value: selectedBloodType },
       { field: "selectedRelationship", value: selectedRelationship },
       { field: "contactNumber", value: contactNumber },
+      { field: "imageUri", value: imageUri }, // Add imageUri to validation
     ];
 
     if (isEmergency) {
@@ -188,7 +189,7 @@ export default function RequestBloodunitScreen({
           Please ensure all fields are completed before submission. Incomplete
           requests will not be processed.
         </Text>
-        <Text style={styles.header}>Patient's Name</Text>
+        <Text style={styles.header}>Patient's Name *</Text>
         <TextInput
           style={styles.inputContainer}
           onChangeText={(text) => {
@@ -201,7 +202,7 @@ export default function RequestBloodunitScreen({
         {errors.patientName && (
           <Text style={styles.errorText}>{errors.patientName}</Text>
         )}
-        <Text style={styles.header}>Blood Type</Text>
+        <Text style={styles.header}>Blood Type *</Text>
         <View style={styles.picker}>
           <Picker
             ref={bloodTypePickerRef}
@@ -225,7 +226,7 @@ export default function RequestBloodunitScreen({
         {errors.selectedBloodType && (
           <Text style={styles.errorText}>{errors.selectedBloodType}</Text>
         )}
-        <Text style={styles.header}>Transfusion</Text>
+        <Text style={styles.header}>Transfusion *</Text>
         <View style={styles.picker}>
           <Picker
             ref={transfusionPickerRef}
@@ -260,7 +261,7 @@ export default function RequestBloodunitScreen({
           value={packedRequestInfo}
           placeholder="Additional Information"
         />
-        <Text style={styles.header}>Relationship To Patient</Text>
+        <Text style={styles.header}>Relationship To Patient *</Text>
         <View style={styles.picker}>
           <Picker
             ref={relationshipPickerRef}
@@ -283,7 +284,7 @@ export default function RequestBloodunitScreen({
         {errors.selectedRelationship && (
           <Text style={styles.errorText}>{errors.selectedRelationship}</Text>
         )}
-        <Text style={styles.header}>Is this request an Emergency?</Text>
+        <Text style={styles.header}>Is this request an Emergency? *</Text>
         <RadioGroup
           radioButtons={[
             {
@@ -348,7 +349,7 @@ export default function RequestBloodunitScreen({
           </>
         )}
 
-        <Text style={styles.header}>Contact Information</Text>
+        <Text style={styles.header}>Contact Information *</Text>
         <View style={styles.phoneInputContainer}>
           <Text style={styles.phonePrefix}>+63</Text>
           <TextInput
@@ -367,7 +368,7 @@ export default function RequestBloodunitScreen({
           <Text style={styles.errorText}>{errors.contactNumber}</Text>
         )}
 
-        <Text style={styles.header}>Upload Blood Request Form</Text>
+        <Text style={styles.header}>Upload Blood Request Form *</Text>
         <CustomButtonWithIcon
           onPress={() => setModalVisible(true)}
           icon="upload"

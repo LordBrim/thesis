@@ -29,15 +29,9 @@ import { useFonts } from "expo-font";
 import { Text } from "react-native";
 
 export default function StackLayout() {
-  async function changeScreenOrientation() {
-    await ScreenOrientation.lockAsync(
-      ScreenOrientation.OrientationLock.PORTRAIT_UP
-    );
-  }
   const [fontsLoaded] = useFonts({
     Montserrat_100Thin,
     Montserrat_100Thin_Italic,
-    Montserrat_200ExtraLight,
     Montserrat_200ExtraLight,
     Montserrat_300Light,
     Montserrat_300Light_Italic,
@@ -54,18 +48,28 @@ export default function StackLayout() {
     Montserrat_900Black,
     Montserrat_900Black_Italic,
   });
-  if (!fontsLoaded) {
-    return <Text>Loading fonts...</Text>;
-  }
-  const customTextProps = {
-    style: {
-      fontFamily: "Montserrat_400Regular",
-    },
-  };
+
   useEffect(() => {
+    async function changeScreenOrientation() {
+      await ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP
+      );
+    }
+
+    const customTextProps = {
+      style: {
+        fontFamily: "Montserrat_400Regular",
+      },
+    };
+
     changeScreenOrientation();
     setCustomText(customTextProps);
   }, []);
+
+  if (!fontsLoaded) {
+    return <Text>Loading fonts...</Text>;
+  }
+
   return (
     <Provider store={store}>
       <Stack

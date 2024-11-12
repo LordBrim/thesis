@@ -72,6 +72,7 @@ export const checklistQuestions = [
       "Do you have any of the following conditions? Please check all that apply.",
     type: "dropdown", // multiple options
     options: [
+      "None",
       "HIV/AIDS",
       "Cancer",
       "Bleeding conditions (e.g., hemophilia)",

@@ -21,13 +21,21 @@ import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
+  const getMinimumDate = () => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    return tomorrow;
+  };
+
   const [openHospital, setOpenHospital] = useState(false);
   const [openTimeBlock, setOpenTimeBlock] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(getMinimumDate());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedHospital, setSelectedHospital] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTimeBlock, setSelectedTimeBlock] = useState(null);
+  const [alertModalVisible, setAlertModalVisible] = useState(false);
 
   const timeBlocks = [
     { label: "10:00 AM - 10:30 AM", value: "10:00 AM" },
@@ -59,8 +67,8 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
   const handleNextButtonPress = (answers) => {
     console.log("Received answers:", answers); // Log the received answers
 
-    if (!selectedHospital) {
-      alert("Please select a hospital.");
+    if (!selectedHospital || !selectedDate || !selectedTimeBlock) {
+      setAlertModalVisible(true);
       return;
     }
 
@@ -80,28 +88,21 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
     handleNextButtonPress();
   };
 
+  const isValid = () => {
+    return selectedHospital && selectedDate && selectedTimeBlock;
+  };
+
   useImperativeHandle(ref, () => ({
     handleNextButtonPress,
     updateAnswersState,
+    isValid,
   }));
 
   const hospitals = [
     { label: "UERM Hospital", value: "UERM Hospital" },
     {
-      label: "De los Santos Medical Center",
-      value: "De los Santos Medical Center",
-    },
-    {
       label: "ACE Medical Center",
       value: "ACE Medical Center Mandaluyong",
-    },
-    {
-      label: "Our Lady of Lourdes Hospital",
-      value: "Our Lady of Lourdes Hospital",
-    },
-    {
-      label: "Quirino Memorial Medical Center",
-      value: "Quirino Memorial Medical Center",
     },
   ];
 
@@ -142,7 +143,7 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
             mode="date"
             display="default"
             onChange={handleDateChange}
-            minimumDate={new Date()}
+            minimumDate={getMinimumDate()}
           />
         )}
 
@@ -171,6 +172,15 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
         animation={true}
         btnLabel="OK"
         description="Please select a time between 10 AM and 5 PM."
+      />
+
+      <SingleBtnModal
+        visible={alertModalVisible}
+        onRequestClose={() => setAlertModalVisible(false)}
+        onPress={() => setAlertModalVisible(false)}
+        title="Incomplete Information"
+        description="Please fill in all the fields before proceeding."
+        btnLabel="OK"
       />
     </View>
   );

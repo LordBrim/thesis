@@ -21,7 +21,7 @@ export default function ManageStaff() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getHopitalStaff(user.hospitalName));
-  }, [staff]);
+  }, [staff.length]);
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({

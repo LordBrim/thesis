@@ -5,21 +5,26 @@ import { GS } from "constants/style";
 import { COLORS } from "constants/theme";
 import { router, useNavigation, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable, ScrollView } from "react-native";
+import { FlatList, Pressable } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   disableAdmins,
   disableAdminsInFirebase,
-  getAllAdmins,
-} from "rtx/unused/admins";
+  getHospitalAdmins,
+} from "rtx/slices/admins";
 
 export default function ManageAdmins() {
-  const { hospitals } = useSelector((state: RootState) => state.hospitals);
+  const { user } = useSelector((state: RootState) => state.user);
+  const { admins } = useSelector((state: RootState) => state.admins);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(getAllAdmins());
-  }, []);
+    dispatch(getHospitalAdmins(user.hospitalName));
+  }, [admins]);
+  const filteredAdmins = admins.filter(
+    (admin) => admin.displayName !== user.hospitalName
+  );
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
@@ -39,7 +44,7 @@ export default function ManageAdmins() {
           icon="plus"
           size={18}
           onPress={() =>
-            router.push("/(app)/(super)/(home)/manage-admins-create")
+            router.push("/(app)/(admin)/(home)/manage-admins-create")
           }
         />
       ),
@@ -48,59 +53,30 @@ export default function ManageAdmins() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        overScrollMode="never"
         persistentScrollbar={true}
+        overScrollMode="never"
         style={styles.scrollview}
       >
+        <Text style={[GS.h3, styles.title]}>{user.hospitalName} Admins</Text>
         <FlatList
-          data={hospitals}
+          data={filteredAdmins}
           renderItem={({ item }) => (
-            <>
-              <Text style={[GS.h2, styles.title]}>{item.name}</Text>
-              <AdminsPanel hospitalName={item.name} />
-            </>
+            <AdminsCard
+              disabled={item.disabled}
+              uuid={item.uuid}
+              displayName={item.displayName}
+              email={item.email}
+            />
           )}
           keyExtractor={(item, index) => {
             return index.toString();
           }}
-          contentContainerStyle={{ gap: 24, paddingBottom: 16 }}
+          overScrollMode="never"
           scrollEnabled={false}
+          persistentScrollbar={true}
         />
       </ScrollView>
     </SafeAreaView>
-  );
-}
-
-function AdminsPanel({ hospitalName }) {
-  const { admins } = useSelector((state: RootState) => state.admins);
-  const hospitalAdmins = admins.filter(
-    (adminsMember) => adminsMember.hospitalName === hospitalName
-  );
-
-  console.log(hospitalName);
-  console.log(hospitalAdmins);
-  return (
-    <>
-      {hospitalAdmins.length > 0 ? (
-        hospitalAdmins.map((item, index) => (
-          <AdminsCard
-            key={index}
-            disabled={item.disabled}
-            uuid={item.uuid}
-            displayName={item.displayName}
-            email={item.email}
-          />
-        ))
-      ) : (
-        <View
-          style={{
-            paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-          }}
-        >
-          <Text>There are no admins created.</Text>
-        </View>
-      )}
-    </>
   );
 }
 
@@ -111,7 +87,20 @@ type IAdminsCard = {
   email: string;
 };
 
-function AdminsCard({ uuid, disabled, displayName, email }: IAdminsCard) {
+export function AdminsCard({
+  uuid,
+  disabled,
+  displayName,
+  email,
+}: IAdminsCard) {
+  // const handleUpdate = (uuid) => {
+  //   router.push({
+  //     pathname: "(app)/(admin)/(home)/manage-admins-update",
+  //     params: {
+  //       uuid: uuid,
+  //     },
+  //   });
+  // };
   const dispatch = useDispatch();
   const handleDisable = (uuid) => {
     dispatch(
@@ -123,28 +112,10 @@ function AdminsCard({ uuid, disabled, displayName, email }: IAdminsCard) {
     disableAdminsInFirebase(uuid, !disabled);
   };
   return (
-    <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
-      <View style={card.aContainer}>
-        <Text style={card.answer}>
-          UUID:
-          <Text style={{ fontWeight: "normal" }}> {uuid}</Text>
-        </Text>
-        <Text style={card.answer}>
-          Display Name:
-          <Text style={{ fontWeight: "normal" }}> {displayName}</Text>
-        </Text>
-        <Text style={card.answer}>
-          Disabled:
-          <Text style={{ fontWeight: "normal" }}>
-            {" "}
-            {disabled ? "true" : "false"}
-          </Text>
-        </Text>
-        <Text style={card.answer}>
-          Email:<Text style={{ fontWeight: "normal" }}> {email}</Text>
-        </Text>
-      </View>
-      <View>
+    <>
+      <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
+        <Text style={[GS.h2, card.question]}>{displayName}</Text>
+        {/* <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} /> */}
         {disabled ? (
           <IconBtn
             icon="circle-minus"
@@ -160,21 +131,37 @@ function AdminsCard({ uuid, disabled, displayName, email }: IAdminsCard) {
             onPress={() => handleDisable(uuid)}
           />
         )}
+      </Pressable>
+      <View style={card.aContainer}>
+        <Text style={card.answer}>
+          Disabled:
+          <Text style={{ fontWeight: "normal" }}>
+            {" "}
+            {disabled ? "true" : "false"}
+          </Text>
+        </Text>
+        <Text style={card.answer}>
+          Email:<Text style={{ fontWeight: "normal" }}> {email}</Text>
+        </Text>
       </View>
-    </Pressable>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background,
     flex: 1,
+    backgroundColor: COLORS.background,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
   },
   scrollview: {
     gap: 20,
-    paddingTop: HORIZONTAL_SCREEN_MARGIN,
   },
   title: {
+    flex: 1,
+    minWidth: "100%",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
 });
@@ -185,16 +172,23 @@ const card = StyleSheet.create({
     minHeight: 35,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    padding: 2,
+  },
+  question: {
+    flex: 1,
+    fontWeight: "bold",
   },
   aContainer: {
-    width: "85%",
+    width: "100%",
     minHeight: 35,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    padding: 8,
+    paddingTop: 8,
+    paddingBottom: 16,
   },
   answer: {
-    width: "100%",
+    flex: 1,
     flexDirection: "row",
     fontWeight: "bold",
   },

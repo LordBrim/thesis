@@ -32,29 +32,7 @@ export const getAllAdmins = createAsyncThunk<AdminsState["admins"], void>(
   }
 );
 
-export const getHospitalAdmins = createAsyncThunk<
-  AdminsState["admins"],
-  string
->("getHospitalAdmins", async (hospitalName) => {
-  try {
-    const adminsQuery = query(
-      collection(FIRESTORE_DB, "User"),
-      where("role", "==", "admin"),
-      where("hospitalName", "==", hospitalName)
-    );
-    const querySnapshot = await getDocs(adminsQuery);
-    const admins = querySnapshot.docs.map((doc) => ({
-      ...doc.data(),
-      uuid: doc.id,
-    })) as AdminsState["admins"];
-    return admins;
-  } catch (error) {
-    console.error("Error fetching admins:", error);
-    return [];
-  }
-});
-
-export const deleteAdminsInFirebase = async (uuid: string) => {
+export const deleteAdminInFirebase = async (uuid: string) => {
   try {
     const userCollectionRef = collection(FIRESTORE_DB, "User");
     const adminsQuery = query(
@@ -78,7 +56,6 @@ export const disableAdminsInFirebase = async (
   try {
     const userDocRef = doc(FIRESTORE_DB, "User", uuid);
     await updateDoc(userDocRef, { disabled });
-
     console.log(`Admins with UUID ${uuid} updated with disabled = ${disabled}`);
   } catch (error) {
     console.error("Error updating admins disabled status:", error);
@@ -91,7 +68,7 @@ interface AdminsMember {
   displayName: string;
   email: string;
   password: string;
-  role: "user" | "admins" | "admin" | "super";
+  role: "user" | "staff" | "admin" | "super";
   hospitalName: string;
 }
 
@@ -106,7 +83,7 @@ const initialState: AdminsState = {
       displayName: "Andrei Sager",
       email: "andrei@mail.com",
       password: "123456",
-      role: "admins",
+      role: "admin",
       hospitalName: "UERM Hospital",
     },
     {
@@ -115,7 +92,7 @@ const initialState: AdminsState = {
       displayName: "Angelo Munar",
       email: "angelo@mail.com",
       password: "123456",
-      role: "admins",
+      role: "admin",
       hospitalName: "UERM Hospital",
     },
   ],
@@ -150,17 +127,9 @@ const adminsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(getHospitalAdmins.fulfilled, (state, action) => {
-        if (action.payload && action.payload.length > 0) {
-          state.admins = action.payload;
-        } else {
-          state.admins = initialState.admins;
-        }
-      })
-      .addCase(getAllAdmins.fulfilled, (state, action) => {
-        state.admins = action.payload;
-      });
+    builder.addCase(getAllAdmins.fulfilled, (state, action) => {
+      state.admins = action.payload;
+    });
   },
 });
 

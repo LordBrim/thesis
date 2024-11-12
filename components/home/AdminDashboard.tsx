@@ -4,7 +4,6 @@ import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import ReportBarChart from "./ReportBarChart";
 import { useState } from "react";
-import ReportLineChart from "./ReportLineChart";
 import { FlatList } from "react-native";
 import { useSelector } from "react-redux";
 import { RootState } from "app/store";
@@ -13,6 +12,13 @@ export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
   const gridBtns1 = [
+    {
+      href: "/(app)/(admin)/(home)/manage-admins",
+      icon: (
+        <FontAwesome6 name="user-doctor" size={size} color={COLORS.primary} />
+      ),
+      title: "Admins",
+    },
     {
       href: "/(app)/(admin)/(home)/manage-staff",
       icon: (

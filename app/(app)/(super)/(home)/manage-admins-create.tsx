@@ -22,7 +22,7 @@ import { FIREBASE_AUTH } from "firebase-config";
 import { firestoreOperations } from "../../../../firestore-services";
 import IconBtn from "components/common/IconButton";
 import DropDownPicker from "react-native-dropdown-picker";
-import { createAdmins } from "rtx/slices/admins";
+import { createAdmins } from "rtx/unused/admins";
 
 export default function ManageAdminsCreate() {
   const [newUsername, setNewUsername] = useState("");

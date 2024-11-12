@@ -78,7 +78,7 @@ export default function CreateEvent({ navigation }) {
       quality: 1,
     });
 
-    if (!result.canceled && result.assets && result.assets.length > 0) {
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
       let uri = result.assets[0].uri;
 
       // Get the size of the image

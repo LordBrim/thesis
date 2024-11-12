@@ -36,7 +36,7 @@ const Tab = createMaterialTopTabNavigator();
 interface TicketState {
   id: string;
   name: string;
-  status: "pending" | "rejected" | "accepted" | "denied" | missing;
+  status: "pending" | "rejected" | "accepted" | "cancelled";
   userUID: string;
   userEmail: string;
   age?: number;
@@ -51,7 +51,9 @@ interface TicketState {
   selectedTime?: string;
   ticketNumber?: string;
   type: "appointment";
-  checklistData?: { [key: string]: string }; // Add checklistData as an optional property
+  checklistData?: { [key: string]: string };
+  isComplete?: boolean;
+  // Add checklistData as an optional property
   // Add other properties as needed
 }
 
@@ -70,7 +72,7 @@ interface UserData {
 
 interface TicketData {
   userUID: string;
-  status?: "pending" | "rejected" | "accepted" | "denied";
+  status?: "pending" | "rejected" | "accepted" | "cancelled" | "cancelled";
   message?: string;
   selectedDate?: string;
   selectedHospital?: string;
@@ -118,7 +120,6 @@ function ManageTicketsDonationsPending() {
   const [tickets, setTickets] = useState<TicketState[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortOption, setSortOption] = useState<string>("closest");
   const [refreshing, setRefreshing] = useState(false); // Refresh state
 
   const [hospitalName, setHospitalName] = useState<string | null>(null);
@@ -222,32 +223,6 @@ function ManageTicketsDonationsPending() {
     fetchTickets();
   }, [hospitalName]);
 
-  useEffect(() => {
-    setTickets((prevTickets) => sortTickets(prevTickets, sortOption));
-  }, [sortOption]);
-
-  const sortTickets = (tickets: TicketState[], option: string) => {
-    return tickets.sort((a, b) => {
-      const dateA =
-        a.selectedDate && a.selectedTime
-          ? moment(`${a.selectedDate} ${a.selectedTime}`, "YYYY-MM-DD h:mm A")
-          : null;
-      const dateB =
-        b.selectedDate && b.selectedTime
-          ? moment(`${b.selectedDate} ${b.selectedTime}`, "YYYY-MM-DD h:mm A")
-          : null;
-      if (!dateA || !dateB || !dateA.isValid() || !dateB.isValid()) {
-        console.warn("Invalid date parsing in ticket data.");
-        return 0; // No change if parsing fails
-      }
-      if (option === "closest") {
-        return dateA.valueOf() - dateB.valueOf();
-      } else {
-        return dateB.valueOf() - dateA.valueOf();
-      }
-    });
-  };
-
   const onRefresh = async () => {
     setRefreshing(true);
     try {
@@ -312,16 +287,6 @@ function ManageTicketsDonationsPending() {
           <Text style={{ fontWeight: "bold", fontSize: 24 }}>
             Pending Appointments:
           </Text>
-          <View style={styles.filterContainer}>
-            <Picker
-              selectedValue={sortOption}
-              style={styles.picker}
-              onValueChange={(itemValue) => setSortOption(itemValue)}
-            >
-              <Picker.Item label="Closest" value="closest" />
-              <Picker.Item label="Farthest" value="farthest" />
-            </Picker>
-          </View>
         </View>
       </View>
       <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
@@ -347,10 +312,9 @@ function ManageTicketsDonationsArchived() {
   const [tickets, setTickets] = useState<TicketState[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortOption, setSortOption] = useState<string>("closest");
-  const [refreshing, setRefreshing] = useState(false); // Add refreshing state
-
+  const [refreshing, setRefreshing] = useState(false);
   const [hospitalName, setHospitalName] = useState<string | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>("all");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
@@ -369,14 +333,14 @@ function ManageTicketsDonationsArchived() {
   }, []);
 
   const fetchTickets = async () => {
-    if (!hospitalName) return; // Wait until hospitalName is set
-    console.log("Fetching tickets for hospital:", hospitalName); // Debugging log
+    if (!hospitalName) return;
+    console.log("Fetching tickets for hospital:", hospitalName);
 
     try {
       const q = query(
         collection(FIRESTORE_DB, "ticketDonate"),
         where("type", "==", "appointment"),
-        where("selectedHospital", "==", hospitalName) // Filter by selectedHospital
+        where("selectedHospital", "==", hospitalName)
       );
 
       const querySnapshot = await getDocs(q);
@@ -411,27 +375,9 @@ function ManageTicketsDonationsArchived() {
                 type: "appointment",
                 checklistData: data.checklistData,
                 isComplete: data.isComplete,
-                // Map other properties as needed
               } as TicketState;
 
-              const ticketDate = moment(
-                `${ticket.selectedDate} ${ticket.selectedTime}`,
-                "YYYY-MM-DD h:mm A"
-              );
-
-              if (
-                ticketDate.isBefore(moment()) &&
-                ticket.status === "pending"
-              ) {
-                return ticket;
-              } else if (
-                ticket.status === "denied" ||
-                ticket.status === "accepted"
-              ) {
-                return ticket;
-              } else {
-                return null;
-              }
+              return ticket;
             } catch (error) {
               console.error(
                 `Error fetching user data for ticket ${docSnapshot.id}:`,
@@ -457,42 +403,41 @@ function ManageTicketsDonationsArchived() {
     fetchTickets();
   }, [hospitalName]);
 
-  useEffect(() => {
-    setTickets((prevTickets) => sortTickets(prevTickets, sortOption));
-  }, [sortOption]);
-
-  const sortTickets = (tickets: TicketState[], option: string) => {
-    return tickets.sort((a, b) => {
-      const dateA =
-        a.selectedDate && a.selectedTime
-          ? moment(`${a.selectedDate} ${a.selectedTime}`, "YYYY-MM-DD h:mm A")
-          : null;
-      const dateB =
-        b.selectedDate && b.selectedTime
-          ? moment(`${b.selectedDate} ${b.selectedTime}`, "YYYY-MM-DD h:mm A")
-          : null;
-      if (!dateA || !dateB || !dateA.isValid() || !dateB.isValid()) {
-        console.warn("Invalid date parsing in ticket data.");
-        return 0; // No change if parsing fails
-      }
-      if (option === "closest") {
-        return dateA.valueOf() - dateB.valueOf();
-      } else {
-        return dateB.valueOf() - dateA.valueOf();
-      }
-    });
-  };
-
   const onRefresh = async () => {
     setRefreshing(true);
     try {
-      await fetchTickets(); // Re-fetch the tickets
+      await fetchTickets();
     } catch (error) {
       console.error("Error refreshing tickets:", error);
     } finally {
       setRefreshing(false);
     }
   };
+  const filteredTickets = tickets.filter((ticket) => {
+    if (filterStatus === "all") {
+      return (
+        (ticket.status === "accepted" && ticket.isComplete) ||
+        ticket.status === "rejected" ||
+        ticket.status === "cancelled"
+      );
+    }
+    if (filterStatus === "completed") {
+      return ticket.status === "accepted" && ticket.isComplete;
+    }
+    return ticket.status.toLowerCase() === filterStatus.toLowerCase();
+  });
+
+  const sortedTickets = filteredTickets.sort((a, b) => {
+    const dateA = moment(
+      `${a.selectedDate} ${a.selectedTime}`,
+      "YYYY-MM-DD h:mm A"
+    );
+    const dateB = moment(
+      `${b.selectedDate} ${b.selectedTime}`,
+      "YYYY-MM-DD h:mm A"
+    );
+    return dateB.valueOf() - dateA.valueOf(); // Sort in descending order
+  });
 
   if (loading) {
     return (
@@ -510,60 +455,34 @@ function ManageTicketsDonationsArchived() {
     );
   }
 
-  const missedTickets = tickets.filter(
-    (ticket) =>
-      ticket.status === "pending" &&
-      ticket.selectedDate &&
-      ticket.selectedTime &&
-      moment(
-        `${ticket.selectedDate} ${ticket.selectedTime}`,
-        "YYYY-MM-DD h:mm A"
-      ).isBefore(moment())
-  );
-  const rejectedTickets = tickets.filter(
-    (ticket) => ticket.status === "denied"
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={{ fontWeight: "bold", fontSize: 24 }}>
           Archived Appointments:
         </Text>
-        <View style={styles.filterContainer}>
-          <Picker
-            selectedValue={sortOption}
-            style={styles.picker}
-            onValueChange={(itemValue) => setSortOption(itemValue)}
-          >
-            <Picker.Item label="Closest" value="closest" />
-            <Picker.Item label="Farthest" value="farthest" />
-          </Picker>
-        </View>
       </View>
-      <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
-        Click tickets to view more details.
-      </Text>
+      <View style={styles.filterContainer}>
+        <Picker
+          selectedValue={filterStatus}
+          style={styles.picker}
+          onValueChange={(itemValue) => {
+            setFilterStatus(itemValue);
+            console.log("Filter status updated to:", itemValue);
+          }}
+        >
+          <Picker.Item label="All" value="all" />
+          <Picker.Item label="Completed" value="completed" />
+          <Picker.Item label="Rejected" value="rejected" />
+          <Picker.Item label="Cancelled" value="cancelled" />
+        </Picker>
+      </View>
+
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
-      <Text style={{ fontWeight: "bold", fontSize: 20 }}>Missed Tickets:</Text>
       <FlatList
-        data={missedTickets}
+        data={sortedTickets}
         renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.id} // Use the unique ID as the key
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        overScrollMode="never"
-        scrollEnabled={true}
-        persistentScrollbar={true}
-      />
-      <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 20 }}>
-        Rejected Tickets:
-      </Text>
-      <FlatList
-        data={rejectedTickets}
-        renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.id} // Use the unique ID as the key
+        keyExtractor={(item) => item.id}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -574,6 +493,7 @@ function ManageTicketsDonationsArchived() {
     </View>
   );
 }
+
 export function Card({ ticket }: CardProps) {
   const handlePress = () => {
     router.push({
@@ -613,19 +533,19 @@ export function Card({ ticket }: CardProps) {
         }}
       >
         {ticket.status === "pending" && (
-          <IconBtn icon="user-minus" size={18} color="gray" />
-        )}
-        {ticket.status === "denied" && (
-          <IconBtn icon="user-xmark" size={18} color="red" />
-        )}
-        {ticket.status === "accepted" && (
-          <IconBtn icon="user-check" size={18} color="green" />
+          <IconBtn icon="user" size={18} color="blue" />
         )}
         {ticket.status === "rejected" && (
-          <IconBtn icon="user-times" size={18} color="black" />
+          <IconBtn icon="user-xmark" size={18} color="red" />
         )}
-        {ticket.status === "missing" && (
-          <IconBtn icon="user-slash" size={18} color={COLORS.primary} />
+        {ticket.status === "accepted" && ticket.isComplete === false && (
+          <IconBtn icon="user-large" size={18} color="green" />
+        )}
+        {ticket.status === "accepted" && ticket.isComplete === true && (
+          <IconBtn icon="user-check" size={18} color="green" />
+        )}
+        {ticket.status === "cancelled" && (
+          <IconBtn icon="user-clock" size={18} color={COLORS.grayDark} />
         )}
         <View style={{ flexDirection: "column", justifyContent: "center" }}>
           <Text style={card.name}>{ticket.ticketNumber}</Text>
@@ -643,36 +563,64 @@ export function Card({ ticket }: CardProps) {
 const ManageTicketDonationsActive = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const auth = FIREBASE_AUTH;
   const db = FIRESTORE_DB;
   const currentUser = auth.currentUser;
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      if (currentUser) {
-        // Get the current user's hospitalName
-        const userDocRef = doc(db, "User", currentUser.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          const hospitalName = userData.hospitalName;
+  const fetchTickets = async () => {
+    if (currentUser) {
+      // Get the current user's hospitalName
+      const userDocRef = doc(db, "User", currentUser.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const hospitalName = userData.hospitalName;
 
-          // Query the ticketDonate collection
-          const q = query(
-            collection(db, "ticketDonate"),
-            where("selectedHospital", "==", hospitalName),
-            where("status", "in", ["accepted", "missing"])
+        // Query the ticketDonate collection
+        const q = query(
+          collection(db, "ticketDonate"),
+          where("selectedHospital", "==", hospitalName),
+          where("status", "==", "accepted"),
+          where("isComplete", "==", false)
+        );
+        const querySnapshot = await getDocs(q);
+        const fetchedTickets = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            ...data,
+            id: doc.id,
+          };
+        });
+
+        // Sort tickets by closest to the current date in descending order
+        const sortedTickets = fetchedTickets.sort((a, b) => {
+          const dateA = moment(
+            `${a.selectedDate} ${a.selectedTime}`,
+            "YYYY-MM-DD h:mm A"
           );
-          const querySnapshot = await getDocs(q);
-          const fetchedTickets = querySnapshot.docs.map((doc) => doc.data());
-          setTickets(fetchedTickets);
-        }
-      }
-      setLoading(false);
-    };
+          const dateB = moment(
+            `${b.selectedDate} ${b.selectedTime}`,
+            "YYYY-MM-DD h:mm A"
+          );
+          return dateB.valueOf() - dateA.valueOf(); // Sort in descending order
+        });
 
+        setTickets(sortedTickets);
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchTickets();
   }, [currentUser]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchTickets();
+    setRefreshing(false);
+  };
 
   if (loading) {
     return (
@@ -689,7 +637,11 @@ const ManageTicketDonationsActive = () => {
       <FlatList
         data={tickets}
         renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.ticketNumber}
+        key={tickets.id}
+        keyExtractor={(item) => item.id}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

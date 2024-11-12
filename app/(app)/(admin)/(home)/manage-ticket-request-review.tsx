@@ -25,7 +25,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 interface TicketState {
   id: string;
   patientName: string;
-  status: "pending" | "rejected" | "accepted" | "denied";
+  status: "pending" | "rejected" | "accepted" | "cancelled";
   userId: string;
   userEmail: string;
   contactNumber?: string;
@@ -124,7 +124,9 @@ export default function ManageTicketReview() {
     return moment(dateString, "YYYY-MM-DD").format("MMMM D, YYYY");
   };
 
-  const handleUpdateStatus = async (status: "accepted" | "denied") => {
+  const handleUpdateStatus = async (
+    status: "accepted" | "cancelled" | "rejected"
+  ) => {
     if (!ticketData) return;
 
     const updatedTicketData = {
@@ -284,7 +286,7 @@ export default function ManageTicketReview() {
           />
           <Button
             title="Reject"
-            onPress={() => handleUpdateStatus("denied")}
+            onPress={() => handleUpdateStatus("rejected")}
             color={COLORS.primary}
           />
         </View>

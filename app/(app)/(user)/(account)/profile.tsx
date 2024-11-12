@@ -142,7 +142,7 @@ const ProfileEditScreen = () => {
       });
     }
 
-    if (!result.canceled && result.assets && result.assets.length > 0) {
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
       const source = { uri: result.assets[0].uri };
       console.log(source);
       setImage(source.uri); // Set the selected image URI in the state

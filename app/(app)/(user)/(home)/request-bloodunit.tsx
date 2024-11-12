@@ -87,7 +87,7 @@ export default function RequestBloodunitScreen({
       });
     }
 
-    if (!result.canceled && result.assets && result.assets.length > 0) {
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
       const source = { uri: result.assets[0].uri };
       console.log(source);
       setImageUri(source.uri);
@@ -193,8 +193,10 @@ export default function RequestBloodunitScreen({
         <TextInput
           style={styles.inputContainer}
           onChangeText={(text) => {
-            setPatientName(text);
-            validateField("patientName", text);
+            const filteredName = text.replace(/[^a-zA-Z\s]/g, "");
+
+            setPatientName(filteredName);
+            validateField("patientName", filteredName);
           }}
           value={patientName}
           placeholder="Enter patient's name"

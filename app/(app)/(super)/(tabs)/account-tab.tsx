@@ -157,7 +157,7 @@ export default function AccountTab({
       });
     }
 
-    if (!result.canceled && result.assets && result.assets.length > 0) {
+    if (!result.cancelled && result.assets && result.assets.length > 0) {
       const source = { uri: result.assets[0].uri };
       console.log(source);
       uploadImage(source.uri);

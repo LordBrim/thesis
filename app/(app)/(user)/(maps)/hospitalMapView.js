@@ -66,6 +66,36 @@ const DisplayedIcons = [
   },
 ];
 
+const METRO_MANILA_BOUNDS = {
+  north: 14.853,
+  south: 14.271,
+  east: 121.135,
+  west: 120.856,
+};
+
+const limitMapToMetroManila = (region) => {
+  const { latitude, longitude, latitudeDelta, longitudeDelta } = region;
+  const north = latitude + latitudeDelta / 2;
+  const south = latitude - latitudeDelta / 2;
+  const east = longitude + longitudeDelta / 2;
+  const west = longitude - latitudeDelta / 2;
+
+  if (north > METRO_MANILA_BOUNDS.north) {
+    region.latitude = METRO_MANILA_BOUNDS.north - latitudeDelta / 2;
+  }
+  if (south < METRO_MANILA_BOUNDS.south) {
+    region.latitude = METRO_MANILA_BOUNDS.south + latitudeDelta / 2;
+  }
+  if (east > METRO_MANILA_BOUNDS.east) {
+    region.longitude = METRO_MANILA_BOUNDS.east - longitudeDelta / 2;
+  }
+  if (west < METRO_MANILA_BOUNDS.west) {
+    region.longitude = METRO_MANILA_BOUNDS.west + latitudeDelta / 2;
+  }
+
+  return region;
+};
+
 const HospitalMapView = () => {
   const router = useRouter(); // Initialize the router
   const navigation = useNavigation();
@@ -88,6 +118,7 @@ const HospitalMapView = () => {
   const [loading, setLoading] = useState(true); // State for loading
   const previousLocation = useRef(null);
   const previousHospital = useRef(null);
+  const mapViewRef = useRef(null); // Add this line to define mapViewRef
   const isSameLocation = (loc1, loc2) => {
     return loc1.latitude === loc2.latitude && loc2.longitude === loc2.longitude;
   };
@@ -105,7 +136,9 @@ const HospitalMapView = () => {
     }
   };
 
-useEffect(() => {
+  const [locationPermissionDenied, setLocationPermissionDenied] = useState(false); // Add state for permission cancelled
+
+  useEffect(() => {
     console.log("Selected Marker:", selectedMarker);
     if (selectedMarker) {
         openBottomSheet();
@@ -157,7 +190,8 @@ useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.error("Permission to access location was denied");
+        console.error("Permission to access location was cancelled");
+        setLocationPermissionDenied(true); // Set state to true if permission is cancelled
         return;
       }
 
@@ -282,13 +316,26 @@ useEffect(() => {
   };
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* Show a message if location permission is cancelled */}
+      {locationPermissionDenied && (
+        <View style={styles.permissionDeniedContainer}>
+          <Text style={styles.permissionDeniedText}>
+            Location permission is required to show the route.
+          </Text>
+        </View>
+      )}
       <MapView
+        ref={mapViewRef} // Add this line to attach the ref to MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         customMapStyle={mapStyle}
         initialRegion={initialRegion || defaultRegion}
         showsUserLocation={true}
         showsMyLocationButton={true}
+        onRegionChangeComplete={(region) => {
+          const limitedRegion = limitMapToMetroManila(region);
+          mapViewRef.current?.animateToRegion(limitedRegion, 1000);
+        }}
         onPanDrag={handleMapInteraction}
         onPress={handleMapInteraction}
       >
@@ -624,5 +671,18 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontWeight: "bold",
     textAlignVertical: "center",
+  },
+  permissionDeniedContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'red',
+    padding: 10,
+    zIndex: 1,
+  },
+  permissionDeniedText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });

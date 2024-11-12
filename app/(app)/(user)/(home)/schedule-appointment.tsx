@@ -173,15 +173,6 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
         btnLabel="OK"
         description="Please select a time between 10 AM and 5 PM."
       />
-
-      <SingleBtnModal
-        visible={alertModalVisible}
-        onRequestClose={() => setAlertModalVisible(false)}
-        onPress={() => setAlertModalVisible(false)}
-        title="Incomplete Information"
-        description="Please fill in all the fields before proceeding."
-        btnLabel="OK"
-      />
     </View>
   );
 });

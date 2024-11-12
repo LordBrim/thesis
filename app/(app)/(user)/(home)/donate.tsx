@@ -201,7 +201,11 @@ By proceeding with this screening, you acknowledge that you understand these req
         description={noticeDescription}
         btnLabel="I Agree"
         extraBtn={
-          <CallToActionBtn label={"I Disagree"} onPress={() => router.back()} />
+          <CallToActionBtn
+            label={"I Disagree"}
+            onPress={() => router.back()}
+            secondary
+          />
         }
       />
 
@@ -209,7 +213,7 @@ By proceeding with this screening, you acknowledge that you understand these req
         visible={alertModalVisible}
         onRequestClose={closeAlertModal}
         onPress={closeAlertModal}
-        title="Incomplete Checklist"
+        title="Incomplete Information"
         description="Please answer all questions before proceeding to the next step."
         btnLabel="OK"
       />

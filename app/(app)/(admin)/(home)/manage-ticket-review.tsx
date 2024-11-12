@@ -6,6 +6,8 @@ import {
   Pressable,
   Button,
   Alert,
+  Modal,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants/theme";
@@ -31,7 +33,7 @@ interface TicketState {
     | "pending"
     | "rejected"
     | "accepted"
-    | "denied"
+    | "cancelled"
     | "completed"
     | "cancelled"
     | "missing";
@@ -95,6 +97,7 @@ export default function ManageTicketReview() {
   const [ticketData, setTicketData] = useState<TicketState | null>(null);
   const [openChecklist, setOpenChecklist] = useState(false);
   const [openUserDetails, setOpenUserDetails] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (ticket) {
@@ -115,17 +118,32 @@ export default function ManageTicketReview() {
     return moment(dateString, "YYYY-MM-DD").format("MMMM D, YYYY");
   };
 
+  const refreshTicketData = async () => {
+    if (!ticketData) return;
+    try {
+      const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
+      const ticketDoc = await getDoc(ticketDocRef);
+      if (ticketDoc.exists()) {
+        setTicketData(ticketDoc.data() as TicketState);
+      }
+    } catch (error) {
+      console.error("Error refreshing ticket data:", error);
+    }
+  };
+
   const handleUpdateStatus = async (
     status:
       | "pending"
       | "rejected"
       | "accepted"
-      | "denied"
+      | "cancelled"
       | "completed"
       | "cancelled"
       | "missing"
   ) => {
     if (!ticketData) return;
+
+    setLoading(true);
 
     const updatedTicketData = {
       ...ticketData,
@@ -139,14 +157,19 @@ export default function ManageTicketReview() {
         status: updatedTicketData.status,
         message: updatedTicketData.message,
       });
-      setTicketData(updatedTicketData);
+      await refreshTicketData();
     } catch (error) {
       console.error("Error updating ticket:", error);
+    } finally {
+      setLoading(false);
+      router.back();
     }
   };
 
   const handleCompleteTransaction = async () => {
     if (!ticketData) return;
+
+    setLoading(true);
 
     const updatedTicketData = {
       ...ticketData,
@@ -173,9 +196,8 @@ export default function ManageTicketReview() {
         });
       }
 
-      setTicketData(updatedTicketData);
+      await refreshTicketData();
 
-      // Inform the admin about the next available donation date
       Alert.alert(
         "Donation Completed",
         `The user will be eligible to donate again on ${moment()
@@ -185,23 +207,44 @@ export default function ManageTicketReview() {
       router.back();
     } catch (error) {
       console.error("Error completing transaction:", error);
+    } finally {
+      setLoading(false);
+      router.back();
     }
   };
 
   const handleCancel = async () => {
     if (!ticketData) return;
 
+    setLoading(true);
+
     try {
       const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
       await deleteDoc(ticketDocRef);
       setTicketData(null); // Optionally, you can navigate away or show a message
+      router.back();
     } catch (error) {
       console.error("Error canceling ticket:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={loading}
+        onRequestClose={() => {}}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.activityIndicatorWrapper}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+            <Text style={styles.loadingText}>Updating ticket...</Text>
+          </View>
+        </View>
+      </Modal>
       <Text style={{ color: COLORS.primary, fontWeight: "bold", fontSize: 24 }}>
         Ticket Details
       </Text>
@@ -376,7 +419,7 @@ export default function ManageTicketReview() {
         {ticketData.status === "pending" ? (
           <CustomButton
             title="Reject"
-            onPress={() => handleUpdateStatus("denied")}
+            onPress={() => handleUpdateStatus("rejected")}
             color={COLORS.primary}
             isReject={true}
           />
@@ -461,6 +504,27 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  modalBackground: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  activityIndicatorWrapper: {
+    backgroundColor: "#FFFFFF",
+    height: 100,
+    width: 200,
+    borderRadius: 10,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    fontWeight: "bold",
+    color: COLORS.primary,
   },
 });
 

@@ -1,11 +1,15 @@
-import { StyleSheet, SafeAreaView, ScrollView, Text } from "react-native";
-import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  RefreshControl,
+} from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
 import { Events, Welcome } from "../../../../components";
 import { GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import UpcomingAppointments from "components/home/UpcomingAppointments";
-import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { COLORS, SIZES, SPACES } from "../../../../constants/theme";
-import { router } from "expo-router";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -15,6 +19,18 @@ import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
 
 export default function HomeTab() {
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    // Add your refresh logic here
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      const db = getFirestore();
+      // Fetch user data or perform other actions
+    }
+    setRefreshing(false);
+  }, []);
   useEffect(() => {
     const checkUserInfo = async () => {
       const auth = getAuth();
@@ -41,7 +57,7 @@ export default function HomeTab() {
   }, []);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(getCurrentUser());
+    dispatch(getCurrentUser(user));
   }, []);
   const { user } = useSelector((state: RootState) => state.user);
   return (
@@ -51,6 +67,9 @@ export default function HomeTab() {
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <View>
           <Text style={GS.h3}>

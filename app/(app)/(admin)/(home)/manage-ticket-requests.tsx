@@ -29,7 +29,7 @@ const Tab = createMaterialTopTabNavigator();
 interface TicketState {
   id: string;
   patientName: string;
-  status: "pending" | "rejected" | "accepted" | "denied";
+  status: "pending" | "rejected" | "accepted" | "cancelled";
   userId: string;
   userEmail: string;
   contactNumber?: string;
@@ -47,7 +47,7 @@ interface TicketState {
 
 interface TicketData {
   userId: string;
-  status?: "pending" | "rejected" | "accepted" | "denied";
+  status?: "pending" | "rejected" | "accepted" | "cancelled";
   message?: string;
   patientName?: string;
   contactNumber?: string;
@@ -280,7 +280,7 @@ function ManageTicketsRequestsArchived() {
   }
 
   const rejectedTickets = tickets.filter(
-    (ticket) => ticket.status === "denied"
+    (ticket) => ticket.status === "rejected"
   );
 
   return (
@@ -340,7 +340,7 @@ export function Card({ ticket }: CardProps) {
         {ticket.status === "pending" && (
           <IconBtn icon="user-minus" size={18} color="gray" />
         )}
-        {ticket.status === "denied" && (
+        {ticket.status === "cancelled" && (
           <IconBtn icon="user-xmark" size={18} color="red" />
         )}
         {ticket.status === "accepted" && (

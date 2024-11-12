@@ -18,6 +18,7 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
+import moment from "moment";
 
 interface Ticket {
   selectedHospital: string;
@@ -46,9 +47,11 @@ export default function UpcomingAppointments() {
           where("status", "==", "accepted")
         );
         const querySnapshot = await getDocs(q);
-        const fetchedTickets = querySnapshot.docs.map(
-          (doc) => doc.data() as Ticket
-        );
+        const fetchedTickets = querySnapshot.docs
+          .map((doc) => doc.data() as Ticket)
+          .filter((ticket) =>
+            moment(ticket.selectedDate).isSameOrAfter(moment(), "day")
+          );
         setTickets(fetchedTickets);
       }
       setLoading(false);
@@ -171,6 +174,7 @@ type IAppointmentCard = {
 };
 
 export function AppointmentCard({ location, date, time }: IAppointmentCard) {
+  const formattedDate = moment(date).format("MMMM DD, YYYY");
   return (
     <View style={card.container}>
       <Image
@@ -182,7 +186,7 @@ export function AppointmentCard({ location, date, time }: IAppointmentCard) {
           {location || "Medical Institution"}
         </Text>
         <View style={{ flexDirection: "row" }}>
-          <Text style={card.details}>{date}</Text>
+          <Text style={card.details}>{formattedDate}</Text>
           <Text style={card.details}> • {time}</Text>
         </View>
       </View>

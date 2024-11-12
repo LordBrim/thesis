@@ -87,7 +87,7 @@ const useFirestoreListener = () => {
             if (
               previousStatus !== nu.update.status &&
               (nu.update.status === "ACCEPTED" ||
-                nu.update.status === "DENIED" ||
+                nu.update.status === "REJECTED" ||
                 nu.changeType === "added")
             ) {
               processedUpdatesRef.current.set(nu.update.id, nu.update.status);

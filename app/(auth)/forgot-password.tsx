@@ -36,11 +36,13 @@ export default function ForgotPassword() {
   const [timerEnd, setTimerEnd] = useState(false);
   const [remainingTime, setRemainingTime] = useState(300);
   const [emailError, setEmailError] = useState("");
+  const [pinError, setPinError] = useState("");
   const router = useRouter();
   const refTimer = useRef(null);
   const [showModalEmail, setShowModalEmail] = useState(false);
+  const [isResendDisabled, setIsResendDisabled] = useState(true);
   const generatePin = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    return Math.floor(10000 + Math.random() * 90000).toString();
   };
 
   const checkEmailExists = async (email) => {
@@ -118,6 +120,7 @@ export default function ForgotPassword() {
         console.log("OTP email sent successfully");
         console.log("Generated PIN:", pin); // Log the generated PIN value
         setShowModal(true);
+        setIsResendDisabled(true);
       } else {
         console.error("Failed to send email:", response.statusText);
       }
@@ -135,9 +138,10 @@ export default function ForgotPassword() {
       console.log("PIN entered correctly:", enteredPin);
       await sendPasswordResetEmail(FIREBASE_AUTH, email);
       setShowModalEmail(true);
+      setPinError("");
     } else {
       console.error("Incorrect PIN entered");
-      // Optionally, show an error message to the user
+      setPinError("Incorrect PIN entered. Please try again.");
     }
   };
 
@@ -147,6 +151,7 @@ export default function ForgotPassword() {
 
   const timerCallbackFunc = (timerFlag) => {
     setTimerEnd(timerFlag);
+    setIsResendDisabled(false);
     console.warn("Alert the user when timer runs out...");
   };
 
@@ -222,13 +227,15 @@ export default function ForgotPassword() {
         extraBtn={
           <TouchableOpacity
             onPress={() => {
-              if (refTimer.current) {
+              if (!isResendDisabled && refTimer.current) {
                 refTimer.current.resetTimer();
+                sendPin();
               }
             }}
             style={{ flexDirection: "row" }}
+            disabled={isResendDisabled}
           >
-            <Text style={GS.link1}>
+            <Text style={[GS.link1, isResendDisabled && { color: "gray" }]}>
               Resend OTP
               {remainingTime >= 0 && <Text> </Text>}
             </Text>
@@ -254,7 +261,7 @@ export default function ForgotPassword() {
           }}
         >
           <OtpInput
-            numberOfDigits={6}
+            numberOfDigits={5}
             focusColor="#DA2F47"
             focusStickBlinkingDuration={500}
             onFilled={(text) => setEnteredPin(text)}
@@ -265,10 +272,12 @@ export default function ForgotPassword() {
               pinCodeContainerStyle: {
                 width: 60,
                 height: 60,
+                marginHorizontal: 5,
                 borderRadius: 10,
               },
             }}
           />
+          {pinError ? <Text style={styles.errorText}>{pinError}</Text> : null}
         </View>
       </SingleBtnModal>
     </View>
@@ -285,6 +294,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   errorText: {
+    marginTop: 20,
     color: "red",
   },
 });

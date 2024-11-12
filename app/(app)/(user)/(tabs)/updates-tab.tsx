@@ -1,13 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-  Button,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SIZES, COLORS } from "../../../../constants";
 import {
   usePushNotification,
@@ -15,7 +7,6 @@ import {
 } from "hooks/usePushNotification";
 import useFirestoreListener from "hooks/useFirestoreListener";
 import UpdateCard from "../(updates)/update-card";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Update {
   id: string;
@@ -29,6 +20,7 @@ interface Update {
 export default function UpdatesTab() {
   const { notification, expoPushToken } = usePushNotification(); // Extract expoPushToken
   const updates = useFirestoreListener();
+  const [refreshing, setRefreshing] = useState(false);
 
   const [combinedData, setCombinedData] = useState<Update[]>([]);
   const [filter, setFilter] = useState<string>("All");

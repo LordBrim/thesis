@@ -66,6 +66,7 @@ export default function RegisterScreen() {
   const [modalDescription, setModalDescription] = useState("");
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const fbAuth = FIREBASE_AUTH;
+  const [verifiedEmail, setVerifiedEmail] = useState("");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -135,6 +136,8 @@ export default function RegisterScreen() {
       if (otpInput === otpCode) {
         console.log("OTP verified successfully:", otpInput);
         setOtpVerified(true);
+        setVerifiedEmail(email); // Store the verified email
+        setEmailError(""); // Clear any previous email error
       } else {
         console.error("Incorrect OTP entered:", otpInput);
         // Optionally, show an error message to the user
@@ -219,8 +222,10 @@ export default function RegisterScreen() {
       if (isValidEmail(debouncedEmail)) {
         if (await checkEmailExists(debouncedEmail)) {
           setEmailError("Email is already registered.");
+        } else if (otpVerified) {
+          setEmailError(""); // Clear any previous email error
         } else {
-          setEmailError("");
+          setEmailError("Email is not registered yet.");
         }
       } else {
         setEmailError("");
@@ -228,7 +233,7 @@ export default function RegisterScreen() {
     };
 
     checkEmail();
-  }, [debouncedEmail]);
+  }, [debouncedEmail, otpVerified]);
 
   const handleEmailChange = (email) => {
     setEmail(email);
@@ -249,6 +254,15 @@ export default function RegisterScreen() {
       return;
     }
 
+    if (emailError === "Email is already registered.") {
+      setModalTitle("Email Already Registered");
+      setModalDescription(
+        "The email address you entered is already registered."
+      );
+      setModalVisible(true);
+      return;
+    }
+
     if (!isValidPassword(password)) {
       setModalTitle("Weak Password");
       setModalDescription(
@@ -265,7 +279,7 @@ export default function RegisterScreen() {
       return;
     }
 
-    if (!otpVerified) {
+    if (!otpVerified || email !== verifiedEmail) {
       setModalTitle("Email Verification");
       setModalDescription("Please verify your email address.");
       setModalVisible(true);
@@ -288,7 +302,7 @@ export default function RegisterScreen() {
       return;
     }
     if (!sex) {
-      setModalTitle("Empty Input");
+      setModalTitle("Sex is not yet selected");
       setModalDescription(
         "Please select your sex to continue with the registration."
       );
@@ -299,7 +313,7 @@ export default function RegisterScreen() {
     try {
       const response = await createUserWithEmailAndPassword(
         fbAuth,
-        email,
+        verifiedEmail, // Use the verified email for registration
         password
       );
       console.log(response);
@@ -311,7 +325,7 @@ export default function RegisterScreen() {
       console.log(age);
       // Add user data to the Firestore in "User" collection with auto-generated document ID
       const documentData = {
-        email: email,
+        email: verifiedEmail, // Use the verified email for registration
         displayName: displayName,
         dateOfBirth: formattedDate,
         sex: sex,
@@ -346,7 +360,7 @@ export default function RegisterScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <ScrollView
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
         overScrollMode="never"
         contentContainerStyle={styles.scrollview}
       >
@@ -360,7 +374,10 @@ export default function RegisterScreen() {
                   style={styles.input}
                   value={fullName}
                   placeholder="Enter your full name..."
-                  onChangeText={(fullName) => setFullName(fullName)}
+                  onChangeText={(fullName) => {
+                    const filteredName = fullName.replace(/[^a-zA-Z\s]/g, "");
+                    setFullName(filteredName);
+                  }}
                   autoCapitalize="words"
                   autoCorrect={true}
                   enablesReturnKeyAutomatically
@@ -375,6 +392,7 @@ export default function RegisterScreen() {
                   autoCapitalize="none"
                   autoCorrect={false}
                   enablesReturnKeyAutomatically
+                  editable={!otpVerified} // Disable the email input field after the OTP is verified
                 />
                 {emailError ? (
                   <Text style={{ color: "red", marginRight: 10 }}>
@@ -556,8 +574,9 @@ export default function RegisterScreen() {
               </View>
             </View>
           </View>
-
-          <CallToActionBtn label="Register" onPress={() => register()} />
+          <View style={{ marginBottom: 30 }}>
+            <CallToActionBtn label="Register" onPress={() => register()} />
+          </View>
 
           {/* <View
             style={{

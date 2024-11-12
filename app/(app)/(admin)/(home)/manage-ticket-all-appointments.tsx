@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Pressable,
   RefreshControl,
+  Modal,
 } from "react-native";
 import { COLORS } from "../../../../constants/theme";
 import { Agenda } from "react-native-calendars";
@@ -19,7 +20,7 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 
 interface TicketState {
   id: string;
-  status: "pending" | "rejected" | "accepted" | "denied";
+  status: "pending" | "rejected" | "accepted" | "cancelled";
   userUID: string;
   userEmail: string;
   age?: number;
@@ -48,6 +49,7 @@ export default function ManageTicketAllAppointments() {
   const [loading, setLoading] = useState(false); // Loading state
   const [refreshing, setRefreshing] = useState(false); // Refreshing state
   const [emptyDateMessage, setEmptyDateMessage] = useState(""); // New state for empty date message
+  const [modalVisible, setModalVisible] = useState(true); // Modal visibility state
 
   const handleAppointmentPress = async (item) => {
     router.push({
@@ -96,6 +98,7 @@ export default function ManageTicketAllAppointments() {
       setTicketList(ticketsWithUserData);
       markAppointmentDates(ticketsWithUserData); // Mark appointments on calendar
       transformAppointmentsToAgendaItems(ticketsWithUserData); // Transform appointments for Agenda
+      setModalVisible(false); // Close modal when data is ready
     };
 
     fetchUserDataForTickets();
@@ -233,41 +236,60 @@ export default function ManageTicketAllAppointments() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>All Appointments</Text>
-      <Agenda
-        items={agendaItems}
-        loadItemsForMonth={(month) => {
-          console.log("trigger items loading for month", month);
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
         }}
-        onDayPress={handleDayPress}
-        onDayChange={(day) => {
-          console.log("day changed", day);
-        }}
-        selected={moment().format("YYYY-MM-DD")}
-        renderItem={renderAppointmentItem}
-        renderEmptyDate={renderEmptyDate}
-        renderEmptyData={renderEmptyData} // Custom empty data handling
-        markedDates={markedDates}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderKnob={() => (
-          <FontAwesome name="caret-down" size={30} color={COLORS.primary} />
-        )}
-        theme={{
-          selectedDayBackgroundColor: COLORS.primary,
-          todayTextColor: COLORS.primary,
-          dotColor: COLORS.primary,
-          selectedDotColor: COLORS.primary,
-          arrowColor: COLORS.primary,
-          textMonthColor: COLORS.primary,
-          agendaDayTextColor: COLORS.primary,
-          agendaDayNumColor: COLORS.primary,
-          agendaTodayColor: COLORS.primary,
-          agendaKnobColor: COLORS.primary,
-          indicatorColor: COLORS.primary,
-        }}
-      />
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+            <Text style={styles.modalText}>Loading appointments...</Text>
+          </View>
+        </View>
+      </Modal>
+      {!modalVisible && (
+        <>
+          <Text style={styles.header}>All Appointments</Text>
+          <Agenda
+            items={agendaItems}
+            loadItemsForMonth={(month) => {
+              console.log("trigger items loading for month", month);
+            }}
+            onDayPress={handleDayPress}
+            onDayChange={(day) => {
+              console.log("day changed", day);
+            }}
+            selected={moment().format("YYYY-MM-DD")}
+            renderItem={renderAppointmentItem}
+            renderEmptyDate={renderEmptyDate}
+            renderEmptyData={renderEmptyData} // Custom empty data handling
+            markedDates={markedDates}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            renderKnob={() => (
+              <FontAwesome name="caret-down" size={30} color={COLORS.primary} />
+            )}
+            theme={{
+              selectedDayBackgroundColor: COLORS.primary,
+              todayTextColor: COLORS.primary,
+              dotColor: COLORS.primary,
+              selectedDotColor: COLORS.primary,
+              arrowColor: COLORS.primary,
+              textMonthColor: COLORS.primary,
+              agendaDayTextColor: COLORS.primary,
+              agendaDayNumColor: COLORS.primary,
+              agendaTodayColor: COLORS.primary,
+              agendaKnobColor: COLORS.primary,
+              indicatorColor: COLORS.primary,
+            }}
+          />
+        </>
+      )}
     </View>
   );
 }
@@ -305,5 +327,23 @@ const styles = StyleSheet.create({
     color: COLORS.grayDark,
     textAlign: "center", // Center align the text
     paddingHorizontal: 20, // Add padding for better readability
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: COLORS.primary,
   },
 });

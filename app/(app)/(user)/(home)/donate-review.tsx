@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import moment from "moment";
 import { checklistQuestions } from "../../../../constants/database"; // Adjust the path to your database.js file
 import IconBtn from "../../../../components/common/IconButton"; // Adjust the path to your IconBtn component
@@ -56,7 +56,7 @@ const DonateReview: React.FC<DonateReviewProps> = ({ answers }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Review Your Answers</Text>
       <View
         style={{
@@ -99,14 +99,15 @@ const DonateReview: React.FC<DonateReviewProps> = ({ answers }) => {
           />
         );
       })}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 16,
+    marginBottom: 20,
     alignItems: "center",
   },
   header: {

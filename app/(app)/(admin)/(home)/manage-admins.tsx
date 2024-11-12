@@ -21,7 +21,7 @@ export default function ManageAdmins() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getHospitalAdmins(user.hospitalName));
-  }, [admins]);
+  }, [admins.length]);
   const filteredAdmins = admins.filter(
     (admin) => admin.displayName !== user.hospitalName
   );

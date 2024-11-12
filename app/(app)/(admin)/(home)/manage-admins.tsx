@@ -10,8 +10,8 @@ import { ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  disableAdmins,
-  disableAdminsInFirebase,
+  disableAdmin,
+  disableAdminInFirebase,
   getHospitalAdmins,
 } from "rtx/slices/admins";
 
@@ -104,12 +104,12 @@ export function AdminsCard({
   const dispatch = useDispatch();
   const handleDisable = (uuid) => {
     dispatch(
-      disableAdmins({
+      disableAdmin({
         uuid: uuid,
         disabled: !disabled,
       })
     );
-    disableAdminsInFirebase(uuid, !disabled);
+    disableAdminInFirebase(uuid, !disabled);
   };
   return (
     <>

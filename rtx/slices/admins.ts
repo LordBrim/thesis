@@ -11,27 +11,6 @@ import {
   where,
 } from "firebase/firestore";
 
-export const getAllAdmins = createAsyncThunk<AdminsState["admins"], void>(
-  "getAllAdmins",
-  async () => {
-    try {
-      const adminsQuery = query(
-        collection(FIRESTORE_DB, "User"),
-        where("role", "==", "admin")
-      );
-      const querySnapshot = await getDocs(adminsQuery);
-      const admins = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        uuid: doc.id,
-      })) as AdminsState["admins"];
-      return admins;
-    } catch (error) {
-      console.error("Error fetching admins:", error);
-      return [];
-    }
-  }
-);
-
 export const getHospitalAdmins = createAsyncThunk<
   AdminsState["admins"],
   string
@@ -54,7 +33,7 @@ export const getHospitalAdmins = createAsyncThunk<
   }
 });
 
-export const deleteAdminsInFirebase = async (uuid: string) => {
+export const deleteAdminInFirebase = async (uuid: string) => {
   try {
     const userCollectionRef = collection(FIRESTORE_DB, "User");
     const adminsQuery = query(
@@ -71,7 +50,7 @@ export const deleteAdminsInFirebase = async (uuid: string) => {
   }
 };
 
-export const disableAdminsInFirebase = async (
+export const disableAdminInFirebase = async (
   uuid: string,
   disabled: boolean
 ) => {
@@ -85,7 +64,7 @@ export const disableAdminsInFirebase = async (
   }
 };
 
-interface AdminsMember {
+interface AdminState {
   uuid?: string;
   disabled: boolean;
   displayName: string;
@@ -96,7 +75,7 @@ interface AdminsMember {
 }
 
 interface AdminsState {
-  admins: AdminsMember[];
+  admins: AdminState[];
 }
 const initialState: AdminsState = {
   admins: [
@@ -125,46 +104,42 @@ const adminsSlice = createSlice({
   name: "admins",
   initialState,
   reducers: {
-    createAdmins: (
+    createAdmin: (
       state,
-      { payload: { newAdmins } }: PayloadAction<{ newAdmins: AdminsMember }>
+      { payload: { newAdmin } }: PayloadAction<{ newAdmin: AdminState }>
     ) => {
       const existingAdmins = state.admins.find(
-        (admins) => admins.email === newAdmins.email
+        (admins) => admins.email === newAdmin.email
       );
       if (existingAdmins) {
-        Object.assign(existingAdmins, newAdmins);
+        Object.assign(existingAdmins, newAdmin);
       } else {
-        state.admins.push(newAdmins);
+        state.admins.push(newAdmin);
       }
     },
-    disableAdmins: (
+    disableAdmin: (
       state,
       action: PayloadAction<{ uuid: string; disabled: boolean }>
     ) => {
       const { uuid, disabled } = action.payload;
-      const admins = state.admins.find((admins) => admins.uuid === uuid);
+      const admins = state.admins.find((admin) => admin.uuid === uuid);
       if (admins) {
         admins.disabled = disabled;
       }
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(getHospitalAdmins.fulfilled, (state, action) => {
-        if (action.payload && action.payload.length > 0) {
-          state.admins = action.payload;
-        } else {
-          state.admins = initialState.admins;
-        }
-      })
-      .addCase(getAllAdmins.fulfilled, (state, action) => {
+    builder.addCase(getHospitalAdmins.fulfilled, (state, action) => {
+      if (action.payload && action.payload.length > 0) {
         state.admins = action.payload;
-      });
+      } else {
+        state.admins = initialState.admins;
+      }
+    });
   },
 });
 
-export const { createAdmins, disableAdmins } = adminsSlice.actions;
+export const { createAdmin, disableAdmin } = adminsSlice.actions;
 
 export const selectCount = (state: RootState) => state.admins;
 

@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
 import Incentives from "components/home/Incentives";
+import { getHospitals } from "rtx/slices/hospitals";
 
 export default function HomeTab() {
   const [refreshing, setRefreshing] = useState(false);
@@ -55,7 +56,8 @@ export default function HomeTab() {
   }, []);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
-    dispatch(getCurrentUser(user));
+    dispatch(getCurrentUser());
+    dispatch(getHospitals());
   }, []);
   const { user } = useSelector((state: RootState) => state.user);
   return (

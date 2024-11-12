@@ -3,30 +3,24 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 
-export const getCurrentUser = createAsyncThunk(
-  "getCurrentUser",
-  async (userUID: string) => {
-    try {
-      const user = FIREBASE_AUTH.currentUser;
-
-      if (!user) {
-        return null;
-      }
-
-      const docRef = doc(FIRESTORE_DB, "User", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (!docSnap.exists()) {
-        return null;
-      }
-
-      return docSnap.data() as UserState["user"];
-    } catch (error) {
-      console.error("Error fetching FAQs:", error);
+export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
+  try {
+    const user = FIREBASE_AUTH.currentUser;
+    if (!user) {
       return null;
     }
+    const docRef = doc(FIRESTORE_DB, "User", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      return null;
+    }
+    return docSnap.data() as UserState["user"];
+  } catch (error) {
+    console.error("Error fetching FAQs:", error);
+    return null;
   }
-);
+});
 
 interface UserState {
   user: {
@@ -35,6 +29,7 @@ interface UserState {
     password: string;
     role: "user" | "staff" | "admin" | "super";
     hospitalName: string;
+    lastDonationUUID: string;
     incentives: Array<{
       hospitalUuid: string;
       claimed: number;
@@ -52,6 +47,7 @@ const initialState: UserState = {
     password: "",
     role: "user",
     hospitalName: "",
+    lastDonationUUID: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
     incentives: [
       {
         hospitalUuid: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",

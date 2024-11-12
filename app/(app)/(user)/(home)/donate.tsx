@@ -89,16 +89,23 @@ By proceeding with this screening, you acknowledge that you understand these req
       return;
     }
 
+    // Separate appointment data from checklist data
+    const {
+      appointmentDate,
+      appointmentTime,
+      selectedHospital,
+      ...checklistData
+    } = answers;
+
     const db = getFirestore();
     try {
       await addDoc(collection(db, "ticketDonate"), {
-        checklistData: answers,
-        fullName: null,
+        checklistData: checklistData,
         isComplete: false,
         message: "sent",
-        selectedDate: answers.appointmentDate,
-        selectedHospital: answers.selectedHospital,
-        selectedTime: answers.appointmentTime,
+        selectedDate: appointmentDate,
+        selectedHospital: selectedHospital,
+        selectedTime: appointmentTime,
         status: "pending",
         ticketNumber: ticketCode,
         type: "appointment",

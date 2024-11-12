@@ -86,8 +86,8 @@ export default function AllEventsScreen() {
         time={`${moment(item.endDate, "MM/DD/YYYY").format("MMMM D, YYYY")} ${
           item.endTime
         }`}
-        latitude={item.latitude}
-        longitude={item.longitude}
+        latitude={parseFloat(item.latitude)}
+        longitude={parseFloat(item.longitude)}
       />
     </View>
   );

@@ -108,8 +108,11 @@ const HospitalMapView = () => {
   useEffect(() => {
     if (selectedMarker && selectedMarker !== null) {
       openBottomSheet();
+      fetchRoute(); // Fetch route when a marker is selected
     }
+    console.log("ue 1 triggered")
   }, [selectedMarker]);
+
   const openGoogleMapsForDriving = () => {
     if (currentLocation && selectedMarker) {
       const origin = `${currentLocation.latitude},${currentLocation.longitude}`;
@@ -124,94 +127,30 @@ const HospitalMapView = () => {
     }
   };
 
-  useEffect(() => {
-    let watchId;
+  const fetchRoute = async () => {
+    if (!currentLocation || !selectedMarker) {
+      return;
+    }
 
-    const startWatching = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        watchId = await Location.watchPositionAsync(
-          { accuracy: Location.Accuracy.Best, timeInterval: 500 },
-          (location) => {
-            setCurrentLocation({
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            });
+    const start = `${currentLocation.longitude},${currentLocation.latitude}`;
+    const end = selectedMarker.coordinates
+      ? `${selectedMarker.coordinates.longitude},${selectedMarker.coordinates.latitude}`
+      : `${selectedMarker.longitude},${selectedMarker.latitude}`;
+    const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62480d5edcd000074935966b0d86d130c538&start=${start}&end=${end}`;
 
-            // Update the routeCoordinates state
-            setRouteCoordinates((prevRouteCoordinates) => {
-              // Remove the coordinates up to and including the current location
-              const newRouteCoordinates = prevRouteCoordinates.slice();
-              while (
-                newRouteCoordinates.length > 0 &&
-                !isSameLocation(newRouteCoordinates[0], location.coords)
-              ) {
-                newRouteCoordinates.shift();
-              }
-              return newRouteCoordinates;
-            });
-          }
-        );
-      } else {
-        // Handle permission denied...
-      }
-    };
-
-    startWatching();
-
-    return () => {
-      if (watchId) {
-        watchId.remove();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    const fetchRoute = async () => {
-      if (!currentLocation || !selectedMarker) {
-        return;
-      }
-
-      // Check if the location or marker has actually changed using deep comparison
-      if (
-        previousLocation.current &&
-        previousHospital.current &&
-        isSameLocation(previousLocation.current, currentLocation) &&
-        isSameLocation(
-          previousHospital.current.coordinates || previousHospital.current,
-          selectedMarker.coordinates || selectedMarker
-        )
-      ) {
-        // Don't fetch the route if the selected marker hasn't changed
-        return;
-      }
-
-      // Save current state to refs
-      previousLocation.current = currentLocation;
-      previousHospital.current = selectedMarker;
-
-      const start = `${currentLocation.longitude},${currentLocation.latitude}`;
-      const end = selectedMarker.coordinates
-        ? `${selectedMarker.coordinates.longitude},${selectedMarker.coordinates.latitude}`
-        : `${selectedMarker.longitude},${selectedMarker.latitude}`;
-      const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62480d5edcd000074935966b0d86d130c538&start=${start}&end=${end}`;
-
-      try {
-        const response = await axios.get(url);
-        const data = response.data;
-        const route = data.features[0].geometry.coordinates;
-        const routeCoordinates = route.map((coord) => ({
-          longitude: coord[0],
-          latitude: coord[1],
-        }));
-        setRouteCoordinates(routeCoordinates);
-      } catch (error) {
-        console.error("Error fetching route:", error);
-      }
-    };
-
-    fetchRoute();
-  }, [selectedMarker]); // Dependencies
+    try {
+      const response = await axios.get(url);
+      const data = response.data;
+      const route = data.features[0].geometry.coordinates;
+      const routeCoordinates = route.map((coord) => ({
+        longitude: coord[0],
+        latitude: coord[1],
+      }));
+      setRouteCoordinates(routeCoordinates);
+    } catch (error) {
+      console.error("Error fetching route:", error);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -226,21 +165,26 @@ const HospitalMapView = () => {
       currentLocationRef.current = location.coords;
 
       if (selectedHospital) {
-        selectedHospitalRef.current = selectedHospital;
-        const start = {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-        };
-        const end = {
-          latitude: selectedHospital.coordinates.latitude,
-          longitude: selectedHospital.coordinates.longitude,
-        };
-        const distanceInMeters = getDistance(start, end);
-        setDistance((distanceInMeters / 1000).toFixed(1));
+        if (selectedHospitalRef.current !== selectedHospital) {
+          selectedHospitalRef.current = selectedHospital;
+          const start = {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          };
+          const end = {
+            latitude: selectedHospital.coordinates.latitude,
+            longitude: selectedHospital.coordinates.longitude,
+          };
+          const distanceInMeters = getDistance(start, end);
+          setDistance((distanceInMeters / 1000).toFixed(1));
+        }
       }
     })();
-  }, [selectedHospital]);
+    console.log("ue 2 triggered")
 
+  }, []);
+
+  
   const isActiveEvent = (startDate, startTime, endDate, endTime) => {
     const now = moment();
     const start = moment(`${startDate} ${startTime}`, "MM/DD/YYYY hh:mm A");
@@ -274,6 +218,8 @@ const HospitalMapView = () => {
     };
 
     fetchEvents();
+    console.log("ue 3 triggered")
+
   }, []);
 
   useEffect(() => {
@@ -299,6 +245,8 @@ const HospitalMapView = () => {
     } else {
       setLoading(false); // Set loading to false if hospitals are already provided
     }
+    console.log("ue 4 triggered")
+
   }, [hospitals]);
 
   const handleMapInteraction = () => {

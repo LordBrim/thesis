@@ -93,7 +93,7 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
     },
     {
       label: "ACE Medical Center",
-      value: "ACE Medical Center",
+      value: "ACE Medical Center Mandaluyong",
     },
     {
       label: "Our Lady of Lourdes Hospital",

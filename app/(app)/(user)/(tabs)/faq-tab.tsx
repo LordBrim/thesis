@@ -154,17 +154,21 @@ export default function FAQTab() {
     setSearchText(text);
     const filtered = FAQ_DATA.map((section) => ({
       ...section,
-      data: section.data.filter(
-        (item) =>
-          item.question.toLowerCase().includes(text.toLowerCase()) ||
-          item.answer.toLowerCase().includes(text.toLowerCase())
+      data: section.data.filter((item) =>
+        item.question.toLowerCase().includes(text.toLowerCase())
       ),
     })).filter((section) => section.data.length > 0);
     setFilteredData(filtered);
   };
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView overScrollMode="never">
+      <ScrollView overScrollMode="never" stickyHeaderIndices={[1]}>
+        {/* This view can contain additional content or just act as a spacer */}
+        <View style={styles.topSpacer}>
+          {/* Any content here won't be sticky */}
+        </View>
+
+        {/* Header section to be sticky */}
         <View style={styles.cTop}>
           <Text style={GS.h1}>How can we help you?</Text>
           <TextInputWrapper>
@@ -186,10 +190,16 @@ export default function FAQTab() {
           </TextInputWrapper>
         </View>
 
+        {/* Panels section with content */}
         <View style={styles.panels}>
           <FlatList
-            data={FAQ_DATA}
-            renderItem={({ item }) => <QuestionPanel questions={item.data} />}
+            data={filteredData}
+            renderItem={({ item }) => (
+              <View>
+                <Text style={panel.title}>{item.title}</Text>
+                <QuestionPanel questions={item.data} />
+              </View>
+            )}
             keyExtractor={(item) => item.title}
             overScrollMode="never"
             scrollEnabled={false}
@@ -267,6 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     fontWeight: "bold",
     gap: 16,
+    position: "static",
   },
   panels: {
     gap: 20,

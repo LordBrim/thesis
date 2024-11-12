@@ -138,6 +138,7 @@ export default function UpcomingEvents() {
         latitude={item.latitude} // Pass latitude to EventCard
         longitude={item.longitude} // Pass longitude to EventCard
         onPress={() => navigateToMaps(item)}
+        navigate = {true}
       />
     </View>
   );

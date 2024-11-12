@@ -50,8 +50,10 @@ export const checklistQuestions = [
   {
     id: 9,
     question: "Have you traveled outside the Philippines within the past year?",
-    type: "yesNo",
+    type: "condionalTravel",
+    conditional: { showIfYes: true }, // condition to show text input if
   },
+  
   {
     id: 10,
     question: "Are you pregnant or breastfeeding? (FOR FEMALES ONLY)",

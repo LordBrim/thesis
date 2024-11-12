@@ -66,11 +66,6 @@ export default function AdminDashboard() {
       icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
       title: "User\nRequests",
     },
-    {
-      href: "/(app)/(admin)/(home)/manage-ticket-transfers",
-      icon: <FontAwesome6 name="ticket" size={size} color={COLORS.primary} />,
-      title: "Bank\nTransfers",
-    },
   ];
 
   return (

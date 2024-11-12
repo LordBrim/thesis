@@ -12,7 +12,7 @@ import { COLORS, SIZES, SPACES } from "../../constants/theme";
 import { Link } from "expo-router";
 
 type IEventCard = {
-  image: string;
+  image: ImageSourcePropType;
   title: string;
   date?: string;
   time?: string;
@@ -24,6 +24,7 @@ type IEventCard = {
   latitude?: number;
   longitude?: number;
   onPress?: () => void;
+  navigate?: boolean;
 };
 
 export default function EventCard({
@@ -37,27 +38,10 @@ export default function EventCard({
   documentId,
   latitude,
   longitude,
-  onPress,
+  onPress = () => {},
+  navigate = false,
 }: IEventCard) {
-  return (
-    // <Link
-    //   asChild
-    //   push
-    //   href={{
-    //     pathname: "/(app)/(user)/(maps)/hospitalMapView",
-    //     params: {
-    //       image: image.uri,
-    //       title: title,
-    //       date: date,
-    //       time: time,
-    //       description,
-    //       address,
-    //       documentId,
-    //       latitude,
-    //       longitude,
-    //     },
-    //   }}
-    // >
+  const cardContent = (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <View style={styles.details}>
@@ -78,7 +62,31 @@ export default function EventCard({
         </View>
       </ImageBackground>
     </TouchableOpacity>
-    // </Link>
+  );
+
+  return !navigate ? (
+    <Link
+      asChild
+      push
+      href={{
+        pathname: "/(app)/(home)/event-details",
+        params: {
+          image: image.uri,
+          title: title,
+          date: date,
+          time: time,
+          description,
+          address,
+          documentId,
+          latitude,
+          longitude,
+        },
+      }}
+    >
+      {cardContent}
+    </Link>
+  ) : (
+    cardContent
   );
 }
 

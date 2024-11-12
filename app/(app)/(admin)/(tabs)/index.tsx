@@ -36,18 +36,6 @@ export default function HomeTab() {
         showsHorizontalScrollIndicator={false}
         overScrollMode="never"
       >
-        <Link
-          asChild
-          href={"/(app)/(admin)/manage-request-unit"}
-          style={[styles.ctaContainer]}
-        >
-          <Pressable android_ripple={{ radius: 200 }}>
-            <Text style={[styles.ctaTitle]}>Request</Text>
-            <Text style={[styles.ctaSubtitle]}>
-              Request a blood unit to other hospital
-            </Text>
-          </Pressable>
-        </Link>
         <AdminDashboard />
       </ScrollView>
       <SingleBtnModal

@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
   },
   ctaContainer: {

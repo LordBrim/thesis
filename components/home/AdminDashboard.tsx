@@ -1,30 +1,17 @@
 import { Link } from "expo-router";
-import {
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import {
-  FontAwesome6,
-  Fontisto,
-  Ionicons,
-  Octicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import { BarChart } from "react-native-gifted-charts";
 import ReportBarChart from "./ReportBarChart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ReportLineChart from "./ReportLineChart";
 import { FlatList } from "react-native";
+import { useSelector } from "react-redux";
+import { RootState } from "app/store";
 
 export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
-
   const gridBtns1 = [
     {
       href: "/(app)/(admin)/(home)/manage-staff",
@@ -54,7 +41,6 @@ export default function AdminDashboard() {
       title: "Blood Units",
     },
   ];
-
   const gridBtns2 = [
     {
       href: "/(app)/(admin)/(home)/manage-ticket-donations",
@@ -67,10 +53,80 @@ export default function AdminDashboard() {
       title: "User\nRequests",
     },
   ];
+  const { reports } = useSelector((state: RootState) => state.reports);
+  const formatYearlyData = (yearlyData) => {
+    return yearlyData.flatMap((item, index) => [
+      {
+        value: item.donations,
+        label: item.year,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: item.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
+  const formatMonthlyData = (monthlyData) => {
+    return monthlyData.flatMap((item, index) => [
+      {
+        value: item.donations,
+        label: item.month,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: item.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
+  const formatWeeklyData = (weeklyData) => {
+    return weeklyData.flatMap((item, index) => [
+      {
+        value: item.donations,
+        label: item.week,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: item.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
+  interface DailyDataEntry {
+    day: string;
+    donations: number;
+    requests: number;
+  }
 
+  const formatDailyData = (dailyData: Record<string, DailyDataEntry>) => {
+    return Object.entries(dailyData).flatMap(([date, data]) => [
+      {
+        value: data.donations,
+        label: data.day,
+        spacing: 5,
+        labelWidth: 35,
+        labelTextStyle: { color: "gray" },
+        frontColor: COLORS.primary,
+      },
+      {
+        value: data.requests,
+        frontColor: COLORS.accent1,
+      },
+    ]);
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ gap: 8 }}>
+      <View style={styles.section}>
         <Text style={GS.h2}>Dashboard</Text>
         <FlatList
           data={gridBtns1}
@@ -93,6 +149,9 @@ export default function AdminDashboard() {
           numColumns={4}
           scrollEnabled={false}
         />
+      </View>
+
+      <View style={styles.section}>
         <Text style={GS.h2}>Transactions</Text>
         <FlatList
           data={gridBtns2}
@@ -117,72 +176,89 @@ export default function AdminDashboard() {
         />
       </View>
 
-      <Text style={GS.h2}>Reports</Text>
+      <View style={styles.section}>
+        <Text style={GS.h2}>Reports</Text>
 
-      <View style={{ flexDirection: "row", gap: 2 }}>
-        <View
-          style={[
-            styles.sBtnView,
-            { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
-          ]}
-        >
-          <Pressable
-            onPress={() => setChart("Daily")}
-            android_ripple={{ radius: 200 }}
-            style={styles.sBtnPress}
-          >
-            <Text>Daily</Text>
-          </Pressable>
-        </View>
-
-        <View style={[styles.sBtnView]}>
-          <Pressable
-            onPress={() => setChart("Weekly")}
-            android_ripple={{ radius: 200 }}
-            style={styles.sBtnPress}
-          >
-            <Text>Weekly</Text>
-          </Pressable>
-        </View>
-
-        <View style={[styles.sBtnView]}>
-          <Pressable
-            onPress={() => setChart("Monthly")}
-            android_ripple={{ radius: 200 }}
-            style={styles.sBtnPress}
-          >
-            <Text>Monthly</Text>
-          </Pressable>
-        </View>
-
-        <View
-          style={[
-            styles.sBtnView,
-            { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
-          ]}
-        >
-          <Pressable
-            onPress={() => setChart("Yearly")}
-            android_ripple={{ radius: 200 }}
+        <View style={{ flexDirection: "row", gap: 2 }}>
+          <View
             style={[
-              styles.sBtnPress,
+              styles.sBtnView,
+              { borderTopLeftRadius: 10, borderBottomLeftRadius: 10 },
+            ]}
+          >
+            <Pressable
+              onPress={() => setChart("Daily")}
+              android_ripple={{ radius: 200 }}
+              style={styles.sBtnPress}
+            >
+              <Text>Daily</Text>
+            </Pressable>
+          </View>
+
+          <View style={[styles.sBtnView]}>
+            <Pressable
+              onPress={() => setChart("Weekly")}
+              android_ripple={{ radius: 200 }}
+              style={styles.sBtnPress}
+            >
+              <Text>Weekly</Text>
+            </Pressable>
+          </View>
+
+          <View style={[styles.sBtnView]}>
+            <Pressable
+              onPress={() => setChart("Monthly")}
+              android_ripple={{ radius: 200 }}
+              style={styles.sBtnPress}
+            >
+              <Text>Monthly</Text>
+            </Pressable>
+          </View>
+
+          <View
+            style={[
+              styles.sBtnView,
               { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
             ]}
           >
-            <Text>Yearly</Text>
-          </Pressable>
+            <Pressable
+              onPress={() => setChart("Yearly")}
+              android_ripple={{ radius: 200 }}
+              style={[
+                styles.sBtnPress,
+                { borderTopRightRadius: 10, borderBottomRightRadius: 10 },
+              ]}
+            >
+              <Text>Yearly</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
 
-      {chart == "Daily" && <ReportBarChart title="Daily" data={dailyData} />}
-      {chart == "Weekly" && <ReportBarChart title="Weekly" data={weeklyData} />}
-      {chart == "Monthly" && (
-        <ReportBarChart title="Monthly" data={monthlyData} />
+      {chart == "Daily" && (
+        <ReportBarChart title="Daily" data={formatDailyData(reports.daily)} />
       )}
-      {chart == "Yearly" && <ReportBarChart title="Yearly" data={yearlyData} />}
+      {chart == "Weekly" && (
+        <ReportBarChart
+          title="Weekly"
+          data={formatWeeklyData(reports.weekly)}
+        />
+      )}
+      {chart == "Monthly" && (
+        <ReportBarChart
+          title="Monthly"
+          data={formatMonthlyData(reports.monthly)}
+        />
+      )}
+      {chart == "Yearly" && (
+        <ReportBarChart
+          title="Yearly"
+          data={formatYearlyData(reports.yearly)}
+        />
+      )}
 
-      <ReportBarChart title="Donations From Events" data={eventsData} />
-      <ReportLineChart />
+      {/* TODO: Add a button to toggle between bar chart and line area chart  */}
+      {/* <ReportLineChart /> */}
     </SafeAreaView>
   );
 }
@@ -192,6 +268,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     gap: 16,
+    backgroundColor: COLORS.background,
+  },
+  scrollview: {},
+  section: {
+    gap: 8,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   dBtnText: {
     fontWeight: "500",

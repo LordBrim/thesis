@@ -12,7 +12,6 @@ export default function LifelineLogo() {
           source={require("../../assets/splash/icon.png")}
         />
       </View>
-      <Text style={styles.subtitle}>Bloodbank management system</Text>
     </View>
   );
 }
@@ -35,13 +34,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     color: COLORS.primary,
   },
-  subtitle: {
-    fontSize: 15,
-    fontWeight: "500",
-    textTransform: "capitalize",
-    width: 230,
-    textAlign: "center",
-  },
+
   logo: {
     width: 50,
     height: 50,

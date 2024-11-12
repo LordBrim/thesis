@@ -3,8 +3,69 @@ import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import { store } from "app/store"; // Ensure correct import path
 import Toastable from "react-native-toastable";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { useEffect } from "react";
+import { setCustomText } from "react-native-global-props";
+import {
+  Montserrat_100Thin,
+  Montserrat_100Thin_Italic,
+  Montserrat_200ExtraLight,
+  Montserrat_300Light,
+  Montserrat_300Light_Italic,
+  Montserrat_400Regular,
+  Montserrat_400Regular_Italic,
+  Montserrat_500Medium,
+  Montserrat_500Medium_Italic,
+  Montserrat_600SemiBold,
+  Montserrat_600SemiBold_Italic,
+  Montserrat_700Bold,
+  Montserrat_700Bold_Italic,
+  Montserrat_800ExtraBold,
+  Montserrat_800ExtraBold_Italic,
+  Montserrat_900Black,
+  Montserrat_900Black_Italic,
+} from "@expo-google-fonts/montserrat";
+import { useFonts } from "expo-font";
+import { Text } from "react-native";
 
 export default function StackLayout() {
+  async function changeScreenOrientation() {
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT_UP
+    );
+  }
+  const [fontsLoaded] = useFonts({
+    Montserrat_100Thin,
+    Montserrat_100Thin_Italic,
+    Montserrat_200ExtraLight,
+    Montserrat_200ExtraLight,
+    Montserrat_300Light,
+    Montserrat_300Light_Italic,
+    Montserrat_400Regular,
+    Montserrat_400Regular_Italic,
+    Montserrat_500Medium,
+    Montserrat_500Medium_Italic,
+    Montserrat_600SemiBold,
+    Montserrat_600SemiBold_Italic,
+    Montserrat_700Bold,
+    Montserrat_700Bold_Italic,
+    Montserrat_800ExtraBold,
+    Montserrat_800ExtraBold_Italic,
+    Montserrat_900Black,
+    Montserrat_900Black_Italic,
+  });
+  if (!fontsLoaded) {
+    return <Text>Loading fonts...</Text>;
+  }
+  const customTextProps = {
+    style: {
+      fontFamily: "Montserrat_400Regular",
+    },
+  };
+  useEffect(() => {
+    changeScreenOrientation();
+    setCustomText(customTextProps);
+  }, []);
   return (
     <Provider store={store}>
       <Stack
@@ -12,10 +73,7 @@ export default function StackLayout() {
         screenOptions={{ headerTitle: "" }}
       >
         {/* Authentication Screens */}
-        <Stack.Screen
-          name="(auth)/login"
-          options={{ headerShadowVisible: false }}
-        />
+        <Stack.Screen name="(auth)/login" />
         <Stack.Screen name="(auth)/register" />
         <Stack.Screen name="(auth)/forgot-password" />
         <Stack.Screen name="(auth)/new-password" />
@@ -51,7 +109,7 @@ export default function StackLayout() {
             headerTitle: "Profile Settings",
           })}
         />
-        
+
         {/* User Level Home Screens */}
         <Stack.Screen name="(app)/(user)/(home)/request" />
         <Stack.Screen name="(app)/(user)/(home)/event-details" />
@@ -84,13 +142,15 @@ export default function StackLayout() {
         {/* Admin Level Home Screens */}
         <Stack.Screen name="(app)/(admin)/(home)/manage-staff" />
         {/* Account Screens */}
-        <Stack.Screen name="(app)/(user)/(account)/about" 
+        <Stack.Screen
+          name="(app)/(user)/(account)/about"
           options={{
             headerTitle: "About Us",
           }}
         />
         <Stack.Screen name="(app)/(user)/(account)/donation-history" />
-        <Stack.Screen name="(app)/(user)/(account)/help" 
+        <Stack.Screen
+          name="(app)/(user)/(account)/help"
           options={{
             headerTitle: "Help",
           }}

@@ -102,7 +102,12 @@ export default function ManageFaqCreate() {
         { type: "AB-", available: false },
         { type: "O+", available: false },
         { type: "O-", available: false },
-      ]
+      ],
+      {
+        info: "",
+        number: 4,
+        data: [],
+      }
     );
     dispatch(getHospitals());
     router.back();

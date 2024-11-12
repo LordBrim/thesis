@@ -33,8 +33,15 @@ import { FlatList } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { showToastable } from "react-native-toastable";
 import { showLongToast } from "hooks/useToast";
+import { useNavigation } from "expo-router";
 
 export default function LoginScreen() {
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerShadowVisible: false,
+    });
+  }, []);
   const router = useRouter();
   const [fontsLoaded] = useFonts({
     Raleway_400Regular,

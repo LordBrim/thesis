@@ -12,22 +12,20 @@ import UpcomingAppointments from "components/home/UpcomingAppointments";
 import { COLORS, SIZES, SPACES } from "../../../../constants/theme";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
+import Incentives from "components/home/Incentives";
 
 export default function HomeTab() {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    // Add your refresh logic here
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
       const db = getFirestore();
-      // Fetch user data or perform other actions
     }
     setRefreshing(false);
   }, []);
@@ -83,6 +81,7 @@ export default function HomeTab() {
 
         <Welcome toDonate="/donate" toRequest="/request" currentUser={user} />
         <UpcomingAppointments />
+        <Incentives />
         <Events />
       </ScrollView>
     </SafeAreaView>

@@ -6,30 +6,25 @@ import { COLORS } from "./theme";
 export const GS = StyleSheet.create({
   h1: {
     fontSize: 24,
-    // fontWeight: "bold",
-    fontFamily: "Montserrat_700Bold",
+    fontWeight: "bold",
     textTransform: "capitalize",
   },
   h2: {
     fontSize: 20,
-    fontFamily: "Montserrat_700Bold",
-    // fontWeight: "bold",
+    fontWeight: "bold",
     textTransform: "capitalize",
   },
   h3: {
     fontSize: 18,
-    // fontWeight: "bold",
-    fontFamily: "Montserrat_700Bold",
+    fontWeight: "bold",
     textTransform: "capitalize",
   },
   link1: {
-    // fontWeight: "bold",
-    fontFamily: "Montserrat_700Bold",
+    fontWeight: "bold",
     color: COLORS.primary,
   },
   link2: {
-    // fontWeight: "bold",
-    fontFamily: "Montserrat_700Bold",
+    fontWeight: "bold",
     color: COLORS.grayMid,
   },
 });

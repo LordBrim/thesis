@@ -3,27 +3,30 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 
-export const getCurrentUser = createAsyncThunk("getCurrentUser", async (userUID: string) => {
-  try {
-    const user = FIREBASE_AUTH.currentUser;
+export const getCurrentUser = createAsyncThunk(
+  "getCurrentUser",
+  async (userUID: string) => {
+    try {
+      const user = FIREBASE_AUTH.currentUser;
 
-    if (!user) {
+      if (!user) {
+        return null;
+      }
+
+      const docRef = doc(FIRESTORE_DB, "User", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        return null;
+      }
+
+      return docSnap.data() as UserState["user"];
+    } catch (error) {
+      console.error("Error fetching FAQs:", error);
       return null;
     }
-
-    const docRef = doc(FIRESTORE_DB, "User", user.uid);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) {
-      return null;
-    }
-
-    return docSnap.data() as UserState["user"];
-  } catch (error) {
-    console.error("Error fetching FAQs:", error);
-    return null;
   }
-});
+);
 
 interface UserState {
   user: {
@@ -32,11 +35,11 @@ interface UserState {
     password: string;
     role: "user" | "staff" | "admin" | "super";
     hospitalName: string;
-    incentives: {
+    incentives: Array<{
       hospitalUuid: string;
       claimed: number;
       timesCompleted: number;
-    }[];
+    }>;
     disabled: boolean;
     sex: "male" | "female"; // Add sex property
   };

@@ -25,11 +25,10 @@ export default function Incentives() {
     (section) => section.name === user.lastDonationName
   )?.incentives;
   const data = Array.from(
-    { length: hospitalIncentives?.number || 0 },
+    { length: hospitalIncentives.number || 0 },
     (_, i) => {
       const items =
-        hospitalIncentives?.data.filter((item) => item.position === i + 1) ||
-        [];
+        hospitalIncentives.data.filter((item) => item.position === i + 1) || [];
       const uniqueIncentives = [
         ...new Set(items.map((item) => item.incentive)),
       ];
@@ -41,7 +40,7 @@ export default function Incentives() {
     }
   );
   const size = 40;
-  const [simulation, setSimulation] = useState(hospitalIncentives?.number);
+  const [simulation, setSimulation] = useState(hospitalIncentives.number);
   return (
     <View style={{ gap: 24 }}>
       <View style={styles.bar}>

@@ -12,8 +12,8 @@ import { COLORS, SPACES } from "../../../../constants/theme";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import {
-  deleteHospital,
-  deleteHospitalInFirebase,
+  disableHospital,
+  disableHospitalInFirebase,
   getHospitals,
 } from "rtx/slices/hospitals";
 import { Pressable } from "react-native";
@@ -39,6 +39,7 @@ export default function HomeTab() {
           renderItem={({ item }) => (
             <HospitalCard
               uuid={item.uuid}
+              disabled={item.disabled}
               name={item.name}
               logoUrl={item.logoUrl}
               address={item.address}
@@ -59,6 +60,7 @@ export default function HomeTab() {
 
 type IHospitalCard = {
   uuid: string;
+  disabled: boolean;
   name: string;
   logoUrl: string;
   address: string;
@@ -78,6 +80,7 @@ interface StockState {
 
 export function HospitalCard({
   uuid,
+  disabled,
   name,
   logoUrl,
   address,
@@ -90,28 +93,26 @@ export function HospitalCard({
       params: { uuid: uuid.toString() },
     });
   };
-
   const dispatch = useDispatch();
-
-  const handleDelete = (uuid) => {
+  const handleDisable = (uuid: string) => {
     dispatch(
-      deleteHospital({
+      disableHospital({
         uuid: uuid,
+        disabled: !disabled,
       })
     );
-    deleteHospitalInFirebase(uuid);
+    disableHospitalInFirebase(uuid, !disabled);
   };
-
   return (
     <View style={{ width: "100%", flex: 1 }}>
       <Pressable style={card.tContainer} android_ripple={{ radius: 250 }}>
         <Text style={[GS.h3, card.name]}>{name}</Text>
         <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} />
         <IconBtn
-          icon="trash"
+          icon="circle-minus"
           size={18}
-          onPress={() => handleDelete(uuid)}
-          color="red"
+          onPress={() => handleDisable(uuid)}
+          color={disabled ? COLORS.grayMid : "red"}
         />
       </Pressable>
       <View style={card.bContainer}>

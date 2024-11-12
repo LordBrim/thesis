@@ -23,6 +23,7 @@ export const getHospitals = createAsyncThunk("getHospitals", async () => {
     const querySnapshot = await getDocs(sortedQuery);
     const hospitals = querySnapshot.docs.map((doc) => ({
       uuid: doc.id, // Document ID
+      disabled: doc.data().disabled,
       name: doc.data().name,
       type: doc.data().type,
       address: doc.data().address,
@@ -175,12 +176,29 @@ export const updateHospitalIncentivesByUuid = async (
   }
 };
 
+export const disableHospitalInFirebase = async (
+  uuid: string,
+  disabled: boolean
+) => {
+  try {
+    const userDocRef = doc(FIRESTORE_DB, "hospital", uuid);
+    await updateDoc(userDocRef, { disabled });
+
+    console.log(
+      `Hospital with UUID ${uuid} updated with disabled = ${disabled}`
+    );
+  } catch (error) {
+    console.error("Error updating hospital disabled status:", error);
+  }
+};
+
 interface HospitalsState {
   hospitals: Array<HospitalState>;
 }
 
 interface HospitalState {
   uuid?: string;
+  disabled: boolean;
   name: string;
   logoUrl: string;
   address: string;
@@ -215,6 +233,7 @@ const initialState: HospitalsState = {
   hospitals: [
     {
       uuid: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
+      disabled: false,
       name: "UERM Hospital",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
@@ -340,6 +359,18 @@ export const hospitalsSlice = createSlice({
         state.hospitals[hospitalIndex].incentives = updatedIncentives;
       }
     },
+    disableHospital: (
+      state,
+      action: PayloadAction<{ uuid: string; disabled: boolean }>
+    ) => {
+      const { uuid, disabled } = action.payload;
+      const hospital = state.hospitals.find(
+        (hospital) => hospital.uuid === uuid
+      );
+      if (hospital) {
+        hospital.disabled = disabled;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getHospitals.fulfilled, (state, action) => {
@@ -358,6 +389,7 @@ export const {
   deleteHospital,
   updateHospitalStock,
   updateIncentives,
+  disableHospital,
 } = hospitalsSlice.actions;
 
 export const selectCount = (state: RootState) => state.hospitals.hospitals;

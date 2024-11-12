@@ -29,7 +29,6 @@ function Maps({ setMapBackground, setMapHeader }) {
   const navigation = useNavigation();
   const [isMarkerSelected, setIsMarkerSelected] = useState(false);
   const skeletonAnimation = useRef(new Animated.Value(0)).current;
-
   useEffect(() => {
     const fetchHospitals = async () => {
       try {
@@ -37,7 +36,7 @@ function Maps({ setMapBackground, setMapHeader }) {
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
         const querySnapshot = await getDocs(
-          collection(FIRESTORE_DB, "hospitalData")
+          collection(FIRESTORE_DB, "hospital")
         );
         const hospitalsData = await Promise.all(
           querySnapshot.docs.map(async (doc) => {
@@ -92,20 +91,15 @@ function Maps({ setMapBackground, setMapHeader }) {
       params: {
         hospital: JSON.stringify(hospital),
         styles: JSON.stringify(styles),
-        hospitals: JSON.stringify(HospitalsData), // Ensure this is passed
+        hospitals: JSON.stringify(HospitalsData),
       },
     });
   };
-
   const animatedStyle = {
     opacity: skeletonAnimation.interpolate({
       inputRange: [0, 1],
       outputRange: [0.3, 1],
     }),
-  };
-
-  const handleSearch = () => {
-    console.error("Search Hospital is not yet implemented!");
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -114,19 +108,6 @@ function Maps({ setMapBackground, setMapHeader }) {
           <Text style={GS.h1}>Locate a Hospital</Text>
           <Description description="Select a partnered hospital to locate" />
         </View>
-
-        {/* <TextInputWrapper>
-          <TextInput
-            placeholder="Find a medical institution..."
-            style={{
-              flex: 1,
-              padding: 12,
-            }}
-          />
-          <TouchableOpacity style={{ paddingRight: 12 }} onPress={handleSearch}>
-            <FontAwesome6 name="magnifying-glass" size={24} color={"black"} />
-          </TouchableOpacity>
-        </TextInputWrapper> */}
       </View>
       {loading ? (
         <View style={styles.skeletonContainer}>
@@ -146,22 +127,26 @@ function Maps({ setMapBackground, setMapHeader }) {
         </View>
       ) : (
         !selectedHospital &&
-        HospitalsData.map((hospital) => (
-          <Pressable
-            style={styles.hContainer}
-            key={hospital.id}
-            android_ripple={{ radius: 250 }}
-            onPress={() => focusMap(hospital)}
-          >
-            <Text style={styles.hName}>{hospital.name}</Text>
-            <View style={styles.icon}>
-              <FontAwesome6
-                name="chevron-right"
-                size={18}
-                color={COLORS.slate400}
-              />
-            </View>
-          </Pressable>
+        HospitalsData.map((hospital, index) => (
+          <>
+            {!hospital.disabled && (
+              <Pressable
+                style={styles.hContainer}
+                key={hospital.index}
+                android_ripple={{ radius: 250 }}
+                onPress={() => focusMap(hospital)}
+              >
+                <Text style={styles.hName}>{hospital.name}</Text>
+                <View style={styles.icon}>
+                  <FontAwesome6
+                    name="chevron-right"
+                    size={18}
+                    color={COLORS.text}
+                  />
+                </View>
+              </Pressable>
+            )}
+          </>
         ))
       )}
     </SafeAreaView>
@@ -187,11 +172,10 @@ const styles = StyleSheet.create({
   hContainer: {
     flex: 1,
     width: "100%",
-
     flexDirection: "row",
     alignItems: "center",
     maxHeight: 50,
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingLeft: HORIZONTAL_SCREEN_MARGIN,
     paddingVertical: 12,
   },
   hName: {

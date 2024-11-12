@@ -5,6 +5,7 @@ import {
   FlatList,
   View,
   Text,
+  Alert,
 } from "react-native";
 import React, { useEffect } from "react";
 import { GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
@@ -94,14 +95,56 @@ export function HospitalCard({
     });
   };
   const dispatch = useDispatch();
-  const handleDisable = (uuid: string) => {
-    dispatch(
-      disableHospital({
-        uuid: uuid,
-        disabled: !disabled,
-      })
-    );
-    disableHospitalInFirebase(uuid, !disabled);
+  const handleDisable = (uuid: string, disabled: boolean) => {
+    if (!disabled) {
+      Alert.alert(
+        "Confirm Disable",
+        "Are you sure you want to disable this hospital?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              dispatch(
+                disableHospital({
+                  uuid: uuid,
+                  disabled: !disabled,
+                })
+              );
+              disableHospitalInFirebase(uuid, !disabled);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert(
+        "Confirm Reenable",
+        "Are you sure you want to enable this hospital?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              dispatch(
+                disableHospital({
+                  uuid: uuid,
+                  disabled: !disabled,
+                })
+              );
+              disableHospitalInFirebase(uuid, !disabled);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
   };
   return (
     <View style={{ width: "100%", flex: 1 }}>
@@ -111,7 +154,7 @@ export function HospitalCard({
         <IconBtn
           icon="circle-minus"
           size={18}
-          onPress={() => handleDisable(uuid)}
+          onPress={() => handleDisable(uuid, disabled)}
           color={disabled ? COLORS.grayMid : "red"}
         />
       </Pressable>

@@ -74,11 +74,6 @@ interface CoordinatesState {
   longitude: number;
 }
 
-interface StockState {
-  type: string;
-  available: boolean;
-}
-
 export function HospitalCard({
   uuid,
   disabled,

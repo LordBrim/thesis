@@ -32,10 +32,12 @@ export const getHospitals = createAsyncThunk("getHospitals", async () => {
         latitude: doc.data().coordinates.latitude,
         longitude: doc.data().coordinates.longitude,
       },
-      stock: doc.data().stock.map((item) => ({
-        available: item.available,
-        type: item.type,
-      })),
+      stock: doc
+        .data()
+        .stock.map((item: { available: string; type: string }) => ({
+          available: item.available,
+          type: item.type,
+        })),
       incentives: {
         info: doc.data().incentives.info,
         number: doc.data().incentives.number,
@@ -70,6 +72,7 @@ export const addHospitalToFirebase = async (
     where("name", "==", name)
   );
   const querySnapshot = await getDocs(existingHospitalQuery);
+
   if (!querySnapshot.empty) {
     const hospitalDocRef = querySnapshot.docs[0].ref;
     await updateDoc(hospitalDocRef, {
@@ -86,7 +89,7 @@ export const addHospitalToFirebase = async (
       incentives,
     });
   } else {
-    await addDoc(hospitalsCollectionRef, {
+    const hospitalDocRef = await addDoc(hospitalsCollectionRef, {
       disabled,
       name,
       address,
@@ -99,6 +102,7 @@ export const addHospitalToFirebase = async (
       stock,
       incentives,
     });
+    await updateDoc(hospitalDocRef, { uuid: hospitalDocRef.id });
   }
 };
 
@@ -195,12 +199,12 @@ export const disableHospitalInFirebase = async (
   }
 };
 
-interface HospitalsState {
+export interface HospitalsState {
   hospitals: Array<HospitalState>;
 }
 
-interface HospitalState {
-  uuid?: string;
+export interface HospitalState {
+  uuid: string;
   disabled: boolean;
   name: string;
   logoUrl: string;
@@ -398,6 +402,6 @@ export const {
   disableHospital,
 } = hospitalsSlice.actions;
 
-export const selectCount = (state: RootState) => state.hospitals.hospitals;
+export const selectCount = (state: RootState) => state.hospitals;
 
 export default hospitalsSlice.reducer;

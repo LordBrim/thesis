@@ -13,14 +13,15 @@ import { COLORS, SIZES, SPACES } from "../../../../constants/theme";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { View } from "react-native";
+import Incentives from "components/home/Incentives";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
-import Incentives from "components/home/Incentives";
 import { getHospitals } from "rtx/slices/hospitals";
 
 export default function HomeTab() {
   const [refreshing, setRefreshing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     const auth = getAuth();
@@ -49,7 +50,6 @@ export default function HomeTab() {
             setModalVisible(true);
           }
         }
-        console.log("Document data:", userDoc.data());
       }
     };
     checkUserInfo();
@@ -57,7 +57,7 @@ export default function HomeTab() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getCurrentUser());
-    dispatch(getHospitals());
+    // dispatch(getHospitals());
   }, []);
   const { user } = useSelector((state: RootState) => state.user);
   return (

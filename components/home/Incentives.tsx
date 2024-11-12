@@ -1,46 +1,59 @@
 import { View, Text, StyleSheet, FlatList, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { COLORS, SIZES } from "constants/theme";
 import LinkBtn from "components/common/LinkBtn";
 import { useNavigation } from "expo-router";
-import { useSelector } from "react-redux";
-import { RootState } from "app/store";
 import { Fontisto } from "@expo/vector-icons";
 import { GS } from "constants/style";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/store";
+import {
+  getHospitals,
+  HospitalsState,
+  HospitalState,
+} from "rtx/slices/hospitals";
 
 export default function Incentives() {
-  const navigation = useNavigation();
   const { user } = useSelector((state: RootState) => state.user);
   const { hospitals } = useSelector((state: RootState) => state.hospitals);
   const hospital = hospitals.find(
-    (section) => section.name === user.hospitalName
+    (section) => section.name === user.lastDonationName
   );
   // TODO: Get the incentives of the hospital based on last donation
-  const incentives = hospitals.find(
-    (section) => section.uuid === user.incentives[0].hospitalUuid
-  ).incentives;
-  const data = Array.from({ length: incentives.number }, (_, i) => {
-    const items = incentives.data.filter((item) => item.position === i + 1);
-    const uniqueIncentives = [...new Set(items.map((item) => item.incentive))];
-    return {
-      incentiveNo: i + 1,
-      incentive:
-        uniqueIncentives.length > 0 ? uniqueIncentives.join(", ") : null,
-    };
-  });
+  const userIncentives = user.incentives;
+  const hospitalIncentives = hospitals.find(
+    (section) => section.name === user.lastDonationName
+  )?.incentives;
+  const data = Array.from(
+    { length: hospitalIncentives?.number || 0 },
+    (_, i) => {
+      const items =
+        hospitalIncentives?.data.filter((item) => item.position === i + 1) ||
+        [];
+      const uniqueIncentives = [
+        ...new Set(items.map((item) => item.incentive)),
+      ];
+      return {
+        incentiveNo: i + 1,
+        incentive:
+          uniqueIncentives.length > 0 ? uniqueIncentives.join(", ") : null,
+      };
+    }
+  );
   const size = 40;
-  const [simulation, setSimulation] = useState(incentives.number);
+  const [simulation, setSimulation] = useState(hospitalIncentives?.number);
   return (
     <View style={{ gap: 24 }}>
       <View style={styles.bar}>
         <Text style={styles.title}>Incentives</Text>
-        <LinkBtn
+        {/* TODO: All incentives are great but we first need to display the active incentives. */}
+        {/* <LinkBtn
           label="View All"
           onPress={() =>
             navigation.navigate("(app)/(user)/(home)/all-incentives")
           }
           linkStyle={{ color: "black", textDecorationLine: "none" }}
-        />
+        /> */}
       </View>
       <View
         style={{
@@ -63,10 +76,8 @@ export default function Incentives() {
               marginLeft: 12,
             }}
           >
-            <Text style={[GS.h3, styles.title]}>
-              {user.hospitalName} Incentives
-            </Text>
-            {incentives.info && <Text>{incentives.info}</Text>}
+            <Text style={[GS.h3, styles.title]}>{hospital?.name}</Text>
+            {hospitalIncentives?.info && <Text>{hospitalIncentives.info}</Text>}
           </View>
         </View>
       </View>

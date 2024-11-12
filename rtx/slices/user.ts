@@ -11,7 +11,6 @@ export const getCurrentUser = createAsyncThunk("getCurrentUser", async () => {
     }
     const docRef = doc(FIRESTORE_DB, "User", user.uid);
     const docSnap = await getDoc(docRef);
-
     if (!docSnap.exists()) {
       return null;
     }
@@ -30,8 +29,9 @@ interface UserState {
     role: "user" | "staff" | "admin" | "super";
     hospitalName: string;
     lastDonationUUID: string;
+    lastDonationName: string;
     incentives: Array<{
-      hospitalUuid: string;
+      hospitalUUID: string;
       claimed: number;
       timesCompleted: number;
     }>;
@@ -48,9 +48,10 @@ const initialState: UserState = {
     role: "user",
     hospitalName: "",
     lastDonationUUID: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
+    lastDonationName: "UERM Hospital",
     incentives: [
       {
-        hospitalUuid: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
+        hospitalUUID: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
         claimed: 3,
         timesCompleted: 3,
       },

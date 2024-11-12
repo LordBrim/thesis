@@ -21,9 +21,7 @@ export default function ManageIncentives() {
   const hospital = hospitals.find(
     (section) => section.name === user.hospitalName
   );
-  const incentives = hospitals.find(
-    (section) => section.name === user.hospitalName
-  )?.incentives;
+  const incentives = hospital?.incentives;
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({

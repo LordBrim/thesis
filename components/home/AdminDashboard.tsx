@@ -1,12 +1,21 @@
 import { Link } from "expo-router";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import ReportBarChart from "./ReportBarChart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "app/store";
+import moment from "moment";
+import { incrementDonation, incrementRequest } from "rtx/slices/reports";
 
 export default function AdminDashboard() {
   const size = 40;
@@ -60,6 +69,10 @@ export default function AdminDashboard() {
     },
   ];
   const { reports } = useSelector((state: RootState) => state.reports);
+  const [yearlyData, setYearlyData] = useState();
+
+  useEffect(() => {}, []);
+
   const formatYearlyData = (yearlyData) => {
     return yearlyData.flatMap((item, index) => [
       {
@@ -72,7 +85,7 @@ export default function AdminDashboard() {
       },
       {
         value: item.requests,
-        frontColor: COLORS.accent1,
+        frontColor: COLORS.accent,
       },
     ]);
   };
@@ -88,7 +101,7 @@ export default function AdminDashboard() {
       },
       {
         value: item.requests,
-        frontColor: COLORS.accent1,
+        frontColor: COLORS.accent,
       },
     ]);
   };
@@ -104,7 +117,7 @@ export default function AdminDashboard() {
       },
       {
         value: item.requests,
-        frontColor: COLORS.accent1,
+        frontColor: COLORS.accent,
       },
     ]);
   };
@@ -113,7 +126,6 @@ export default function AdminDashboard() {
     donations: number;
     requests: number;
   }
-
   const formatDailyData = (dailyData: Record<string, DailyDataEntry>) => {
     return Object.entries(dailyData).flatMap(([date, data]) => [
       {
@@ -126,10 +138,11 @@ export default function AdminDashboard() {
       },
       {
         value: data.requests,
-        frontColor: COLORS.accent1,
+        frontColor: COLORS.accent,
       },
     ]);
   };
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.section}>
@@ -265,6 +278,25 @@ export default function AdminDashboard() {
 
       {/* TODO: Add a button to toggle between bar chart and line area chart  */}
       {/* <ReportLineChart /> */}
+      <Button
+        title="Log"
+        onPress={() => {
+          console.log("");
+          console.log("Year: " + moment().format("YYYY"));
+          console.log("Month: " + moment().format("MMM"));
+          console.log("Week: " + moment().format("W"));
+          console.log("Day: " + moment().format("ddd"));
+          console.log("Day: " + moment().format("YYYY-MM-DD"));
+        }}
+      ></Button>
+      <Button
+        title="Increment Donations"
+        onPress={() => dispatch(incrementDonation())}
+      ></Button>
+      <Button
+        title="Increment Requests"
+        onPress={() => dispatch(incrementRequest())}
+      ></Button>
     </SafeAreaView>
   );
 }

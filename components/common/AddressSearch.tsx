@@ -28,10 +28,15 @@ const AddressSearchComponent: React.FC<AddressSearchComponentProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const isSelecting = useRef(false);
+  const hasSelected = useRef(false); // New flag to indicate address selection
 
   useEffect(() => {
     const fetchPlaces = async () => {
-      if (searchText.length > 2 && !isSelecting.current) {
+      if (
+        searchText.length > 2 &&
+        !isSelecting.current &&
+        !hasSelected.current
+      ) {
         setLoading(true);
         try {
           const apiKey = "Dj4loZJ9qrAv9eTFGDKu"; // Replace with your actual API key
@@ -83,6 +88,7 @@ const AddressSearchComponent: React.FC<AddressSearchComponentProps> = ({
     const selectedPlace = results.find((place) => place.label === value);
     if (selectedPlace) {
       isSelecting.current = true;
+      hasSelected.current = true; // Set the flag to true when an address is selected
       setSearchText(selectedPlace.label);
       setResults([]);
       console.log(
@@ -98,6 +104,7 @@ const AddressSearchComponent: React.FC<AddressSearchComponentProps> = ({
       }, 100);
     }
   };
+
   const renderItem = ({ item }: { item: PlaceResult }) => (
     <TouchableOpacity onPress={() => handlePlaceSelect(item.label)}>
       <Text style={styles.resultItem}>{item.label}</Text>
@@ -111,7 +118,10 @@ const AddressSearchComponent: React.FC<AddressSearchComponentProps> = ({
           style={styles.searchInput}
           placeholder="Search for an address..."
           value={searchText}
-          onChangeText={setSearchText}
+          onChangeText={(text) => {
+            setSearchText(text);
+            hasSelected.current = false; // Reset the flag when the user types
+          }}
         />
       </TextInputWrapper>
 
@@ -141,6 +151,7 @@ const styles = StyleSheet.create({
   searchInput: {
     height: 40,
     flex: 1,
+    marginLeft: 10,
   },
   errorText: {
     color: "red",

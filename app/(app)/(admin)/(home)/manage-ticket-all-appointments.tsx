@@ -62,8 +62,10 @@ export default function ManageTicketAllAppointments() {
 
   const fetchTickets = async () => {
     setLoading(true);
+    setModalVisible(true); // Show modal when fetching starts
     await dispatch(fetchTicketsForCurrentUser());
     setLoading(false);
+    setModalVisible(false); // Hide modal when fetching ends
   };
 
   useEffect(() => {
@@ -247,7 +249,7 @@ export default function ManageTicketAllAppointments() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <ActivityIndicator size="large" color={COLORS.primary} />
-            <Text style={styles.modalText}>Loading appointments...</Text>
+            <Text style={styles.modalText}>Fetching events...</Text>
           </View>
         </View>
       </Modal>

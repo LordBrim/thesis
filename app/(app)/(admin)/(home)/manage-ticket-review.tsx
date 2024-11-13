@@ -432,15 +432,6 @@ export default function ManageTicketReview() {
           />
         )}
       </View>
-      {ticketData.status === "accepted" ? (
-        <CustomButton
-          title="User No-Show"
-          onPress={() => handleUpdateStatus("missing")}
-          color={COLORS.primary}
-          isMissing={true}
-          // isReject={true}
-        />
-      ) : null}
     </ScrollView>
   );
 }

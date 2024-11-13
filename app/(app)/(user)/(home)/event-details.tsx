@@ -32,6 +32,7 @@ export default function EventDetailsScreen() {
     documentId,
     latitude,
     longitude,
+    isAdmin,
   } = useLocalSearchParams();
   const [imageUri, setImageUri] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,7 +44,8 @@ export default function EventDetailsScreen() {
     time,
     documentId,
     latitude,
-    longitude
+    longitude,
+    isAdmin
   );
 
   useEffect(() => {
@@ -167,11 +169,13 @@ export default function EventDetailsScreen() {
           </View>
         </View>
       </Modal>
-      <View style={styles.buttonContainer}>
-        <Button mode="contained" onPress={navigateToMaps} icon="map-marker">
-          Navigate to Location
-        </Button>
-      </View>
+      {!isAdmin ? (
+        <View style={styles.buttonContainer}>
+          <Button mode="contained" onPress={navigateToMaps} icon="map-marker">
+            Navigate to Location
+          </Button>
+        </View>
+      ) : null}
     </View>
   );
 }

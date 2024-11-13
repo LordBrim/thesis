@@ -24,6 +24,7 @@ type IEventCard = {
   latitude?: number;
   longitude?: number;
   onPress?: () => void;
+  isAdmin?: boolean;
   navigate?: boolean;
 };
 
@@ -40,6 +41,7 @@ export default function EventCard({
   longitude,
   onPress = () => {},
   navigate = false,
+  isAdmin = false,
 }: IEventCard) {
   const cardContent = (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -80,6 +82,7 @@ export default function EventCard({
           documentId,
           latitude,
           longitude,
+          isAdmin,
         },
       }}
     >

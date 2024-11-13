@@ -57,7 +57,7 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
               height: 12,
               width: 12,
               borderRadius: 6,
-              backgroundColor: COLORS.accent1,
+              backgroundColor: COLORS.accent,
               marginRight: 8,
             }}
           />

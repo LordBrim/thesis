@@ -72,8 +72,8 @@ export default function AdminDashboard() {
     },
   ];
   const { reports } = useSelector((state: RootState) => state.reports);
-  const formatYearlyData = (yearlyData: any) => {
-    return yearlyData.flatMap((item: any) => [
+  const formatYearlyData = (yearlyData) => {
+    return yearlyData.flatMap((item) => [
       {
         value: item.donations,
         label: item.year,

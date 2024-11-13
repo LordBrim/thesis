@@ -5,9 +5,9 @@
       "@/*": ["src/*"],
       "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
     },
-    "target": "es5", // Specify ECMAScript target version
+    "target": "esnext", // Specify ECMAScript target version
     "module": "commonjs", // Specify module code generation
-    "lib": ["ES2019", "ES2019.array", "dom", "esnext", "es6", "es7", "es2017"], // Specify library files to be included
+    "lib": ["dom", "esnext"], // Specify library files to be included
     "jsx": "react-native", // Specify JSX code generation
     "strict": true, // Enable all strict type-checking options
     "moduleResolution": "node", // Specify module resolution strategy

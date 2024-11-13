@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator, Modal } from "react-native";
 import { COLORS } from "../../../../constants/theme";
 import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -17,7 +17,7 @@ export default function ManageEvents({ navigation }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [markedDates, setMarkedDates] = useState({});
   const [agendaItems, setAgendaItems] = useState({});
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(true); // Set initial loading state to true
   const [emptyDateMessage, setEmptyDateMessage] = useState(""); // New state for empty date message
 
   useEffect(() => {
@@ -47,6 +47,7 @@ export default function ManageEvents({ navigation }) {
         setMarkedDates({});
         setAgendaItems({});
       }
+      setLoading(false); // Set loading to false after data fetching is done
     });
 
     return () => unsubscribe();
@@ -150,6 +151,7 @@ export default function ManageEvents({ navigation }) {
         }`}
         documentId={item.id}
         manageEvent={true}
+        isAdmin={true}
       />
     </View>
   );
@@ -182,73 +184,84 @@ export default function ManageEvents({ navigation }) {
 
   // Handle what happens when a day is pressed
   const handleDayPress = (day) => {
-    setLoading(true); // Start loading when a day is pressed
+    const selectedDate = day.dateString; // Get the clicked date in "YYYY-MM-DD" format
 
-    setTimeout(() => {
-      setLoading(false); // Stop loading after the timeout
-      const selectedDate = day.dateString; // Get the clicked date in "YYYY-MM-DD" format
-
-      // Check if the selected date has events
-      if (
-        !agendaItems[selectedDate] ||
-        agendaItems[selectedDate].length === 0
-      ) {
-        // If no events, show a message
-        setEmptyDateMessage("No events are planned for this date.");
-      } else {
-        // If there are events, clear the message
-        setEmptyDateMessage("");
-      }
-    }, 1000); // Simulate loading delay
+    // Check if the selected date has events
+    if (!agendaItems[selectedDate] || agendaItems[selectedDate].length === 0) {
+      // If no events, show a message
+      setEmptyDateMessage("No events are planned for this date.");
+    } else {
+      // If there are events, clear the message
+      setEmptyDateMessage("");
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Your Events</Text>
-      <Agenda
-        items={agendaItems}
-        loadItemsForMonth={(month) => {
-          console.log("trigger items loading for month", month);
-        }}
-        onDayPress={handleDayPress}
-        onDayChange={(day) => {
-          console.log("day changed", day);
-        }}
-        selected={moment().format("YYYY-MM-DD")}
-        renderItem={renderEventItem}
-        renderEmptyDate={renderEmptyDate}
-        renderEmptyData={renderEmptyData} // Custom empty data handling
-        markedDates={markedDates}
-        renderKnob={() => (
-          <FontAwesome name="caret-down" size={30} color={COLORS.primary} />
-        )}
-        theme={{
-          selectedDayBackgroundColor: COLORS.primary,
-          todayTextColor: COLORS.primary,
-          dotColor: COLORS.primary,
-          selectedDotColor: COLORS.primary,
-          arrowColor: COLORS.primary,
-          textMonthColor: COLORS.primary,
-          agendaDayTextColor: COLORS.primary,
-          agendaDayNumColor: COLORS.primary,
-          agendaTodayColor: COLORS.primary,
-          agendaKnobColor: COLORS.primary,
-          indicatorColor: COLORS.primary,
-        }}
-      />
-      <CustomButtonWithIcon
-        title="Create Event"
-        icon="calendar-plus-o"
-        iconSize={24}
-        iconColor={"white"}
-        textStyle={{ color: "white" }}
-        buttonStyle={{
-          backgroundColor: COLORS.primary,
-          marginVertical: 0,
-          marginTop: 10,
-        }}
-        onPress={() => router.navigate("/(app)/(home)/manage-create-events")}
-      />
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={loading}
+        onRequestClose={() => {}}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+            <Text style={styles.modalText}>Fetching all active events...</Text>
+          </View>
+        </View>
+      </Modal>
+      {!loading && (
+        <>
+          <Text style={styles.header}>Your Events</Text>
+          <Agenda
+            items={agendaItems}
+            loadItemsForMonth={(month) => {
+              console.log("trigger items loading for month", month);
+            }}
+            onDayPress={handleDayPress}
+            onDayChange={(day) => {
+              console.log("day changed", day);
+            }}
+            selected={moment().format("YYYY-MM-DD")}
+            renderItem={renderEventItem}
+            renderEmptyDate={renderEmptyDate}
+            renderEmptyData={renderEmptyData} // Custom empty data handling
+            markedDates={markedDates}
+            renderKnob={() => (
+              <FontAwesome name="caret-down" size={30} color={COLORS.primary} />
+            )}
+            theme={{
+              selectedDayBackgroundColor: COLORS.primary,
+              todayTextColor: COLORS.primary,
+              dotColor: COLORS.primary,
+              selectedDotColor: COLORS.primary,
+              arrowColor: COLORS.primary,
+              textMonthColor: COLORS.primary,
+              agendaDayTextColor: COLORS.primary,
+              agendaDayNumColor: COLORS.primary,
+              agendaTodayColor: COLORS.primary,
+              agendaKnobColor: COLORS.primary,
+              indicatorColor: COLORS.primary,
+            }}
+          />
+          <CustomButtonWithIcon
+            title="Create Event"
+            icon="calendar-plus-o"
+            iconSize={24}
+            iconColor={"white"}
+            textStyle={{ color: "white" }}
+            buttonStyle={{
+              backgroundColor: COLORS.primary,
+              marginVertical: 0,
+              marginTop: 10,
+            }}
+            onPress={() =>
+              router.navigate("/(app)/(home)/manage-create-events")
+            }
+          />
+        </>
+      )}
     </View>
   );
 }
@@ -285,5 +298,23 @@ const styles = StyleSheet.create({
     height: 15,
     flex: 1,
     paddingTop: 30,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: COLORS.primary,
   },
 });

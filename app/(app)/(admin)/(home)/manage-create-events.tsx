@@ -23,6 +23,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { getDoc, doc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { router } from "expo-router";
+import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
 
 export default function CreateEvent({ navigation }) {
   const [title, setTitle] = useState("");
@@ -43,6 +45,14 @@ export default function CreateEvent({ navigation }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [inputHeight, setInputHeight] = useState(50);
+
+  // New state variables to track if date and time have been selected
+  const [isStartDateSelected, setIsStartDateSelected] = useState(false);
+  const [isStartTimeSelected, setIsStartTimeSelected] = useState(false);
+  const [isEndDateSelected, setIsEndDateSelected] = useState(false);
+  const [isEndTimeSelected, setIsEndTimeSelected] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -86,7 +96,6 @@ export default function CreateEvent({ navigation }) {
         uri,
         async (width, height) => {
           console.log(`Image width: ${width}, height: ${height}`);
-          Alert.alert("Image Size", `Width: ${width}, Height: ${height}`);
 
           // Determine the aspect ratio
           const aspectRatio = width / height;
@@ -174,14 +183,19 @@ export default function CreateEvent({ navigation }) {
       const formattedEndDate = `${
         endDate.getMonth() + 1
       }/${endDate.getDate()}/${endDate.getFullYear()}`;
-      const formattedStartTime = startTime.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      const formattedEndTime = endTime.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+      const formattedStartTime = startTime
+        ? startTime.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "";
+
+      const formattedEndTime = endTime
+        ? endTime.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "";
 
       // Add event details to Firestore
       const docId = await firestoreOperations.addDocument("events", {
@@ -213,6 +227,7 @@ export default function CreateEvent({ navigation }) {
       });
 
       Alert.alert("Success", "Event created successfully!");
+      setModalVisible(true); // Show modal on success
       // Reset form fields
       setTitle("");
       setStartDate(new Date());
@@ -224,6 +239,10 @@ export default function CreateEvent({ navigation }) {
       setImageUri(null);
       setLatitude(null);
       setLongitude(null);
+      setIsStartDateSelected(false);
+      setIsStartTimeSelected(false);
+      setIsEndDateSelected(false);
+      setIsEndTimeSelected(false);
       router.replace("/(app)/(home)/manage-events");
     } catch (error) {
       console.error("Error creating event: ", error);
@@ -235,8 +254,10 @@ export default function CreateEvent({ navigation }) {
     setShowStartDatePicker(false);
     if (selectedDate) {
       setStartDate(selectedDate);
+      setIsStartDateSelected(true);
       if (selectedDate > endDate) {
         setEndDate(selectedDate);
+        setIsEndDateSelected(true);
       }
     }
   };
@@ -245,6 +266,7 @@ export default function CreateEvent({ navigation }) {
     setShowStartTimePicker(false);
     if (selectedTime) {
       setStartTime(selectedTime);
+      setIsStartTimeSelected(true);
     }
   };
 
@@ -255,13 +277,16 @@ export default function CreateEvent({ navigation }) {
         Alert.alert("Invalid Date", "End date cannot be before start date.");
       } else {
         setEndDate(selectedDate);
+        setIsEndDateSelected(true);
       }
     }
   };
+
   const handleEndTimeChange = (event, selectedTime) => {
     setShowEndTimePicker(false);
     if (selectedTime) {
       setEndTime(selectedTime);
+      setIsEndTimeSelected(true);
     }
   };
 
@@ -279,13 +304,34 @@ export default function CreateEvent({ navigation }) {
     <View style={styles.formContainer}>
       <Text style={styles.header}>Create Event</Text>
       <View style={styles.imageContainer}>
-        <Button title="Pick Image" onPress={handleImagePicker} />
+        <CustomButtonWithIcon
+          title="Select Image"
+          icon="file-image-o"
+          onPress={handleImagePicker}
+          iconSize={24}
+          iconColor={COLORS.background}
+          textStyle={{ color: "white" }}
+          buttonStyle={{
+            backgroundColor: COLORS.primary,
+            marginVertical: 0,
+            marginTop: 10,
+          }}
+        />
         {imageUri && (
-          <Image
-            source={{ uri: imageUri }}
-            style={[styles.image, { aspectRatio: imageAspectRatio }]}
-            resizeMode="contain"
-          />
+          <View
+            style={{
+              borderWidth: 1,
+              borderRadius: 20,
+              padding: 10,
+              marginVertical: 10,
+            }}
+          >
+            <Image
+              source={{ uri: imageUri }}
+              style={[styles.image, { aspectRatio: imageAspectRatio }]}
+              resizeMode="contain"
+            />
+          </View>
         )}
       </View>
       <View style={styles.inputContainer}>
@@ -300,11 +346,14 @@ export default function CreateEvent({ navigation }) {
       </View>
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Start Date">
-          <TouchableOpacity onPress={() => setShowStartDatePicker(true)}>
+          <TouchableOpacity
+            onPress={() => setShowStartDatePicker(true)}
+            style={{ flex: 1, width: "100%" }}
+          >
             <TextInput
               style={styles.input}
-              placeholder="Start Date"
-              value={startDate.toLocaleDateString()}
+              placeholder=""
+              value={isStartDateSelected ? startDate.toLocaleDateString() : ""}
               editable={false}
             />
           </TouchableOpacity>
@@ -321,14 +370,21 @@ export default function CreateEvent({ navigation }) {
       </View>
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Start Time">
-          <TouchableOpacity onPress={() => setShowStartTimePicker(true)}>
+          <TouchableOpacity
+            onPress={() => setShowStartTimePicker(true)}
+            style={{ flex: 1, width: "100%" }}
+          >
             <TextInput
               style={styles.input}
-              placeholder="Start Time"
-              value={startTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              placeholder=""
+              value={
+                isStartTimeSelected
+                  ? startTime.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : ""
+              }
               editable={false}
             />
           </TouchableOpacity>
@@ -344,11 +400,14 @@ export default function CreateEvent({ navigation }) {
       </View>
       <View style={styles.inputContainer}>
         <TextInputWrapper label="End Date">
-          <TouchableOpacity onPress={() => setShowEndDatePicker(true)}>
+          <TouchableOpacity
+            onPress={() => setShowEndDatePicker(true)}
+            style={{ flex: 1, width: "100%" }}
+          >
             <TextInput
               style={styles.input}
-              placeholder="End Date"
-              value={endDate.toLocaleDateString()}
+              placeholder=""
+              value={isEndDateSelected ? endDate.toLocaleDateString() : ""}
               editable={false}
             />
           </TouchableOpacity>
@@ -365,14 +424,21 @@ export default function CreateEvent({ navigation }) {
       </View>
       <View style={styles.inputContainer}>
         <TextInputWrapper label="End Time">
-          <TouchableOpacity onPress={() => setShowEndTimePicker(true)}>
+          <TouchableOpacity
+            onPress={() => setShowEndTimePicker(true)}
+            style={{ flex: 1, width: "100%" }}
+          >
             <TextInput
               style={styles.input}
-              placeholder="End Time"
-              value={endTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              placeholder=""
+              value={
+                isEndTimeSelected
+                  ? endTime.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : ""
+              }
               editable={false}
             />
           </TouchableOpacity>
@@ -381,7 +447,7 @@ export default function CreateEvent({ navigation }) {
           <DateTimePicker
             value={endTime}
             mode="time"
-            display="spinner"
+            display="default"
             onChange={handleEndTimeChange}
           />
         )}
@@ -414,18 +480,42 @@ export default function CreateEvent({ navigation }) {
 
   const renderFooter = () => (
     <View style={styles.footerContainer}>
-      <Button title="Create Event" onPress={handleSubmit} />
+      <CustomButtonWithIcon
+        title="Create Event"
+        icon="calendar-check-o"
+        onPress={handleSubmit}
+        iconSize={24}
+        iconColor={COLORS.background}
+        textStyle={{ color: "white" }}
+        buttonStyle={{
+          backgroundColor: COLORS.primary,
+          marginVertical: 0,
+          marginTop: 10,
+        }}
+      />
     </View>
   );
 
   return (
-    <FlatList
-      data={[{ key: "form" }]}
-      renderItem={renderForm}
-      ListFooterComponent={renderFooter}
-      style={styles.container}
-      keyExtractor={(item) => item.key}
-    />
+    <>
+      <FlatList
+        data={[{ key: "form" }]}
+        renderItem={renderForm}
+        ListFooterComponent={renderFooter}
+        style={styles.container}
+        keyExtractor={(item) => item.key}
+      />
+      <SingleBtnModal
+        visible={modalVisible}
+        onClose={() => {
+          setModalVisible(false);
+          router.back(); // Navigate back when modal is closed
+        }}
+        title="Event Created"
+        message="Your event has been created successfully in a professional manner."
+        btnLabel="OK"
+      />
+    </>
   );
 }
 

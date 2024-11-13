@@ -6,7 +6,9 @@ import {
   FlatList,
   Pressable,
   RefreshControl,
-  ActivityIndicator, // Add RefreshControl import
+  ActivityIndicator,
+  Modal,
+  Alert, // Add RefreshControl import
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
@@ -25,12 +27,16 @@ import {
   DocumentData,
   query,
   where,
+  deleteDoc,
 } from "firebase/firestore";
 import moment from "moment";
 import Divider from "constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { onAuthStateChanged } from "firebase/auth";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
+import { useFocusEffect } from "@react-navigation/native";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import CallToActionBtn from "components/common/CallToActionBtn";
 const Tab = createMaterialTopTabNavigator();
 
 interface TicketState {
@@ -121,7 +127,6 @@ function ManageTicketsDonationsPending() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false); // Refresh state
-
   const [hospitalName, setHospitalName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -219,9 +224,12 @@ function ManageTicketsDonationsPending() {
     }
   };
 
-  useEffect(() => {
-    fetchTickets();
-  }, [hospitalName]);
+  useFocusEffect(
+    React.useCallback(() => {
+      setLoading(true);
+      fetchTickets();
+    }, [hospitalName])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -234,21 +242,6 @@ function ManageTicketsDonationsPending() {
     }
   };
 
-  if (loading) {
-    return (
-      <View style={styles.centeredContainer}>
-        <Text>Loading Tickets...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.centeredContainer}>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -293,21 +286,33 @@ function ManageTicketsDonationsPending() {
         Click tickets to view more details.
       </Text>
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
-      <FlatList
-        data={tickets}
-        renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.id} // Use the unique ID as the key
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        overScrollMode="never"
-        scrollEnabled={true}
-        persistentScrollbar={true}
-      />
+      {error && (
+        <View style={styles.centeredContainer}>
+          <Text>{error}</Text>
+        </View>
+      )}
+      {loading ? (
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      ) : tickets.length === 0 ? (
+        <View style={styles.centeredContainer}>
+          <Text style={styles.emptyMessage}>No pending tickets available.</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={tickets}
+          renderItem={({ item }) => <Card ticket={item} />}
+          keyExtractor={(item) => item.id} // Use the unique ID as the key
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          overScrollMode="never"
+          scrollEnabled={true}
+          persistentScrollbar={true}
+        />
+      )}
     </View>
   );
 }
-
 function ManageTicketsDonationsArchived() {
   const [tickets, setTickets] = useState<TicketState[]>([]);
   const [loading, setLoading] = useState(true);
@@ -399,9 +404,11 @@ function ManageTicketsDonationsArchived() {
     }
   };
 
-  useEffect(() => {
-    fetchTickets();
-  }, [hospitalName]);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchTickets();
+    }, [hospitalName])
+  );
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -413,6 +420,7 @@ function ManageTicketsDonationsArchived() {
       setRefreshing(false);
     }
   };
+
   const filteredTickets = tickets.filter((ticket) => {
     if (filterStatus === "all") {
       return (
@@ -439,22 +447,6 @@ function ManageTicketsDonationsArchived() {
     return dateB.valueOf() - dateA.valueOf(); // Sort in descending order
   });
 
-  if (loading) {
-    return (
-      <View style={styles.centeredContainer}>
-        <Text>Loading Tickets...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.centeredContainer}>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -479,22 +471,34 @@ function ManageTicketsDonationsArchived() {
       </View>
 
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
-      <FlatList
-        data={sortedTickets}
-        renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.id}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        overScrollMode="never"
-        scrollEnabled={true}
-        persistentScrollbar={true}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      ) : sortedTickets.length === 0 ? (
+        <View style={styles.centeredContainer}>
+          <Text style={styles.emptyMessage}>
+            No archived tickets available.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={sortedTickets}
+          renderItem={({ item }) => <Card ticket={item} />}
+          keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          overScrollMode="never"
+          scrollEnabled={true}
+          persistentScrollbar={true}
+        />
+      )}
     </View>
   );
 }
 
 export function Card({ ticket }: CardProps) {
+  const [modalVisible, setModalVisible] = useState(false);
+
   const handlePress = () => {
     router.push({
       pathname: "(app)/(admin)/(home)/manage-ticket-review",
@@ -513,53 +517,92 @@ export function Card({ ticket }: CardProps) {
     });
   };
 
+  const handleDelete = () => {
+    setModalVisible(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await deleteDoc(doc(FIRESTORE_DB, "ticketDonate", ticket.id));
+      setModalVisible(false);
+      Alert.alert("Success", "Ticket deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting ticket: ", error);
+      Alert.alert("Error", "Failed to delete ticket. Please try again.");
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return moment(dateString, "YYYY-MM-DD").format("MMMM D, YYYY");
   };
 
   return (
-    <Pressable
-      style={card.container}
-      android_ripple={{ radius: 250 }}
-      onPress={handlePress}
-    >
-      <View
-        style={{
-          flexShrink: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 4,
-        }}
+    <>
+      <Pressable
+        style={card.container}
+        android_ripple={{ radius: 250 }}
+        onPress={handlePress}
       >
-        {ticket.status === "pending" && (
-          <IconBtn icon="user" size={18} color="blue" />
-        )}
-        {ticket.status === "rejected" && (
-          <IconBtn icon="user-xmark" size={18} color="red" />
-        )}
-        {ticket.status === "accepted" && ticket.isComplete === false && (
-          <IconBtn icon="user-large" size={18} color="green" />
-        )}
-        {ticket.status === "accepted" && ticket.isComplete === true && (
-          <IconBtn icon="user-check" size={18} color="green" />
-        )}
-        {ticket.status === "cancelled" && (
-          <IconBtn icon="user-clock" size={18} color={COLORS.grayDark} />
-        )}
-        <View style={{ flexDirection: "column", justifyContent: "center" }}>
-          <Text style={card.name}>{ticket.ticketNumber}</Text>
-          <Text style={card.text}>
-            {ticket.selectedDate ? formatDate(ticket.selectedDate) : ""}
-          </Text>
-          <Text style={card.text}>{ticket.selectedTime || ""}</Text>
+        <View
+          style={{
+            flexShrink: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          {ticket.status === "pending" && (
+            <IconBtn icon="user" size={18} color="blue" />
+          )}
+          {ticket.status === "rejected" && (
+            <IconBtn icon="user-xmark" size={18} color="red" />
+          )}
+          {ticket.status === "accepted" && ticket.isComplete === false && (
+            <IconBtn icon="user" size={18} color="green" />
+          )}
+          {ticket.status === "accepted" && ticket.isComplete === true && (
+            <IconBtn icon="user-check" size={18} color="green" />
+          )}
+          {ticket.status === "cancelled" && (
+            <IconBtn icon="user-clock" size={18} color={COLORS.grayDark} />
+          )}
+          <View style={{ flexDirection: "column", justifyContent: "center" }}>
+            <Text style={card.name}>{ticket.ticketNumber}</Text>
+            <Text style={card.text}>
+              {ticket.selectedDate ? formatDate(ticket.selectedDate) : ""}
+            </Text>
+            <Text style={card.text}>{ticket.selectedTime || ""}</Text>
+          </View>
         </View>
-      </View>
-      <IconBtn icon="angle-right" size={18} onPress={handlePress} />
-    </Pressable>
+        <IconBtn
+          icon="trash"
+          size={18}
+          onPress={handleDelete}
+          color={COLORS.primary}
+        />
+        <IconBtn icon="angle-right" size={18} onPress={handlePress} />
+      </Pressable>
+
+      <SingleBtnModal
+        visible={modalVisible}
+        title="Delete Ticket"
+        description="Are you sure you want to delete this ticket? This action cannot be undone."
+        onRequestClose={confirmDelete}
+        onPress={confirmDelete}
+        btnLabel="Delete"
+        animation={true}
+        extraBtn={
+          <CallToActionBtn
+            label={"I Disagree"}
+            onPress={() => setModalVisible(false)}
+            secondary
+          />
+        }
+      />
+    </>
   );
 }
-
 const ManageTicketDonationsActive = () => {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -634,15 +677,21 @@ const ManageTicketDonationsActive = () => {
   return (
     <View style={ACTIVE.container}>
       <Text style={ACTIVE.title}>Active Tickets</Text>
-      <FlatList
-        data={tickets}
-        renderItem={({ item }) => <Card ticket={item} />}
-        key={tickets.id}
-        keyExtractor={(item) => item.id}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+      {tickets.length === 0 ? (
+        <View style={ACTIVE.loadingContainer}>
+          <Text style={ACTIVE.emptyMessage}>No active tickets available.</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={tickets}
+          renderItem={({ item }) => <Card ticket={item} />}
+          key={tickets.id}
+          keyExtractor={(item) => item.id}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      )}
     </View>
   );
 };
@@ -673,12 +722,17 @@ const ACTIVE = StyleSheet.create({
     fontSize: 18,
     color: COLORS.text,
   },
+  emptyMessage: {
+    fontSize: 18,
+    color: COLORS.text,
+    textAlign: "center",
+    marginTop: 20,
+  },
 });
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    justifyContent: "center",
     padding: 20,
   },
   centeredContainer: {
@@ -698,6 +752,12 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     width: 150,
+  },
+  emptyMessage: {
+    fontSize: 18,
+    color: COLORS.text,
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 

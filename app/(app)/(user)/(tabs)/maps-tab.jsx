@@ -132,7 +132,7 @@ function Maps({ setMapBackground, setMapHeader }) {
             {!hospital.disabled && (
               <Pressable
                 style={styles.hContainer}
-                key={hospital.index}
+                key={hospital.id} // Changed from hospital.index to hospital.id
                 android_ripple={{ radius: 250 }}
                 onPress={() => focusMap(hospital)}
               >

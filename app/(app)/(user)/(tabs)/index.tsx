@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
 import { getHospitals } from "rtx/slices/hospitals";
+import ActionBtn from "components/home/ActionBtn";
 
 export default function HomeTab() {
   const [refreshing, setRefreshing] = useState(false);

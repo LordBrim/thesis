@@ -128,8 +128,7 @@ function Maps({ setMapBackground, setMapHeader }) {
       ) : (
         !selectedHospital &&
         HospitalsData.map((hospital, index) => (
-          <>
-            {!hospital.disabled && (
+            !hospital.disabled && (
               <Pressable
                 style={styles.hContainer}
                 key={hospital.id} // Changed from hospital.index to hospital.id
@@ -145,8 +144,7 @@ function Maps({ setMapBackground, setMapHeader }) {
                   />
                 </View>
               </Pressable>
-            )}
-          </>
+            )
         ))
       )}
     </SafeAreaView>

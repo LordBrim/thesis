@@ -269,11 +269,6 @@ export default function AccountTab({
               }
               label="profile"
             />
-            <Card
-              href="/settings"
-              icon={<FontAwesome6 name="gear" size={22} color={COLORS.text} />}
-              label="settings"
-            />
           </View>
         </View>
 

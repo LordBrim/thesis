@@ -10,12 +10,15 @@ import {
 import { FontAwesome6, Fontisto, Ionicons } from "@expo/vector-icons";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import ReportBarChart from "./ReportBarChart";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "app/store";
-import moment from "moment";
-import { incrementDonation, incrementRequest } from "rtx/slices/reports";
+import {
+  incrementDonation,
+  incrementHospitalReports,
+  incrementRequest,
+} from "rtx/slices/reports";
 
 export default function AdminDashboard() {
   const size = 40;
@@ -69,12 +72,8 @@ export default function AdminDashboard() {
     },
   ];
   const { reports } = useSelector((state: RootState) => state.reports);
-  const [yearlyData, setYearlyData] = useState();
-
-  useEffect(() => {}, []);
-
-  const formatYearlyData = (yearlyData) => {
-    return yearlyData.flatMap((item, index) => [
+  const formatYearlyData = (yearlyData: any) => {
+    return yearlyData.flatMap((item: any) => [
       {
         value: item.donations,
         label: item.year,
@@ -90,7 +89,7 @@ export default function AdminDashboard() {
     ]);
   };
   const formatMonthlyData = (monthlyData) => {
-    return monthlyData.flatMap((item, index) => [
+    return monthlyData.data.flatMap((item) => [
       {
         value: item.donations,
         label: item.month,
@@ -106,7 +105,7 @@ export default function AdminDashboard() {
     ]);
   };
   const formatWeeklyData = (weeklyData) => {
-    return weeklyData.flatMap((item, index) => [
+    return weeklyData.data.flatMap((item) => [
       {
         value: item.donations,
         label: item.week,
@@ -121,23 +120,18 @@ export default function AdminDashboard() {
       },
     ]);
   };
-  interface DailyDataEntry {
-    day: string;
-    donations: number;
-    requests: number;
-  }
-  const formatDailyData = (dailyData: Record<string, DailyDataEntry>) => {
-    return Object.entries(dailyData).flatMap(([date, data]) => [
+  const formatDailyData = (dailyData) => {
+    return dailyData.data.flatMap((item) => [
       {
-        value: data.donations,
-        label: data.day,
+        value: item.donations,
+        label: item.day,
         spacing: 5,
         labelWidth: 35,
         labelTextStyle: { color: "gray" },
         frontColor: COLORS.primary,
       },
       {
-        value: data.requests,
+        value: item.requests,
         frontColor: COLORS.accent,
       },
     ]);
@@ -169,7 +163,6 @@ export default function AdminDashboard() {
           scrollEnabled={false}
         />
       </View>
-
       <View style={styles.section}>
         <Text style={GS.h2}>Transactions</Text>
         <FlatList
@@ -194,7 +187,6 @@ export default function AdminDashboard() {
           scrollEnabled={false}
         />
       </View>
-
       <View style={styles.section}>
         <Text style={GS.h2}>Reports</Text>
 
@@ -253,7 +245,6 @@ export default function AdminDashboard() {
           </View>
         </View>
       </View>
-
       {chart == "Daily" && (
         <ReportBarChart title="Daily" data={formatDailyData(reports.daily)} />
       )}
@@ -275,23 +266,12 @@ export default function AdminDashboard() {
           data={formatYearlyData(reports.yearly)}
         />
       )}
-
-      {/* TODO: Add a button to toggle between bar chart and line area chart  */}
-      {/* <ReportLineChart /> */}
-      <Button
-        title="Log"
-        onPress={() => {
-          console.log("");
-          console.log("Year: " + moment().format("YYYY"));
-          console.log("Month: " + moment().format("MMM"));
-          console.log("Week: " + moment().format("W"));
-          console.log("Day: " + moment().format("ddd"));
-          console.log("Day: " + moment().format("YYYY-MM-DD"));
-        }}
-      ></Button>
       <Button
         title="Increment Donations"
-        onPress={() => dispatch(incrementDonation())}
+        onPress={() => {
+          dispatch(incrementDonation());
+          incrementHospitalReports("UERM Hospital", true);
+        }}
       ></Button>
       <Button
         title="Increment Requests"
@@ -344,298 +324,3 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
 });
-
-const dailyData = [
-  {
-    value: 40,
-    label: "M",
-    spacing: -5,
-    labelWidth: 18,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 50,
-    label: "T",
-    spacing: -5,
-    labelWidth: 18,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 75,
-    label: "W",
-    spacing: -5,
-    labelWidth: 18,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 25, frontColor: COLORS.accent1 },
-  {
-    value: 30,
-    label: "T",
-    spacing: -5,
-    labelWidth: 18,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 60,
-    label: "F",
-    spacing: -5,
-    labelWidth: 18,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 65,
-    label: "S",
-    spacing: -5,
-    labelWidth: 18,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 30, frontColor: COLORS.accent1 },
-  {
-    value: 65,
-    label: "S",
-    spacing: -5,
-    labelWidth: 18,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 30, frontColor: COLORS.accent1 },
-];
-
-const weeklyData = [
-  {
-    value: 65,
-    label: "46",
-    spacing: -5,
-    labelWidth: 25,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 30, frontColor: COLORS.accent1 },
-  {
-    value: 40,
-    label: "47",
-    spacing: -5,
-    labelWidth: 25,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 50,
-    label: "48",
-    spacing: -5,
-    labelWidth: 25,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 75,
-    label: "49",
-    spacing: -5,
-    labelWidth: 25,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 25, frontColor: COLORS.accent1 },
-  {
-    value: 30,
-    label: "50",
-    spacing: -5,
-    labelWidth: 25,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 60,
-    label: "51",
-    spacing: -5,
-    labelWidth: 25,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 65,
-    label: "52",
-    spacing: -5,
-    labelWidth: 25,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 30, frontColor: COLORS.accent1 },
-];
-
-const monthlyData = [
-  {
-    value: 40,
-    label: "Jan",
-    spacing: -5,
-    labelWidth: 32,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 50,
-    label: "Feb",
-    spacing: -5,
-    labelWidth: 32,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 75,
-    label: "Mar",
-    spacing: -5,
-    labelWidth: 32,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 25, frontColor: COLORS.accent1 },
-  {
-    value: 30,
-    label: "Apr",
-    spacing: -5,
-    labelWidth: 32,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 60,
-    label: "May",
-    spacing: -5,
-    labelWidth: 32,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 65,
-    label: "Jun",
-    spacing: -5,
-    labelWidth: 32,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 30, frontColor: COLORS.accent1 },
-  {
-    value: 65,
-    label: "Jul",
-    spacing: -5,
-    labelWidth: 32,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 30, frontColor: COLORS.accent1 },
-];
-
-const yearlyData = [
-  {
-    value: 40,
-    label: "2018",
-    spacing: -5,
-    labelWidth: 37,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 40,
-    label: "2019",
-    spacing: -5,
-    labelWidth: 37,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 50,
-    label: "2020",
-    spacing: -5,
-    labelWidth: 37,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 75,
-    label: "2021",
-    spacing: -5,
-    labelWidth: 37,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 25, frontColor: COLORS.accent1 },
-  {
-    value: 30,
-    label: "2022",
-    spacing: -5,
-    labelWidth: 37,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 20, frontColor: COLORS.accent1 },
-  {
-    value: 60,
-    label: "2023",
-    spacing: -5,
-    labelWidth: 37,
-    labelTextStyle: { color: "gray" },
-    frontColor: COLORS.primary,
-  },
-  { value: 40, frontColor: COLORS.accent1 },
-  {
-    value: 65,
-    label: "2024",
-    spacing: -5,
-    labelWidth: 37,
-    labelTextStyle: { color: "gray", textFontSize: 12 },
-    frontColor: COLORS.primary,
-  },
-  { value: 30, frontColor: COLORS.accent1 },
-];
-
-const eventsData = [
-  {
-    value: 40,
-    frontColor: COLORS.primary,
-  },
-  {
-    value: 50,
-    frontColor: COLORS.primary,
-  },
-  {
-    value: 75,
-    frontColor: COLORS.primary,
-  },
-  {
-    value: 30,
-    frontColor: COLORS.primary,
-  },
-  {
-    value: 60,
-    frontColor: COLORS.primary,
-  },
-  {
-    value: 65,
-    frontColor: COLORS.primary,
-  },
-  {
-    value: 65,
-    frontColor: COLORS.primary,
-  },
-];

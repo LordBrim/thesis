@@ -1,21 +1,16 @@
-import {
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  Pressable,
-  Text,
-} from "react-native";
+import { StyleSheet, SafeAreaView, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import AdminDashboard from "components/home/AdminDashboard";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { COLORS, SPACES, SIZES } from "../../../../constants/theme";
-import { router, useNavigation, Link } from "expo-router";
+import { router } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "app/store";
 import { getCurrentUser } from "rtx/slices/user";
 import { getHospitals } from "rtx/slices/hospitals";
+import { getHospitalReports } from "rtx/slices/reports";
 
 export default function HomeTab() {
   const [modalVisible, setModalVisible] = useState(false); // Set initial state to false
@@ -23,10 +18,12 @@ export default function HomeTab() {
     setModalVisible(false);
     router.navigate("(app)/(account)/profile");
   };
+  const { user } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(getCurrentUser());
     dispatch(getHospitals());
+    dispatch(getHospitalReports(user.hospitalName));
   }, []);
   return (
     <SafeAreaView style={styles.container}>

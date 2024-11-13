@@ -21,20 +21,14 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "firebase-config";
 import { firestoreOperations } from "../../../../firestore-services";
 import IconBtn from "components/common/IconButton";
-import DropDownPicker from "react-native-dropdown-picker";
-import { createAdmins } from "rtx/unused/admins";
+import { createAdmin } from "rtx/slices/admins";
 
-export default function ManageAdminsCreate() {
+export default function ManageAdminCreate() {
+  const { user } = useSelector((state: RootState) => state.user);
+  const [newTitle, setNewTitle] = useState(user.hospitalName);
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [open, setOpen] = useState(false);
-  const [selectedHospital, setSelectedHospital] = useState(null);
-  const { hospitals } = useSelector((state: RootState) => state.hospitals);
-  const hospitalNames = hospitals.map((hospital) => ({
-    label: hospital.name,
-    value: hospital.name,
-  }));
   const dispatch = useDispatch();
   const navigation = useNavigation();
   useEffect(() => {
@@ -54,7 +48,7 @@ export default function ManageAdminsCreate() {
         </TouchableOpacity>
       ),
     });
-  }, [navigation, newUsername, newEmail, newPassword, selectedHospital]);
+  }, [navigation, newTitle, newUsername, newEmail, newPassword]);
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Create Admin",
@@ -81,7 +75,7 @@ export default function ManageAdminsCreate() {
         password: newPassword,
         displayName: newUsername,
         role: "admin",
-        hospitalName: selectedHospital,
+        hospitalName: newTitle,
       };
       await firestoreOperations.addDocument(
         "User",
@@ -89,14 +83,14 @@ export default function ManageAdminsCreate() {
         response.user.uid
       );
       dispatch(
-        createAdmins({
-          newAdmins: {
+        createAdmin({
+          newAdmin: {
             disabled: false,
             email: newEmail,
             password: newPassword,
             displayName: newUsername,
             role: "admin",
-            hospitalName: selectedHospital,
+            hospitalName: newTitle,
           },
         })
       );
@@ -106,42 +100,18 @@ export default function ManageAdminsCreate() {
       alert("Registration Failed:" + error.message);
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.scrollview}>
-        <DropDownPicker
-          open={open}
-          value={selectedHospital}
-          items={hospitalNames}
-          setOpen={setOpen}
-          setValue={setSelectedHospital}
-          placeholder="Select a hospital..."
-          style={{
-            width: "100%",
-            flexDirection: "row",
-            backgroundColor: "transparent",
-            justifyContent: "space-between",
-          }}
-          dropDownContainerStyle={{
-            backgroundColor: COLORS.background,
-          }}
-          labelStyle={{
-            textTransform: "capitalize",
-            backgroundColor: COLORS.background,
-            paddingHorizontal: 4,
-            borderRadius: 50,
-          }}
-          placeholderStyle={{
-            color: COLORS.slate400,
-          }}
-          scrollViewProps={{}}
-        />
+      <ScrollView
+        contentContainerStyle={styles.scrollview}
+        overScrollMode="never"
+        persistentScrollbar={true}
+      >
         <TextInputWrapper label="Username">
           <TextInput
             value={newUsername}
             onChangeText={(username) => setNewUsername(username)}
-            placeholder="Enter admins username..."
+            placeholder="Enter admin username..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -155,7 +125,7 @@ export default function ManageAdminsCreate() {
           <TextInput
             value={newEmail}
             onChangeText={(email) => setNewEmail(email)}
-            placeholder="Enter admins email..."
+            placeholder="Enter admin email..."
             autoCapitalize="none"
             autoCorrect={true}
             enablesReturnKeyAutomatically
@@ -168,7 +138,7 @@ export default function ManageAdminsCreate() {
         <TextInputWrapper label="Password" error={!!passwordError}>
           <TextInput
             value={newPassword}
-            placeholder="Enter admins password..."
+            placeholder="Enter admin password..."
             onChangeText={(password) => setNewPassword(password)}
             autoCapitalize="none"
             autoCorrect={true}
@@ -197,7 +167,7 @@ export default function ManageAdminsCreate() {
             the proper account credentials.
           </Text>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

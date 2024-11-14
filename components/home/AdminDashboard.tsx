@@ -45,11 +45,6 @@ export default function AdminDashboard() {
       icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
       title: "Events",
     },
-    // {
-    //   href: "/(app)/(admin)/(home)/manage-faq",
-    //   icon: <Ionicons name="chatbubbles" size={size} color={COLORS.primary} />,
-    //   title: "FAQ",
-    // },
     {
       href: "/(app)/(admin)/(home)/manage-incentives",
       icon: <FontAwesome6 name="gifts" size={size} color={COLORS.primary} />,
@@ -96,7 +91,7 @@ export default function AdminDashboard() {
     return Object.entries(data).flatMap(([key, item]) => [
       {
         value: item.donations,
-        label: moment(key, "M").format("MMM"),
+        label: key,
         spacing: 5,
         labelWidth: 35,
         labelTextStyle: { color: "gray" },
@@ -140,18 +135,6 @@ export default function AdminDashboard() {
       },
     ]);
   };
-  const formatYearlyData = (yearlyData: ReportsState["yearly"]) =>
-    formatDataYearly(yearlyData);
-  const formatMonthlyData = (monthlyData: ReportsState["monthly"]) =>
-    Object.entries(monthlyData).flatMap(([year, months]) =>
-      formatDataMonthly(months)
-    );
-  const formatWeeklyData = (weeklyData: ReportsState["weekly"]) =>
-    Object.entries(weeklyData).flatMap(([year, weeks]) =>
-      formatDataWeekly(weeks)
-    );
-  const formatDailyData = (dailyData: ReportsState["daily"]) =>
-    Object.entries(dailyData).flatMap(([year, days]) => formatDataDaily(days));
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
   return (
@@ -263,16 +246,16 @@ export default function AdminDashboard() {
         </View>
       </View>
       {chart == "Daily" && (
-        <ReportBarChart title="Daily" data={formatDailyData(daily)} />
+        <ReportBarChart title="Daily" data={formatDataDaily(daily)} />
       )}
       {chart == "Weekly" && (
-        <ReportBarChart title="Weekly" data={formatWeeklyData(weekly)} />
+        <ReportBarChart title="Weekly" data={formatDataWeekly(weekly)} />
       )}
       {chart == "Monthly" && (
-        <ReportBarChart title="Monthly" data={formatMonthlyData(monthly)} />
+        <ReportBarChart title="Monthly" data={formatDataMonthly(monthly)} />
       )}
       {chart == "Yearly" && (
-        <ReportBarChart title="Yearly" data={formatYearlyData(yearly)} />
+        <ReportBarChart title="Yearly" data={formatDataYearly(yearly)} />
       )}
       <Button
         title="Increment Donations"

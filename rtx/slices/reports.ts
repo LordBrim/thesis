@@ -13,7 +13,7 @@ import {
 import moment from "moment";
 
 export const getHospitalReports = createAsyncThunk(
-  "reports/getHospitalReports",
+  "getHospitalReports",
   async (hospitalName: string) => {
     try {
       const { year, month, week, date } = {
@@ -28,15 +28,20 @@ export const getHospitalReports = createAsyncThunk(
       );
       if (snapshot.empty) return initialState;
       const docData = snapshot.docs[0].data();
+      const limitEntries = (data: Record<string, any>, limit: number) => {
+        return Object.keys(data)
+          .slice(0, limit)
+          .reduce((acc, key) => {
+            acc[key] = data[key];
+            return acc;
+          }, {} as Record<string, { donations: number; requests: number }>);
+      };
       return {
-        hospitalName: docData.hospitalName,
-        yearly: docData.yearly?.[year] ?? { donations: 0, requests: 0 },
-        monthly: docData.monthly?.[year]?.[month] ?? {
-          donations: 0,
-          requests: 0,
-        },
-        weekly: docData.weekly?.[year]?.[week] ?? { donations: 0, requests: 0 },
-        daily: docData.daily?.[year]?.[date] ?? { donations: 0, requests: 0 },
+        hospitalName: docData.hospitalName || hospitalName,
+        yearly: limitEntries(docData.yearly ?? {}, 5),
+        monthly: docData.monthly?.[year] ?? {},
+        weekly: limitEntries(docData.weekly?.[year] ?? {}, 5),
+        daily: limitEntries(docData.daily?.[year] ?? {}, 7),
       };
     } catch (error) {
       console.error("Error fetching hospital reports:", error);
@@ -59,12 +64,11 @@ export const incrementHospitalReports = async (
       : snapshot.docs[0].ref;
     const batch = writeBatch(FIRESTORE_DB);
     const field = isDonation ? "donations" : "requests";
-    const { year, month, week, date, day } = {
+    const { year, month, week, date } = {
       year: moment().format("YYYY"),
       month: moment().format("MMM"),
       week: moment().format("W"),
       date: moment().format("YYYY-MM-DD"),
-      day: moment().format("ddd"),
     };
     batch.update(docRef, {
       [`yearly.${year}.${field}`]: increment(1),

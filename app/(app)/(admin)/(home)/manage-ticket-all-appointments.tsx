@@ -249,7 +249,7 @@ export default function ManageTicketAllAppointments() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <ActivityIndicator size="large" color={COLORS.primary} />
-            <Text style={styles.modalText}>Fetching events...</Text>
+            <Text style={styles.modalText}>Fetching appointment data...</Text>
           </View>
         </View>
       </Modal>

@@ -4,7 +4,15 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants/";
 
 const UpdateCard = ({ update }) => {
-  const { type, status = "", message, date, time, hospital } = update;
+  const {
+    type,
+    status = "",
+    message,
+    date,
+    time,
+    hospital,
+    isComplete,
+  } = update;
   const size = 24;
   const lowerCaseStatus = status?.toLowerCase();
   console.log(update.message, update.status, update.type);
@@ -83,6 +91,22 @@ const UpdateCard = ({ update }) => {
             <AntDesign name="star" size={size} color="#daa520" />
           </View>
         )}
+        {isComplete && lowerCaseStatus === "accepted" && (
+          <View
+            style={[
+              styles.cardIcon,
+              {
+                backgroundColor: "#d4edda",
+              },
+            ]}
+          >
+            <Ionicons
+              name="checkmark-done-circle"
+              size={size}
+              color="#28a745"
+            />
+          </View>
+        )}
       </View>
       <View style={{ width: "100%", flex: 1, gap: 2 }}>
         {message === "thanks" && (
@@ -147,6 +171,20 @@ const UpdateCard = ({ update }) => {
             </Text>
           </Text>
         ) : null}
+        {isComplete && lowerCaseStatus === "accepted" && (
+          <Text style={styles.cardMessage}>
+            Your request for a{" "}
+            {type === "appointment" && "donation appointment"}
+            {type === "request" && "blood unit"}
+            {type === "transfer" && `transfer of blood units`} has been{" "}
+            <Text style={{ color: "green", fontWeight: "700" }}>completed</Text>{" "}
+            at
+            <Text style={{ fontWeight: "700" }}>
+              {" "}
+              {hospital || "the hospital"}
+            </Text>
+          </Text>
+        )}
         <Text style={styles.cardDatetime}>
           {date || "Unknown date"} At {time || "Unknown time"}
         </Text>

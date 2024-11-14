@@ -18,6 +18,8 @@ import IconBtn from "../../../../components/common/IconButton";
 import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import axios from "axios";
+
 type CustomButtonProps = {
   title: string;
   onPress: () => void;
@@ -35,8 +37,7 @@ interface TicketState {
     | "accepted"
     | "cancelled"
     | "completed"
-    | "cancelled"
-    | "missing";
+    | "cancelled";
   userUID: string;
   userEmail: string;
   age?: number;
@@ -92,6 +93,110 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   </Pressable>
 );
 
+const getEmailContent = (status: string) => {
+  let subject = "Ticket Status Update";
+  let text = `Your ticket status has been updated to: ${status}.`;
+  let html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+      <h2 style="color: #333;">Lifeline Ticket Status Update</h2>
+      <p style="color: #555;">Dear User,</p>
+      <p style="color: #555;">Your ticket status has been updated to: <strong>${status}</strong>.</p>
+      <p style="color: #555;">If you have any questions, please contact our support team.</p>
+      <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+      <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+      <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+    </div>
+  `;
+
+  switch (status) {
+    case "accepted":
+      subject = "Appointment Accepted";
+      text = "Congratulations! Your appointment has been accepted.";
+      html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333;">Lifeline Appointment Accepted</h2>
+          <p style="color: #555;">Dear User,</p>
+          <p style="color: #555;">We are pleased to inform you that your appointment has been accepted.</p>
+          <p style="color: #555;">If you have any questions, please contact our support team.</p>
+          <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+        </div>
+      `;
+      break;
+    case "rejected":
+      subject = "Appointment Rejected";
+      text = "Unfortunately, your appointment has been rejected.";
+      html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333;">Lifeline Appointment Rejected</h2>
+          <p style="color: #555;">Dear User,</p>
+          <p style="color: #555;">We regret to inform you that your appointment has been rejected. Please contact our support team for further assistance.</p>
+          <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+        </div>
+      `;
+      break;
+    case "completed":
+      subject = "Appointment Completed";
+      text = "Your appointment has been successfully completed.";
+      html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333;">Lifeline Appointment Completed</h2>
+          <p style="color: #555;">Dear User,</p>
+          <p style="color: #555;">We are pleased to inform you that your appointment has been successfully completed. Thank you for your participation.</p>
+          <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+        </div>
+      `;
+      break;
+    // Add more cases as needed
+  }
+
+  return { subject, text, html };
+};
+
+const sendEmailNotification = async (email: string, status: string) => {
+  const API_KEY = "d1440a571533e6c003ef72358ff55e5a-f6fe91d3-6d5fa136";
+  const DOMAIN = "lifeline-ph.tech";
+
+  const { subject, text, html } = getEmailContent(status);
+
+  const data = new URLSearchParams({
+    from: "Lifeline Support <support@lifeline.com>",
+    to: email,
+    subject: subject,
+    text: text,
+    html: html,
+  });
+
+  try {
+    const response = await axios.post(
+      `https://api.mailgun.net/v3/${DOMAIN}/messages`,
+      data,
+      {
+        auth: {
+          username: "api",
+          password: API_KEY,
+        },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("Status update email sent successfully");
+    } else {
+      console.error("Failed to send email:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error sending status update email:", error);
+  }
+};
+
 export default function ManageTicketReview() {
   const { ticket } = useLocalSearchParams();
   const [ticketData, setTicketData] = useState<TicketState | null>(null);
@@ -103,7 +208,6 @@ export default function ManageTicketReview() {
     if (ticket) {
       setTicketData(JSON.parse(ticket as string)); // Deserialize the ticket data
     }
-    console.log("TICKET REVIEW SCREEN" + ticket);
   }, [ticket]);
 
   if (!ticketData) {
@@ -139,7 +243,6 @@ export default function ManageTicketReview() {
       | "cancelled"
       | "completed"
       | "cancelled"
-      | "missing"
   ) => {
     if (!ticketData) return;
 
@@ -158,6 +261,7 @@ export default function ManageTicketReview() {
         message: updatedTicketData.message,
       });
       await refreshTicketData();
+      await sendEmailNotification(ticketData.userEmail, status); // Send email notification
     } catch (error) {
       console.error("Error updating ticket:", error);
     } finally {
@@ -197,6 +301,7 @@ export default function ManageTicketReview() {
       }
 
       await refreshTicketData();
+      await sendEmailNotification(ticketData.userEmail, "completed"); // Send email notification
 
       Alert.alert(
         "Donation Completed",

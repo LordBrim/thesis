@@ -5,12 +5,11 @@ import {
   query,
   getFirestore,
 } from "firebase/firestore";
-import { usePushNotification } from "./usePushNotification";
 import { getAuth } from "firebase/auth";
+
 const useFirestoreListener = () => {
   const [updates, setUpdates] = useState([]);
   const processedUpdatesRef = useRef(new Map());
-  const { expoPushToken } = usePushNotification();
   const db = getFirestore();
   const auth = getAuth();
   const user = auth.currentUser;
@@ -86,12 +85,11 @@ const useFirestoreListener = () => {
             );
             if (
               previousStatus !== nu.update.status &&
-              (nu.update.status === "ACCEPTED" ||
-                nu.update.status === "REJECTED" ||
+              (nu.update.status === "accepted" ||
+                nu.update.status === "rejected" ||
                 nu.changeType === "added")
             ) {
               processedUpdatesRef.current.set(nu.update.id, nu.update.status);
-              sendPushNotification(expoPushToken, nu.update);
               return true;
             }
             return false;
@@ -116,49 +114,9 @@ const useFirestoreListener = () => {
       unsubscribeDonate();
       unsubscribeRequest();
     };
-  }, [expoPushToken, user]);
+  }, [user]);
 
   return updates;
 };
 
 export default useFirestoreListener;
-const sendPushNotification = async (expoPushToken, update) => {
-  console.log("Attempting to send push notification");
-  if (!expoPushToken) {
-    console.log("No Expo push token available. Skipping notification.");
-    return;
-  }
-
-  try {
-    let notificationBody = `The status of your ${update.type} has changed to ${update.status}.`;
-
-    const message = {
-      to: expoPushToken,
-      sound: "default",
-      title: `${update.type} Update: ${update.status}`,
-      body: notificationBody,
-      data: {
-        update,
-        timestamp: new Date().getTime().toString(),
-      },
-      icon: "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/icon.png?alt=media&token=477e9720-9f25-4429-9db4-c7f6286bfdb1",
-    };
-
-    console.log("Sending push notification:", message);
-
-    const response = await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(message),
-    });
-
-    const responseData = await response.json();
-    console.log("Push notification response:", responseData);
-  } catch (error) {
-    console.error("Failed to send push notification:", error);
-  }
-};

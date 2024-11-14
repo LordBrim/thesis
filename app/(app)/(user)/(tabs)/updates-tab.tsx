@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { SIZES, COLORS } from "../../../../constants";
-import {
-  usePushNotification,
-  CustomNotification,
-} from "hooks/usePushNotification";
 import useFirestoreListener from "hooks/useFirestoreListener";
 import UpdateCard from "../(updates)/update-card";
 
@@ -18,7 +14,6 @@ interface Update {
 }
 
 export default function UpdatesTab() {
-  const { notification, expoPushToken } = usePushNotification(); // Extract expoPushToken
   const updates = useFirestoreListener();
   const [refreshing, setRefreshing] = useState(false);
 
@@ -26,7 +21,6 @@ export default function UpdatesTab() {
   const [filter, setFilter] = useState<string>("All");
 
   const prevUpdatesRef = useRef<Update[]>([]);
-  const prevNotificationsRef = useRef<CustomNotification[]>([]);
 
   useEffect(() => {
     const newUpdates = updates.filter(
@@ -37,14 +31,8 @@ export default function UpdatesTab() {
             prevUpdate.timestamp === update.timestamp
         )
     );
-    const newNotifications = (notification || []).filter(
-      (notif: CustomNotification) =>
-        !prevNotificationsRef.current.some(
-          (prevNotif) => prevNotif.id === notif.id
-        )
-    );
 
-    const newCombinedData = new Map<string, Update | CustomNotification>(
+    const newCombinedData = new Map<string, Update>(
       combinedData.map((item) => [item.id + item.timestamp, item])
     );
 
@@ -52,16 +40,6 @@ export default function UpdatesTab() {
     newUpdates.forEach((update) => {
       if (isValidUpdate(update)) {
         newCombinedData.set(update.id + update.timestamp, formatUpdate(update));
-      }
-    });
-
-    // Process new notifications
-    newNotifications.forEach((notif) => {
-      if (isValidNotification(notif)) {
-        newCombinedData.set(
-          notif.id + notif.timestamp,
-          formatNotification(notif)
-        );
       }
     });
 
@@ -73,8 +51,7 @@ export default function UpdatesTab() {
     setCombinedData(sortedData as Update[]);
 
     prevUpdatesRef.current = updates;
-    prevNotificationsRef.current = notification || [];
-  }, [updates, notification]);
+  }, [updates]);
 
   const filteredData = combinedData.filter((item) => {
     if (filter === "All") return true;
@@ -97,33 +74,10 @@ export default function UpdatesTab() {
     );
   };
 
-  const isValidNotification = (notif: CustomNotification): boolean => {
-    return notif && notif.date && isValidDate(notif.date.toString());
-  };
-
   const formatUpdate = (update: Update): Update => {
     const date = new Date(update.date);
     return {
       ...update,
-      date: date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "2-digit",
-      }),
-      time: date.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-    };
-  };
-
-  const formatNotification = (
-    notif: CustomNotification
-  ): CustomNotification => {
-    const date = new Date(notif.date.toString());
-    return {
-      ...notif,
       date: date.toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",

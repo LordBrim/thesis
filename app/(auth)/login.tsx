@@ -215,7 +215,7 @@ export default function LoginScreen() {
       ),
       title: "Staff",
       email: "munaru@mail.com",
-      password: "123456",
+      password: "admin123",
     },
     {
       icon: (

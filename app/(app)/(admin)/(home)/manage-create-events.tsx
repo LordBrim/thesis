@@ -321,7 +321,6 @@ export default function CreateEvent({ navigation }) {
           <View
             style={{
               borderWidth: 1,
-              borderRadius: 20,
               padding: 10,
               marginVertical: 10,
             }}

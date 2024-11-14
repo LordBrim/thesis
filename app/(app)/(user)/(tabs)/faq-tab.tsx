@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   Image,
+  Animated,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -149,6 +150,7 @@ export default function FAQTab() {
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState(FAQ_DATA);
   const [modalVisible, setModalVisible] = useState(false);
+  const [openQuestion, setOpenQuestion] = useState<string | null>(null);
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -160,6 +162,11 @@ export default function FAQTab() {
     })).filter((section) => section.data.length > 0);
     setFilteredData(filtered);
   };
+
+  const handleToggleQuestion = (question: string) => {
+    setOpenQuestion(openQuestion === question ? null : question);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView overScrollMode="never" stickyHeaderIndices={[1]}>
@@ -197,7 +204,11 @@ export default function FAQTab() {
             renderItem={({ item }) => (
               <View>
                 <Text style={panel.title}>{item.title}</Text>
-                <QuestionPanel questions={item.data} />
+                <QuestionPanel
+                  questions={item.data}
+                  openQuestion={openQuestion}
+                  onToggleQuestion={handleToggleQuestion}
+                />
               </View>
             )}
             keyExtractor={(item) => item.title}
@@ -213,16 +224,27 @@ export default function FAQTab() {
 
 type IQuestionPanel = {
   questions: Array<{ question: string; answer: string }>;
+  openQuestion: string | null;
+  onToggleQuestion: (question: string) => void;
 };
 
-export function QuestionPanel({ questions }: IQuestionPanel) {
+export function QuestionPanel({
+  questions,
+  openQuestion,
+  onToggleQuestion,
+}: IQuestionPanel) {
   return (
     <View style={panel.container}>
       <FlatList
         contentContainerStyle={(panel.container, { gap: 16 })}
         data={questions}
         renderItem={({ item }) => (
-          <QuestionCard question={item.question} answer={item.answer} />
+          <QuestionCard
+            question={item.question}
+            answer={item.answer}
+            isOpen={openQuestion === item.question}
+            onToggle={onToggleQuestion}
+          />
         )}
         keyExtractor={(item) => item.question}
       />
@@ -233,32 +255,96 @@ export function QuestionPanel({ questions }: IQuestionPanel) {
 type IQuestionCard = {
   question: string;
   answer: string;
+  isOpen: boolean;
+  onToggle: (question: string) => void;
 };
 
-export function QuestionCard({ question, answer }: IQuestionCard) {
-  const [open, setOpen] = useState(false);
+export function QuestionCard({
+  question,
+  answer,
+  isOpen,
+  onToggle,
+}: IQuestionCard) {
+  const animatedHeight = useState(new Animated.Value(0))[0];
+
+  useEffect(() => {
+    Animated.timing(animatedHeight, {
+      toValue: isOpen ? 100 : 0, // Adjust this value based on the content height
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [isOpen, animatedHeight]);
+
   return (
-    <>
-      <Pressable
-        style={card.qContainer}
-        onPress={open ? () => setOpen(false) : () => setOpen(true)}
-        android_ripple={{ radius: 250 }}
-      >
-        <Text style={card.question}>{question}</Text>
-        {open ? (
-          <IconBtn icon="minus" size={18} onPress={() => setOpen(false)} />
-        ) : (
-          <IconBtn icon="plus" size={18} onPress={() => setOpen(true)} />
-        )}
-      </Pressable>
-      {open ? (
-        <View style={card.aContainer}>
-          <Text style={card.answer}>{answer}</Text>
-        </View>
-      ) : null}
-    </>
+    <Pressable
+      style={isOpen ? card.openContainer : card.qContainer}
+      onPress={() => onToggle(question)}
+      android_ripple={{ radius: 250 }}
+    >
+      <Text style={isOpen ? card.openQuestion : card.question}>{question}</Text>
+      {isOpen ? (
+        <>
+          <Animated.View style={{ height: animatedHeight }}>
+            <Text style={card.answer}>{answer}</Text>
+          </Animated.View>
+        </>
+      ) : (
+        <IconBtn
+          icon="plus"
+          size={18}
+          onPress={() => onToggle(question)}
+          color="white"
+        />
+      )}
+    </Pressable>
   );
 }
+
+const card = StyleSheet.create({
+  qContainer: {
+    width: "95%",
+    minHeight: 35,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    backgroundColor: COLORS.primary,
+    marginLeft: 5,
+    borderRadius: 5,
+    marginVertical: 7,
+  },
+  openContainer: {
+    width: "95%",
+    minHeight: 35,
+    flexDirection: "column",
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    paddingTop: 8,
+    paddingBottom: 16,
+    borderWidth: 1,
+    borderColor: "black",
+    marginLeft: 5,
+    borderRadius: 10,
+    marginVertical: 20,
+  },
+  question: {
+    flex: 1,
+    fontWeight: "bold",
+    color: "white",
+    fontSize: 14,
+  },
+  openQuestion: {
+    flex: 1,
+    fontWeight: "bold",
+    color: COLORS.primary,
+    fontSize: 16,
+  },
+  answer: {
+    flex: 1,
+    flexDirection: "row",
+    textAlign: "justify",
+    fontSize: 16,
+  },
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -281,6 +367,7 @@ const styles = StyleSheet.create({
   },
   panels: {
     gap: 20,
+    alignItems: "center",
   },
   modalView: {
     flex: 1,
@@ -308,42 +395,14 @@ const styles = StyleSheet.create({
 const panel = StyleSheet.create({
   container: {
     flex: 1,
-    borderColor: COLORS.slate100,
+    borderColor: COLORS.slate500,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     fontSize: 18,
     fontWeight: "bold",
     color: COLORS.primary,
-  },
-});
-
-const card = StyleSheet.create({
-  qContainer: {
-    width: "100%",
-    minHeight: 35,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-  },
-  question: {
-    flex: 1,
-    fontWeight: "bold",
-  },
-  aContainer: {
-    width: "100%",
-    minHeight: 35,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  answer: {
-    flex: 1,
-    flexDirection: "row",
-    textAlign: "justify",
-    fontSize: 16,
   },
 });

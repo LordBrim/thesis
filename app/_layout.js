@@ -21,6 +21,8 @@ export default function StackLayout() {
         initialRouteName="(auth)/login"
         screenOptions={{ headerTitle: "" }}
       >
+
+
         {/* Authentication Screens */}
         <Stack.Screen name="(auth)/login" />
         <Stack.Screen name="(auth)/register" />
@@ -111,6 +113,7 @@ export default function StackLayout() {
         <Stack.Screen name="(aux)/empty" />
         <Stack.Screen name="(aux)/no-internet" />
         <Stack.Screen name="(aux)/terms-and-conditions" />
+        
       </Stack>
       <Toastable />
     </Provider>

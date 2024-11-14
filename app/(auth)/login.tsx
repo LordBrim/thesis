@@ -43,14 +43,6 @@ export default function LoginScreen() {
     });
   }, []);
   const router = useRouter();
-  const [fontsLoaded] = useFonts({
-    Raleway_400Regular,
-    Raleway_500Medium,
-    Grotesk: require("../../assets/fonts/Grotesk.ttf"),
-    Grotesk_regular: require("../../assets/fonts/Grotesk_Reg.ttf"),
-    BakbakOne: require("../../assets/fonts/BakbakOne.ttf"),
-  });
-
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
   const [emailError, setEmailError] = useState("");

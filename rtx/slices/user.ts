@@ -36,7 +36,7 @@ interface UserState {
       timesCompleted: number;
     }>;
     disabled: boolean;
-    sex: "male" | "female"; // Add sex property
+    sex: "male" | "female";
   };
 }
 
@@ -57,7 +57,7 @@ const initialState: UserState = {
       },
     ],
     disabled: false,
-    sex: "male", // Set default sex
+    sex: "male",
   },
 };
 
@@ -76,7 +76,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const selectCount = (state: RootState) => state.user.user;
-export const selectUser = (state: RootState) => state.user.user;
+export const selectCount = (state: RootState) => state.user;
+export const selectUser = (state: RootState) => state.user;
 
 export default userSlice.reducer;

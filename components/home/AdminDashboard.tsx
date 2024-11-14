@@ -18,7 +18,9 @@ import {
   incrementDonation,
   incrementHospitalReports,
   incrementRequest,
+  ReportsState,
 } from "rtx/slices/reports";
+import moment from "moment";
 
 export default function AdminDashboard() {
   const size = 40;
@@ -43,11 +45,6 @@ export default function AdminDashboard() {
       icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
       title: "Events",
     },
-    // {
-    //   href: "/(app)/(admin)/(home)/manage-faq",
-    //   icon: <Ionicons name="chatbubbles" size={size} color={COLORS.primary} />,
-    //   title: "FAQ",
-    // },
     {
       href: "/(app)/(admin)/(home)/manage-incentives",
       icon: <FontAwesome6 name="gifts" size={size} color={COLORS.primary} />,
@@ -71,12 +68,14 @@ export default function AdminDashboard() {
       title: "User\nRequests",
     },
   ];
-  const { reports } = useSelector((state: RootState) => state.reports);
-  const formatYearlyData = (yearlyData) => {
-    return yearlyData.flatMap((item) => [
+  const { yearly, monthly, weekly, daily } = useSelector(
+    (state: RootState) => state.reports
+  );
+  const formatDataYearly = (data: Record<string, any>) => {
+    return Object.entries(data).flatMap(([key, item]) => [
       {
         value: item.donations,
-        label: item.year,
+        label: key,
         spacing: 5,
         labelWidth: 35,
         labelTextStyle: { color: "gray" },
@@ -88,11 +87,11 @@ export default function AdminDashboard() {
       },
     ]);
   };
-  const formatMonthlyData = (monthlyData) => {
-    return monthlyData.data.flatMap((item) => [
+  const formatDataMonthly = (data: Record<string, any>) => {
+    return Object.entries(data).flatMap(([key, item]) => [
       {
         value: item.donations,
-        label: item.month,
+        label: key,
         spacing: 5,
         labelWidth: 35,
         labelTextStyle: { color: "gray" },
@@ -104,11 +103,11 @@ export default function AdminDashboard() {
       },
     ]);
   };
-  const formatWeeklyData = (weeklyData) => {
-    return weeklyData.data.flatMap((item) => [
+  const formatDataWeekly = (data: Record<string, any>) => {
+    return Object.entries(data).flatMap(([key, item]) => [
       {
         value: item.donations,
-        label: item.week,
+        label: key,
         spacing: 5,
         labelWidth: 35,
         labelTextStyle: { color: "gray" },
@@ -120,11 +119,11 @@ export default function AdminDashboard() {
       },
     ]);
   };
-  const formatDailyData = (dailyData) => {
-    return dailyData.data.flatMap((item) => [
+  const formatDataDaily = (data: Record<string, any>) => {
+    return Object.entries(data).flatMap(([key, item]) => [
       {
         value: item.donations,
-        label: item.day,
+        label: moment(key).format("ddd"),
         spacing: 5,
         labelWidth: 35,
         labelTextStyle: { color: "gray" },
@@ -137,6 +136,7 @@ export default function AdminDashboard() {
     ]);
   };
   const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.section}>
@@ -246,36 +246,30 @@ export default function AdminDashboard() {
         </View>
       </View>
       {chart == "Daily" && (
-        <ReportBarChart title="Daily" data={formatDailyData(reports.daily)} />
+        <ReportBarChart title="Daily" data={formatDataDaily(daily)} />
       )}
       {chart == "Weekly" && (
-        <ReportBarChart
-          title="Weekly"
-          data={formatWeeklyData(reports.weekly)}
-        />
+        <ReportBarChart title="Weekly" data={formatDataWeekly(weekly)} />
       )}
       {chart == "Monthly" && (
-        <ReportBarChart
-          title="Monthly"
-          data={formatMonthlyData(reports.monthly)}
-        />
+        <ReportBarChart title="Monthly" data={formatDataMonthly(monthly)} />
       )}
       {chart == "Yearly" && (
-        <ReportBarChart
-          title="Yearly"
-          data={formatYearlyData(reports.yearly)}
-        />
+        <ReportBarChart title="Yearly" data={formatDataYearly(yearly)} />
       )}
       <Button
         title="Increment Donations"
         onPress={() => {
           dispatch(incrementDonation());
-          incrementHospitalReports("UERM Hospital", true);
+          incrementHospitalReports(user.hospitalName, true);
         }}
       ></Button>
       <Button
         title="Increment Requests"
-        onPress={() => dispatch(incrementRequest())}
+        onPress={() => {
+          dispatch(incrementRequest());
+          incrementHospitalReports(user.hospitalName, false);
+        }}
       ></Button>
     </SafeAreaView>
   );

@@ -20,10 +20,10 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "app/store";
 import { incrementHospitalReports, incrementRequest } from "rtx/slices/reports";
+import axios from "axios";
 
 interface TicketState {
   id: string;
@@ -127,10 +127,98 @@ export default function ManageTicketReview() {
     return moment(dateString, "YYYY-MM-DD").format("MMMM D, YYYY");
   };
 
+  const getEmailContent = (status: string) => {
+    let subject = "Ticket Status Update";
+    let text = `Your ticket status has been updated to: ${status}.`;
+    let html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+        <h2 style="color: #333;">Lifeline Ticket Status Update</h2>
+        <p style="color: #555;">Dear User,</p>
+        <p style="color: #555;">Your ticket status has been updated to: <strong>${status}</strong>.</p>
+        <p style="color: #555;">If you have any questions, please contact our support team.</p>
+        <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+        <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+      </div>
+    `;
+
+    switch (status) {
+      case "accepted":
+        subject = "Request Accepted";
+        text = `Congratulations! Your Request for a ${ticketData.packedRequest} has been accepted.`;
+        html = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+            <h2 style="color: #333;">Lifeline Appointment Accepted</h2>
+            <p style="color: #555;">Dear User,</p>
+            <p style="color: #555;">We are pleased to inform you that your request has been accepted.</p>
+            <p style="color: #555;">If you have any questions, please contact our support team.</p>
+            <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+            <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+          </div>
+        `;
+        break;
+      case "rejected":
+        subject = "Request Rejected";
+        text = `Unfortunately, Your Request for a ${ticketData.packedRequest} has been rejected.`;
+        html = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+            <h2 style="color: #333;">Lifeline Appointment Rejected</h2>
+            <p style="color: #555;">Dear User,</p>
+            <p style="color: #555;">We regret to inform you that your appointment has been rejected. Please contact our support team for further assistance.</p>
+            <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+            <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+          </div>
+        `;
+        break;
+    }
+
+    return { subject, text, html };
+  };
+
+  const sendEmailNotification = async (email: string, status: string) => {
+    const API_KEY = "d1440a571533e6c003ef72358ff55e5a-f6fe91d3-6d5fa136";
+    const DOMAIN = "lifeline-ph.tech";
+
+    const { subject, text, html } = getEmailContent(status);
+
+    const data = new FormData();
+    data.append("from", "Lifeline Support <support@lifeline.com>");
+    data.append("to", email);
+    data.append("subject", subject);
+    data.append("text", text);
+    data.append("html", html);
+
+    try {
+      const response = await axios.post(
+        `https://api.mailgun.net/v3/${DOMAIN}/messages`,
+        data,
+        {
+          auth: {
+            username: "api",
+            password: API_KEY,
+          },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Status update email sent successfully");
+      } else {
+        console.error("Failed to send email:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sending status update email:", error);
+    }
+  };
+
   const handleUpdateStatus = async (
     status: "accepted" | "cancelled" | "rejected"
   ) => {
-    if (!ticketData) return;
+    if (!ticketData || !userData) return;
 
     const updatedTicketData = {
       ...ticketData,
@@ -148,6 +236,14 @@ export default function ManageTicketReview() {
       dispatch(incrementRequest());
       incrementHospitalReports(user.hospitalName, false);
       setTicketData(updatedTicketData);
+
+      if (status === "accepted" || status === "rejected") {
+        if (userData.email) {
+          await sendEmailNotification(userData.email, status);
+        } else {
+          console.error("User email is not defined");
+        }
+      }
     } catch (error) {
       console.error("Error updating ticket:", error);
     }
@@ -342,6 +438,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.8)",
+    gap: 10,
   },
   fullImage: {
     width: "100%",

@@ -4,28 +4,17 @@ import {
   FlatList,
   SafeAreaView,
   Text,
-  SectionList,
   Pressable,
   TouchableOpacity,
-  Modal,
-  Image,
   Animated,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
-import {
-  FAQuestions,
-  GS,
-  HORIZONTAL_SCREEN_MARGIN,
-} from "../../../../constants";
+import { GS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
 import { COLORS } from "../../../../constants/theme";
-import Description from "../../../../components/common/texts/Description";
 import TextInputWrapper from "../../../../components/common/TextInputWrapper";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "app/store";
-import { getFAQs } from "rtx/slices/faq";
 import IconBtn from "components/common/IconButton";
 
 const FAQ_DATA = [
@@ -61,12 +50,12 @@ const FAQ_DATA = [
       {
         question: "How do I schedule a donation appointment?",
         answer:
-          "You can schedule a donation appointment by going to the main dashboard and clicking on ‘Donate’. This will direct you to the donation page, which consists of two (2) parts: the assessment section and the schedule section. Please read the eligibility notice thoroughly before proceeding. In the assessment section, please answer all questions truthfully, as this will serve as your initial assessment that will be forwarded to the hospital staff. Then, you can select your preferred hospital, date, and time for your appointment in the schedule section. A code will be provided at the end. Make sure to save it or take a screenshot, as this code will be required at your appointment to validate your incentive eligibility.",
+          "You can schedule a donation appointment by going to the main dashboard and clicking on ‘Donate’.",
       },
       {
         question: "Is it necessary to fill out the preliminary checklist?",
         answer:
-          "Yes, it is necessary. To schedule a donation appointment using Lifeline, you would have to answer the preliminary checklist, as this serves as an initial evaluation of your potential eligibility to donate. Please keep in mind that while this checklist doesn’t guarantee final eligibility, it provides the hospital staff an overview of your health status prior to your appointment. You would still need to undergo a comprehensive screening with the hospital staff on the day of your appointment.",
+          "Yes, it is necessary. To schedule a donation appointment using Lifeline, you would have to answer the preliminary checklist, as this serves as an initial evaluation of your potential eligibility to donate. ",
       },
       {
         question: "How can I locate the nearest hospital for blood donation?",
@@ -151,6 +140,7 @@ export default function FAQTab() {
   const [filteredData, setFilteredData] = useState(FAQ_DATA);
   const [modalVisible, setModalVisible] = useState(false);
   const [openQuestion, setOpenQuestion] = useState<string | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -164,6 +154,7 @@ export default function FAQTab() {
   };
 
   const handleToggleQuestion = (question: string) => {
+    if (isAnimating) return; // Ignore toggle if animation is in progress
     setOpenQuestion(openQuestion === question ? null : question);
   };
 
@@ -208,6 +199,8 @@ export default function FAQTab() {
                   questions={item.data}
                   openQuestion={openQuestion}
                   onToggleQuestion={handleToggleQuestion}
+                  isAnimating={isAnimating}
+                  setIsAnimating={setIsAnimating}
                 />
               </View>
             )}
@@ -226,12 +219,16 @@ type IQuestionPanel = {
   questions: Array<{ question: string; answer: string }>;
   openQuestion: string | null;
   onToggleQuestion: (question: string) => void;
+  isAnimating: boolean;
+  setIsAnimating: (animating: boolean) => void;
 };
 
 export function QuestionPanel({
   questions,
   openQuestion,
   onToggleQuestion,
+  isAnimating,
+  setIsAnimating,
 }: IQuestionPanel) {
   return (
     <View style={panel.container}>
@@ -244,6 +241,8 @@ export function QuestionPanel({
             answer={item.answer}
             isOpen={openQuestion === item.question}
             onToggle={onToggleQuestion}
+            isAnimating={isAnimating}
+            setIsAnimating={setIsAnimating}
           />
         )}
         keyExtractor={(item) => item.question}
@@ -257,6 +256,8 @@ type IQuestionCard = {
   answer: string;
   isOpen: boolean;
   onToggle: (question: string) => void;
+  isAnimating: boolean;
+  setIsAnimating: (animating: boolean) => void;
 };
 
 export function QuestionCard({
@@ -264,35 +265,47 @@ export function QuestionCard({
   answer,
   isOpen,
   onToggle,
+  isAnimating,
+  setIsAnimating,
 }: IQuestionCard) {
   const animatedHeight = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
-    Animated.timing(animatedHeight, {
-      toValue: isOpen ? 100 : 0, // Adjust this value based on the content height
-      duration: 300,
-      useNativeDriver: false,
-    }).start();
-  }, [isOpen, animatedHeight]);
+    if (isOpen) {
+      // Opening animation
+      setIsAnimating(true);
+      Animated.timing(animatedHeight, {
+        toValue: 150, // Set the desired open height
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => setIsAnimating(false));
+    } else {
+      // Closing animation
+      setIsAnimating(true);
+      Animated.timing(animatedHeight, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start(() => setIsAnimating(false));
+    }
+  }, [isOpen]);
 
   return (
     <Pressable
       style={isOpen ? card.openContainer : card.qContainer}
-      onPress={() => onToggle(question)}
+      onPress={() => !isAnimating && onToggle(question)} // Only toggle if not animating
       android_ripple={{ radius: 250 }}
     >
       <Text style={isOpen ? card.openQuestion : card.question}>{question}</Text>
       {isOpen ? (
-        <>
-          <Animated.View style={{ height: animatedHeight }}>
-            <Text style={card.answer}>{answer}</Text>
-          </Animated.View>
-        </>
+        <Animated.View style={{ height: animatedHeight }}>
+          <Text style={card.answer}>{answer}</Text>
+        </Animated.View>
       ) : (
         <IconBtn
           icon="plus"
           size={18}
-          onPress={() => onToggle(question)}
+          onPress={() => !isAnimating && onToggle(question)}
           color="white"
         />
       )}
@@ -319,12 +332,11 @@ const card = StyleSheet.create({
     flexDirection: "column",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingTop: 8,
-    paddingBottom: 16,
     borderWidth: 1,
     borderColor: "black",
     marginLeft: 5,
     borderRadius: 10,
-    marginVertical: 20,
+    marginVertical: 10,
   },
   question: {
     flex: 1,

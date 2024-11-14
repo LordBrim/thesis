@@ -21,6 +21,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import moment from "moment";
+import { router } from "expo-router";
 
 interface Ticket {
   selectedHospital: string;
@@ -29,6 +30,11 @@ interface Ticket {
   ticketNumber: string;
   status: string;
   userUID: string;
+  checklistData: Record<string, any>;
+  isComplete: boolean;
+  message: string;
+  type: string;
+  userEmail: string;
 }
 
 export default function UpcomingAppointmentsStaff() {
@@ -39,6 +45,7 @@ export default function UpcomingAppointmentsStaff() {
   const currentUser = auth.currentUser;
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [viewAllModalVisible, setViewAllModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -46,7 +53,6 @@ export default function UpcomingAppointmentsStaff() {
         const userDoc = await getDoc(doc(db, "User", currentUser.uid));
         const userData = userDoc.data();
         const hospitalName = userData?.hospitalName;
-        console.log(hospitalName);
         if (hospitalName) {
           const q = query(
             collection(db, "ticketDonate"),
@@ -98,16 +104,14 @@ export default function UpcomingAppointmentsStaff() {
             fontWeight: "bold",
             textDecorationLine: "underline",
           }}
-          onPress={() => {
-            console.log("pressed");
-          }}
+          onPress={() => setViewAllModalVisible(true)}
         >
           View all
         </Text>
       </View>
       {hasAppointments ? (
         <FlatList
-          data={tickets.slice(0, 6)}
+          data={tickets.slice(0, 5)}
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => handlePress(item)}
@@ -137,6 +141,42 @@ export default function UpcomingAppointmentsStaff() {
           <Text style={{ color: COLORS.text }}>No Scheduled Appointments</Text>
         </View>
       )}
+      {/* Modal for viewing all appointments */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={viewAllModalVisible}
+        onRequestClose={() => setViewAllModalVisible(false)}
+      >
+        <View style={allAppointments.modalContainer}>
+          <View style={[allAppointments.modalContent, { height: "70%" }]}>
+            <Text style={allAppointments.modalTitle}>All Appointments</Text>
+            <FlatList
+              data={tickets}
+              renderItem={({ item }) => {
+                return (
+                  <View style={{ marginBottom: 10, width: 300 }}>
+                    <AppointmentCard
+                      location={item.selectedHospital}
+                      date={item.selectedDate}
+                      time={item.selectedTime}
+                    />
+                  </View>
+                );
+              }}
+              keyExtractor={(item) => item.ticketNumber}
+              showsVerticalScrollIndicator={true}
+            />
+            <TouchableOpacity
+              onPress={() => setViewAllModalVisible(false)}
+              style={styles.closeButton}
+            >
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <Modal
         animationType="fade"
         transparent={true}
@@ -218,7 +258,44 @@ export function AppointmentCard({ location, date, time }: IAppointmentCard) {
     </View>
   );
 }
-
+const allAppointments = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "90%",
+    padding: 20,
+    backgroundColor: "white",
+    alignItems: "center",
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: SIZES.large,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: COLORS.primary,
+  },
+  modalDetails: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "70%",
+    marginBottom: 10,
+  },
+  modalLabel: {
+    fontSize: SIZES.medium,
+    fontWeight: "bold",
+    color: COLORS.text,
+  },
+  modalValue: {
+    fontSize: SIZES.medium,
+    color: COLORS.text,
+  },
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -255,7 +332,6 @@ const styles = StyleSheet.create({
     width: "90%",
     padding: 20,
     backgroundColor: "white",
-
     alignItems: "center",
     borderRadius: 10,
     elevation: 5,

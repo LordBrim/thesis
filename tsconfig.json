@@ -7,7 +7,7 @@
     },
     "target": "esnext", // Specify ECMAScript target version
     "module": "commonjs", // Specify module code generation
-    "lib": ["dom", "esnext"], // Specify library files to be included
+    "lib": ["dom", "esnext", "ES2023.Array"], // Specify library files to be included
     "jsx": "react-native", // Specify JSX code generation
     "strict": true, // Enable all strict type-checking options
     "moduleResolution": "node", // Specify module resolution strategy

@@ -9,7 +9,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 export default function TabLayout() {
   const navigation = useNavigation();
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -37,11 +36,6 @@ export default function TabLayout() {
       ),
     });
   }, []);
-
-  const handleDropdown = () => {
-    console.log("Open dropdown!");
-  };
-
   const handleLogout = () => {
     Alert.alert(
       "Confirm Logout",
@@ -57,18 +51,14 @@ export default function TabLayout() {
       { cancelable: false }
     );
   };
-
   const signOutUser = async () => {
     try {
       const auth = getAuth();
       await auth.signOut();
-      console.log("User signed out successfully");
-
       await AsyncStorage.removeItem("user_logged_in");
       await AsyncStorage.removeItem("user_email");
       await AsyncStorage.removeItem("user_password");
       await AsyncStorage.removeItem("user_role");
-
       router.replace("/login");
     } catch (error) {
       console.error("Error signing out:", error.message);

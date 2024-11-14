@@ -205,7 +205,6 @@ const styles = StyleSheet.create({
     gap: SIZES.xSmall,
   },
   inputLabel: {
-    textTransform: "capitalize",
     backgroundColor: COLORS.background,
     paddingHorizontal: 4,
     borderRadius: 50,

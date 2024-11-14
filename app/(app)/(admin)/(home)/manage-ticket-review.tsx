@@ -2,12 +2,13 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
+  FlatList,
   Pressable,
   Button,
   Alert,
   Modal,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants/theme";
@@ -36,6 +37,7 @@ type CustomButtonProps = {
   color: string;
   isReject?: boolean;
   isMissing?: boolean;
+  disabled?: boolean;
 };
 
 interface TicketState {
@@ -73,12 +75,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   color,
   isReject,
   isMissing,
+  disabled,
 }) => (
   <Pressable
-    onPress={onPress}
+    onPress={disabled ? undefined : onPress}
     style={({ pressed }) => [
       {
-        backgroundColor: color,
+        backgroundColor: disabled ? COLORS.grayMid : color,
         padding: 10,
         borderRadius: 5,
         opacity: pressed ? 0.8 : 1,
@@ -135,13 +138,27 @@ const getEmailContent = (status: string) => {
       `;
       break;
     case "rejected":
-      subject = "Appointment Rejected";
+      subject = "Appointment Cancelled";
       text = "Unfortunately, your appointment has been rejected.";
       html = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
           <h2 style="color: #333;">Lifeline Appointment Rejected</h2>
           <p style="color: #555;">Dear User,</p>
           <p style="color: #555;">We regret to inform you that your appointment has been rejected. Please contact our support team for further assistance.</p>
+          <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+          <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+        </div>
+      `;
+      break;
+    case "cancelled":
+      subject = "Appointment Cancelled";
+      text = "Unfortunately, your appointment has been cancelled.";
+      html = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+          <h2 style="color: #333;">Lifeline Appointment cancelled</h2>
+          <p style="color: #555;">Dear User,</p>
+          <p style="color: #555;">We regret to inform you that your appointment has been cancelled. Please contact our support team for further assistance.</p>
           <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
           <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
@@ -219,6 +236,8 @@ export default function ManageTicketReview() {
   const auth = getAuth();
   const db = getFirestore();
   const currentUser = auth.currentUser;
+  const [userDetailsHeight, setUserDetailsHeight] = useState(0);
+  const [checklistHeight, setChecklistHeight] = useState(0);
   useEffect(() => {
     const fetchUserDoc = async () => {
       if (currentUser) {
@@ -365,8 +384,32 @@ export default function ManageTicketReview() {
     }
   };
 
+  const renderChecklistItem = ({
+    item,
+    index,
+  }: {
+    item: [string, string];
+    index: number;
+  }) => (
+    <View key={item[0]} style={styles.checklistItem}>
+      <Text style={styles.checklistKey}>
+        {index + 1}. {item[0]}
+      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginLeft: 30,
+        }}
+      >
+        <View style={styles.bullet} />
+        <Text style={styles.checklistValue}>{item[1]}</Text>
+      </View>
+    </View>
+  );
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <Modal
         transparent={true}
         animationType="fade"
@@ -386,7 +429,7 @@ export default function ManageTicketReview() {
       <View
         style={{
           flexDirection: "column",
-          width: "100%",
+          width: "90%",
           borderWidth: 1,
           borderColor: COLORS.grayMid,
           borderRadius: 10,
@@ -464,7 +507,12 @@ export default function ManageTicketReview() {
         )}
       </Pressable>
       {openUserDetails ? (
-        <View style={styles.checklistContainer}>
+        <View
+          style={styles.checklistContainerUser}
+          onLayout={(event) =>
+            setUserDetailsHeight(event.nativeEvent.layout.height)
+          }
+        >
           <Text style={styles.textDetails}>
             Name: {ticketData.name || ticketData.displayName}
           </Text>
@@ -505,43 +553,30 @@ export default function ManageTicketReview() {
         )}
       </Pressable>
       {openChecklist ? (
-        <ScrollView style={styles.checklistContainer}>
-          {ticketData.checklistData &&
-          Object.keys(ticketData.checklistData).length > 0 ? (
-            Object.entries(ticketData.checklistData).map(
-              ([key, value], index) => (
-                <View key={key} style={styles.checklistItem}>
-                  <Text style={styles.checklistKey}>
-                    {index + 1}. {key}
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginLeft: 30,
-                    }}
-                  >
-                    <View style={styles.bullet} />
-                    <Text style={styles.checklistValue}>{value}</Text>
-                  </View>
-                </View>
-              )
-            )
-          ) : (
-            <Text style={styles.noChecklistData}>
-              No preliminary checklist data available.
-            </Text>
-          )}
-        </ScrollView>
+        <View style={{ flex: 1 }}>
+          <FlatList
+            data={Object.entries(ticketData.checklistData || {})}
+            renderItem={renderChecklistItem}
+            keyExtractor={(item) => item[0]}
+            style={styles.checklistContainer}
+            scrollEnabled={false}
+          />
+        </View>
       ) : null}
 
       <View style={styles.buttonContainer}>
-        {ticketData.status === "accepted" ? (
+        {(ticketData.status === "accepted" && !ticketData.isComplete) ||
+        ticketData.status === "rejected" ? (
           <CustomButton
             title="Complete Transaction"
             onPress={handleCompleteTransaction}
             color="#10b500"
             isReject={false}
+            disabled={
+              (ticketData.status === "accepted" && ticketData.isComplete) ||
+              ticketData.status === "rejected" ||
+              ticketData.status === "cancelled"
+            }
           />
         ) : (
           <CustomButton
@@ -549,6 +584,11 @@ export default function ManageTicketReview() {
             onPress={() => handleUpdateStatus("accepted")}
             color="#10b500"
             isReject={false}
+            disabled={
+              (ticketData.status === "accepted" && ticketData.isComplete) ||
+              ticketData.status === "rejected" ||
+              ticketData.status === "cancelled"
+            }
           />
         )}
         {ticketData.status === "pending" ? (
@@ -560,10 +600,15 @@ export default function ManageTicketReview() {
           />
         ) : (
           <CustomButton
-            title="Reject"
+            title="Cancel Appointment"
             onPress={() => handleUpdateStatus("cancelled")}
             color={COLORS.primary}
             isReject={true}
+            disabled={
+              (ticketData.status === "accepted" && ticketData.isComplete) ||
+              ticketData.status === "rejected" ||
+              ticketData.status === "cancelled"
+            }
           />
         )}
       </View>
@@ -573,23 +618,45 @@ export default function ManageTicketReview() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: COLORS.background,
     alignItems: "center",
+
     padding: 20,
+  },
+  scrollContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingBottom: 20,
+    width: "100%",
+    backgroundColor: COLORS.background,
   },
   textDetails: {
     fontSize: 16,
     marginVertical: 3,
+    fontWeight: "bold",
   },
   checklistContainer: {
-    width: "100%",
-    marginLeft: 15,
+    width: "90%",
+    height: "auto",
+    margin: 10,
+    borderWidth: 1,
+    borderColor: COLORS.grayMid,
+    borderRadius: 10,
+    padding: 10,
+  },
+  checklistContainerUser: {
+    width: "90%",
+    justifyContent: "space-around",
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+    borderColor: COLORS.grayMid,
   },
   checklistTitle: {
     fontWeight: "bold",
     fontSize: 18,
-    marginBottom: 10,
+    marginVertical: 20,
   },
   checklistItem: {
     marginBottom: 10,
@@ -599,14 +666,14 @@ const styles = StyleSheet.create({
   },
   checklistValue: {
     fontSize: 16,
-    fontWeight: "normal",
+    fontWeight: "bold",
+    color: COLORS.primary,
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginTop: 20,
     width: "100%",
-    margin: 20,
   },
   bullet: {
     width: 8,
@@ -656,7 +723,7 @@ const styles = StyleSheet.create({
 
 const card = StyleSheet.create({
   qContainer: {
-    width: "100%",
+    width: "90%",
     minHeight: 35,
     flexDirection: "row",
     justifyContent: "space-between",

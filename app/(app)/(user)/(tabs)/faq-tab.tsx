@@ -296,18 +296,37 @@ export function QuestionCard({
       onPress={() => !isAnimating && onToggle(question)} // Only toggle if not animating
       android_ripple={{ radius: 250 }}
     >
-      <Text style={isOpen ? card.openQuestion : card.question}>{question}</Text>
-      {isOpen ? (
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={isOpen ? card.openQuestion : card.question}>
+          {question}
+        </Text>
+        {isOpen ? (
+          <IconBtn
+            icon="minus"
+            size={18}
+            onPress={() => !isAnimating && onToggle(question)}
+            color={COLORS.primary}
+          />
+        ) : (
+          <IconBtn
+            icon="plus"
+            size={18}
+            onPress={() => !isAnimating && onToggle(question)}
+            color="white"
+          />
+        )}
+      </View>
+
+      {isOpen && (
         <Animated.View style={{ height: animatedHeight }}>
           <Text style={card.answer}>{answer}</Text>
         </Animated.View>
-      ) : (
-        <IconBtn
-          icon="plus"
-          size={18}
-          onPress={() => !isAnimating && onToggle(question)}
-          color="white"
-        />
       )}
     </Pressable>
   );
@@ -316,7 +335,7 @@ export function QuestionCard({
 const card = StyleSheet.create({
   qContainer: {
     width: "95%",
-    minHeight: 35,
+    minHeight: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

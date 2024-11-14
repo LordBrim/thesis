@@ -48,8 +48,13 @@ const metroCities = [
   "Pateros",
 ];
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const ProfileEditScreen = () => {
   const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const [sex, setSex] = useState("");
   const [age, setAge] = useState("");
   const [contactDetails, setContactDetails] = useState("");
@@ -76,14 +81,15 @@ const ProfileEditScreen = () => {
 
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          setFullName(userData.displayName || "");
-          setSex(userData.sex || "");
+          setFullName(capitalizeFirstLetter(userData.displayName || ""));
+          setSex(capitalizeFirstLetter(userData.sex || ""));
           setDateOfBirth(
             moment(userData.dateOfBirth).format("MMMM D, YYYY") || ""
           );
           setAge(userData.age ? userData.age.toString() : "");
           setContactDetails(userData.contactDetails || "");
           setCity(userData.city || "");
+          setEmail(userData.email || "");
         }
         // Fetch the avatar from Firebase Storage
         const fileRef = ref(FIREBASE_STORAGE, `avatars/${user.uid}.jpg`);
@@ -222,20 +228,27 @@ const ProfileEditScreen = () => {
           />
         </TextInputWrapper>
       </View>
+      <View style={styles.inputContainer}>
+        <TextInputWrapper label="Email">
+          <TextInput
+            style={styles.inputGrayed}
+            value={email}
+            placeholder={email}
+            editable={false}
+          />
+        </TextInputWrapper>
+      </View>
 
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Sex">
           <View style={styles.radioContainer}>
-            <Text style={{ color: COLORS.grayDark }}>{sex.toUpperCase()}</Text>
+            <Text style={{ color: COLORS.grayDark }}>
+              {capitalizeFirstLetter(sex)}
+            </Text>
           </View>
         </TextInputWrapper>
       </View>
 
-      <View style={styles.inputContainer}>
-        <TextInputWrapper label="Age">
-          <TextInput style={styles.inputGrayed} value={age} editable={false} />
-        </TextInputWrapper>
-      </View>
       <View style={styles.inputContainer}>
         <TextInputWrapper label="Date of Birth">
           <TextInput
@@ -248,7 +261,7 @@ const ProfileEditScreen = () => {
       </View>
 
       <View style={styles.inputContainer}>
-        <TextInputWrapper label="Contact Details (Phone Number)">
+        <TextInputWrapper label="Phone Number">
           <TextInput
             style={styles.input}
             value={contactDetails}
@@ -370,7 +383,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   radioContainer: {
-    marginLeft: 15,
+    marginLeft: 20,
     flexDirection: "row",
     alignItems: "center",
   },

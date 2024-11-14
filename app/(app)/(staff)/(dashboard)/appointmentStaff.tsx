@@ -104,7 +104,9 @@ export default function UpcomingAppointmentsStaff() {
             fontWeight: "bold",
             textDecorationLine: "underline",
           }}
-          onPress={() => setViewAllModalVisible(true)}
+          onPress={() =>
+            router.push("/(app)/(admin)/(home)/manage-ticket-all-appointments")
+          }
         >
           View all
         </Text>

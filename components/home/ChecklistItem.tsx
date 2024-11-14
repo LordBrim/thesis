@@ -47,8 +47,8 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
           />
         );
       case "condionalText":
-      case "condionalTravel":
       case "yesNo":
+      case "condionalTravel":
         return (
           <View style={styles.radioGroupContainer}>
             <RadioGroup
@@ -184,10 +184,12 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
       )}
       {question.type === "condionalTravel" && answer === "Yes" && (
         <>
-          <Text style={styles.questionInput}>List all medication here:</Text>
+          <Text style={styles.questionInput}>
+            List the countries you visited:
+          </Text>
           <TextInput
             style={styles.input}
-            placeholder="Please list the countryies you have visited"
+            placeholder="Please list the countries you have visited"
             value={textInputValue}
             onChangeText={handleTextInputChange}
           />

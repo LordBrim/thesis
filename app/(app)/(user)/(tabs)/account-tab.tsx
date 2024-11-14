@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Pressable,
   SafeAreaView,
+  RefreshControl,
 } from "react-native";
 import { COLORS, SIZES } from "../../../../constants/theme";
 import { Link } from "expo-router";
@@ -31,6 +32,7 @@ import IconModal from "../../(common)/custom-album-modal";
 import { useSelector } from "react-redux";
 import { RootState } from "app/store";
 import moment from "moment"; // Import moment for date formatting
+import { useFocusEffect } from "@react-navigation/native";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -50,8 +52,8 @@ export default function AccountTab({
   const [donateStatus, setDonateStatus] = useState(true);
   const [incentives, setIncentives] = useState(0); // New state for incentives
   const [nextDonationDate, setNextDonationDate] = useState(""); // New state for next donation date
-
   const [loading, setLoading] = useState(true); // Loading state
+  const [refreshing, setRefreshing] = useState(false); // State for refresh control
 
   const signOutUser = async () => {
     try {
@@ -91,52 +93,63 @@ export default function AccountTab({
     );
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      setLoading(true); // Start loading
+  const fetchUserData = async () => {
+    setLoading(true); // Start loading
 
-      const user = FIREBASE_AUTH.currentUser;
-      if (user) {
-        // Fetch the user document from Firestore
-        const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
-        const userDoc = await getDoc(userDocRef);
+    const user = FIREBASE_AUTH.currentUser;
+    if (user) {
+      // Fetch the user document from Firestore
+      const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
+      const userDoc = await getDoc(userDocRef);
 
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setEmail(userData.email);
-          setDisplayName(userData.displayName);
-          setIncentives(userData.incentive || 0); // Set incentives
-          setNextDonationDate(userData.nextDonationDate || ""); // Set next donation date
-        } else {
-          console.log("No such document!");
-        }
-
-        // Fetch the avatar from Firebase Storage
-        const fileRef = ref(FIREBASE_STORAGE, `avatars/${user.uid}.jpg`);
-        getDownloadURL(fileRef)
-          .then((url) => {
-            console.log("Avatar URL:", url);
-            setAvatar(url); // Set avatar URL if found
-          })
-          .catch((error) => {
-            // Handle the case where the avatar doesn't exist
-            if (error.code === "storage/object-not-found") {
-              console.warn("Avatar not found, using default avatar.");
-              setAvatar(null); // Use null to indicate that default avatar should be used
-            } else {
-              console.error("Error getting avatar URL:", error);
-            }
-          })
-          .finally(() => {
-            setLoading(false); // Stop loading after avatar fetch
-          });
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setEmail(userData.email);
+        setDisplayName(userData.displayName);
+        setIncentives(userData.incentive || 0); // Set incentives
+        setNextDonationDate(userData.nextDonationDate || ""); // Set next donation date
       } else {
-        console.log("No user is logged in.");
-        setLoading(false); // Stop loading if no user
+        console.log("No such document!");
       }
-    };
 
+      // Fetch the avatar from Firebase Storage
+      const fileRef = ref(FIREBASE_STORAGE, `avatars/${user.uid}.jpg`);
+      getDownloadURL(fileRef)
+        .then((url) => {
+          console.log("Avatar URL:", url);
+          setAvatar(url); // Set avatar URL if found
+        })
+        .catch((error) => {
+          // Handle the case where the avatar doesn't exist
+          if (error.code === "storage/object-not-found") {
+            console.warn("Avatar not found, using default avatar.");
+            setAvatar(null); // Use null to indicate that default avatar should be used
+          } else {
+            console.error("Error getting avatar URL:", error);
+          }
+        })
+        .finally(() => {
+          setLoading(false); // Stop loading after avatar fetch
+        });
+    } else {
+      console.log("No user is logged in.");
+      setLoading(false); // Stop loading if no user
+    }
+  };
+
+  useEffect(() => {
     fetchUserData();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+    }, [])
+  );
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchUserData().then(() => setRefreshing(false));
   }, []);
 
   const uploadImage = async (uri: string) => {
@@ -177,7 +190,12 @@ export default function AccountTab({
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView overScrollMode="never">
+      <ScrollView
+        overScrollMode="never"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.profile}>
           {loading ? (
             <ActivityIndicator size="large" color={COLORS.primary} />

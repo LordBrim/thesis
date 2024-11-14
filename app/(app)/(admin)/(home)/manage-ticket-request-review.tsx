@@ -15,7 +15,7 @@ import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import IconBtn from "components/common/IconButton";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, getFirestore } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
 import * as FileSystem from "expo-file-system";
@@ -24,11 +24,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "app/store";
 import { incrementHospitalReports, incrementRequest } from "rtx/slices/reports";
 import axios from "axios";
+import { getAuth } from "firebase/auth";
 
 interface TicketState {
   id: string;
   patientName: string;
-  status: "pending" | "rejected" | "accepted" | "cancelled";
+  status: "pending" | "rejected" | "accepted" | "cancelled" | "in-progress";
   userId: string;
   userEmail: string;
   contactNumber?: string;
@@ -52,7 +53,9 @@ interface UserState {
   sex: string;
   // Add other user properties as needed
 }
-
+interface adminUser {
+  hospitalName: string;
+}
 export default function ManageTicketReview() {
   const { ticket } = useLocalSearchParams();
   const [ticketData, setTicketData] = useState<TicketState | null>(null);
@@ -60,7 +63,23 @@ export default function ManageTicketReview() {
   const [openUserDetails, setOpenUserDetails] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [adminUser, setAdminUser] = useState<string | null>();
 
+  const dispatch = useDispatch();
+  const auth = getAuth();
+  const db = getFirestore();
+  const currentUser = auth.currentUser;
+  useEffect(() => {
+    const fetchUserDoc = async () => {
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, "User", currentUser.uid));
+        const userData = userDoc.data();
+        setAdminUser(userData?.hospitalName);
+      }
+    };
+
+    fetchUserDoc();
+  }, []);
   useEffect(() => {
     if (ticket) {
       const parsedTicket = JSON.parse(ticket as string);
@@ -145,12 +164,12 @@ export default function ManageTicketReview() {
     switch (status) {
       case "accepted":
         subject = "Request Accepted";
-        text = `Congratulations! Your Request for a ${ticketData.packedRequest} has been accepted.`;
+        text = `Congratulations! Your Request for a ${ticketData.packedRequest} has been accepted by ${adminUser}`;
         html = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-            <h2 style="color: #333;">Lifeline Appointment Accepted</h2>
+            <h2 style="color: #333;">Congratulations! Your Request for a ${ticketData.packedRequest} has been accepted by ${adminUser}</h2>
             <p style="color: #555;">Dear User,</p>
-            <p style="color: #555;">We are pleased to inform you that your request has been accepted.</p>
+            <p style="color: #555;">We are pleased to inform you that your request has been accepted. Please wait for further announcement for your schedule</p>
             <p style="color: #555;">If you have any questions, please contact our support team.</p>
             <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
             <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
@@ -166,6 +185,19 @@ export default function ManageTicketReview() {
             <h2 style="color: #333;">Lifeline Appointment Rejected</h2>
             <p style="color: #555;">Dear User,</p>
             <p style="color: #555;">We regret to inform you that your appointment has been rejected. Please contact our support team for further assistance.</p>
+            <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+            <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+            <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+          </div>
+        `;
+      case "in-progress":
+        subject = "Request Progress Announcement";
+        text = `Thank you for waiting, you request has been processed please read for further instruction.`;
+        html = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+            <h2 style="color: #333;">Lifeline Appointment Rejected</h2>
+            <p style="color: #555;">Dear User,</p>
+            <p style="color: #555;">Please proceed to the laboratory between 10:00 A.M. to 5:00 P.M. on weekdays. Kindly take note of the hospital's blood processing fee which may range from -- to --. Thank you for using Lifeline.</p>
             <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
             <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
             <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
@@ -216,26 +248,27 @@ export default function ManageTicketReview() {
   };
 
   const handleUpdateStatus = async (
-    status: "accepted" | "cancelled" | "rejected"
+    status: "accepted" | "cancelled" | "rejected" | "in-progress"
   ) => {
-    if (!ticketData || !userData) return;
+    if (!ticketData || !userData || !currentUser) return;
 
     const updatedTicketData = {
       ...ticketData,
       status: status,
       message: "deliberation",
     };
-    const dispatch = useDispatch();
-    const { user } = useSelector((state: RootState) => state.user);
     try {
       const ticketDocRef = doc(FIRESTORE_DB, "ticketRequest", ticketData.id);
       await updateDoc(ticketDocRef, {
         status: updatedTicketData.status,
         message: updatedTicketData.message,
       });
-      dispatch(incrementRequest());
-      incrementHospitalReports(user.hospitalName, false);
       setTicketData(updatedTicketData);
+      if (status === "accepted") {
+        incrementRequest();
+        incrementHospitalReports(adminUser, false);
+        console.log("increment");
+      }
 
       if (status === "accepted" || status === "rejected") {
         if (userData.email) {
@@ -381,16 +414,33 @@ export default function ManageTicketReview() {
         )}
 
         <View style={styles.buttonContainer}>
-          <Button
-            title="Accept"
-            onPress={() => handleUpdateStatus("accepted")}
-            color="green"
-          />
-          <Button
-            title="Reject"
-            onPress={() => handleUpdateStatus("rejected")}
-            color={COLORS.primary}
-          />
+          {ticketData.status === "accepted" ? (
+            <>
+              <Button
+                title="Processing Available"
+                onPress={() => handleUpdateStatus("in-progress")}
+                color="green"
+              />
+              <Button
+                title="Cancel Request"
+                onPress={() => handleUpdateStatus("rejected")}
+                color={COLORS.primary}
+              />
+            </>
+          ) : (
+            <>
+              <Button
+                title="Accept"
+                onPress={() => handleUpdateStatus("accepted")}
+                color="green"
+              />
+              <Button
+                title="Reject"
+                onPress={() => handleUpdateStatus("rejected")}
+                color={COLORS.primary}
+              />
+            </>
+          )}
         </View>
       </View>
     </ScrollView>

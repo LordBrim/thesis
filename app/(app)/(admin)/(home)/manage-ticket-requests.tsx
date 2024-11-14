@@ -88,6 +88,7 @@ export default function ManageTicketsRequests() {
       }}
     >
       <Tab.Screen name="Pending" component={ManageTicketsRequestsPending} />
+      <Tab.Screen name="Active" component={ManageTicketsRequestsActive} />
       <Tab.Screen name="Archived" component={ManageTicketsRequestsArchived} />
     </Tab.Navigator>
   );
@@ -199,6 +200,113 @@ function ManageTicketsRequestsPending() {
   );
 }
 
+function ManageTicketsRequestsActive() {
+  const [tickets, setTickets] = useState<TicketState[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTickets = async () => {
+    try {
+      const q = query(
+        collection(FIRESTORE_DB, "ticketRequest"),
+        where("type", "==", "request"),
+        where("status", "==", "accepted") // Filter by status "accepted"
+      );
+
+      const querySnapshot = await getDocs(q);
+      const ticketsData = querySnapshot.docs.map(
+        (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
+          const data = docSnapshot.data() as TicketData;
+          const ticket = {
+            id: docSnapshot.id,
+            patientName: data.patientName ?? "Unknown",
+            status: data.status ?? "pending",
+            userId: data.userId,
+            contactNumber: data.contactNumber,
+            emergencyReason: data.emergencyReason,
+            imageUrl: data.imageUrl,
+            isEmergency: data.isEmergency,
+            message: data.message,
+            packedRequest: data.packedRequest,
+            packedRequestInfo: data.packedRequestInfo,
+            selectedBloodType: data.selectedBloodType,
+            selectedRelationship: data.selectedRelationship,
+            type: "request",
+            // Map other properties as needed
+          } as TicketState;
+
+          return ticket;
+        }
+      );
+
+      // Sort tickets based on isEmergency field
+      ticketsData.sort(
+        (a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0)
+      );
+
+      setTickets(ticketsData);
+      setLoading(false);
+      setRefreshing(false);
+    } catch (error) {
+      console.error("Error fetching tickets: ", error);
+      setError("Failed to load tickets");
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchTickets();
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.centeredContainer}>
+        <Text>Loading Tickets...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centeredContainer}>
+        <Text>{error}</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+          Active Requests:
+        </Text>
+      </View>
+      <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
+        Request Tickets that are accepted and pending for scheduling.
+      </Text>
+      <Divider height={1} width={350} color={COLORS.grayDark} margin={5} />
+      <FlatList
+        data={tickets}
+        renderItem={({ item }) => <Card ticket={item} />}
+        keyExtractor={(item) => item.id} // Use the unique ID as the key
+        overScrollMode="never"
+        scrollEnabled={true}
+        persistentScrollbar={true}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+    </View>
+  );
+}
+
 function ManageTicketsRequestsArchived() {
   const [tickets, setTickets] = useState<TicketState[]>([]);
   const [loading, setLoading] = useState(true);
@@ -283,6 +391,10 @@ function ManageTicketsRequestsArchived() {
     (ticket) => ticket.status === "rejected"
   );
 
+  const inProgressTickets = tickets.filter(
+    (ticket) => ticket.status === "in-progress"
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -299,6 +411,21 @@ function ManageTicketsRequestsArchived() {
       </Text>
       <FlatList
         data={rejectedTickets}
+        renderItem={({ item }) => <Card ticket={item} />}
+        keyExtractor={(item) => item.id} // Use the unique ID as the key
+        overScrollMode="never"
+        scrollEnabled={true}
+        persistentScrollbar={true}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
+
+      <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 20 }}>
+        In-Progress Requests:
+      </Text>
+      <FlatList
+        data={inProgressTickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
         overScrollMode="never"
@@ -341,13 +468,16 @@ export function Card({ ticket }: CardProps) {
           <IconBtn icon="user-minus" size={18} color="gray" />
         )}
         {ticket.status === "cancelled" && (
-          <IconBtn icon="user-xmark" size={18} color="red" />
+          <IconBtn icon="user-xmark" size={18} color={COLORS.primary} />
         )}
         {ticket.status === "accepted" && (
-          <IconBtn icon="user-check" size={18} color="green" />
+          <IconBtn icon="user" size={18} color="green" />
         )}
         {ticket.status === "rejected" && (
-          <IconBtn icon="user-times" size={18} color="black" />
+          <IconBtn icon="user-xmark" size={18} color={COLORS.primary} />
+        )}
+        {ticket.status === "in-progress" && (
+          <IconBtn icon="user-check" size={18} color="green" />
         )}
         <View style={{ flexDirection: "column", justifyContent: "center" }}>
           <Text style={card.name}>{ticket.patientName}</Text>

@@ -15,7 +15,14 @@ import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { router, useLocalSearchParams } from "expo-router";
 import moment from "moment";
 import IconBtn from "../../../../components/common/IconButton";
-import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  deleteDoc,
+  getDoc,
+  getFirestore,
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import axios from "axios";
@@ -206,6 +213,23 @@ export default function ManageTicketReview() {
   const [openChecklist, setOpenChecklist] = useState(false);
   const [openUserDetails, setOpenUserDetails] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [adminUser, setAdminUser] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
+  const auth = getAuth();
+  const db = getFirestore();
+  const currentUser = auth.currentUser;
+  useEffect(() => {
+    const fetchUserDoc = async () => {
+      if (currentUser) {
+        const userDoc = await getDoc(doc(db, "User", currentUser.uid));
+        const userData = userDoc.data();
+        setAdminUser(userData?.hospitalName);
+      }
+    };
+
+    fetchUserDoc();
+  }, []);
 
   useEffect(() => {
     if (ticket) {
@@ -283,8 +307,7 @@ export default function ManageTicketReview() {
       message: "incentives",
       isComplete: true,
     };
-    const dispatch = useDispatch();
-    const { user } = useSelector((state: RootState) => state.user);
+
     try {
       const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
       await updateDoc(ticketDocRef, {
@@ -307,8 +330,8 @@ export default function ManageTicketReview() {
       await refreshTicketData();
       await sendEmailNotification(ticketData.userEmail, "completed"); // Send email notification
 
-      dispatch(incrementRequest());
-      incrementHospitalReports(user.hospitalName, false);
+      incrementRequest();
+      incrementHospitalReports(adminUser, false);
 
       Alert.alert(
         "Donation Completed",

@@ -21,6 +21,9 @@ import { FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "app/store";
+import { incrementHospitalReports, incrementRequest } from "rtx/slices/reports";
 
 interface TicketState {
   id: string;
@@ -134,13 +137,16 @@ export default function ManageTicketReview() {
       status: status,
       message: "deliberation",
     };
-
+    const dispatch = useDispatch();
+    const { user } = useSelector((state: RootState) => state.user);
     try {
       const ticketDocRef = doc(FIRESTORE_DB, "ticketRequest", ticketData.id);
       await updateDoc(ticketDocRef, {
         status: updatedTicketData.status,
         message: updatedTicketData.message,
       });
+      dispatch(incrementRequest());
+      incrementHospitalReports(user.hospitalName, false);
       setTicketData(updatedTicketData);
     } catch (error) {
       console.error("Error updating ticket:", error);

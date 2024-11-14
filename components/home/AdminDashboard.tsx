@@ -21,6 +21,7 @@ import {
   ReportsState,
 } from "rtx/slices/reports";
 import moment from "moment";
+import useIncrementHospitalReport from "hooks/useIncrementHospitalReport";
 
 export default function AdminDashboard() {
   const size = 40;
@@ -257,20 +258,6 @@ export default function AdminDashboard() {
       {chart == "Yearly" && (
         <ReportBarChart title="Yearly" data={formatDataYearly(yearly)} />
       )}
-      <Button
-        title="Increment Donations"
-        onPress={() => {
-          dispatch(incrementDonation());
-          incrementHospitalReports(user.hospitalName, true);
-        }}
-      ></Button>
-      <Button
-        title="Increment Requests"
-        onPress={() => {
-          dispatch(incrementRequest());
-          incrementHospitalReports(user.hospitalName, false);
-        }}
-      ></Button>
     </SafeAreaView>
   );
 }

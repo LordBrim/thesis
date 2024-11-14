@@ -19,6 +19,9 @@ import { doc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "firebase-config";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { incrementHospitalReports, incrementRequest } from "rtx/slices/reports";
+import { RootState } from "app/store";
 
 type CustomButtonProps = {
   title: string;
@@ -280,7 +283,8 @@ export default function ManageTicketReview() {
       message: "incentives",
       isComplete: true,
     };
-
+    const dispatch = useDispatch();
+    const { user } = useSelector((state: RootState) => state.user);
     try {
       const ticketDocRef = doc(FIRESTORE_DB, "ticketDonate", ticketData.id);
       await updateDoc(ticketDocRef, {
@@ -302,6 +306,9 @@ export default function ManageTicketReview() {
 
       await refreshTicketData();
       await sendEmailNotification(ticketData.userEmail, "completed"); // Send email notification
+
+      dispatch(incrementRequest());
+      incrementHospitalReports(user.hospitalName, false);
 
       Alert.alert(
         "Donation Completed",

@@ -13,7 +13,6 @@ import { COLORS, SIZES } from "constants/theme";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants/measurements";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { useDispatch, useSelector } from "react-redux";
-import { addFAQToFirebase, createQuestion } from "rtx/slices/faq";
 import { router, useNavigation } from "expo-router";
 import { RootState } from "app/store";
 import useTogglePasswordVisibility from "hooks/useTogglePasswordVisibility";
@@ -21,7 +20,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "firebase-config";
 import { firestoreOperations } from "../../../../firestore-services";
-import { createStaff, getHopitalStaff } from "rtx/slices/staff";
+import { createStaff } from "rtx/slices/staff";
 import IconBtn from "components/common/IconButton";
 
 export default function ManageStaffCreate() {

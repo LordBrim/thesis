@@ -20,11 +20,75 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firestoreOperations } from "firestore-services";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { getDoc, doc } from "firebase/firestore";
+import {
+  getDoc,
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { router } from "expo-router";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import { Picker } from "@react-native-picker/picker";
+import axios from "axios";
+
+const API_KEY = "d1440a571533e6c003ef72358ff55e5a-f6fe91d3-6d5fa136";
+const DOMAIN = "lifeline-ph.tech";
+
+const getEmailContent = (city) => {
+  const subject = "New Blood Drive Event in Your City";
+  const text = `A new blood drive event has been created in ${city}. We invite you to participate and help save lives.`;
+  const html = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+      <h2 style="color: #333;">New Blood Drive Event in ${city}</h2>
+      <p style="color: #555;">Dear User,</p>
+      <p style="color: #555;">A new blood drive event has been created in <strong>${city}</strong>. You can check all of the event details on our Lifeline App! We hope to see you there.</p>
+      <p style="color: #555;">If you have any questions, please contact our support team.</p>
+      <p style="color: #555;">Best regards,<br/>The Lifeline Team</p>
+      <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+      <p style="color: #aaa; font-size: 12px; text-align: center;">This is an automated message, please do not reply.</p>
+    </div>
+  `;
+  return { subject, text, html };
+};
+
+const sendEmailNotification = async (email, city) => {
+  const { subject, text, html } = getEmailContent(city);
+
+  const data = new FormData();
+  data.append("from", "Lifeline Support <support@lifeline.com>");
+  data.append("to", email);
+  data.append("subject", subject);
+  data.append("text", text);
+  data.append("html", html);
+
+  try {
+    const response = await axios.post(
+      `https://api.mailgun.net/v3/${DOMAIN}/messages`,
+      data,
+      {
+        auth: {
+          username: "api",
+          password: API_KEY,
+        },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("Event notification email sent successfully");
+    } else {
+      console.error("Failed to send email:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error sending event notification email:", error);
+  }
+};
 
 export default function CreateEvent({ navigation }) {
   const [title, setTitle] = useState("");
@@ -53,6 +117,27 @@ export default function CreateEvent({ navigation }) {
   const [isEndTimeSelected, setIsEndTimeSelected] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [city, setCity] = useState("");
+  const metroManilaCities = [
+    "Caloocan",
+    "Las Piñas",
+    "Makati",
+    "Malabon",
+    "Mandaluyong",
+    "Manila",
+    "Marikina",
+    "Muntinlupa",
+    "Navotas",
+    "Parañaque",
+    "Pasay",
+    "Pasig",
+    "Pateros",
+    "Quezon City",
+    "San Juan",
+    "Taguig",
+    "Valenzuela",
+  ];
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -153,9 +238,13 @@ export default function CreateEvent({ navigation }) {
       latitude === null ||
       longitude === null ||
       !currentUser ||
-      !userDetails
+      !userDetails ||
+      !city // Ensure city is selected
     ) {
-      Alert.alert("Error", "Please fill in all fields and select an image.");
+      Alert.alert(
+        "Error",
+        "Please fill in all fields, select an image, and choose a city."
+      );
       return;
     }
 
@@ -212,6 +301,7 @@ export default function CreateEvent({ navigation }) {
         hospitalName: userDetails.hospitalName || userDetails.displayName,
         adminEventStatus: "pending",
         eventStatus: "upcoming",
+        city, // Add city to the document
       });
 
       // Upload image to Firebase Storage
@@ -226,7 +316,19 @@ export default function CreateEvent({ navigation }) {
         imageUrl: downloadURL,
       });
 
-      Alert.alert("Success", "Event created successfully!");
+      // Fetch users in the same city and send email notifications
+      const usersQuery = query(
+        collection(FIRESTORE_DB, "User"),
+        where("city", "==", city)
+      );
+      const querySnapshot = await getDocs(usersQuery);
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data();
+        if (userData.email) {
+          sendEmailNotification(userData.email, city);
+        }
+      });
+
       setModalVisible(true); // Show modal on success
       // Reset form fields
       setTitle("");
@@ -243,6 +345,7 @@ export default function CreateEvent({ navigation }) {
       setIsStartTimeSelected(false);
       setIsEndDateSelected(false);
       setIsEndTimeSelected(false);
+      setCity("");
       router.replace("/(app)/(home)/manage-events");
     } catch (error) {
       console.error("Error creating event: ", error);
@@ -474,6 +577,20 @@ export default function CreateEvent({ navigation }) {
           />
         </TextInputWrapper>
       </View>
+      <View style={styles.inputContainer}>
+        <TextInputWrapper label="City">
+          <Picker
+            selectedValue={city}
+            onValueChange={(itemValue) => setCity(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Select a city" value="" />
+            {metroManilaCities.map((cityName) => (
+              <Picker.Item key={cityName} label={cityName} value={cityName} />
+            ))}
+          </Picker>
+        </TextInputWrapper>
+      </View>
     </View>
   );
 
@@ -550,5 +667,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginBottom: 20,
+  },
+  picker: {
+    height: 40,
+    flex: 1,
+    marginLeft: 10,
+    color: COLORS.grayDark,
   },
 });

@@ -26,6 +26,7 @@ const StaffChangePasswordScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalTitle, setModalTitle] = useState("");
+  const [isPasswordChanged, setIsPasswordChanged] = useState(false);
   const router = useRouter();
   const handleCurrentPasswordVisibility = () => {
     setIsCurrentPasswordVisible(!isCurrentPasswordVisible);
@@ -68,6 +69,7 @@ const StaffChangePasswordScreen = () => {
         await updatePassword(user, newPassword);
         setModalTitle("Success");
         setModalMessage("Password changed successfully");
+        setIsPasswordChanged(true);
         setModalVisible(true);
       } catch (error) {
         console.error("Error changing password:", error);
@@ -75,6 +77,7 @@ const StaffChangePasswordScreen = () => {
         setModalMessage(
           "Failed to change password. Please check your current password."
         );
+        setIsPasswordChanged(false);
         setModalVisible(true);
       }
     } else {
@@ -194,7 +197,9 @@ const StaffChangePasswordScreen = () => {
         btnLabel="OK"
         onPress={() => {
           setModalVisible(false);
-          router.back();
+          if (isPasswordChanged) {
+            router.back();
+          }
         }}
       />
     </View>

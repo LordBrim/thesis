@@ -41,6 +41,8 @@ export default function ForgotPassword() {
   const refTimer = useRef(null);
   const [showModalEmail, setShowModalEmail] = useState(false);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [showModalEmailNotRegistered, setShowModalEmailNotRegistered] =
+    useState(false);
   const generatePin = () => {
     return Math.floor(10000 + Math.random() * 90000).toString();
   };
@@ -67,6 +69,7 @@ export default function ForgotPassword() {
       console.log(`Email ${email} exists:`, emailExists);
       if (!emailExists) {
         setEmailError("The email address is not registered.");
+        setShowModalEmailNotRegistered(true);
         return;
       }
       if (email.length == 0) {
@@ -280,6 +283,22 @@ export default function ForgotPassword() {
           {pinError ? <Text style={styles.errorText}>{pinError}</Text> : null}
         </View>
       </SingleBtnModal>
+      <SingleBtnModal
+        visible={showModalEmailNotRegistered}
+        onRequestClose={() => setShowModalEmailNotRegistered(false)}
+        onPress={() => setShowModalEmailNotRegistered(false)}
+        icon={
+          <FontAwesome5 name="exclamation-circle" size={40} color="black" />
+        }
+        title="Email Not Registered"
+        description={
+          <Text>
+            The email address <Text style={{ fontWeight: "700" }}>{email}</Text>{" "}
+            is not registered.
+          </Text>
+        }
+        btnLabel="Close"
+      />
     </View>
   );
 }

@@ -361,7 +361,7 @@ export default function RegisterScreen() {
     <GestureHandlerRootView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={true}
-        overScrollMode="never"
+        overScrollMode="always"
         contentContainerStyle={styles.scrollview}
       >
         <View style={styles.cTop}>
@@ -573,9 +573,9 @@ export default function RegisterScreen() {
                 <Text>?</Text>
               </View>
             </View>
-          </View>
-          <View style={{ marginBottom: 30 }}>
-            <CallToActionBtn label="Register" onPress={() => register()} />
+            <View style={{ marginBottom: 55 }}>
+              <CallToActionBtn label="Register" onPress={() => register()} />
+            </View>
           </View>
 
           {/* <View

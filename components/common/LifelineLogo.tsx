@@ -6,11 +6,11 @@ export default function LifelineLogo() {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>Lifeline</Text>
         <Image
           style={styles.logo}
           source={require("../../assets/splash/icon.png")}
         />
+        <Text style={styles.title}>Lifeline</Text>
       </View>
     </View>
   );
@@ -19,25 +19,22 @@ export default function LifelineLogo() {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    gap: 4,
   },
   innerContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
-    gap: 14,
+    alignItems: "flex-end",
     width: 230,
   },
   title: {
     fontSize: SIZES.xxxLarge,
     fontWeight: "900",
-    textTransform: "uppercase",
     color: COLORS.primary,
+    paddingBottom: 4,
   },
-
   logo: {
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
     borderRadius: 100,
   },
 });

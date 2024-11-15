@@ -19,7 +19,7 @@ const UpdateCard = ({ update }) => {
   return (
     <Pressable android_ripple={{ radius: 250 }} style={styles.cardContainer}>
       <View style={{ height: 35, width: 35 }}>
-        {message === "thanks" && (
+        {message === "completed" && (
           <View
             style={[
               styles.cardIcon,
@@ -109,7 +109,7 @@ const UpdateCard = ({ update }) => {
         )}
       </View>
       <View style={{ width: "100%", flex: 1, gap: 2 }}>
-        {message === "thanks" && (
+        {message === "completed" && (
           <Text style={styles.cardMessage}>
             Thank you for donating your blood at
             <Text style={{ fontWeight: "700" }}>

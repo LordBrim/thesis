@@ -261,7 +261,7 @@ const HospitalMapView = () => {
     const fetchHospitals = async () => {
       try {
         const querySnapshot = await getDocs(
-          collection(FIRESTORE_DB, "hospitalData")
+          collection(FIRESTORE_DB, "hospital")
         );
         const hospitalsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -344,15 +344,18 @@ const HospitalMapView = () => {
           strokeWidth={5}
           strokeColor="blue"
         />
-        {parsedHospitals.map((hospital) => (
-          <HospitalMarker
-            key={hospital.id}
-            data={hospital}
-            setSelectedMarker={setSelectedMarker}
-            styles={styles}
-            type="hospital"
-          />
-        ))}
+        {parsedHospitals
+          .filter(hospital => !hospital.disabled)
+          .map((hospital) => (
+            <HospitalMarker
+              key={hospital.id}
+              data={hospital}
+              setSelectedMarker={setSelectedMarker}
+              styles={styles}
+              type="hospital"
+            />
+          ))
+        }
         {events.map((event) => (
           <HospitalMarker
             key={event.id}

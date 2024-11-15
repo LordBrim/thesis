@@ -287,6 +287,11 @@ export default function AccountTab({
               }
               label="profile"
             />
+            <Card
+              href="/incentives"
+              icon={<MaterialIcons name="star" size={22} color={COLORS.text} />}
+              label="incentives"
+            />
           </View>
         </View>
 

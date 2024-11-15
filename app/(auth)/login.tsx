@@ -321,34 +321,6 @@ export default function LoginScreen() {
           />
         </View>
 
-        {/* TODO: Remove on showcase */}
-        <View style={{ gap: 8, marginVertical: "auto" }}>
-          <Text style={GS.h2}>Easy Login</Text>
-
-          <FlatList
-            data={gridBtns}
-            renderItem={({ item }) => (
-              <View style={[easyLogin.view]}>
-                <Pressable
-                  style={easyLogin.press}
-                  android_ripple={{ radius: 200 }}
-                  onPress={() => login(item.email, item.password)}
-                >
-                  {item.icon}
-                  <Text style={easyLogin.text}>{item.title}</Text>
-                </Pressable>
-              </View>
-            )}
-            keyExtractor={(item, index) => {
-              return index.toString();
-            }}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            numColumns={4}
-            scrollEnabled={false}
-          />
-        </View>
-        {/* TODO: Remove on showcase */}
         <View style={styles.cBottom}>
           <Text>Don't have an account? </Text>
           <LinkBtn label="Register" href="/register" underline />

@@ -101,7 +101,7 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
   const hospitals = [
     { label: "UERM Hospital", value: "UERM Hospital" },
     {
-      label: "ACE Medical Center",
+      label: "ACE Medical Center Mandaluyong",
       value: "ACE Medical Center Mandaluyong",
     },
   ];

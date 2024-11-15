@@ -78,6 +78,12 @@ export default function RegisterScreen() {
     setShow(true);
   };
   const sendOTP = async (email) => {
+    if (!isValidEmail(email)) {
+      setModalTitle("Invalid Email");
+      setModalDescription("Please enter a valid email address.");
+      setModalVisible(true);
+      return;
+    }
     const API_KEY = "d1440a571533e6c003ef72358ff55e5a-f6fe91d3-6d5fa136";
     const DOMAIN = "lifeline-ph.tech";
 

@@ -342,7 +342,7 @@ export default function ManageTicketReview() {
         await updateDoc(userDocRef, {
           incentive: newIncentiveCount,
           nextDonationDate: nextDonationDate,
-          status: "thanks",
+          status: "completed",
         });
       }
 

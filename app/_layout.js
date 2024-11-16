@@ -8,27 +8,15 @@ import { useEffect } from "react";
 import { SplashScreen } from "expo-router";
 import { useFonts } from "expo-font";
 import { setCustomText } from "react-native-global-props";
+import {
+  Poppins_400Regular,
+  Poppins_700Bold,
+} from "@expo-google-fonts/poppins";
 
 export default function StackLayout() {
   const [loaded, error] = useFonts({
-    "Poppins-Thin": require("./assets/fonts/Poppins-Thin.ttf"),
-    "Poppins-ThinItalic": require("./assets/fonts/Poppins-ThinItalic.ttf"),
-    "Poppins-ExtraLight": require("./assets/fonts/Poppins-ExtraLight.ttf"),
-    "Poppins-ExtraLightItalic": require("./assets/fonts/Poppins-ExtraLightItalic.ttf"),
-    "Poppins-Light": require("./assets/fonts/Poppins-Light.ttf"),
-    "Poppins-LightItalic": require("./assets/fonts/Poppins-LightItalic.ttf"),
-    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-RegularItalic": require("./assets/fonts/Poppins-RegularItalic.ttf"),
-    "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
-    "Poppins-MediumItalic": require("./assets/fonts/Poppins-MediumItalic.ttf"),
-    "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
-    "Poppins-SemiBoldItalic": require("./assets/fonts/Poppins-SemiBoldItalic.ttf"),
-    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
-    "Poppins-BoldItalic": require("./assets/fonts/Poppins-BoldItalic.ttf"),
-    "Poppins-ExtraBold": require("./assets/fonts/Poppins-ExtraBold.ttf"),
-    "Poppins-ExtraBoldItalic": require("./assets/fonts/Poppins-ExtraBoldItalic.ttf"),
-    "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
-    "Poppins-BlackItalic": require("./assets/fonts/Poppins-BlackItalic.ttf"),
+    Poppins_400Regular,
+    Poppins_700Bold,
   });
   useEffect(() => {
     if (loaded || error) {
@@ -47,7 +35,7 @@ export default function StackLayout() {
     changeScreenOrientation();
     const customTextProps = {
       style: {
-        fontFamily: "Montserrat_400Regular",
+        fontFamily: "Poppins-Regular",
       },
     };
     setCustomText(customTextProps);

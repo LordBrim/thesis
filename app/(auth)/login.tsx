@@ -292,11 +292,13 @@ export default function LoginScreen() {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <View style={{ flexDirection: "row", gap: 10 }}>
+              <View
+                style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+              >
                 <CheckBox
                   checked={toggleRemember}
                   color="#FF3642"
-                  borderRadius={3}
+                  borderRadius={5}
                   onPress={() => handleToggleRemember()}
                 />
                 <Text
@@ -350,8 +352,12 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
+    justifyContent: "center",
+    alignItems: "center",
   },
   scrollview: {
+    width: "95%",
+
     height: Dimensions.get("window").height,
     maxHeight: Dimensions.get("window").height - 82,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,

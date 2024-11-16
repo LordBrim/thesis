@@ -5,13 +5,10 @@ import { SIZES, COLORS } from "../../constants";
 export default function LifelineLogo() {
   return (
     <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <Image
-          style={styles.logo}
-          source={require("../../assets/splash/icon.png")}
-        />
-        <Text style={styles.title}>Lifeline</Text>
-      </View>
+      <Image
+        style={{ height: 70, width: "75%" }}
+        source={require("../../assets/images/lifeline_logo_text.png")}
+      />
     </View>
   );
 }
@@ -23,18 +20,13 @@ const styles = StyleSheet.create({
   innerContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "flex-end",
+    alignItems: "center",
     width: 230,
   },
   title: {
     fontSize: SIZES.xxxLarge,
     fontFamily: "Poppins_900Black",
     color: COLORS.primary,
-    paddingBottom: 4,
-  },
-  logo: {
-    width: 70,
-    height: 70,
-    borderRadius: 100,
+    marginTop: 20,
   },
 });

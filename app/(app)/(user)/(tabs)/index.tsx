@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textTransform: "capitalize",
     color: COLORS.primary,
   },

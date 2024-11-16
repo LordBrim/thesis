@@ -112,14 +112,14 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 20,
     textAlign: "center",
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   qContainer: {
     width: "90%",
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   aContainer: {
     padding: 10,

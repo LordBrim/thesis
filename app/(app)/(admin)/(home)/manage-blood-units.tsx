@@ -30,6 +30,7 @@ export default function ManageBloodUnits() {
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
+        fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
     });
@@ -57,7 +58,7 @@ export default function ManageBloodUnits() {
           }}
           onPress={handleUpdate}
         >
-          <Text style={{ fontWeight: "bold" }}>Save</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Save</Text>
         </TouchableOpacity>
       ),
     });
@@ -239,6 +240,6 @@ const styles = StyleSheet.create({
     maxWidth: 55,
   },
   detail: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

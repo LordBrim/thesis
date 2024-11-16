@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   header: {
     color: COLORS.primary,
     fontSize: SIZES.large,
-    fontWeight: "600",
+    fontFamily: "Poppins_600SemiBold",
   },
   contentContainer: { flex: 1, flexDirection: "column", gap: 8 },
   inputContainer: {

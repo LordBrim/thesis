@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.xLarge,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
   },
   flatlist: {
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 20,
     color: COLORS.primary,
   },
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   },
   modalLabel: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.text,
   },
   modalValue: {
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   cardContainer: {
     margin: 25,
@@ -329,7 +329,7 @@ const card = StyleSheet.create({
   },
   location: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   details: {
     fontSize: SIZES.small,

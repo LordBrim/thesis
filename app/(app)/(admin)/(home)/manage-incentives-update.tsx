@@ -42,7 +42,7 @@ export default function ManageIncentivesUpdate() {
     navigation.setOptions({
       headerTitle: "Edit Incentives",
       headerTintColor: "#000000",
-      headerTitleStyle: { fontSize: 16 },
+      headerTitleStyle: { fontSize: 16, fontFamily: "Poppins_400Regular" },
       headerTitleAlign: "center",
     });
   }, []);
@@ -140,7 +140,7 @@ export default function ManageIncentivesUpdate() {
           }}
           onPress={handleUpdate}
         >
-          <Text style={{ fontWeight: "bold" }}>Save</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Save</Text>
         </TouchableOpacity>
       ),
     });
@@ -175,7 +175,9 @@ export default function ManageIncentivesUpdate() {
             style={{ flex: 1, padding: 12 }}
           />
         </TextInputWrapper>
-        <Text style={{ fontWeight: "bold", textTransform: "capitalize" }}>
+        <Text
+          style={{ fontFamily: "Poppins_700Bold", textTransform: "capitalize" }}
+        >
           Incentives
         </Text>
         {inputs.map((input, index) => (
@@ -251,7 +253,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     fontSize: 16,
   },
 });

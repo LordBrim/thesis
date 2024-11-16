@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     borderColor: "#FF5607",
   },
   label: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textTransform: "capitalize",
     position: "absolute",
     left: 6,

@@ -229,6 +229,6 @@ const card = StyleSheet.create({
   },
   name: {
     minWidth: "78%",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

@@ -112,7 +112,7 @@ const UpdateCard = ({ update }) => {
         {message === "completed" && (
           <Text style={styles.cardMessage}>
             Thank you for donating your blood at
-            <Text style={{ fontWeight: "700" }}>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
               {" "}
               {hospital || "the hospital"}
             </Text>
@@ -126,7 +126,7 @@ const UpdateCard = ({ update }) => {
             {type === "request" && "blood unit"}
             {type === "transfer" && "transfer of blood units"} is successfully
             sent to
-            <Text style={{ fontWeight: "700" }}>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
               {" "}
               {hospital || "all partnered hospital"}
             </Text>
@@ -140,14 +140,16 @@ const UpdateCard = ({ update }) => {
             {type === "request" && "blood unit"}
             {type === "transfer" && `transfer of blood units`} is{" "}
             {lowerCaseStatus === "accepted" ? (
-              <Text style={{ color: "green", fontWeight: "700" }}>
+              <Text style={{ color: "green", fontFamily: "Poppins_700Bold" }}>
                 accepted
               </Text>
             ) : (
-              <Text style={{ color: "red", fontWeight: "700" }}>declined</Text>
+              <Text style={{ color: "red", fontFamily: "Poppins_700Bold" }}>
+                declined
+              </Text>
             )}{" "}
             by
-            <Text style={{ fontWeight: "700" }}>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
               {" "}
               {hospital || "the hospital"}
             </Text>
@@ -156,7 +158,7 @@ const UpdateCard = ({ update }) => {
         {message === "incentives" && lowerCaseStatus !== "missing" && (
           <Text style={styles.cardMessage}>
             You are now qualified to claim the incentives for{" "}
-            <Text style={{ fontWeight: "700" }}>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
               {" "}
               {hospital || "the hospital"}
             </Text>
@@ -165,7 +167,7 @@ const UpdateCard = ({ update }) => {
         {message === "deliberation" && lowerCaseStatus === "missing" ? (
           <Text style={styles.cardMessage}>
             You have not showed up for the appointment at
-            <Text style={{ fontWeight: "700" }}>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
               {" "}
               {hospital || "the hospital"}
             </Text>
@@ -177,9 +179,11 @@ const UpdateCard = ({ update }) => {
             {type === "appointment" && "donation appointment"}
             {type === "request" && "blood unit"}
             {type === "transfer" && `transfer of blood units`} has been{" "}
-            <Text style={{ color: "green", fontWeight: "700" }}>completed</Text>{" "}
+            <Text style={{ color: "green", fontFamily: "Poppins_700Bold" }}>
+              completed
+            </Text>{" "}
             at
-            <Text style={{ fontWeight: "700" }}>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
               {" "}
               {hospital || "the hospital"}
             </Text>
@@ -211,10 +215,9 @@ const styles = StyleSheet.create({
   },
   cardMessage: {
     width: "auto",
-    fontWeight: "400",
   },
   cardDatetime: {
-    fontWeight: "700",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.slate500,
     fontSize: 12,
   },

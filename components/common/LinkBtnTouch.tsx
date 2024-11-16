@@ -19,7 +19,7 @@ export default function LinkBtnTouch({ label, onPress, linkStyle }: ILinkBtn) {
 
 const styles = StyleSheet.create({
   label: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textDecorationLine: "underline",
     color: COLORS.primary,
   },

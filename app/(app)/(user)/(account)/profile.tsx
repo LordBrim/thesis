@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   },
   titleHeader: {
     fontSize: SIZES.xLarge,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 20,
   },
   profileImage: {
@@ -372,7 +372,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: "white",
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   profile: {
     flexDirection: "row",

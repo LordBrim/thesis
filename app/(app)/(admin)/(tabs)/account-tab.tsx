@@ -384,14 +384,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textTransform: "capitalize",
     color: COLORS.primary,
   },
   subtitle: {
     fontSize: SIZES.small,
     color: COLORS.text,
-    fontWeight: "500",
+    fontFamily: "Poppins_500Medium",
   },
   section: {
     marginTop: HORIZONTAL_SCREEN_MARGIN,
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontSize: SIZES.xSmall,
     textTransform: "capitalize",
-    fontWeight: "700",
+    fontFamily: "Poppins_700Bold",
     marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   flatlist: {
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
     fontSize: 16,
-    fontWeight: "500",
+    fontFamily: "Poppins_500Medium",
     textTransform: "capitalize",
   },
   loadingContainer: {

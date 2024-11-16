@@ -95,12 +95,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 16,
   },
   label: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginTop: 8,
   },
   value: {

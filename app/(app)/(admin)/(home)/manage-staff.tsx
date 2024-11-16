@@ -29,6 +29,7 @@ export default function ManageStaff() {
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
+        fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
     });
@@ -127,13 +128,14 @@ export function StaffCard({ uuid, disabled, displayName, email }: IStaffCard) {
       <View style={card.aContainer}>
         <Text style={card.answer}>
           Disabled:
-          <Text style={{ fontWeight: "normal" }}>
+          <Text style={{ fontFamily: "Poppins_400Regular" }}>
             {" "}
             {disabled ? "true" : "false"}
           </Text>
         </Text>
         <Text style={card.answer}>
-          Email:<Text style={{ fontWeight: "normal" }}> {email}</Text>
+          Email:
+          <Text style={{ fontFamily: "Poppins_400Regular" }}> {email}</Text>
         </Text>
       </View>
     </>
@@ -170,7 +172,7 @@ const card = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   aContainer: {
     width: "100%",
@@ -182,6 +184,6 @@ const card = StyleSheet.create({
   answer: {
     flex: 1,
     flexDirection: "row",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

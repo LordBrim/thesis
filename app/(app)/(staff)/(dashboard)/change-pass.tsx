@@ -104,7 +104,11 @@ const StaffChangePasswordScreen = () => {
           }}
         >
           <Text
-            style={{ color: COLORS.primary, fontSize: 24, fontWeight: "bold" }}
+            style={{
+              color: COLORS.primary,
+              fontSize: 24,
+              fontFamily: "Poppins_700Bold",
+            }}
           >
             Change password
           </Text>

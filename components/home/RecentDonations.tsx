@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   flatlist: {
     flex: 1,

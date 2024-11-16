@@ -50,7 +50,7 @@ export default function ManageStaffCreate() {
           }}
           onPress={handleCreate}
         >
-          <Text style={{ fontWeight: "bold" }}>Add</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Add</Text>
         </TouchableOpacity>
       ),
     });

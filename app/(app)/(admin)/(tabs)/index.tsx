@@ -51,8 +51,7 @@ const styles = StyleSheet.create({
   ctaTitle: {
     fontSize: 18,
     color: COLORS.background,
-
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   ctaSubtitle: {
     fontSize: SIZES.small,

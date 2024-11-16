@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 10,
   },
   appointmentContainer: {

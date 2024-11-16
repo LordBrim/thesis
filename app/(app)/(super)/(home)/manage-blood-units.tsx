@@ -117,7 +117,7 @@ function BloodUnitsCard({ uuid, title, stock }: IBloodUnitsCard) {
           }}
           onPress={handleUpdate}
         >
-          <Text style={{ fontWeight: "bold" }}>Save</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Save</Text>
         </TouchableOpacity>
       </View>
       <View style={card.row}>
@@ -268,6 +268,6 @@ const card = StyleSheet.create({
     maxWidth: 55,
   },
   detail: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

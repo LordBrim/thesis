@@ -101,7 +101,7 @@ export default function UpcomingAppointmentsStaff() {
           style={{
             color: COLORS.primary,
             fontSize: 14,
-            fontWeight: "bold",
+            fontFamily: "Poppins_700Bold",
             textDecorationLine: "underline",
           }}
           onPress={() =>
@@ -277,7 +277,7 @@ const allAppointments = StyleSheet.create({
   },
   modalTitle: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 20,
     color: COLORS.primary,
   },
@@ -290,7 +290,7 @@ const allAppointments = StyleSheet.create({
   },
   modalLabel: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.text,
   },
   modalValue: {
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   flatlist: {
     flex: 1,
@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 20,
     color: COLORS.primary,
   },
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
   },
   modalLabel: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.text,
   },
   modalValue: {
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });
 
@@ -395,7 +395,7 @@ const card = StyleSheet.create({
   },
   location: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   details: {
     fontSize: SIZES.small,

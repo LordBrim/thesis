@@ -72,7 +72,7 @@ export default function About() {
             textDecorationColor: COLORS.primary,
             color: COLORS.primary,
             fontSize: 16,
-            fontWeight: "bold",
+            fontFamily: "Poppins_700Bold",
             marginBottom: 30,
             textAlign: "center",
           }}
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textAlign: "center",
     color: COLORS.primary,
     marginBottom: 10,

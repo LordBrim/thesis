@@ -29,6 +29,7 @@ export default function ManageIncentives() {
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
+        fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
     });
@@ -70,7 +71,7 @@ export default function ManageIncentives() {
           }}
           onPress={handleUpdate}
         >
-          <Text style={{ fontWeight: "bold" }}>Edit</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Edit</Text>
         </TouchableOpacity>
       ),
     });
@@ -135,7 +136,9 @@ export default function ManageIncentives() {
                   }
                 />
                 {item.incentive && (
-                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                  <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                    {item.incentive}
+                  </Text>
                 )}
               </View>
             )}
@@ -176,7 +179,9 @@ export default function ManageIncentives() {
                   }
                 />
                 {item.incentive && (
-                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                  <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                    {item.incentive}
+                  </Text>
                 )}
               </View>
             )}
@@ -217,7 +222,9 @@ export default function ManageIncentives() {
                   }
                 />
                 {item.incentive && (
-                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                  <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                    {item.incentive}
+                  </Text>
                 )}
               </View>
             )}
@@ -258,7 +265,9 @@ export default function ManageIncentives() {
                   }
                 />
                 {item.incentive && (
-                  <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                  <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                    {item.incentive}
+                  </Text>
                 )}
               </View>
             )}
@@ -287,7 +296,7 @@ export default function ManageIncentives() {
           }}
           onPress={handleSimulation}
         >
-          <Text style={{ fontWeight: "bold" }}>Simulate</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Simulate</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

@@ -102,7 +102,9 @@ export default function Incentives() {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -143,7 +145,9 @@ export default function Incentives() {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -184,7 +188,9 @@ export default function Incentives() {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -225,7 +231,9 @@ export default function Incentives() {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -256,6 +264,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

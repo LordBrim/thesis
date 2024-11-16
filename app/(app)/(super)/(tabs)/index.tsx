@@ -156,23 +156,33 @@ export function HospitalCard({
       <View style={card.bContainer}>
         <Text style={card.detail}>
           UUID:
-          <Text style={{ fontWeight: "normal" }}> {uuid}</Text>
+          <Text style={{ fontFamily: "Poppins_400Regular" }}> {uuid}</Text>
         </Text>
         <Text style={card.detail}>
-          Address:<Text style={{ fontWeight: "normal" }}> {address}</Text>
+          Address:
+          <Text style={{ fontFamily: "Poppins_400Regular" }}> {address}</Text>
         </Text>
         <Text style={card.detail}>
           Contact Number:
-          <Text style={{ fontWeight: "normal" }}> {contactNumber}</Text>
+          <Text style={{ fontFamily: "Poppins_400Regular" }}>
+            {" "}
+            {contactNumber}
+          </Text>
         </Text>
         <Text style={card.detail}>Coordinates:</Text>
         <Text style={card.detail}>
           {"\t\t"}Latitude:
-          <Text style={{ fontWeight: "normal" }}> {coordinates.latitude}</Text>
+          <Text style={{ fontFamily: "Poppins_400Regular" }}>
+            {" "}
+            {coordinates.latitude}
+          </Text>
         </Text>
         <Text style={card.detail}>
           {"\t\t"}Longitude:
-          <Text style={{ fontWeight: "normal" }}> {coordinates.longitude}</Text>
+          <Text style={{ fontFamily: "Poppins_400Regular" }}>
+            {" "}
+            {coordinates.longitude}
+          </Text>
         </Text>
       </View>
     </View>
@@ -214,6 +224,6 @@ const card = StyleSheet.create({
   },
   detail: {
     flex: 1,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

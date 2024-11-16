@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.xxxLarge,
-    fontWeight: "900",
+    fontFamily: "Poppins_900Black",
     color: COLORS.primary,
     paddingBottom: 4,
   },

@@ -148,7 +148,9 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -189,7 +191,9 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -232,7 +236,7 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
               {item.incentive && (
                 <Text
                   style={{
-                    fontWeight: "bold",
+                    fontFamily: "Poppins_700Bold",
                   }}
                 >
                   {item.incentive}
@@ -277,7 +281,9 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
                 }
               />
               {item.incentive && (
-                <Text style={{ fontWeight: "bold" }}>{item.incentive}</Text>
+                <Text style={{ fontFamily: "Poppins_700Bold" }}>
+                  {item.incentive}
+                </Text>
               )}
             </View>
           )}
@@ -308,7 +314,7 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
           }}
           onPress={handleUpdate}
         >
-          <Text style={{ fontWeight: "bold" }}>Edit</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -322,7 +328,7 @@ function IncentivesCard({ uuid, name, logoUrl, incentives }: IIncentivesCard) {
         >
           <Text
             style={{
-              fontWeight: "bold",
+              fontFamily: "Poppins_700Bold",
             }}
           >
             Simulate

@@ -228,7 +228,7 @@ By proceeding with this screening, you acknowledge that you understand these req
       >
         <View
           style={{
-            backgroundColor: COLORS.white,
+            backgroundColor: COLORS.background,
             marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
             borderRadius: 15,
             justifyContent: "center",
@@ -245,7 +245,7 @@ By proceeding with this screening, you acknowledge that you understand these req
           </Text>
           <Text
             style={{
-              fontWeight: "bold",
+              fontFamily: "Poppins_700Bold",
               fontSize: 28,
               color: COLORS.primary,
             }}

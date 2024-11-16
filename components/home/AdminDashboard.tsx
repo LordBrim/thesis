@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   dBtnText: {
-    fontWeight: "500",
+    fontFamily: "Poppins_500Medium",
     textAlign: "center",
   },
   dBtnView: {

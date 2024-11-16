@@ -46,7 +46,7 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 
-import { useRouter } from "expo-router"; 
+import { useRouter } from "expo-router";
 const DisplayedIcons = [
   {
     Icon: ABloodType,
@@ -136,16 +136,17 @@ const HospitalMapView = () => {
     }
   };
 
-  const [locationPermissionDenied, setLocationPermissionDenied] = useState(false); // Add state for permission cancelled
+  const [locationPermissionDenied, setLocationPermissionDenied] =
+    useState(false); // Add state for permission cancelled
 
   useEffect(() => {
     console.log("Selected Marker:", selectedMarker);
     if (selectedMarker) {
-        openBottomSheet();
-        fetchRoute();
+      openBottomSheet();
+      fetchRoute();
     }
     console.log("ue 1 triggered");
-}, [selectedMarker]);
+  }, [selectedMarker]);
 
   const openGoogleMapsForDriving = () => {
     if (currentLocation && selectedMarker) {
@@ -215,11 +216,9 @@ const HospitalMapView = () => {
         }
       }
     })();
-    console.log("ue 2 triggered")
-
+    console.log("ue 2 triggered");
   }, []);
 
-  
   const isActiveEvent = (startDate, startTime, endDate, endTime) => {
     const now = moment();
     const start = moment(`${startDate} ${startTime}`, "MM/DD/YYYY hh:mm A");
@@ -241,9 +240,14 @@ const HospitalMapView = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        const filteredEvents = eventsData.filter(event =>
-          isActiveEvent(event.startDate, event.startTime, event.endDate, event.endTime) ||
-          isUpcomingEvent(event.startDate, event.startTime)
+        const filteredEvents = eventsData.filter(
+          (event) =>
+            isActiveEvent(
+              event.startDate,
+              event.startTime,
+              event.endDate,
+              event.endTime
+            ) || isUpcomingEvent(event.startDate, event.startTime)
         );
         setEvents(filteredEvents);
         console.log(filteredEvents);
@@ -253,8 +257,7 @@ const HospitalMapView = () => {
     };
 
     fetchEvents();
-    console.log("ue 3 triggered")
-
+    console.log("ue 3 triggered");
   }, []);
 
   useEffect(() => {
@@ -280,8 +283,7 @@ const HospitalMapView = () => {
     } else {
       setLoading(false); // Set loading to false if hospitals are already provided
     }
-    console.log("ue 4 triggered")
-
+    console.log("ue 4 triggered");
   }, [hospitals]);
 
   const handleMapInteraction = () => {
@@ -345,7 +347,7 @@ const HospitalMapView = () => {
           strokeColor="blue"
         />
         {parsedHospitals
-          .filter(hospital => !hospital.disabled)
+          .filter((hospital) => !hospital.disabled)
           .map((hospital) => (
             <HospitalMarker
               key={hospital.id}
@@ -354,8 +356,7 @@ const HospitalMapView = () => {
               styles={styles}
               type="hospital"
             />
-          ))
-        }
+          ))}
         {events.map((event) => (
           <HospitalMarker
             key={event.id}
@@ -510,7 +511,6 @@ const HospitalMapView = () => {
                 iconColor={COLORS.primary}
                 textStyle={{ fontSize: 15, color: COLORS.primary }}
               />
-             
             </View>
           ) : selectedMarker && selectedMarker.type !== "hospital" ? (
             <View style={styles.topAlignedContent}>
@@ -672,20 +672,20 @@ const styles = StyleSheet.create({
   },
   markerText: {
     color: COLORS.primary,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textAlignVertical: "center",
   },
   permissionDeniedContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'red',
+    backgroundColor: "red",
     padding: 10,
     zIndex: 1,
   },
   permissionDeniedText: {
-    color: 'white',
-    textAlign: 'center',
+    color: "white",
+    textAlign: "center",
   },
 });

@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   dBtnText: {
-    fontWeight: "500",
+    fontFamily: "Poppins_500Medium",
     textAlign: "center",
   },
   dBtnView: {

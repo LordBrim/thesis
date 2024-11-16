@@ -127,7 +127,7 @@ export default function AdminTicketScreen() {
           source={hospitalImages[adminHospital]}
           style={{ width: 60, height: 60, marginRight: 12 }}
         /> */}
-        <Text style={[styles.noRequests, { fontWeight: "bold" }]}>
+        <Text style={[styles.noRequests, { fontFamily: "Poppins_700Bold" }]}>
           {adminHospital}
         </Text>
       </View>
@@ -145,7 +145,7 @@ export default function AdminTicketScreen() {
           cta
         />
       </View>
-      <Text style={{ fontWeight: "bold", fontSize: 20, margin: 15 }}>
+      <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 20, margin: 15 }}>
         Appointments For Today:
       </Text>
       <View style={{ flexDirection: "column" }}>
@@ -154,7 +154,7 @@ export default function AdminTicketScreen() {
             key={appointment.id}
             style={{ borderWidth: 1, borderRadius: 3, margin: 10, padding: 10 }}
           >
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+            <Text style={{ fontSize: 18, fontFamily: "Poppins_700Bold" }}>
               {appointment.ticketNumber} - {appointment.selectedDate}{" "}
               {appointment.selectedTime}
             </Text>
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   label: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   value: {},
   buttonsContainer: {

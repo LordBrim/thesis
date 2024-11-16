@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
   header: {
     color: COLORS.primary,
     fontSize: SIZES.large,
-    fontWeight: "600",
+    fontFamily: "Poppins_600SemiBold",
   },
 });

@@ -35,9 +35,7 @@ function Maps({ setMapBackground, setMapHeader }) {
       // Simulate a delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const querySnapshot = await getDocs(
-        collection(FIRESTORE_DB, "hospital")
-      );
+      const querySnapshot = await getDocs(collection(FIRESTORE_DB, "hospital"));
       const hospitalsData = await Promise.all(
         querySnapshot.docs.map(async (doc) => {
           const data = doc.data();
@@ -130,7 +128,8 @@ function Maps({ setMapBackground, setMapHeader }) {
         </View>
       ) : (
         !selectedHospital &&
-        HospitalsData.map((hospital, index) => (
+        HospitalsData.map(
+          (hospital, index) =>
             !hospital.disabled && (
               <Pressable
                 style={styles.hContainer}
@@ -148,7 +147,7 @@ function Maps({ setMapBackground, setMapHeader }) {
                 </View>
               </Pressable>
             )
-        ))
+        )
       )}
     </SafeAreaView>
   );
@@ -167,7 +166,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     gap: 16,
   },
   hContainer: {
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
   },
   hName: {
     flex: 1,
-    fontWeight: "600",
+    fontFamily: "Poppins_600SemiBold",
   },
   icon: {
     width: 50,

@@ -45,7 +45,7 @@ export default function ManageFaqCreate() {
           }}
           onPress={handleCreate}
         >
-          <Text style={{ fontWeight: "bold" }}>Add</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Add</Text>
         </TouchableOpacity>
       ),
     });
@@ -113,6 +113,17 @@ export default function ManageFaqCreate() {
     );
     router.back();
   };
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Create Hospital",
+      headerTintColor: "#000000",
+      headerTitleStyle: {
+        fontSize: 16,
+        fontFamily: "Poppins_400Regular",
+      },
+      headerTitleAlign: "center",
+    });
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -244,6 +255,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   detail: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });

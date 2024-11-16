@@ -30,9 +30,8 @@ export const TextInputField = ({ field, handleInputChange }) => {
     <View style={styles.inputContainer}>
       <Text
         style={{
-          fontFamily: "Raleway_500Medium",
           fontSize: 16,
-          fontWeight: "bold",
+          fontFamily: "Poppins_700Bold",
           marginVertical: 10,
         }}
       >

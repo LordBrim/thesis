@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   button: {
     flexDirection: "row",
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textAlign: "center",
     marginLeft: 10,
   },

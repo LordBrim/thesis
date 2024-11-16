@@ -13,7 +13,7 @@ export default function ReportLineChart({ data }: LineChartPropsType) {
       <Text
         style={{
           fontSize: 20,
-          fontWeight: "bold",
+          fontFamily: "Poppins_700Bold",
           textAlign: "center",
         }}
       >
@@ -120,7 +120,7 @@ export default function ReportLineChart({ data }: LineChartPropsType) {
                 <Text style={{ color: "lightgray", fontSize: 12 }}>
                   donations
                 </Text>
-                <Text style={{ color: "white", fontWeight: "bold" }}>
+                <Text style={{ color: "white", fontFamily: "Poppins_700Bold" }}>
                   {items[0].value}
                 </Text>
                 <Text
@@ -128,7 +128,7 @@ export default function ReportLineChart({ data }: LineChartPropsType) {
                 >
                   requests
                 </Text>
-                <Text style={{ color: "white", fontWeight: "bold" }}>
+                <Text style={{ color: "white", fontFamily: "Poppins_700Bold" }}>
                   {items[1].value}
                 </Text>
               </View>

@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   location: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   date: {
     fontSize: SIZES.small,

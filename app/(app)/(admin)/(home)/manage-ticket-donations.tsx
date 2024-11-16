@@ -102,6 +102,7 @@ export default function ManageTicketsDonations() {
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
+        fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
     });
@@ -275,9 +276,13 @@ function ManageTicketsDonationsPending() {
                 },
               });
             }}
-            textStyle={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
+            textStyle={{
+              color: "#fff",
+              fontSize: 16,
+              fontFamily: "Poppins_700Bold",
+            }}
           />
-          <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+          <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 24 }}>
             Pending Appointments:
           </Text>
         </View>
@@ -450,7 +455,7 @@ function ManageTicketsDonationsArchived() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+        <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 24 }}>
           Archived Appointments:
         </Text>
       </View>
@@ -704,7 +709,7 @@ const ACTIVE = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
     marginBottom: 20,
   },
@@ -773,7 +778,7 @@ const card = StyleSheet.create({
   },
   name: {
     minWidth: "78%",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
   },
   text: {

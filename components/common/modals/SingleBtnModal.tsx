@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   description: {
     fontSize: 16,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   error: {
     color: "red",

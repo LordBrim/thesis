@@ -208,7 +208,9 @@ export default function ForgotPassword() {
         description={
           <Text>
             We have sent a link to reset your password to your{" "}
-            <Text style={{ fontWeight: "700" }}>email address {email} </Text>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
+              email address {email}{" "}
+            </Text>
           </Text>
         }
         btnLabel="Close"
@@ -222,7 +224,9 @@ export default function ForgotPassword() {
         description={
           <Text>
             We have sent a PIN to your{" "}
-            <Text style={{ fontWeight: "700" }}>email address {email} </Text>
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
+              email address {email}{" "}
+            </Text>
             Please confirm below.
           </Text>
         }
@@ -248,7 +252,7 @@ export default function ForgotPassword() {
               timerOnProgress={timerOnProgressFunc}
               timerCallback={timerCallbackFunc}
               textStyle={{
-                fontWeight: "bold",
+                fontFamily: "Poppins_700Bold",
                 color: COLORS.primary,
               }}
             />
@@ -293,8 +297,9 @@ export default function ForgotPassword() {
         title="Email Not Registered"
         description={
           <Text>
-            The email address <Text style={{ fontWeight: "700" }}>{email}</Text>{" "}
-            is not registered.
+            The email address{" "}
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>{email}</Text> is
+            not registered.
           </Text>
         }
         btnLabel="Close"

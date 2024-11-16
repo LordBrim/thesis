@@ -182,7 +182,7 @@ export default function RequestBloodunitScreen({
           style={{
             color: COLORS.secondary,
             fontSize: 15,
-            fontWeight: "bold",
+            fontFamily: "Poppins_600SemiBold",
             marginVertical: 10,
           }}
         >
@@ -296,7 +296,7 @@ export default function RequestBloodunitScreen({
               color: selectedId === "yes" ? COLORS.black : undefined,
               labelStyle:
                 selectedId === "yes"
-                  ? { fontWeight: "bold", color: COLORS.black }
+                  ? { fontFamily: "Poppins_700Bold", color: COLORS.black }
                   : undefined,
             },
             {
@@ -306,7 +306,7 @@ export default function RequestBloodunitScreen({
               color: selectedId === "no" ? COLORS.black : undefined,
               labelStyle:
                 selectedId === "no"
-                  ? { fontWeight: "bold", color: COLORS.black }
+                  ? { fontFamily: "Poppins_700Bold", color: COLORS.black }
                   : undefined,
             },
           ]}
@@ -404,12 +404,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   header: {
     color: COLORS.primary,
     fontSize: 18,
-    fontWeight: "600",
+    fontFamily: "Poppins_700Bold",
   },
   fixed: {
     flexDirection: "row",
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginLeft: 10,
   },
   // button: {
@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textAlign: "center",
   },
   modalText: {

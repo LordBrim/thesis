@@ -60,7 +60,10 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
                   color: selectedId === "yes" ? COLORS.black : undefined,
                   labelStyle:
                     selectedId === "yes"
-                      ? { fontWeight: "bold", color: COLORS.black }
+                      ? {
+                          fontFamily: "Poppins_700Bold",
+                          color: COLORS.black,
+                        }
                       : undefined,
                 },
                 {
@@ -70,7 +73,10 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
                   color: selectedId === "no" ? COLORS.black : undefined,
                   labelStyle:
                     selectedId === "no"
-                      ? { fontWeight: "bold", color: COLORS.black }
+                      ? {
+                          fontFamily: "Poppins_700Bold",
+                          color: COLORS.black,
+                        }
                       : undefined,
                 },
               ]}
@@ -148,7 +154,7 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
                   style={[
                     styles.checkboxLabel,
                     value.includes(item.value) && {
-                      fontWeight: "bold",
+                      fontFamily: "Poppins_700Bold",
                       color: COLORS.primary,
                     },
                   ]}
@@ -224,12 +230,12 @@ const styles = StyleSheet.create({
   question: {
     fontSize: 16,
     marginBottom: 10,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   questionInput: {
     fontSize: 16,
     marginBottom: 10,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     top: 5,
   },
   input: {
@@ -260,7 +266,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#000",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   selectedButtonText: {
     color: COLORS.background,

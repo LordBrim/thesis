@@ -14,15 +14,14 @@ import { FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import moment from "moment"; // Import moment for date formatting
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useRouter } from "expo-router";
 
 export default function UpcomingEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation(); // Get the navigation object
-  const router = useRouter(); 
-
+  const router = useRouter();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -55,14 +54,19 @@ export default function UpcomingEvents() {
 
         // Filter and sort events by start date
         const now = moment();
-        const upcomingEvents = allEvents.filter(event => {
-          const eventEnd = moment(`${event.endDate} ${event.endTime}`, "MM/DD/YYYY hh:mm A");
-          return eventEnd.isAfter(now);
-        }).sort((a, b) => {
-          const dateA = moment(a.startDate, "MM/DD/YYYY");
-          const dateB = moment(b.startDate, "MM/DD/YYYY");
-          return dateA - dateB;
-        });
+        const upcomingEvents = allEvents
+          .filter((event) => {
+            const eventEnd = moment(
+              `${event.endDate} ${event.endTime}`,
+              "MM/DD/YYYY hh:mm A"
+            );
+            return eventEnd.isAfter(now);
+          })
+          .sort((a, b) => {
+            const dateA = moment(a.startDate, "MM/DD/YYYY");
+            const dateB = moment(b.startDate, "MM/DD/YYYY");
+            return dateA - dateB;
+          });
 
         setEvents(upcomingEvents);
       } catch (error) {
@@ -82,42 +86,62 @@ export default function UpcomingEvents() {
     return now.isBetween(start, end);
   };
 
-
-  
   const navigateToMaps = (event) => {
-    const { latitude, longitude, title, description, startDate, startTime, address, mapCSS } = event;
+    const {
+      latitude,
+      longitude,
+      title,
+      description,
+      startDate,
+      startTime,
+      address,
+      mapCSS,
+    } = event;
     console.log("Latitude:", latitude);
     console.log("Longitude:", longitude);
-  
-    
-    if ((typeof latitude === "string" || typeof latitude === "number") && 
-    (typeof longitude === "string" || typeof longitude === "number")) {
-  router.push({
-    pathname: "/(app)/(user)/(maps)/hospitalMapView",
-    params: {
-      event: JSON.stringify({
-        latitude: parseFloat(latitude),
-        longitude: parseFloat(longitude),
-        title: title,
-        description: description,
-        startDate: startDate,
-        startTime: startTime,
-        address: address,
-        mapCSS: JSON.stringify(mapCSS),
-      }),
-    },
-  });
-} else {
-  console.log("Latitude or Longitude is missing or not a string/number");
-}
+
+    if (
+      (typeof latitude === "string" || typeof latitude === "number") &&
+      (typeof longitude === "string" || typeof longitude === "number")
+    ) {
+      router.push({
+        pathname: "/(app)/(user)/(maps)/hospitalMapView",
+        params: {
+          event: JSON.stringify({
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            title: title,
+            description: description,
+            startDate: startDate,
+            startTime: startTime,
+            address: address,
+            mapCSS: JSON.stringify(mapCSS),
+          }),
+        },
+      });
+    } else {
+      console.log("Latitude or Longitude is missing or not a string/number");
+    }
   };
 
   const renderEventItem = ({ item }) => (
     <View style={styles.eventContainer}>
-      {isActiveEvent(item.startDate, item.startTime, item.endDate, item.endTime) && (
-        <View style={{ position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
-          <Text style={{ backgroundColor: COLORS.primary, 
-            color: 'white', padding: 10, borderBottomRightRadius: 10, fontSize: 15 }}>
+      {isActiveEvent(
+        item.startDate,
+        item.startTime,
+        item.endDate,
+        item.endTime
+      ) && (
+        <View style={{ position: "absolute", top: 0, left: 0, zIndex: 1 }}>
+          <Text
+            style={{
+              backgroundColor: COLORS.primary,
+              color: "white",
+              padding: 10,
+              borderBottomRightRadius: 10,
+              fontSize: 15,
+            }}
+          >
             Active Event
           </Text>
         </View>
@@ -138,12 +162,10 @@ export default function UpcomingEvents() {
         latitude={item.latitude} // Pass latitude to EventCard
         longitude={item.longitude} // Pass longitude to EventCard
         onPress={() => navigateToMaps(item)}
-        navigate = {true}
+        navigate={true}
       />
     </View>
   );
-
-
 
   return (
     <View style={styles.container}>
@@ -175,9 +197,15 @@ export default function UpcomingEvents() {
             />
           ) : (
             <View style={styles.noEventsContainer}>
-              <MaterialCommunityIcons name="calendar-alert" size={55} color={COLORS.grayMid} />
-              <Text style={styles.noEventsText}>No upcoming events at the moment.</Text>
-              </View>
+              <MaterialCommunityIcons
+                name="calendar-alert"
+                size={55}
+                color={COLORS.grayMid}
+              />
+              <Text style={styles.noEventsText}>
+                No upcoming events at the moment.
+              </Text>
+            </View>
           )}
         </>
       )}
@@ -203,7 +231,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   loadingContainer: {
     flex: 1,
@@ -216,13 +244,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     minHeight: 300,
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: COLORS.grayMid,
-    borderRadius: 30
+    borderRadius: 30,
   },
   noEventsText: {
     marginTop: 10,
     fontSize: SIZES.large,
-    color: COLORS.grayMid
+    color: COLORS.grayMid,
   },
 });

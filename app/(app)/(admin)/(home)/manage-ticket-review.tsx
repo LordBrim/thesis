@@ -423,7 +423,13 @@ export default function ManageTicketReview() {
           </View>
         </View>
       </Modal>
-      <Text style={{ color: COLORS.primary, fontWeight: "bold", fontSize: 24 }}>
+      <Text
+        style={{
+          color: COLORS.primary,
+          fontFamily: "Poppins_700Bold",
+          fontSize: 24,
+        }}
+      >
         Ticket Details
       </Text>
       <View
@@ -437,9 +443,15 @@ export default function ManageTicketReview() {
           marginVertical: 10,
         }}
       >
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>Ticket Number:</Text>
+        <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold" }}>
+          Ticket Number:
+        </Text>
         <Text
-          style={{ fontSize: 20, color: COLORS.primary, fontWeight: "bold" }}
+          style={{
+            fontSize: 20,
+            color: COLORS.primary,
+            fontFamily: "Poppins_700Bold",
+          }}
         >
           {ticketData.ticketNumber}
         </Text>
@@ -452,7 +464,13 @@ export default function ManageTicketReview() {
           }}
         >
           <FontAwesome6 name="calendar-day" size={18} color="black" />
-          <Text style={{ fontSize: 16, fontWeight: "bold", marginLeft: 7 }}>
+          <Text
+            style={{
+              fontSize: 16,
+              fontFamily: "Poppins_700Bold",
+              marginLeft: 7,
+            }}
+          >
             {ticketData.selectedDate
               ? formatDate(ticketData.selectedDate)
               : "N/A"}
@@ -467,15 +485,25 @@ export default function ManageTicketReview() {
           }}
         >
           <FontAwesome6 name="clock" size={18} color="black" />
-          <Text style={{ fontSize: 16, marginLeft: 5, fontWeight: "bold" }}>
+          <Text
+            style={{
+              fontSize: 16,
+              marginLeft: 5,
+              fontFamily: "Poppins_700Bold",
+            }}
+          >
             {ticketData.selectedTime}
           </Text>
         </View>
-        <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+        <Text
+          style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+        >
           Status: {ticketData.status.toUpperCase()}
         </Text>
         {ticketData.status == "accepted" ? (
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Appoinment Result:{" "}
             {!ticketData.isComplete ? "IN-REVIEW" : "COMPLETED"}
           </Text>
@@ -634,7 +662,7 @@ const styles = StyleSheet.create({
   textDetails: {
     fontSize: 16,
     marginVertical: 3,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   checklistContainer: {
     width: "90%",
@@ -654,7 +682,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.grayMid,
   },
   checklistTitle: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     fontSize: 18,
     marginVertical: 20,
   },
@@ -662,11 +690,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   checklistKey: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   checklistValue: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
   },
   buttonContainer: {
@@ -695,7 +723,7 @@ const styles = StyleSheet.create({
   buttonText: {
     marginLeft: 5,
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textAlign: "center",
   },
   modalBackground: {
@@ -716,7 +744,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
   },
 });
@@ -732,7 +760,7 @@ const card = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   aContainer: {
     width: "100%",

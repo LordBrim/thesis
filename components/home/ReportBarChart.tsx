@@ -13,7 +13,7 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
       <Text
         style={{
           fontSize: 20,
-          fontWeight: "bold",
+          fontFamily: "Poppins_700Bold",
           textAlign: "center",
         }}
       >

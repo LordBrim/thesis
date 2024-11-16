@@ -74,6 +74,7 @@ export default function ManageTicketsRequests() {
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
+        fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
     });
@@ -177,7 +178,7 @@ function ManageTicketsRequestsPending() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+        <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 24 }}>
           Pending Requests:
         </Text>
       </View>
@@ -284,7 +285,7 @@ function ManageTicketsRequestsActive() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+        <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 24 }}>
           Active Requests:
         </Text>
       </View>
@@ -398,7 +399,7 @@ function ManageTicketsRequestsArchived() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontWeight: "bold", fontSize: 24 }}>
+        <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 24 }}>
           Archived Requests:
         </Text>
       </View>
@@ -406,7 +407,9 @@ function ManageTicketsRequestsArchived() {
         Click tickets to view more details.
       </Text>
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
-      <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 20 }}>
+      <Text
+        style={{ fontFamily: "Poppins_700Bold", fontSize: 20, marginTop: 20 }}
+      >
         Rejected Requests:
       </Text>
       <FlatList
@@ -421,7 +424,9 @@ function ManageTicketsRequestsArchived() {
         }
       />
 
-      <Text style={{ fontWeight: "bold", fontSize: 20, marginTop: 20 }}>
+      <Text
+        style={{ fontFamily: "Poppins_700Bold", fontSize: 20, marginTop: 20 }}
+      >
         In-Progress Requests:
       </Text>
       <FlatList
@@ -529,7 +534,7 @@ const card = StyleSheet.create({
   },
   name: {
     minWidth: "78%",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
   },
   text: {

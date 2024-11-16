@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   label: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   value: {},
   buttonsContainer: {

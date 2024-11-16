@@ -359,13 +359,13 @@ const card = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: "white",
     fontSize: 14,
   },
   openQuestion: {
     flex: 1,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
     fontSize: 16,
   },
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     gap: 16,
     position: "static",
   },
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
 });
 
@@ -433,7 +433,7 @@ const panel = StyleSheet.create({
   title: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
   },
 });

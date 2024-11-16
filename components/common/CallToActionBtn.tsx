@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: SIZES.medium,
     textTransform: "capitalize",
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   defaultLabel: {
     color: COLORS.background,

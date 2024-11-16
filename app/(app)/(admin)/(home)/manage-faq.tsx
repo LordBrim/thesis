@@ -152,7 +152,7 @@ const card = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   aContainer: {
     width: "100%",

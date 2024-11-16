@@ -421,7 +421,12 @@ export default function RegisterScreen() {
                 description={
                   <Text style={{ textAlign: "justify" }}>
                     We have sent the OTP code to your{" "}
-                    <Text style={{ fontWeight: "700", textAlign: "justify" }}>
+                    <Text
+                      style={{
+                        fontFamily: "Poppins_700Bold",
+                        textAlign: "justify",
+                      }}
+                    >
                       email address {email}. Please check in the spam folder if
                       you don't see it in your inbox.
                     </Text>

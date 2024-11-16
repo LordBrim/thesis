@@ -286,7 +286,11 @@ export default function ManageTicketReview() {
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
         <Text
-          style={{ color: COLORS.primary, fontWeight: "bold", fontSize: 24 }}
+          style={{
+            color: COLORS.primary,
+            fontFamily: "Poppins_700Bold",
+            fontSize: 24,
+          }}
         >
           Ticket Details
         </Text>
@@ -301,39 +305,61 @@ export default function ManageTicketReview() {
             marginVertical: 10,
           }}
         >
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold" }}>
             Ticket Number:
           </Text>
           <Text
-            style={{ fontSize: 20, color: COLORS.primary, fontWeight: "bold" }}
+            style={{
+              fontSize: 20,
+              color: COLORS.primary,
+              fontFamily: "Poppins_700Bold",
+            }}
           >
             {ticketData.id}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Patient Name: {ticketData.patientName}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Blood Type: {ticketData.selectedBloodType}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Relationship: {ticketData.selectedRelationship}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Contact Number: {ticketData.contactNumber}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Emergency Reason: {ticketData.emergencyReason || "N/A"}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Packed Request: {ticketData.packedRequest}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Packed Request Info: {ticketData.packedRequestInfo || "N/A"}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Status: {ticketData.status}
           </Text>
-          <Text style={{ fontSize: 16, fontWeight: "bold", margin: 5 }}>
+          <Text
+            style={{ fontSize: 16, fontFamily: "Poppins_700Bold", margin: 5 }}
+          >
             Message: {ticketData.message}
           </Text>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -467,7 +493,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   checklistTitle: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     fontSize: 18,
     marginBottom: 10,
   },

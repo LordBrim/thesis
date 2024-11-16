@@ -37,7 +37,7 @@ export default function ManageFaqUpdate() {
           }}
           onPress={handleUpdate}
         >
-          <Text style={{ fontWeight: "bold" }}>Save</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Save</Text>
         </TouchableOpacity>
       ),
     });

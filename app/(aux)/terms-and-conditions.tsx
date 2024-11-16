@@ -71,7 +71,12 @@ export default function TermsAndConditionsScreen() {
           cruz.191253@stamesa.sti.edu.ph.
         </Text>
         <Text style={styles.paragraph}>Thank you for using Lifeline!</Text>
-        <Text style={[styles.paragraph, { fontStyle: "italic" }]}>
+        <Text
+          style={[
+            styles.paragraph,
+            { fontFamily: "Poppins_400Regular_Italic" },
+          ]}
+        >
           Reference: ACEMC Mandaluyong Terms And Conditions. (n.d.). Terms and
           Conditions. Retrieved from{" "}
           <Text
@@ -96,13 +101,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 16,
     textAlign: "center",
   },
   heading: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginTop: 16,
     marginBottom: 8,
   },

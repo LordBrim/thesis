@@ -44,7 +44,7 @@ export default function ManageStaffCreate() {
           }}
           onPress={handleCreate}
         >
-          <Text style={{ fontWeight: "bold" }}>Add</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Add</Text>
         </TouchableOpacity>
       ),
     });
@@ -55,6 +55,7 @@ export default function ManageStaffCreate() {
       headerTintColor: "#000000",
       headerTitleStyle: {
         fontSize: 16,
+        fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
     });

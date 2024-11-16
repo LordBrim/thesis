@@ -35,7 +35,7 @@ export default function ManageFaqCreate() {
           }}
           onPress={handleCreate}
         >
-          <Text style={{ fontWeight: "bold" }}>Add</Text>
+          <Text style={{ fontFamily: "Poppins_700Bold" }}>Add</Text>
         </TouchableOpacity>
       ),
     });

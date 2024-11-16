@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginVertical: 10,
   },
   dateTimeContainer: {
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   description: {
     textAlign: "justify",
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginVertical: 10,
     lineHeight: 20,
   },
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   progressTitle: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     marginBottom: 5,
   },
   progressBar: {
@@ -292,7 +292,7 @@ const mapCSS = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     gap: 16,
   },
   buttonHospital: {
@@ -347,7 +347,7 @@ const mapCSS = StyleSheet.create({
   },
   markerText: {
     color: COLORS.primary,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textAlignVertical: "center",
   },
   markerImage: {
@@ -409,7 +409,7 @@ const mapCSS = StyleSheet.create({
   },
   infoTopTitle: {
     fontSize: SIZES.xLarge,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.background,
   },
   infoTopDistance: {
@@ -429,7 +429,7 @@ const mapCSS = StyleSheet.create({
   },
   hName: {
     flex: 1,
-    fontWeight: "600",
+    fontFamily: "Poppins_700Bold",
   },
   icon: {
     width: 50,

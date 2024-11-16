@@ -37,7 +37,7 @@ export default function HomeTab() {
         <Text
           style={{
             fontSize: 24,
-            fontWeight: "bold",
+            fontFamily: "Poppins_700Bold",
             marginLeft: 20,
             color: COLORS.primary,
           }}
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
   },
   defaultTitle: {},
   ctaTitle: {

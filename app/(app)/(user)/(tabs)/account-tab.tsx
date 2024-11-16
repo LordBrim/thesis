@@ -375,7 +375,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: SIZES.small,
     color: COLORS.text,
-    fontWeight: "500",
   },
   section: {
     marginTop: HORIZONTAL_SCREEN_MARGIN,
@@ -383,7 +382,7 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontSize: SIZES.xSmall,
     textTransform: "capitalize",
-    fontWeight: "700",
+    fontFamily: "Poppins_700Bold",
     marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   flatlist: {
@@ -424,7 +423,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.large,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textTransform: "capitalize",
     color: COLORS.primary,
   },

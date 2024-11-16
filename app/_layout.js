@@ -5,8 +5,39 @@ import { store } from "app/store"; // Ensure correct import path
 import Toastable from "react-native-toastable";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect } from "react";
+import { SplashScreen } from "expo-router";
+import { useFonts } from "expo-font";
+import { setCustomText } from "react-native-global-props";
 
 export default function StackLayout() {
+  const [loaded, error] = useFonts({
+    "Poppins-Thin": require("./assets/fonts/Poppins-Thin.ttf"),
+    "Poppins-ThinItalic": require("./assets/fonts/Poppins-ThinItalic.ttf"),
+    "Poppins-ExtraLight": require("./assets/fonts/Poppins-ExtraLight.ttf"),
+    "Poppins-ExtraLightItalic": require("./assets/fonts/Poppins-ExtraLightItalic.ttf"),
+    "Poppins-Light": require("./assets/fonts/Poppins-Light.ttf"),
+    "Poppins-LightItalic": require("./assets/fonts/Poppins-LightItalic.ttf"),
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-RegularItalic": require("./assets/fonts/Poppins-RegularItalic.ttf"),
+    "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
+    "Poppins-MediumItalic": require("./assets/fonts/Poppins-MediumItalic.ttf"),
+    "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-SemiBoldItalic": require("./assets/fonts/Poppins-SemiBoldItalic.ttf"),
+    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-BoldItalic": require("./assets/fonts/Poppins-BoldItalic.ttf"),
+    "Poppins-ExtraBold": require("./assets/fonts/Poppins-ExtraBold.ttf"),
+    "Poppins-ExtraBoldItalic": require("./assets/fonts/Poppins-ExtraBoldItalic.ttf"),
+    "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
+    "Poppins-BlackItalic": require("./assets/fonts/Poppins-BlackItalic.ttf"),
+  });
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+  if (!loaded && !error) {
+    return null;
+  }
   useEffect(() => {
     async function changeScreenOrientation() {
       await ScreenOrientation.lockAsync(
@@ -14,6 +45,12 @@ export default function StackLayout() {
       );
     }
     changeScreenOrientation();
+    const customTextProps = {
+      style: {
+        fontFamily: "Montserrat_400Regular",
+      },
+    };
+    setCustomText(customTextProps);
   }, []);
   return (
     <Provider store={store}>
@@ -21,17 +58,20 @@ export default function StackLayout() {
         initialRouteName="(auth)/login"
         screenOptions={{ headerTitle: "" }}
       >
-
-
         {/* Authentication Screens */}
         <Stack.Screen name="(auth)/login" />
-        <Stack.Screen name="(auth)/register"   options={{
+        <Stack.Screen
+          name="(auth)/register"
+          options={{
             headerTitle: "Register",
-          }}  />
-        <Stack.Screen name="(auth)/forgot-password"
-        options={{
-          headerTitle: "Password Recovery",
-        }}  />
+          }}
+        />
+        <Stack.Screen
+          name="(auth)/forgot-password"
+          options={{
+            headerTitle: "Password Recovery",
+          }}
+        />
         <Stack.Screen name="(auth)/new-password" />
         <Stack.Screen name="(auth)/confirm-email" />
         {/* Home Screens */}
@@ -110,10 +150,11 @@ export default function StackLayout() {
             headerTitle: "Incentives",
           }}
         />
-        <Stack.Screen name="(app)/(user)/(account)/donation-history"
-        options={{
-          headerTitle: "Donation History",
-        }}
+        <Stack.Screen
+          name="(app)/(user)/(account)/donation-history"
+          options={{
+            headerTitle: "Donation History",
+          }}
         />
         <Stack.Screen
           name="(app)/(user)/(account)/help"
@@ -128,7 +169,6 @@ export default function StackLayout() {
         <Stack.Screen name="(aux)/empty" />
         <Stack.Screen name="(aux)/no-internet" />
         <Stack.Screen name="(aux)/terms-and-conditions" />
-        
       </Stack>
       <Toastable />
     </Provider>

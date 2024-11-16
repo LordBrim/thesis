@@ -133,7 +133,7 @@ const UpdateCard = ({ update }) => {
             .
           </Text>
         )}
-        {message === "deliberation" && lowerCaseStatus !== "missing" && (
+        {message === "deliberation" && lowerCaseStatus !== "rejected" && (
           <Text style={styles.cardMessage}>
             Your request for a{" "}
             {type === "appointment" && "donation appointment"}

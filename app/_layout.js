@@ -25,8 +25,13 @@ export default function StackLayout() {
 
         {/* Authentication Screens */}
         <Stack.Screen name="(auth)/login" />
-        <Stack.Screen name="(auth)/register" />
-        <Stack.Screen name="(auth)/forgot-password" />
+        <Stack.Screen name="(auth)/register"   options={{
+            headerTitle: "Register",
+          }}  />
+        <Stack.Screen name="(auth)/forgot-password"
+        options={{
+          headerTitle: "Password Recovery",
+        }}  />
         <Stack.Screen name="(auth)/new-password" />
         <Stack.Screen name="(auth)/confirm-email" />
         {/* Home Screens */}
@@ -99,7 +104,17 @@ export default function StackLayout() {
             headerTitle: "About Us",
           }}
         />
-        <Stack.Screen name="(app)/(user)/(account)/donation-history" />
+        <Stack.Screen
+          name="(app)/(user)/(account)/incentives"
+          options={{
+            headerTitle: "Incentives",
+          }}
+        />
+        <Stack.Screen name="(app)/(user)/(account)/donation-history"
+        options={{
+          headerTitle: "Donation History",
+        }}
+        />
         <Stack.Screen
           name="(app)/(user)/(account)/help"
           options={{

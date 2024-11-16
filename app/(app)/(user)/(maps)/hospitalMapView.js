@@ -449,8 +449,8 @@ const HospitalMapView = () => {
                       width={30}
                       height={30}
                       fill={
-                        selectedMarker?.bloodBanks
-                          ?.filter((bt) => types.includes(bt.bloodType))
+                        selectedMarker?.stock
+                          ?.filter((bt) => types.includes(bt.type))
                           .some((t) => t.available)
                           ? "red"
                           : "gray"
@@ -460,8 +460,8 @@ const HospitalMapView = () => {
                     <View style={styles.bloodTypeIndicators}>
                       {types.map((bb, bbIndex) => {
                         const positive = bb.includes("+");
-                        let iconColor = selectedMarker?.bloodBanks?.filter(
-                          (bt) => bb == bt.bloodType
+                        let iconColor = selectedMarker?.stock?.filter(
+                          (bt) => bb == bt.type
                         )[0]?.available
                           ? "red"
                           : "gray";

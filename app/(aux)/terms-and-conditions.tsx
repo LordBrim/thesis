@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React from "react";
-
+import { COLORS, SIZES } from "constants/theme";
 export default function TermsAndConditionsScreen() {
   return (
     <View style={styles.container}>
@@ -71,10 +71,14 @@ export default function TermsAndConditionsScreen() {
           cruz.191253@stamesa.sti.edu.ph.
         </Text>
         <Text style={styles.paragraph}>Thank you for using Lifeline!</Text>
-        <Text style={styles.paragraph}>
+        <Text style={[styles.paragraph, { fontStyle: "italic" }]}>
           Reference: ACEMC Mandaluyong Terms And Conditions. (n.d.). Terms and
-          Conditions. Retrieved from
-          https://www.acemandaluyong.com.ph/ace-termsAndConditions
+          Conditions. Retrieved from{" "}
+          <Text
+            style={{ color: COLORS.primary, textDecorationLine: "underline" }}
+          >
+            https://www.acemandaluyong.com.ph/ace-termsAndConditions
+          </Text>
         </Text>
       </ScrollView>
     </View>

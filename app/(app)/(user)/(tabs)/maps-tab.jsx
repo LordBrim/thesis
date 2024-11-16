@@ -9,7 +9,7 @@ import {
   Animated,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { COLORS, SIZES } from "../../../../constants/theme";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -29,38 +29,41 @@ function Maps({ setMapBackground, setMapHeader }) {
   const navigation = useNavigation();
   const [isMarkerSelected, setIsMarkerSelected] = useState(false);
   const skeletonAnimation = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    const fetchHospitals = async () => {
-      try {
-        // Simulate a delay
-        await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        const querySnapshot = await getDocs(
-          collection(FIRESTORE_DB, "hospital")
-        );
-        const hospitalsData = await Promise.all(
-          querySnapshot.docs.map(async (doc) => {
-            const data = doc.data();
-            const storage = getStorage(); // Initialize storage
-            const logoRef = ref(storage, `hospitalDataLogo/${doc.id}.png`);
-            const logoUrl = await getDownloadURL(logoRef);
-            return {
-              id: doc.id,
-              ...data,
-              logoUrl,
-            };
-          })
-        );
-        setHospitals(hospitalsData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching hospitals:", error);
-        setLoading(false);
-      }
-    };
+  const fetchHospitals = async () => {
+    try {
+      // Simulate a delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    fetchHospitals();
-  }, []);
+      const querySnapshot = await getDocs(
+        collection(FIRESTORE_DB, "hospital")
+      );
+      const hospitalsData = await Promise.all(
+        querySnapshot.docs.map(async (doc) => {
+          const data = doc.data();
+          const storage = getStorage(); // Initialize storage
+          const logoRef = ref(storage, `hospitalDataLogo/${doc.id}.png`);
+          const logoUrl = await getDownloadURL(logoRef);
+          return {
+            id: doc.id,
+            ...data,
+            logoUrl,
+          };
+        })
+      );
+      setHospitals(hospitalsData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching hospitals:", error);
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchHospitals();
+    }, [])
+  );
 
   useEffect(() => {
     setIsMarkerSelected(selectedHospital !== null);

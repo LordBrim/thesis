@@ -371,8 +371,6 @@ export default function RegisterScreen() {
         contentContainerStyle={styles.scrollview}
       >
         <View style={styles.cTop}>
-          <Text style={GS.h1}>Register</Text>
-
           <View style={{ gap: 12 }}>
             <View style={{ gap: 24 }}>
               <TextInputWrapper label="Full Name">
@@ -432,7 +430,7 @@ export default function RegisterScreen() {
                 btnLabel="Close"
               ></SingleBtnModal>
 
-              <View style={{ flexDirection: "row" }}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <TextInput
                   style={styles.emailInput}
                   value={otpInput}
@@ -441,6 +439,7 @@ export default function RegisterScreen() {
                   autoCapitalize="none"
                   autoCorrect={false}
                   maxLength={6}
+                  editable={otpSent && !otpVerified} // Disable the OTP input field if OTP is not sent or already verified
                   keyboardType="numeric" // Set the keyboard type to numeric
                 />
                 {otpSent ? (
@@ -463,9 +462,13 @@ export default function RegisterScreen() {
                     />
                   </View>
                 ) : (
-                  <View style={{ margin: 5 }}>
-                    <Button title="Send OTP" onPress={handleButtonPress} />
-                  </View>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleButtonPress}
+                  >
+                    <Ionicons name="send" size={18} color="white" />
+                    <Text style={styles.buttonText}>Send OTP</Text>
+                  </TouchableOpacity>
                 )}
               </View>
 
@@ -579,7 +582,7 @@ export default function RegisterScreen() {
                 <Text>?</Text>
               </View>
             </View>
-            <View style={{ marginBottom: 55 }}>
+            <View style={{ margin: 50 }}>
               <CallToActionBtn label="Register" onPress={() => register()} />
             </View>
           </View>
@@ -664,6 +667,19 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#007BFF",
+    padding: 10,
+    borderRadius: 5,
+    margin: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 15,
+    marginLeft: 5,
+  },
   inputTouchable: {
     alignContent: "center",
     justifyContent: "center",
@@ -703,7 +719,7 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   cTop: {
-    gap: SIZES.xxxLarge,
+    marginVertical: SIZES.medium,
   },
   cBottom: {
     flexDirection: "row",

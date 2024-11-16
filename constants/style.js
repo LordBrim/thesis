@@ -6,25 +6,25 @@ import { COLORS } from "./theme";
 export const GS = StyleSheet.create({
   h1: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textTransform: "capitalize",
   },
   h2: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textTransform: "capitalize",
   },
   h3: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     textTransform: "capitalize",
   },
   link1: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
   },
   link2: {
-    fontWeight: "bold",
+    fontFamily: "Poppins_700Bold",
     color: COLORS.grayMid,
   },
 });

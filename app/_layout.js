@@ -10,12 +10,15 @@ import { useFonts } from "expo-font";
 import { setCustomText } from "react-native-global-props";
 import {
   Poppins_400Regular,
+  Poppins_400Regular_Italic,
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 
+SplashScreen.preventAutoHideAsync();
 export default function StackLayout() {
   const [loaded, error] = useFonts({
     Poppins_400Regular,
+    Poppins_400Regular_Italic,
     Poppins_700Bold,
   });
   useEffect(() => {
@@ -23,9 +26,11 @@ export default function StackLayout() {
       SplashScreen.hideAsync();
     }
   }, [loaded, error]);
-  if (!loaded && !error) {
-    return null;
-  }
+  const customTextProps = {
+    style: {
+      fontFamily: "Poppins_400Regular",
+    },
+  };
   useEffect(() => {
     async function changeScreenOrientation() {
       await ScreenOrientation.lockAsync(
@@ -33,13 +38,11 @@ export default function StackLayout() {
       );
     }
     changeScreenOrientation();
-    const customTextProps = {
-      style: {
-        fontFamily: "Poppins-Regular",
-      },
-    };
     setCustomText(customTextProps);
   }, []);
+  if (!loaded && !error) {
+    return null;
+  }
   return (
     <Provider store={store}>
       <Stack

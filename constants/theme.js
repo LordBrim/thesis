@@ -26,16 +26,6 @@ const COLORS = {
   slate700: "#334155",
 };
 
-const FONT = {
-  regular: "DMRegular",
-  medium: "DMMedium",
-  bold: "DMBold",
-  // raleway: "Raleway_Semibold",
-  Grotesk: "Grotesk",
-  Grotesk_regular: "Grotesk_regular",
-  BakbakOne: "BakbakOne",
-};
-
 const SIZES = {
   xSmall: 12,
   small: 14,

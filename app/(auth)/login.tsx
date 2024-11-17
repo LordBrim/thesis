@@ -10,12 +10,7 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
-import { Link, useRouter } from "expo-router";
-import { useFonts } from "expo-font";
-import {
-  Raleway_400Regular,
-  Raleway_500Medium,
-} from "@expo-google-fonts/raleway";
+import { useRouter } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { CheckBox } from "react-native-btr";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -31,7 +26,6 @@ import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 import { FlatList } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { showToastable } from "react-native-toastable";
 import { showLongToast } from "hooks/useToast";
 import { useNavigation } from "expo-router";
 
@@ -250,7 +244,10 @@ export default function LoginScreen() {
                   enablesReturnKeyAutomatically
                   style={{
                     flex: 1,
-                    padding: 12,
+                    paddingHorizontal: 12,
+                    paddingTop: 16,
+                    paddingBottom: 8,
+                    fontFamily: "Poppins_400Regular",
                   }}
                 />
               </TextInputWrapper>
@@ -268,7 +265,10 @@ export default function LoginScreen() {
                   secureTextEntry={passwordVisibility}
                   style={{
                     flex: 1,
-                    padding: 12,
+                    paddingHorizontal: 12,
+                    paddingTop: 16,
+                    paddingBottom: 8,
+                    fontFamily: "Poppins_400Regular",
                   }}
                 />
                 <Pressable
@@ -293,7 +293,7 @@ export default function LoginScreen() {
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
               <View
-                style={{ flexDirection: "row", gap: 10, alignItems: "center" }}
+                style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
               >
                 <CheckBox
                   checked={toggleRemember}
@@ -303,7 +303,7 @@ export default function LoginScreen() {
                 />
                 <Text
                   style={{
-                    fontWeight: "bold",
+                    fontFamily: "Poppins_700Bold",
                   }}
                 >
                   Remember Me
@@ -384,9 +384,6 @@ const styles = StyleSheet.create({
 });
 
 const easyLogin = StyleSheet.create({
-  text: {
-    fontWeight: "500",
-  },
   view: {
     width: "25%",
     aspectRatio: 1 / 1,

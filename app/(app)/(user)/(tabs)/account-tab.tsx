@@ -375,6 +375,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: SIZES.small,
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
   section: {
     marginTop: HORIZONTAL_SCREEN_MARGIN,
@@ -413,8 +414,8 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
     fontSize: 16,
-    fontWeight: "500",
     textTransform: "capitalize",
+    fontFamily: "Poppins_400Regular",
   },
   loadingContainer: {
     flex: 1,

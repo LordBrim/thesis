@@ -71,7 +71,10 @@ export default function ManageFaqCreate() {
             multiline={true}
             style={{
               flex: 1,
-              padding: 12,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
             }}
           />
         </TextInputWrapper>
@@ -86,7 +89,10 @@ export default function ManageFaqCreate() {
             multiline={true}
             style={{
               flex: 1,
-              padding: 12,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
             }}
           />
         </TextInputWrapper>

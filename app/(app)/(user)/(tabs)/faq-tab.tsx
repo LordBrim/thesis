@@ -176,7 +176,10 @@ export default function FAQTab() {
               value={searchText}
               style={{
                 flex: 1,
-                padding: 12,
+                paddingHorizontal: 12,
+                paddingTop: 16,
+                paddingBottom: 8,
+                fontFamily: "Poppins_400Regular",
               }}
             />
             <TouchableOpacity

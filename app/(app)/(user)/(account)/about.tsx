@@ -3,7 +3,7 @@ import { COLORS } from "../../../../constants";
 
 export default function About() {
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} overScrollMode="never">
       <View style={styles.logoContainer}>
         <Image
           source={require("../../../../assets/images/op_logo_text.png")} // Update the path to your logo image
@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     lineHeight: 24,
+    fontFamily: "Poppins_400Regular",
   },
   logoContainer: {
     alignItems: "center",

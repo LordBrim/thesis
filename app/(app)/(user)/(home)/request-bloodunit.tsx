@@ -214,6 +214,8 @@ export default function RequestBloodunitScreen({
               validateField("selectedBloodType", itemValue);
             }}
             mode="dropdown"
+            style={{ fontFamily: "Poppins_400Regular" }}
+            itemStyle={{ fontFamily: "Poppins_400Regular" }}
           >
             <Picker.Item label="A+" value="A+" />
             <Picker.Item label="A-" value="A-" />
@@ -444,6 +446,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: SIZES.xxxSmall,
     zIndex: 1,
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingTop: 16,
+    paddingBottom: 8,
+    fontFamily: "Poppins_400Regular",
   },
   inputLabel: {
     textTransform: "capitalize",
@@ -516,13 +523,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
+    fontFamily: "Poppins_400Regular",
   },
   phonePrefix: {
     fontSize: 18,
     marginRight: 12,
+    fontFamily: "Poppins_400Regular",
   },
   phoneInput: {
     flex: 1,
+    fontFamily: "Poppins_400Regular",
   },
   uploadedImage: {
     width: 100,
@@ -534,5 +544,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: -10,
     marginBottom: 10,
+    fontFamily: "Poppins_400Regular",
   },
 });

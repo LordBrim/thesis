@@ -4,7 +4,6 @@ import {
   View,
   Text,
   ScrollView,
-  Alert,
   ActivityIndicator,
   Pressable,
   SafeAreaView,
@@ -33,6 +32,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "app/store";
 import moment from "moment"; // Import moment for date formatting
 import { useFocusEffect } from "@react-navigation/native";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
+import CallToActionBtn from "components/common/CallToActionBtn";
 
 type IAccountTab = {
   avatarUrl: string;
@@ -54,6 +55,7 @@ export default function AccountTab({
   const [nextDonationDate, setNextDonationDate] = useState(""); // New state for next donation date
   const [loading, setLoading] = useState(true); // Loading state
   const [refreshing, setRefreshing] = useState(false); // State for refresh control
+  const [logoutModalVisible, setLogoutModalVisible] = useState(false); // State for logout modal
 
   const signOutUser = async () => {
     try {
@@ -78,19 +80,12 @@ export default function AccountTab({
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      "Confirm Logout",
-      "Are you sure you want to log out?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "OK", onPress: signOutUser },
-      ],
-      { cancelable: false }
-    );
+    setLogoutModalVisible(true); // Show the logout modal
+  };
+
+  const confirmLogout = () => {
+    setLogoutModalVisible(false); // Hide the logout modal
+    signOutUser(); // Proceed with logout
   };
 
   const fetchUserData = async () => {
@@ -342,6 +337,21 @@ export default function AccountTab({
           </View>
         </View>
       </ScrollView>
+      <SingleBtnModal
+        visible={logoutModalVisible}
+        onRequestClose={() => setLogoutModalVisible(false)}
+        onPress={confirmLogout}
+        title="Confirm Logout"
+        description="Are you sure you want to log out?"
+        btnLabel="OK"
+        extraBtn={
+          <CallToActionBtn
+            label="Cancel"
+            onPress={() => setLogoutModalVisible(false)}
+            secondary
+          />
+        }
+      />
     </SafeAreaView>
   );
 }

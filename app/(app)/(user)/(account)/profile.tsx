@@ -7,7 +7,6 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { COLORS, SIZES } from "../../../../constants/theme";
@@ -27,6 +26,7 @@ import {
 } from "../../../../firebase-config";
 import moment from "moment";
 import { black } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
+import SingleBtnModal from "../../../../components/common/modals/SingleBtnModal";
 
 const metroCities = [
   "Manila",
@@ -64,6 +64,16 @@ const ProfileEditScreen = () => {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState({
+    title: "",
+    description: "",
+    btnLabel: "OK",
+  });
+
+  const showModal = (title, description) => {
+    setModalContent({ title, description, btnLabel: "OK" });
+    setModalVisible(true);
+  };
 
   const auth = getAuth();
   const db = getFirestore();
@@ -169,7 +179,7 @@ const ProfileEditScreen = () => {
 
   const handleSave = async () => {
     if (!fullName || !sex || !age || !contactDetails || !city) {
-      Alert.alert("Error", "Please fill in all required fields.");
+      showModal("Error", "Please fill in all required fields.");
       return;
     }
 
@@ -190,122 +200,132 @@ const ProfileEditScreen = () => {
       });
 
       setAvatar(imageUrl); // Update the avatar state with the new URL
-      Alert.alert("Success", "Profile updated successfully!");
+      showModal("Success", "Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
-      Alert.alert("Error", "Failed to update profile. Please try again.");
+      showModal("Error", "Failed to update profile. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.titleHeader}>Edit Profile</Text>
-      <View style={styles.profile}>
-        {loading ? (
-          <ActivityIndicator size="large" color={COLORS.primary} />
-        ) : (
-          <Avatar
-            avatarUrl={
-              image
-                ? { uri: image } // Show selected image if available
-                : avatar
-                ? { uri: avatar } // Firebase URL case
-                : require("../../../../assets/images/defaultAvatar.png") // Local image case
-            }
-            onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
-          />
-        )}
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInputWrapper label="Full Name">
-          <TextInput
-            style={styles.inputGrayed}
-            value={fullName}
-            placeholder={fullName}
-            editable={false}
-          />
-        </TextInputWrapper>
-      </View>
-      <View style={styles.inputContainer}>
-        <TextInputWrapper label="Email">
-          <TextInput
-            style={styles.inputGrayed}
-            value={email}
-            placeholder={email}
-            editable={false}
-          />
-        </TextInputWrapper>
-      </View>
+    <>
+      <ScrollView style={styles.container}>
+        <Text style={styles.titleHeader}>Edit Profile</Text>
+        <View style={styles.profile}>
+          {loading ? (
+            <ActivityIndicator size="large" color={COLORS.primary} />
+          ) : (
+            <Avatar
+              avatarUrl={
+                image
+                  ? { uri: image } // Show selected image if available
+                  : avatar
+                  ? { uri: avatar } // Firebase URL case
+                  : require("../../../../assets/images/defaultAvatar.png") // Local image case
+              }
+              onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
+            />
+          )}
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInputWrapper label="Full Name">
+            <TextInput
+              style={styles.inputGrayed}
+              value={fullName}
+              placeholder={fullName}
+              editable={false}
+            />
+          </TextInputWrapper>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInputWrapper label="Email">
+            <TextInput
+              style={styles.inputGrayed}
+              value={email}
+              placeholder={email}
+              editable={false}
+            />
+          </TextInputWrapper>
+        </View>
 
-      <View style={styles.inputContainer}>
-        <TextInputWrapper label="Sex">
-          <View style={styles.radioContainer}>
-            <Text style={{ color: COLORS.grayDark }}>
-              {capitalizeFirstLetter(sex)}
-            </Text>
-          </View>
-        </TextInputWrapper>
-      </View>
+        <View style={styles.inputContainer}>
+          <TextInputWrapper label="Sex">
+            <View style={styles.radioContainer}>
+              <Text style={{ color: COLORS.grayDark }}>
+                {capitalizeFirstLetter(sex)}
+              </Text>
+            </View>
+          </TextInputWrapper>
+        </View>
 
-      <View style={styles.inputContainer}>
-        <TextInputWrapper label="Date of Birth">
-          <TextInput
-            style={styles.inputGrayed}
-            value={dateOfBirth}
-            keyboardType="numeric"
-            editable={false}
-          />
-        </TextInputWrapper>
-      </View>
+        <View style={styles.inputContainer}>
+          <TextInputWrapper label="Date of Birth">
+            <TextInput
+              style={styles.inputGrayed}
+              value={dateOfBirth}
+              keyboardType="numeric"
+              editable={false}
+            />
+          </TextInputWrapper>
+        </View>
 
-      <View style={styles.inputContainer}>
-        <TextInputWrapper label="Phone Number">
-          <TextInput
-            style={styles.input}
-            value={contactDetails}
-            onChangeText={setContactDetails}
-            keyboardType="phone-pad"
-            placeholder="+63"
-          />
-        </TextInputWrapper>
-      </View>
+        <View style={styles.inputContainer}>
+          <TextInputWrapper label="Phone Number">
+            <TextInput
+              style={styles.input}
+              value={contactDetails}
+              onChangeText={setContactDetails}
+              keyboardType="phone-pad"
+              placeholder="+63"
+            />
+          </TextInputWrapper>
+        </View>
 
-      <View style={styles.inputContainer}>
-        <TextInputWrapper label="City">
-          <Picker
-            selectedValue={city}
-            onValueChange={(itemValue) => setCity(itemValue)}
-            style={styles.picker}
-          >
-            <Picker.Item label="Select city" value="" />
-            {metroCities.map((city) => (
-              <Picker.Item key={city} label={city} value={city} />
-            ))}
-          </Picker>
-        </TextInputWrapper>
-      </View>
-      <CustomButtonWithIcon
-        onPress={handleSave}
-        icon="edit"
-        iconSize={24}
-        iconColor="white"
-        title={loading ? "Saving..." : "Save Changes"}
-        buttonStyle={[
-          { backgroundColor: COLORS.primary },
-          styles.saveButton,
-          loading && styles.disabledButton,
-        ]}
-        textStyle={{ color: "white" }}
-        disabled={loading}
+        <View style={styles.inputContainer}>
+          <TextInputWrapper label="City">
+            <Picker
+              selectedValue={city}
+              onValueChange={(itemValue) => setCity(itemValue)}
+              style={styles.picker}
+            >
+              <Picker.Item label="Select city" value="" />
+              {metroCities.map((city) => (
+                <Picker.Item key={city} label={city} value={city} />
+              ))}
+            </Picker>
+          </TextInputWrapper>
+        </View>
+        <CustomButtonWithIcon
+          onPress={handleSave}
+          icon="edit"
+          iconSize={24}
+          iconColor="white"
+          title={loading ? "Saving..." : "Save Changes"}
+          buttonStyle={[
+            { backgroundColor: COLORS.primary },
+            styles.saveButton,
+            loading && styles.disabledButton,
+          ]}
+          textStyle={{ color: "white" }}
+          disabled={loading}
+        />
+        <IconModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          handleImagePicker={handleImagePicker}
+        />
+      </ScrollView>
+      <SingleBtnModal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        title={modalContent.title}
+        description={modalContent.description}
+        btnLabel={modalContent.btnLabel}
+        onPress={() => setModalVisible(false)}
       />
-      <IconModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        handleImagePicker={handleImagePicker}
-      />
-    </ScrollView>
+    </>
   );
 };
 

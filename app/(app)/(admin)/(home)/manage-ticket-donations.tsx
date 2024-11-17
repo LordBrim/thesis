@@ -7,8 +7,6 @@ import {
   Pressable,
   RefreshControl,
   ActivityIndicator,
-  Modal,
-  Alert, // Add RefreshControl import
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { COLORS } from "../../../../constants";
@@ -503,6 +501,8 @@ function ManageTicketsDonationsArchived() {
 
 export function Card({ ticket }: CardProps) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [successModalVisible, setSuccessModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
 
   const handlePress = () => {
     router.push({
@@ -530,10 +530,10 @@ export function Card({ ticket }: CardProps) {
     try {
       await deleteDoc(doc(FIRESTORE_DB, "ticketDonate", ticket.id));
       setModalVisible(false);
-      Alert.alert("Success", "Ticket deleted successfully.");
+      setSuccessModalVisible(true); // Show success modal
     } catch (error) {
       console.error("Error deleting ticket: ", error);
-      Alert.alert("Error", "Failed to delete ticket. Please try again.");
+      setErrorModalVisible(true); // Show error modal
     }
   };
 
@@ -604,6 +604,26 @@ export function Card({ ticket }: CardProps) {
             secondary
           />
         }
+      />
+
+      <SingleBtnModal
+        visible={successModalVisible}
+        title="Success"
+        description="Ticket deleted successfully."
+        onRequestClose={() => setSuccessModalVisible(false)}
+        onPress={() => setSuccessModalVisible(false)}
+        btnLabel="OK"
+        animation={true}
+      />
+
+      <SingleBtnModal
+        visible={errorModalVisible}
+        title="Error"
+        description="Failed to delete ticket. Please try again."
+        onRequestClose={() => setErrorModalVisible(false)}
+        onPress={() => setErrorModalVisible(false)}
+        btnLabel="OK"
+        animation={true}
       />
     </>
   );

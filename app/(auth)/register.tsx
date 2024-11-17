@@ -691,7 +691,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
     justifyContent: "space-between",
-    alignContent: "center",
+    alignItems: "center",
+    width: "90%",
   },
   emailVerificationContainer: {
     flexDirection: "row",
@@ -709,6 +710,10 @@ const styles = StyleSheet.create({
   scrollview: {
     height: Dimensions.get("window").height,
     maxHeight: Dimensions.get("window").height - 50,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.background,
   },
   radioContainer: {
     flexDirection: "row",

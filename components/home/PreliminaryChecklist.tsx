@@ -8,15 +8,9 @@ import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import { checklistQuestions } from "../../constants/database"; // Adjust the path to your database.js file
 
 const HeaderComponent = () => (
-  <>
-    <View>
-      <Text style={GS.h1}>Preliminary Checklist</Text>
-      <Description description="Please answer all questions as truthfully as possible." />
-    </View>
-    <View style={styles.bar}>
-      <Text style={styles.header}>Questions</Text>
-    </View>
-  </>
+  <View style={{ backgroundColor: COLORS.background, paddingBottom: 10 }}>
+    <Text style={GS.h1}>Preliminary Checklist</Text>
+  </View>
 );
 
 export default function PreliminaryChecklist({
@@ -57,10 +51,18 @@ export default function PreliminaryChecklist({
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={filteredQuestions}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        data={[{ key: "description" }, ...filteredQuestions]}
+        renderItem={({ item, index }) => {
+          if (item.key === "description") {
+            return (
+              <Description description="Please answer all questions as truthfully as possible." />
+            );
+          }
+          return renderItem({ item, index: index - 1 });
+        }}
+        keyExtractor={(item, index) => item.key || item.id.toString()}
         ListHeaderComponent={HeaderComponent}
+        stickyHeaderIndices={[0]} // Add this line to make the header sticky
         contentContainerStyle={styles.flatListContent}
         scrollEnabled={true}
         overScrollMode="never"

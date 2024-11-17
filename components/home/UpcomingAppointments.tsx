@@ -133,7 +133,9 @@ export default function UpcomingAppointments() {
                 <View style={styles.modalDetails}>
                   <Text style={styles.modalLabel}>Date:</Text>
                   <Text style={styles.modalValue}>
-                    {selectedTicket.selectedDate}
+                    {moment(selectedTicket.selectedDate).format(
+                      "MMMM DD, YYYY"
+                    )}
                   </Text>
                 </View>
                 <View style={styles.modalDetails}>
@@ -243,9 +245,9 @@ const styles = StyleSheet.create({
   },
   modalDetails: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
-    width: "100%",
+    width: "80%",
     marginBottom: 10,
   },
   modalLabel: {

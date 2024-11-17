@@ -244,7 +244,10 @@ export default function LoginScreen() {
                   enablesReturnKeyAutomatically
                   style={{
                     flex: 1,
-                    padding: 12,
+                    paddingHorizontal: 12,
+                    paddingTop: 16,
+                    paddingBottom: 8,
+                    fontFamily: "Poppins_400Regular",
                   }}
                 />
               </TextInputWrapper>
@@ -262,7 +265,10 @@ export default function LoginScreen() {
                   secureTextEntry={passwordVisibility}
                   style={{
                     flex: 1,
-                    padding: 12,
+                    paddingHorizontal: 12,
+                    paddingTop: 16,
+                    paddingBottom: 8,
+                    fontFamily: "Poppins_400Regular",
                   }}
                 />
                 <Pressable
@@ -289,7 +295,6 @@ export default function LoginScreen() {
               <View
                 style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
               >
-                Stashed changes
                 <CheckBox
                   checked={toggleRemember}
                   color="#FF3642"

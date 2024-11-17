@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
-import { Alert, Touchable } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
   View,
@@ -8,7 +7,6 @@ import {
   TextInput,
   Pressable,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   Button,
 } from "react-native";
@@ -16,15 +14,12 @@ import RadioButton from "components/common/RadioButton";
 import axios from "axios";
 import { CheckBox } from "react-native-btr";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN, GS } from "../../constants";
+import { SIZES, COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
 import TextInputWrapper from "../../components/common/TextInputWrapper";
 import useTogglePasswordVisibility from "../../hooks/useTogglePasswordVisibility";
 import { firestoreOperations } from "../../firestore-services";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebase-config";
-import {
-  createUserWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import CallToActionBtn from "../../components/common/CallToActionBtn";
 import LinkBtn from "components/common/LinkBtn";
 import { Dimensions } from "react-native";
@@ -50,7 +45,7 @@ export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [otpCode, setOtpCode] = useState();
   const [otpSent, setOtpSent] = useState(false);
-  const [otpInput, setOtpInput] = useState();
+  const [otpInput, setOtpInput] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
   const today = new Date();
 
@@ -367,7 +362,7 @@ export default function RegisterScreen() {
     <GestureHandlerRootView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={true}
-        overScrollMode="always"
+        overScrollMode="never"
         contentContainerStyle={styles.scrollview}
       >
         <View style={styles.cTop}>
@@ -436,17 +431,23 @@ export default function RegisterScreen() {
               ></SingleBtnModal>
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TextInput
-                  style={styles.emailInput}
-                  value={otpInput}
-                  placeholder="6 PIN NUMBER"
-                  onChangeText={(otpInput) => setOtpInput(otpInput)}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  maxLength={6}
-                  editable={otpSent && !otpVerified} // Disable the OTP input field if OTP is not sent or already verified
-                  keyboardType="numeric" // Set the keyboard type to numeric
-                />
+                <TextInputWrapper
+                  label="6 Pin Number"
+                  customStyle={{ flex: 1 }}
+                >
+                  <TextInput
+                    style={styles.input}
+                    value={otpInput}
+                    placeholder="Enter your otp..."
+                    onChangeText={(otpInput) => setOtpInput(otpInput)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    maxLength={6}
+                    editable={otpSent && !otpVerified} // Disable the OTP input field if OTP is not sent or already verified
+                    keyboardType="numeric" // Set the keyboard type to numeric
+                  />
+                </TextInputWrapper>
+
                 {otpSent ? (
                   <View style={{ margin: 5 }}>
                     <Button
@@ -478,25 +479,22 @@ export default function RegisterScreen() {
               </View>
 
               <TextInputWrapper label="Date of Birth">
-                <TouchableOpacity
-                  style={styles.inputTouchable}
-                  onPress={showDatepicker}
-                >
+                <TouchableOpacity style={styles.input} onPress={showDatepicker}>
                   <Text>{moment(date).format("MMMM D, YYYY")}</Text>
                 </TouchableOpacity>
-                {show && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode="date"
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                    maximumDate={eighteenYearsAgo}
-                    minimumDate={new Date(1959, 11, 31)} // December 31, 1959
-                  />
-                )}
               </TextInputWrapper>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode="date"
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                  maximumDate={eighteenYearsAgo}
+                  minimumDate={new Date(1959, 11, 31)} // December 31, 1959
+                />
+              )}
 
               <TextInputWrapper label="Sex">
                 <View style={styles.radioContainer}>
@@ -591,55 +589,6 @@ export default function RegisterScreen() {
               <CallToActionBtn label="Register" onPress={() => register()} />
             </View>
           </View>
-
-          {/* <View
-            style={{
-              gap: 16,
-            }}
-          >
-            <View
-              style={{
-                position: "relative",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: "100%",
-                  position: "absolute",
-                  top: 10,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderWidth: 0.5,
-                  borderColor: COLORS.grayMid,
-                }}
-              />
-              <Text style={{ backgroundColor: COLORS.background }}>
-                {" "}
-                Register With{" "}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 32,
-                width: "100%",
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                source={require("../../assets/icons/facebook.png")}
-                style={{ width: 34, height: 34 }}
-              />
-              <Image
-                source={require("../../assets/icons/google.png")}
-                style={{ width: 34, height: 34 }}
-              />
-            </View>
-          </View> */}
         </View>
       </ScrollView>
 
@@ -694,7 +643,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     backgroundColor: COLORS.background,
     justifyContent: "space-between",
     alignContent: "center",
@@ -709,7 +657,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderColor: "#ccc",
-    borderWidth: 1,
     paddingHorizontal: 8,
     marginRight: 8,
   },
@@ -717,6 +664,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").height,
     maxHeight: Dimensions.get("window").height - 82,
     paddingVertical: HORIZONTAL_SCREEN_MARGIN,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
   },
   radioContainer: {
     flexDirection: "row",
@@ -735,8 +683,11 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 40,
-    padding: 12,
+    paddingHorizontal: 12,
+    paddingTop: 16,
+    paddingBottom: 8,
+    fontFamily: "Poppins_400Regular",
+    zIndex: 5,
   },
   signUpWith: {
     flexDirection: "column",

@@ -2,14 +2,7 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { COLORS, GS, HORIZONTAL_SCREEN_MARGIN } from "../../constants";
-import {
-  View,
-  TextInput,
-  Image,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, TextInput, Image, Text, TouchableOpacity } from "react-native";
 import { StyleSheet } from "react-native";
 import TextInputWrapper from "components/common/TextInputWrapper";
 import Description from "components/common/texts/Description";
@@ -17,14 +10,8 @@ import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { useRouter } from "expo-router";
 import { OtpInput } from "react-native-otp-entry";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import LinkBtnTouch from "components/common/LinkBtnTouch";
 import CountDownTimer from "react-native-countdown-timer-hooks";
-import {
-  sendPasswordResetEmail,
-  confirmPasswordReset,
-  verifyPasswordResetCode,
-  fetchSignInMethodsForEmail,
-} from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB, FIREBASE_AUTH } from "firebase-config";
 
@@ -184,7 +171,10 @@ export default function ForgotPassword() {
             enablesReturnKeyAutomatically
             style={{
               flex: 1,
-              padding: 12,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
             }}
           />
         </TextInputWrapper>

@@ -157,7 +157,13 @@ export default function ManageIncentivesUpdate() {
             autoCorrect={true}
             enablesReturnKeyAutomatically
             multiline={true}
-            style={{ flex: 1, padding: 12 }}
+            style={{
+              flex: 1,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
+            }}
           />
         </TextInputWrapper>
         <TextInputWrapper label="Number Of Donations">
@@ -168,7 +174,13 @@ export default function ManageIncentivesUpdate() {
             autoCapitalize="none"
             enablesReturnKeyAutomatically
             keyboardType="number-pad"
-            style={{ flex: 1, padding: 12 }}
+            style={{
+              flex: 1,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
+            }}
           />
         </TextInputWrapper>
         <Text
@@ -195,7 +207,13 @@ export default function ManageIncentivesUpdate() {
                 autoCapitalize="none"
                 enablesReturnKeyAutomatically
                 keyboardType="number-pad"
-                style={{ flex: 1, padding: 12 }}
+                style={{
+                  flex: 1,
+                  paddingHorizontal: 12,
+                  paddingTop: 16,
+                  paddingBottom: 8,
+                  fontFamily: "Poppins_400Regular",
+                }}
               />
             </TextInputWrapper>
             <TextInputWrapper label="Incentive" customStyle={{ width: "50%" }}>
@@ -207,7 +225,13 @@ export default function ManageIncentivesUpdate() {
                 placeholder="Enter an incentive..."
                 autoCapitalize="none"
                 enablesReturnKeyAutomatically
-                style={{ flex: 1, padding: 12 }}
+                style={{
+                  flex: 1,
+                  paddingHorizontal: 12,
+                  paddingTop: 16,
+                  paddingBottom: 8,
+                  fontFamily: "Poppins_400Regular",
+                }}
               />
             </TextInputWrapper>
             <IconBtn

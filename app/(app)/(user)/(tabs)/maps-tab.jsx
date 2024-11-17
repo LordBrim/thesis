@@ -3,15 +3,12 @@ import {
   View,
   StyleSheet,
   Text,
-  TextInput,
   SafeAreaView,
   Pressable,
   Animated,
-  TouchableOpacity,
 } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { COLORS, SIZES } from "../../../../constants/theme";
-import TextInputWrapper from "components/common/TextInputWrapper";
+import { COLORS } from "../../../../constants/theme";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { HORIZONTAL_SCREEN_MARGIN } from "constants";
 import Description from "components/common/texts/Description";

@@ -349,12 +349,14 @@ const styles = StyleSheet.create({
     height: 40,
     color: COLORS.text,
     marginLeft: 20,
+    fontFamily: "Poppins_400Regular",
   },
   inputGrayed: {
     flex: 1,
     height: 40,
     marginLeft: 20,
     color: COLORS.grayDark,
+    fontFamily: "Poppins_400Regular",
   },
   picker: {
     flex: 1,

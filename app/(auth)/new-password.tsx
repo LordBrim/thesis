@@ -134,7 +134,10 @@ export default function NewPassword() {
             secureTextEntry={passwordVisibility}
             style={{
               flex: 1,
-              padding: 12,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
             }}
           />
           <Pressable

@@ -17,8 +17,8 @@ import {
 } from "react-native";
 import Carousel from "pinar";
 import CallToActionBtn from "components/common/CallToActionBtn";
-import { router } from "expo-router";
-import { useState } from "react";
+import { router, useNavigation } from "expo-router";
+import { useEffect, useState } from "react";
 import StepsIndicator from "components/common/StepsIndicator";
 import RequestBloodunitScreen from "./request-bloodunit";
 import { firestoreOperations } from "../../../../firestore-services";
@@ -234,7 +234,12 @@ export default function Request() {
   };
 
   const Screens = ["Request\nGuidelines", "File A\nRequest", "Review\nRequest"];
-
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerShadowVisible: false,
+    });
+  }, []);
   return (
     <View style={styles.container}>
       <StepsIndicator labels={Screens} step={screenIndex} steps={stepCount} />
@@ -407,6 +412,7 @@ const styles = StyleSheet.create({
   description: {
     flex: 1,
     textAlign: "justify",
+    fontFamily: "Poppins_400Regular",
   },
   buttons: {
     flexDirection: "row",

@@ -43,6 +43,7 @@ export default function StepsIndicator({
 
     labelColor: "#aaaaaa",
     labelSize: 13,
+    labelFontFamily: "Poppins_400Regular",
     currentStepLabelColor: COLORS.primary,
   };
 

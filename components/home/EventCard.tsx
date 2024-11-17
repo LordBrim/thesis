@@ -49,8 +49,8 @@ export default function EventCard({
         <View style={styles.details}>
           {manageEvent ? (
             <View style={styles.columnDetails}>
-              <Text style={styles.subtitle}>{date} |</Text>
-              {time && <Text style={styles.subtitle}>{time}</Text>}
+              <Text style={styles.subtitle}>{date}</Text>
+              {time && <Text style={styles.subtitle}> | {time}</Text>}
             </View>
           ) : (
             <View style={{ flexDirection: "row" }}>
@@ -111,10 +111,20 @@ const styles = StyleSheet.create({
     padding: SPACES.lg,
     backgroundColor: "rgba(0, 0, 0, .4)",
     justifyContent: "flex-end",
+    fontFamily: "Poppins_400Regular",
   },
   columnDetails: {
     flexDirection: "column",
+    fontFamily: "Poppins_400Regular",
   },
-  title: { fontSize: SIZES.xLarge, color: COLORS.background },
-  subtitle: { fontSize: 14, color: COLORS.background },
+  title: {
+    fontSize: SIZES.xLarge,
+    color: COLORS.background,
+    fontFamily: "Poppins_700Bold",
+  },
+  subtitle: {
+    fontSize: 14,
+    color: COLORS.background,
+    fontFamily: "Poppins_400Regular",
+  },
 });

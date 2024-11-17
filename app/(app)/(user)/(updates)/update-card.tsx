@@ -215,9 +215,10 @@ const styles = StyleSheet.create({
   },
   cardMessage: {
     width: "auto",
+    fontFamily: "Poppins_400Regular",
   },
   cardDatetime: {
-    fontFamily: "Poppins_700Bold",
+    fontFamily: "Poppins_400Regular",
     color: COLORS.slate500,
     fontSize: 12,
   },

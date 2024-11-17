@@ -110,7 +110,11 @@ export default function UpcomingAppointments() {
               height: 50,
             }}
           />
-          <Text style={{ color: COLORS.text }}>No Scheduled Appointments</Text>
+          <Text
+            style={{ color: COLORS.text, fontFamily: "Poppins_400Regular" }}
+          >
+            No Scheduled Appointments
+          </Text>
         </View>
       )}
       <Modal

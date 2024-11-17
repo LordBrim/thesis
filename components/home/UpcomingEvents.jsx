@@ -139,7 +139,8 @@ export default function UpcomingEvents() {
               color: "white",
               padding: 10,
               borderBottomRightRadius: 10,
-              fontSize: 15,
+              fontSize: 12,
+              fontFamily: "Poppins_400Regular",
             }}
           >
             Active Event
@@ -176,7 +177,11 @@ export default function UpcomingEvents() {
           onPress={() =>
             navigation.navigate("(app)/(user)/(home)/all-events", { events })
           } // Pass events as parameter
-          linkStyle={{ color: COLORS.gray, textDecorationLine: "none" }}
+          linkStyle={{
+            color: COLORS.gray,
+            textDecorationLine: "none",
+            fontFamily: "Poppins_400Regular",
+          }}
         />
       </View>
 
@@ -225,6 +230,7 @@ const styles = StyleSheet.create({
   },
   flatlist: {
     gap: SPACES.md,
+    fontFamily: "Poppins_400Regular",
   },
   eventContainer: {
     marginVertical: 5,
@@ -252,5 +258,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: SIZES.large,
     color: COLORS.grayMid,
+    fontFamily: "Poppins_400Regular",
   },
 });

@@ -121,5 +121,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
 });

@@ -22,5 +22,6 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     textAlign: "justify",
     color: COLORS.gray,
+    fontFamily: "Poppins_400Regular",
   },
 });

@@ -62,9 +62,10 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
                     selectedId === "yes"
                       ? {
                           fontFamily: "Poppins_700Bold",
-                          color: COLORS.black,
                         }
-                      : undefined,
+                      : {
+                          fontFamily: "Poppins_400Regular",
+                        },
                 },
                 {
                   id: "no",
@@ -75,9 +76,10 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
                     selectedId === "no"
                       ? {
                           fontFamily: "Poppins_700Bold",
-                          color: COLORS.black,
                         }
-                      : undefined,
+                      : {
+                          fontFamily: "Poppins_400Regular",
+                        },
                 },
               ]}
               onPress={(selectedId: string) => {
@@ -222,7 +224,6 @@ const ChecklistItem = ({ question, onAnswerChange, index }) => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
-    padding: 10,
     borderRadius: 8,
     position: "relative", // Ensure the stacking works correctly
     zIndex: 1, // Default lower zIndex
@@ -312,6 +313,7 @@ const styles = StyleSheet.create({
   },
   checkboxLabel: {
     marginLeft: 8,
+    fontFamily: "Poppins_400Regular",
   },
 });
 

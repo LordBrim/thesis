@@ -275,12 +275,22 @@ export default function RequestBloodunitScreen({
               validateField("selectedRelationship", itemValue);
             }}
             mode="dropdown"
+            style={{
+              fontFamily: "Poppins_400Regular",
+            }}
+            itemStyle={{
+              fontFamily: "Poppins_400Regular",
+            }}
           >
             {relationships.map((relationship) => (
               <Picker.Item
                 key={relationship.value}
                 label={relationship.label}
                 value={relationship.value}
+                fontFamily="Poppins_400Regular"
+                style={{
+                  fontFamily: "Poppins_400Regular",
+                }}
               />
             ))}
           </Picker>
@@ -298,8 +308,8 @@ export default function RequestBloodunitScreen({
               color: selectedId === "yes" ? COLORS.black : undefined,
               labelStyle:
                 selectedId === "yes"
-                  ? { fontFamily: "Poppins_700Bold", color: COLORS.black }
-                  : undefined,
+                  ? { fontFamily: "Poppins_700Bold" }
+                  : { fontFamily: "Poppins_400Regular" },
             },
             {
               id: "no",
@@ -308,8 +318,8 @@ export default function RequestBloodunitScreen({
               color: selectedId === "no" ? COLORS.black : undefined,
               labelStyle:
                 selectedId === "no"
-                  ? { fontFamily: "Poppins_700Bold", color: COLORS.black }
-                  : undefined,
+                  ? { fontFamily: "Poppins_700Bold" }
+                  : { fontFamily: "Poppins_400Regular" },
             },
           ]}
           onPress={(selectedId) => {

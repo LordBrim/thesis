@@ -5,6 +5,7 @@ import {
   Modal as RNModal,
   Image,
   Animated,
+  ScrollView,
 } from "react-native";
 import React, { ReactNode, useRef, useEffect } from "react";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
@@ -74,37 +75,39 @@ export default function SingleBtnModal({
       onRequestClose={onRequestClose}
     >
       <Animated.View style={[styles.modal, { opacity: opacityValue }]}>
-        <View style={styles.container}>
-          {icon}
-          <Text style={styles.header}>{title}</Text>
-          {renderMarkdown ? (
-            <Markdown>{description}</Markdown>
-          ) : (
+        <ScrollView
+          overScrollMode="never"
+          contentContainerStyle={styles.scrollview}
+        >
+          <View style={styles.container}>
+            {icon}
+            <Text style={styles.header}>{title}</Text>
             <Text style={styles.description}>{description}</Text>
-          )}
-          {errorMessage && (
-            <Text style={styles.description}>{errorMessage}</Text>
-          )}
-          {children}
-          <View
-            style={{
-              marginTop: 32,
-              width: 300,
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 20,
-            }}
-          >
-            <CallToActionBtn label={btnLabel} onPress={onPress} />
-            {extraBtn}
+            {errorMessage && (
+              <Text style={styles.description}>{errorMessage}</Text>
+            )}
+            {children}
+            <View
+              style={{
+                marginTop: 32,
+                width: 300,
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 20,
+              }}
+            >
+              <CallToActionBtn label={btnLabel} onPress={onPress} />
+              {extraBtn}
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </Animated.View>
     </RNModal>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollview: {},
   modal: {
     flex: 1,
     justifyContent: "center",
@@ -114,18 +117,19 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: COLORS.background,
     padding: 28,
-    marginHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    margin: HORIZONTAL_SCREEN_MARGIN,
     borderRadius: 15,
     alignItems: "center",
     gap: 20,
   },
   header: {
     fontSize: 24,
+    textAlign: "center",
     fontFamily: "Poppins_700Bold",
   },
   description: {
-    fontSize: 16,
-    textAlign: "center",
+    fontSize: 12,
+    fontFamily: "Poppins_400Regular",
   },
   btn: {
     backgroundColor: COLORS.primary,

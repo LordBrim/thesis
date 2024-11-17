@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
     color: COLORS.background,
   },
   subtitle: {
-    fontSize: SIZES.small,
+    fontSize: 13,
+    fontFamily: "Poppins_400Regular",
   },
   defaultSubtitle: {
     color: COLORS.grayDark,

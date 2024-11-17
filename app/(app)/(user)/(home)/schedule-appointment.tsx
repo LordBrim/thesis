@@ -124,6 +124,7 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
           placeholder="Select a hospital"
           style={styles.inputContainer}
           labelStyle={styles.inputLabel}
+          textStyle={styles.inputLabel}
           onOpen={() => setOpenTimeBlock(false)} // Close time block drop-down when hospital drop-down is opened
         />
 
@@ -157,6 +158,7 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
           placeholder="Select a time block"
           style={styles.inputContainer}
           labelStyle={styles.inputLabel}
+          textStyle={styles.inputLabel}
           onOpen={() => setOpenHospital(false)} // Close hospital drop-down when time block drop-down is opened
         />
       </View>
@@ -191,7 +193,12 @@ const styles = StyleSheet.create({
     fontSize: SIZES.large,
     fontFamily: "Poppins_600SemiBold",
   },
-  contentContainer: { flex: 1, flexDirection: "column", gap: 8 },
+  contentContainer: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 8,
+    fontFamily: "Poppins_400Regular",
+  },
   inputContainer: {
     width: "100%",
     height: MINOR_COMPONENT_HEIGHT,
@@ -203,11 +210,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: SIZES.xSmall,
+    fontFamily: "Poppins_400Regular",
   },
   inputLabel: {
     backgroundColor: COLORS.background,
     paddingHorizontal: 4,
     borderRadius: 50,
+    fontFamily: "Poppins_400Regular",
   },
   modalView: {
     margin: 20,
@@ -223,10 +232,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    fontFamily: "Poppins_400Regular",
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+    fontFamily: "Poppins_400Regular",
   },
 });
 

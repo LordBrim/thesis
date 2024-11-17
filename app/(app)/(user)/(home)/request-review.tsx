@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   value: {
     fontSize: SIZES.medium,
     marginBottom: 8,
+    fontFamily: "Poppins_400Regular",
   },
   image: {
     width: 150,

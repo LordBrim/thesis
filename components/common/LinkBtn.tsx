@@ -46,7 +46,7 @@ export default function LinkBtn({
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <Text style={[linkStyle || styles.label]}>{label}</Text>
+      <Text style={[linkStyle && styles.label]}>{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -57,5 +57,6 @@ const styles = StyleSheet.create({
   },
   label: {
     // Add default styles for label if needed
+    fontFamily: "Poppins_400Regular",
   },
 });

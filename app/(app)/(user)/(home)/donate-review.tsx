@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
   },
   answer: {
     fontSize: 14,
+    fontFamily: "Poppins_400Regular",
   },
 });
 

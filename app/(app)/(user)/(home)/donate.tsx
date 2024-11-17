@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { SafeAreaView, StyleSheet, View, Dimensions, Text } from "react-native";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import CallToActionBtn from "components/common/CallToActionBtn";
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import StepsIndicator from "components/common/StepsIndicator";
 import ScheduleAppointmentScreen from "./schedule-appointment";
 import PreliminaryChecklist from "components/home/PreliminaryChecklist";
@@ -144,7 +144,12 @@ By proceeding with this screening, you acknowledge that you understand these req
     "Schedule\nAppointment",
     "Review\nSchedule",
   ];
-
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerShadowVisible: false,
+    });
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <StepsIndicator labels={Screens} step={screenIndex} steps={stepCount} />

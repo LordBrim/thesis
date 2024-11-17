@@ -364,12 +364,11 @@ export default function RegisterScreen() {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <ScrollView
-        showsVerticalScrollIndicator={true}
-        overScrollMode="always"
-        contentContainerStyle={styles.scrollview}
-      >
+    <ScrollView
+      showsVerticalScrollIndicator={true}
+      contentContainerStyle={styles.scrollview}
+    >
+      <GestureHandlerRootView style={styles.container}>
         <View style={styles.cTop}>
           <View style={{ gap: 12 }}>
             <View style={{ gap: 24 }}>
@@ -587,9 +586,7 @@ export default function RegisterScreen() {
                 <Text>?</Text>
               </View>
             </View>
-            <View style={{ margin: 50 }}>
-              <CallToActionBtn label="Register" onPress={() => register()} />
-            </View>
+            <CallToActionBtn label="Register" onPress={() => register()} />
           </View>
 
           {/* <View
@@ -641,33 +638,33 @@ export default function RegisterScreen() {
             </View>
           </View> */}
         </View>
-      </ScrollView>
 
-      <SingleBtnModal
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-        onPress={() => setModalVisible(false)}
-        title={modalTitle}
-        description={modalDescription}
-        btnLabel="Close"
-      />
-      <SingleBtnModal
-        visible={successModalVisible}
-        animation={true}
-        icon={<FontAwesome5 name="check-circle" size={40} color="black" />}
-        onRequestClose={() => {
-          setSuccessModalVisible(false);
-          router.back(); // Replace "Login" with the name of your login screen
-        }}
-        onPress={() => {
-          setSuccessModalVisible(false);
-          router.back(); // Replace "Login" with the name of your login screen
-        }}
-        title="Registration Successful"
-        description="Your account has been created successfully. Please log in to continue."
-        btnLabel="Go to Login"
-      />
-    </GestureHandlerRootView>
+        <SingleBtnModal
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+          onPress={() => setModalVisible(false)}
+          title={modalTitle}
+          description={modalDescription}
+          btnLabel="Close"
+        />
+        <SingleBtnModal
+          visible={successModalVisible}
+          animation={true}
+          icon={<FontAwesome5 name="check-circle" size={40} color="black" />}
+          onRequestClose={() => {
+            setSuccessModalVisible(false);
+            router.back(); // Replace "Login" with the name of your login screen
+          }}
+          onPress={() => {
+            setSuccessModalVisible(false);
+            router.back(); // Replace "Login" with the name of your login screen
+          }}
+          title="Registration Successful"
+          description="Your account has been created successfully. Please log in to continue."
+          btnLabel="Go to Login"
+        />
+      </GestureHandlerRootView>
+    </ScrollView>
   );
 }
 
@@ -715,8 +712,7 @@ const styles = StyleSheet.create({
   },
   scrollview: {
     height: Dimensions.get("window").height,
-    maxHeight: Dimensions.get("window").height - 82,
-    paddingVertical: HORIZONTAL_SCREEN_MARGIN,
+    maxHeight: Dimensions.get("window").height - 50,
   },
   radioContainer: {
     flexDirection: "row",

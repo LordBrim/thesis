@@ -351,6 +351,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    height: "100%",
     backgroundColor: COLORS.background,
     justifyContent: "center",
     alignItems: "center",

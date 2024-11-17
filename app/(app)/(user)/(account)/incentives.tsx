@@ -151,7 +151,7 @@ export default function DonationHistory() {
             source={require("../../../../assets/images/no-appointments.png")}
             style={styles.emptyImage}
           />
-          <Text style={styles.emptyText}>No Scheduled Appointments</Text>
+          <Text style={styles.emptyText}>You do not have Inecntives yet.</Text>
         </View>
       )}
       <Modal

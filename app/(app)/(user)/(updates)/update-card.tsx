@@ -55,7 +55,7 @@ const UpdateCard = ({ update }) => {
             <Ionicons name="checkmark-circle" size={size} color="#32cd32" />
           </View>
         )}
-        {message === "deliberation" && lowerCaseStatus === "rejected" && (
+        {message === "deliberation" && lowerCaseStatus === "denied" && (
           <View
             style={[
               styles.cardIcon,
@@ -64,7 +64,7 @@ const UpdateCard = ({ update }) => {
               },
             ]}
           >
-            <Ionicons name="close-circle" size={size} color="#ff3333" />
+            <Ionicons name="alert-circle" size={size} color="#ff3333" />
           </View>
         )}
         {message === "deliberation" && lowerCaseStatus === "missing" && (

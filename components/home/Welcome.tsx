@@ -14,6 +14,7 @@ export default function Welcome({ toDonate, toRequest, currentUser }) {
           subtitle="Donate blood to someone in need."
           cta
           currentUser={currentUser}
+          nextDonationDate={currentUser?.nextDonationDate}
         />
         <ActionBtn
           href={toRequest}

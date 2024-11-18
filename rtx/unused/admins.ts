@@ -84,7 +84,7 @@ const initialState: AdminsState = {
       email: "andrei@mail.com",
       password: "123456",
       role: "admin",
-      hospitalName: "UERM Hospital",
+      hospitalName: "UERM Medical Hospital",
     },
     {
       uuid: "wLBJcMvAmdONhDpQSlGbbXsL3KS2",
@@ -93,7 +93,7 @@ const initialState: AdminsState = {
       email: "angelo@mail.com",
       password: "123456",
       role: "admin",
-      hospitalName: "UERM Hospital",
+      hospitalName: "UERM Medical Hospital",
     },
   ],
 };

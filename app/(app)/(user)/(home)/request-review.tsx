@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { COLORS, SIZES } from "../../../../constants";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Divider from "constants/divider";
 
 export default function RequestReviewScreen({
   patientName,
@@ -28,6 +29,10 @@ export default function RequestReviewScreen({
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>Review Your Request</Text>
+        <Text style={{ fontSize: 16, fontFamily: "Poppins_400Regular" }}>
+          Please ensure all answers are accurate.
+        </Text>
+        <Divider width={"95%"} color={COLORS.grayDark} height={1} />
         <Text style={styles.label}>Patient's Name:</Text>
         <Text style={styles.value}>{patientName}</Text>
 
@@ -96,7 +101,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: SIZES.large,
     fontFamily: "Poppins_700Bold",
-    marginBottom: 16,
   },
   label: {
     fontSize: SIZES.medium,

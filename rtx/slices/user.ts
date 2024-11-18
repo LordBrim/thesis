@@ -48,7 +48,7 @@ const initialState: UserState = {
     role: "user",
     hospitalName: "",
     lastDonationUUID: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
-    lastDonationName: "UERM Hospital",
+    lastDonationName: "UERM Medical Hospital",
     incentives: [
       {
         hospitalUUID: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",

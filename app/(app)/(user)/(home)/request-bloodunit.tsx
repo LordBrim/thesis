@@ -6,6 +6,8 @@ import {
   Image,
   Platform,
   Alert,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES } from "../../../../constants";
@@ -49,6 +51,8 @@ export default function RequestBloodunitScreen({
   const bloodTypePickerRef = useRef();
   const relationshipPickerRef = useRef();
   const transfusionPickerRef = useRef();
+  const [invalidNumberModalVisible, setInvalidNumberModalVisible] =
+    useState(false);
 
   const relationships = [
     { label: "Myself", value: "myself" },
@@ -64,11 +68,17 @@ export default function RequestBloodunitScreen({
 
   const handleContactNumberChange = (text) => {
     const cleanedText = text.replace(/\D/g, "");
-    const formattedText = cleanedText.replace(
-      /(\d{3})(\d{3})(\d{4})/,
-      "$1 $2 $3"
-    );
+    let formattedText = cleanedText;
+    if (cleanedText.length > 6) {
+      formattedText = cleanedText.replace(
+        /(\d{3})(\d{3})(\d{1,4})/,
+        "$1 $2 $3"
+      );
+    } else if (cleanedText.length > 3) {
+      formattedText = cleanedText.replace(/(\d{3})(\d{1,3})/, "$1 $2");
+    }
     setContactNumber(formattedText);
+    validateField("contactNumber", formattedText); // Validate here
   };
 
   const handleImagePicker = async (type) => {
@@ -126,7 +136,7 @@ export default function RequestBloodunitScreen({
         break;
       case "contactNumber":
         if (!value) error = "Contact number is required.";
-        else if (!/^\d{3} \d{3} \d{4}$/.test(value))
+        else if (!/^9\d{2} \d{3} \d{4}$/.test(value))
           error = "Contact number is invalid.";
         break;
       case "emergencyReason":
@@ -163,6 +173,11 @@ export default function RequestBloodunitScreen({
 
     setErrors(newErrors);
 
+    if (newErrors.contactNumber) {
+      setInvalidNumberModalVisible(true);
+      return;
+    }
+
     if (allValid) {
       next();
     } else {
@@ -180,14 +195,13 @@ export default function RequestBloodunitScreen({
         <Text style={styles.title}>File A Request</Text>
         <Text
           style={{
-            color: COLORS.secondary,
+            color: COLORS.text,
             fontSize: 15,
-            fontFamily: "Poppins_600SemiBold",
-            marginVertical: 10,
+            fontFamily: "Poppins_400Regular",
           }}
         >
-          Please ensure all fields are completed before submission. Incomplete
-          requests will not be processed.
+          Please ensure all fields are completed and accurate before submission.
+          Incomplete requests will not be processed.
         </Text>
         <Text style={styles.header}>Patient's Name *</Text>
         <TextInput
@@ -400,6 +414,28 @@ export default function RequestBloodunitScreen({
           setModalVisible={setModalVisible}
           handleImagePicker={handleImagePicker}
         />
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={invalidNumberModalVisible}
+          onRequestClose={() => {
+            setInvalidNumberModalVisible(!invalidNumberModalVisible);
+          }}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Contact number is invalid.</Text>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() =>
+                  setInvalidNumberModalVisible(!invalidNumberModalVisible)
+                }
+              >
+                <Text style={styles.textStyle}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     </KeyboardAwareScrollView>
   );

@@ -18,6 +18,7 @@ type IActionBtn = {
   subtitle: string;
   cta?: boolean;
   currentUser?: any;
+  nextDonationDate?: string;
 };
 
 export default function ActionBtn({
@@ -26,9 +27,9 @@ export default function ActionBtn({
   subtitle,
   cta,
   currentUser,
+  nextDonationDate,
 }: IActionBtn) {
   const [modalVisible, setModalVisible] = useState(false);
-  const nextDonationDate = currentUser?.nextDonationDate;
   const canDonate =
     !nextDonationDate ||
     moment().isSameOrAfter(moment(nextDonationDate, "YYYY/MM/DD"));
@@ -41,7 +42,7 @@ export default function ActionBtn({
 
   return (
     <>
-      {true ? (
+      {canDonate ? (
         <Link
           asChild
           href={href}

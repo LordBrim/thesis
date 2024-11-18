@@ -45,8 +45,11 @@ import BottomSheet, {
   BottomSheetView,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
+import { getDoc, doc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 import { useRouter } from "expo-router";
+import SingleBtnModal from "../../../../components/common/modals/SingleBtnModal"; // Add this import
 const DisplayedIcons = [
   {
     Icon: ABloodType,
@@ -77,7 +80,7 @@ const limitMapToMetroManila = (region) => {
   const { latitude, longitude, latitudeDelta, longitudeDelta } = region;
   const north = latitude + latitudeDelta / 2;
   const south = latitude - latitudeDelta / 2;
-  const east = longitude + longitudeDelta / 2;
+  const east = longitude + latitudeDelta / 2;
   const west = longitude - latitudeDelta / 2;
 
   if (north > METRO_MANILA_BOUNDS.north) {
@@ -90,7 +93,7 @@ const limitMapToMetroManila = (region) => {
     region.longitude = METRO_MANILA_BOUNDS.east - longitudeDelta / 2;
   }
   if (west < METRO_MANILA_BOUNDS.west) {
-    region.longitude = METRO_MANILA_BOUNDS.west + latitudeDelta / 2;
+    region.longitude = METRO_MANILA_BOUNDS.west + longitudeDelta / 2;
   }
 
   return region;
@@ -138,6 +141,88 @@ const HospitalMapView = () => {
 
   const [locationPermissionDenied, setLocationPermissionDenied] =
     useState(false); // Add state for permission cancelled
+
+  const [userData, setUserData] = useState(null);
+  const [canDonate, setCanDonate] = useState(true);
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const userId = user ? user.uid : null; // Get the current user's unique ID
+  const [modalVisible, setModalVisible] = useState(false); // Add state for modal visibility
+  const [fetchingData, setFetchingData] = useState(true); // Add state for fetching data
+
+  const fetchUserData = async () => {
+    if (!userId) return; // Exit if userId is not available
+    try {
+      const userDoc = await getDoc(doc(FIRESTORE_DB, "User", userId));
+      console.log("User data: ", userDoc.data());
+      if (userDoc.exists()) {
+        const data = userDoc.data();
+        setUserData(data);
+        const nextDonationDate = moment(data.nextDonationDate, "YYYY-MM-DD");
+        const currentDate = moment();
+        if (currentDate.isBefore(nextDonationDate)) {
+          setCanDonate(false);
+        } else {
+          setCanDonate(true);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
+    }
+  };
+
+  const fetchEvents = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(FIRESTORE_DB, "events"));
+      const eventsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      const filteredEvents = eventsData.filter(
+        (event) =>
+          isActiveEvent(
+            event.startDate,
+            event.startTime,
+            event.endDate,
+            event.endTime
+          ) || isUpcomingEvent(event.startDate, event.startTime)
+      );
+      setEvents(filteredEvents);
+      console.log(filteredEvents);
+    } catch (error) {
+      console.error("Error fetching events: ", error);
+    }
+  };
+
+  const fetchHospitals = async () => {
+    try {
+      const querySnapshot = await getDocs(
+        collection(FIRESTORE_DB, "hospital")
+      );
+      const hospitalsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setParsedHospitals(hospitalsData);
+      setLoading(false); // Set loading to false after fetching data
+    } catch (error) {
+      console.error("Error fetching hospitals: ", error);
+      setLoading(false); // Set loading to false in case of error
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await fetchUserData();
+      await fetchEvents();
+      await fetchHospitals();
+      setLoading(false);
+      setFetchingData(false); // Set fetchingData to false after all data is fetched
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     console.log("Selected Marker:", selectedMarker);
@@ -232,60 +317,6 @@ const HospitalMapView = () => {
     return now.isBefore(start);
   };
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(FIRESTORE_DB, "events"));
-        const eventsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        const filteredEvents = eventsData.filter(
-          (event) =>
-            isActiveEvent(
-              event.startDate,
-              event.startTime,
-              event.endDate,
-              event.endTime
-            ) || isUpcomingEvent(event.startDate, event.startTime)
-        );
-        setEvents(filteredEvents);
-        console.log(filteredEvents);
-      } catch (error) {
-        console.error("Error fetching events: ", error);
-      }
-    };
-
-    fetchEvents();
-    console.log("ue 3 triggered");
-  }, []);
-
-  useEffect(() => {
-    const fetchHospitals = async () => {
-      try {
-        const querySnapshot = await getDocs(
-          collection(FIRESTORE_DB, "hospital")
-        );
-        const hospitalsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setParsedHospitals(hospitalsData);
-        setLoading(false); // Set loading to false after fetching data
-      } catch (error) {
-        console.error("Error fetching hospitals: ", error);
-        setLoading(false); // Set loading to false in case of error
-      }
-    };
-
-    if (!hospitals) {
-      fetchHospitals();
-    } else {
-      setLoading(false); // Set loading to false if hospitals are already provided
-    }
-    console.log("ue 4 triggered");
-  }, [hospitals]);
-
   const handleMapInteraction = () => {
     bottomSheetRef.current?.close(); // Close the bottom sheet
     setSelectedMarker(null); // Deselect the marker
@@ -318,6 +349,15 @@ const HospitalMapView = () => {
   };
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {/* Add the SingleBtnModal component */}
+      <SingleBtnModal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        title="Not Eligible"
+        description="You have donated recently and are not eligible to donate at the moment."
+        btnLabel="Close"
+        onPress={() => setModalVisible(false)}
+      />
       {/* Show a message if location permission is cancelled */}
       {locationPermissionDenied && (
         <View style={styles.permissionDeniedContainer}>
@@ -326,51 +366,11 @@ const HospitalMapView = () => {
           </Text>
         </View>
       )}
-      <MapView
-        ref={mapViewRef} // Add this line to attach the ref to MapView
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        customMapStyle={mapStyle}
-        initialRegion={initialRegion || defaultRegion}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        onRegionChangeComplete={(region) => {
-          const limitedRegion = limitMapToMetroManila(region);
-          mapViewRef.current?.animateToRegion(limitedRegion, 1000);
-        }}
-        onPanDrag={handleMapInteraction}
-        onPress={handleMapInteraction}
-      >
-        <Polyline
-          coordinates={routeCoordinates}
-          strokeWidth={5}
-          strokeColor="blue"
-        />
-        {parsedHospitals
-          .filter((hospital) => !hospital.disabled)
-          .map((hospital) => (
-            <HospitalMarker
-              key={hospital.id}
-              data={hospital}
-              setSelectedMarker={setSelectedMarker}
-              styles={styles}
-              type="hospital"
-            />
-          ))}
-        {events.map((event) => (
-          <HospitalMarker
-            key={event.id}
-            data={event}
-            setSelectedMarker={setSelectedMarker}
-            styles={styles}
-            type="event"
-          />
-        ))}
-      </MapView>
+      {/* Add a modal to indicate fetching data */}
       <Modal
         transparent={true}
         animationType="fade"
-        visible={loading}
+        visible={fetchingData}
         onRequestClose={() => {}}
       >
         <View style={styles.modalBackground}>
@@ -382,218 +382,201 @@ const HospitalMapView = () => {
                 fontFamily: "Poppins_400Regular",
               }}
             >
-              Loading fetching data...
+              Fetching all data...
             </Text>
             <ActivityIndicator size="large" color={COLORS.primary} />
           </View>
         </View>
       </Modal>
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        enablePanDownToClose={true}
-      >
-        <BottomSheetScrollView
-          contentContainerStyle={styles.bottomSheetContent}
-        >
-          {selectedMarker && selectedMarker.type === "hospital" ? (
-            <View style={styles.topAlignedContent}>
-              <View style={styles.rowContent}>
-                <Image
-                  source={{ uri: selectedHospital?.logoUrl }}
-                  style={{ width: 60, height: 60 }}
+      {/* Show the map only when fetchingData is false */}
+      {!fetchingData && (
+        <>
+          <MapView
+            ref={mapViewRef} // Add this line to attach the ref to MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            customMapStyle={mapStyle}
+            initialRegion={initialRegion || defaultRegion}
+            showsUserLocation={true}
+            showsMyLocationButton={true}
+            onRegionChangeComplete={(region) => {
+              const limitedRegion = limitMapToMetroManila(region);
+              mapViewRef.current?.animateToRegion(limitedRegion, 1000);
+            }}
+            onPanDrag={handleMapInteraction}
+            onPress={handleMapInteraction}
+          >
+            <Polyline
+              coordinates={routeCoordinates}
+              strokeWidth={5}
+              strokeColor="blue"
+            />
+            {parsedHospitals
+              .filter((hospital) => !hospital.disabled)
+              .map((hospital) => (
+                <HospitalMarker
+                  key={hospital.id}
+                  data={hospital}
+                  setSelectedMarker={setSelectedMarker}
+                  styles={styles}
+                  type="hospital"
                 />
-                <View style={[styles.columnContent, { marginLeft: 10 }]}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Icon
-                      source="hospital-building"
-                      size={20}
-                      color={COLORS.primary}
-                    />
-                    <Text style={styles.hospitalName}>
-                      {selectedMarker?.name}
-                    </Text>
-                  </View>
-                  <Text style={styles.address}>{selectedMarker?.address}</Text>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignselectedMarkers: "center",
-                    }}
-                  >
-                    <Foundation
-                      name="telephone"
-                      size={15}
-                      color={COLORS.primary}
-                    />
-                    <Text
-                      style={{
-                        margin: 5,
-                        textDecorationLine: "underline",
-                        color: COLORS.primary,
-                        fontFamily: "Poppins_400Regular",
-                      }}
-                    >
-                      {selectedMarker?.contactNumber}
-                    </Text>
-                  </View>
-                </View>
+              ))}
+            {events.map((event) => (
+              <HospitalMarker
+                key={event.id}
+                data={event}
+                setSelectedMarker={setSelectedMarker}
+                styles={styles}
+                type="event"
+              />
+            ))}
+          </MapView>
+          <Modal
+            transparent={true}
+            animationType="fade"
+            visible={loading}
+            onRequestClose={() => {}}
+          >
+            <View style={styles.modalBackground}>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  style={{
+                    color: COLORS.background,
+                    fontSize: 15,
+                    fontFamily: "Poppins_400Regular",
+                  }}
+                >
+                  Loading fetching data...
+                </Text>
+                <ActivityIndicator size="large" color={COLORS.primary} />
               </View>
-              <Divider style={styles.divider} />
-              <Text style={styles.bloodTypeText}>
-                The hospitals needs the following blood types:
-              </Text>
-              <View style={styles.bloodTypeContainer}>
-                {DisplayedIcons.map(({ Icon, types }, index) => (
-                  <View key={index} style={styles.bloodTypeselectedMarker}>
-                    <Icon
-                      width={30}
-                      height={30}
-                      fill={
-                        selectedMarker?.stock
-                          ?.filter((bt) => types.includes(bt.type))
-                          .some((t) => t.available)
-                          ? "red"
-                          : "gray"
-                      }
-                      style={{ marginRight: 5 }}
+            </View>
+          </Modal>
+          <BottomSheet
+            ref={bottomSheetRef}
+            index={-1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+            enablePanDownToClose={true}
+          >
+            <BottomSheetScrollView
+              contentContainerStyle={styles.bottomSheetContent}
+            >
+              {selectedMarker && selectedMarker.type === "hospital" ? (
+                <View style={styles.topAlignedContent}>
+                  <View style={styles.rowContent}>
+                    <Image
+                      source={{ uri: selectedHospital?.logoUrl }}
+                      style={{ width: 60, height: 60 }}
                     />
-                    <View style={styles.bloodTypeIndicators}>
-                      {types.map((bb, bbIndex) => {
-                        const positive = bb.includes("+");
-                        let iconColor = selectedMarker?.stock?.filter(
-                          (bt) => bb == bt.type
-                        )[0]?.available
-                          ? "red"
-                          : "gray";
-                        const Icon = positive ? Plus : Minus;
-
-                        return (
-                          <Icon
-                            key={bbIndex}
-                            width={20}
-                            height={20}
-                            fill={iconColor}
-                          />
-                        );
-                      })}
+                    <View style={[styles.columnContent, { marginLeft: 10 }]}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Icon
+                          source="hospital-building"
+                          size={20}
+                          color={COLORS.primary}
+                        />
+                        <Text style={styles.hospitalName}>
+                          {selectedMarker?.name}
+                        </Text>
+                      </View>
+                      <Text style={styles.address}>
+                        {selectedMarker?.address}
+                      </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignselectedMarkers: "center",
+                        }}
+                      >
+                        <Foundation
+                          name="telephone"
+                          size={15}
+                          color={COLORS.primary}
+                        />
+                        <Text
+                          style={{
+                            margin: 5,
+                            textDecorationLine: "underline",
+                            color: COLORS.primary,
+                            fontFamily: "Poppins_400Regular",
+                          }}
+                        >
+                          {selectedMarker?.contactNumber}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                ))}
-              </View>
-              <CustomButtonWithIcon
-                icon={"plus-square"}
-                iconSize={20}
-                title={"Donate Blood"}
-                onPress={() => router.push("/(app)/(user)/(home)/donate")}
-                buttonStyle={{
-                  borderRadius: 30,
-                  width: "80%",
-                  backgroundColor: "white",
-                  borderColor: COLORS.primary,
-                  borderWidth: 1,
-                }}
-                iconColor={COLORS.primary}
-                textStyle={{ fontSize: 15, color: COLORS.primary }}
-              />
-              <CustomButtonWithIcon
-                icon={"location-arrow"}
-                iconSize={20}
-                title={"Drive to location"}
-                onPress={openGoogleMapsForDriving}
-                buttonStyle={{
-                  borderRadius: 30,
-                  width: "80%",
-                  backgroundColor: "white",
-                  borderColor: COLORS.primary,
-                  borderWidth: 1,
-                }}
-                iconColor={COLORS.primary}
-                textStyle={{ fontSize: 15, color: COLORS.primary }}
-              />
-            </View>
-          ) : selectedMarker && selectedMarker.type !== "hospital" ? (
-            <View style={styles.topAlignedContent}>
-              <Image
-                source={{ uri: selectedMarker?.imageUrl }}
-                style={{ width: "80%", height: 150, borderRadius: 10 }}
-                contentFit="cover"
-              />
-              <View style={styles.rowContent}>
-                <View style={[styles.columnContent, { marginLeft: 10 }]}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Fontisto name="blood" size={24} color={COLORS.primary} />
-                    <Text style={styles.hospitalName}>
-                      {selectedMarker?.title}
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Fontisto
-                      name="map"
-                      size={24}
-                      color="black"
-                      marginRight={10}
-                    />
-                    <Text style={styles.address}>
-                      {selectedMarker?.address}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Fontisto name="clock" size={24} color={COLORS.primary} />
-                    <Text
-                      style={{
-                        margin: 5,
-                        color: COLORS.primary,
-                        fontSize: 15,
-                        fontFamily: "Poppins_400Regular",
-                      }}
-                    >
-                      Start Date:{" "}
-                      {formatDate(selectedMarker?.startDate) +
-                        " - " +
-                        selectedMarker?.startTime}
-                      {"\n"}
-                      End Date:{" "}
-                      {formatDate(selectedMarker?.endDate) +
-                        " - " +
-                        selectedMarker?.endTime}
-                    </Text>
-                  </View>
-                  <Text
-                    style={{
-                      margin: 10,
-                      textAlign: "justify",
-                      fontSize: 15,
-                      fontFamily: "Poppins_700Bold",
-                    }}
-                  >
-                    Event Details:
-                    {"\n"}
-                    <Text
-                      style={{
-                        fontFamily: "Poppins_400Regular",
-                      }}
-                    >
-                      {selectedMarker?.description}
-                    </Text>
+                  <Divider style={styles.divider} />
+                  <Text style={styles.bloodTypeText}>
+                    The hospitals needs the following blood types:
                   </Text>
+                  <View style={styles.bloodTypeContainer}>
+                    {DisplayedIcons.map(({ Icon, types }, index) => (
+                      <View key={index} style={styles.bloodTypeselectedMarker}>
+                        <Icon
+                          width={30}
+                          height={30}
+                          fill={
+                            selectedMarker?.stock
+                              ?.filter((bt) => types.includes(bt.type))
+                              .some((t) => t.available)
+                              ? "red"
+                              : "gray"
+                          }
+                          style={{ marginRight: 5 }}
+                        />
+                        <View style={styles.bloodTypeIndicators}>
+                          {types.map((bb, bbIndex) => {
+                            const positive = bb.includes("+");
+                            let iconColor = selectedMarker?.stock?.filter(
+                              (bt) => bb == bt.type
+                            )[0]?.available
+                              ? "red"
+                              : "gray";
+                            const Icon = positive ? Plus : Minus;
+
+                            return (
+                              <Icon
+                                key={bbIndex}
+                                width={20}
+                                height={20}
+                                fill={iconColor}
+                              />
+                            );
+                          })}
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                  <CustomButtonWithIcon
+                    icon={"plus-square"}
+                    iconSize={20}
+                    title={"Donate Blood"}
+                    onPress={() => {
+                      if (canDonate) {
+                        router.push("/(app)/(user)/(home)/donate");
+                      } else {
+                        setModalVisible(true); // Show the modal instead of alert
+                      }
+                    }}
+                    buttonStyle={{
+                      borderRadius: 30,
+                      width: "80%",
+                      backgroundColor: canDonate ? COLORS.primary : COLORS.grayLight,
+                      borderColor: canDonate ? COLORS.background: COLORS.grayDark,
+                      borderWidth: 1,
+                    }}
+                    iconColor={canDonate ? COLORS.background : "white"}
+                    textStyle={canDonate ? { fontSize: 15, color: COLORS.background } : { fontSize: 15, color: "white" }}
+                    disabled={!canDonate}
+                  />
                   <CustomButtonWithIcon
                     icon={"location-arrow"}
                     iconSize={20}
@@ -610,11 +593,104 @@ const HospitalMapView = () => {
                     textStyle={{ fontSize: 15, color: COLORS.primary }}
                   />
                 </View>
-              </View>
-            </View>
-          ) : null}
-        </BottomSheetScrollView>
-      </BottomSheet>
+              ) : selectedMarker && selectedMarker.type !== "hospital" ? (
+                <View style={styles.topAlignedContent}>
+                  <Image
+                    source={{ uri: selectedMarker?.imageUrl }}
+                    style={{ width: "80%", height: 150, borderRadius: 10 }}
+                    contentFit="cover"
+                  />
+                  <View style={styles.rowContent}>
+                    <View style={[styles.columnContent, { marginLeft: 10 }]}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Fontisto name="blood" size={24} color={COLORS.primary} />
+                        <Text style={styles.hospitalName}>
+                          {selectedMarker?.title}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Fontisto
+                          name="map"
+                          size={24}
+                          color="black"
+                          marginRight={10}
+                        />
+                        <Text style={styles.address}>
+                          {selectedMarker?.address}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Fontisto name="clock" size={24} color={COLORS.primary} />
+                        <Text
+                          style={{
+                            margin: 5,
+                            color: COLORS.primary,
+                            fontSize: 15,
+                            fontFamily: "Poppins_400Regular",
+                          }}
+                        >
+                          Start Date:{" "}
+                          {formatDate(selectedMarker?.startDate) +
+                            " - " +
+                            selectedMarker?.startTime}
+                          {"\n"}
+                          End Date:{" "}
+                          {formatDate(selectedMarker?.endDate) +
+                            " - " +
+                            selectedMarker?.endTime}
+                        </Text>
+                      </View>
+                      <Text
+                        style={{
+                          margin: 10,
+                          textAlign: "justify",
+                          fontSize: 15,
+                          fontFamily: "Poppins_700Bold",
+                        }}
+                      >
+                        Event Details:
+                        {"\n"}
+                        <Text
+                          style={{
+                            fontFamily: "Poppins_400Regular",
+                          }}
+                        >
+                          {selectedMarker?.description}
+                        </Text>
+                      </Text>
+                      <CustomButtonWithIcon
+                        icon={"location-arrow"}
+                        iconSize={20}
+                        title={"Drive to location"}
+                        onPress={openGoogleMapsForDriving}
+                        buttonStyle={{
+                          borderRadius: 30,
+                          width: "80%",
+                          backgroundColor: "white",
+                          borderColor: COLORS.primary,
+                          borderWidth: 1,
+                        }}
+                        iconColor={COLORS.primary}
+                        textStyle={{ fontSize: 15, color: COLORS.primary }}
+                      />
+                    </View>
+                  </View>
+                </View>
+              ) : null}
+            </BottomSheetScrollView>
+          </BottomSheet>
+        </>
+      )}
     </GestureHandlerRootView>
   );
 };

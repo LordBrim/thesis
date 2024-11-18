@@ -128,7 +128,7 @@ export default function Request() {
 
     setErrors(newErrors);
 
-    if (!allValid) {
+    if (!allValid && newErrors.contactNumber) {
       setWarningMessage("Please fill in all required fields.");
       setWarningModalVisible(true);
     }
@@ -222,10 +222,21 @@ export default function Request() {
         }
       });
 
+      if (!/^9\d{2} \d{3} \d{4}$/.test(contactNumber)) {
+        newErrors.contactNumber = "Contact number is invalid.";
+        allValid = false;
+      }
+
       setErrors(newErrors);
 
+      if (newErrors.contactNumber) {
+        setWarningMessage("Contact number is invalid.");
+        setWarningModalVisible(true);
+        return;
+      }
+
       if (!allValid) {
-        setValidationError("Please fill in all required fields.");
+        setWarningMessage("Please fill in all required fields.");
         setWarningModalVisible(true);
         return;
       }
@@ -256,11 +267,18 @@ export default function Request() {
           style={{
             gap: 16,
             paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+            alignItems: "center",
           }}
         >
           <Text style={styles.title}>Guidelines For Requesting Blood</Text>
 
-          <ScrollView>
+          <ScrollView
+            contentContainerStyle={{
+              width: "90%",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <FlatList
               scrollEnabled={false}
               data={sampleGuidelines}
@@ -351,15 +369,13 @@ export default function Request() {
 
       <SingleBtnModal
         visible={modalVisible}
-        icon={
-          <Ionicons name="information-circle-outline" size={42} color="black" />
-        }
+        icon={<Ionicons name="checkmark-done-circle" size={50} color="black" />}
         onRequestClose={onModalClose}
         onPress={onModalClose}
         animation={true}
-        title="Your Ticket Request Has Been Submitted"
+        title="Success"
         btnLabel="Okay"
-        description="Your ticket request has been successfully submitted. You will be notified once a donor has been found."
+        description="Your request has been successfully submitted. Please check the Updates tab or your registered email for updates on your request."
       />
 
       <SingleBtnModal

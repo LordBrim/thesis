@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    fontSize: 24,
+    fontSize: 20,
     fontFamily: "Poppins_700Bold",
     marginBottom: 20,
     textAlign: "center",
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   question: {
     flex: 1,
-    fontFamily: "Poppins_700Bold",
+    fontFamily: "Poppins_400Regular",
   },
   aContainer: {
     padding: 10,

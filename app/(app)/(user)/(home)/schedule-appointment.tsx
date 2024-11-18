@@ -99,7 +99,7 @@ const ScheduleAppointmentScreen = forwardRef(({ updateAnswers }, ref) => {
   }));
 
   const hospitals = [
-    { label: "UERM Hospital", value: "UERM Hospital" },
+    { label: "UERM Medical Hospital", value: "UERM Medical Hospital" },
     {
       label: "ACE Medical Center Mandaluyong",
       value: "ACE Medical Center Mandaluyong",

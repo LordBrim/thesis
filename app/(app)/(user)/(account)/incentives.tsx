@@ -66,7 +66,7 @@ export default function DonationHistory() {
 
   const groupedTickets = tickets.reduce(
     (acc, ticket) => {
-      if (ticket.selectedHospital === "UERM Hospital") {
+      if (ticket.selectedHospital === "UERM Medical Hospital") {
         acc.UERM.push(ticket);
       } else if (ticket.selectedHospital === "ACE Medical Center Mandaluyong") {
         acc.ACE.push(ticket);
@@ -104,7 +104,7 @@ export default function DonationHistory() {
       </View>
       {hasAppointments ? (
         <ScrollView>
-          <Text style={styles.sectionTitle}>UERM Hospital</Text>
+          <Text style={styles.sectionTitle}>UERM Medical Hospital</Text>
           <FlatList
             data={groupedTickets.UERM}
             renderItem={({ item }) => (

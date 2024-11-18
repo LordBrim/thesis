@@ -8,7 +8,7 @@ import { HORIZONTAL_SCREEN_MARGIN, COLORS, SIZES, GS } from "../../constants";
 import { checklistQuestions } from "../../constants/database"; // Adjust the path to your database.js file
 
 const HeaderComponent = () => (
-  <View style={{ backgroundColor: COLORS.background, paddingBottom: 10 }}>
+  <View style={{ backgroundColor: COLORS.background }}>
     <Text style={GS.h1}>Preliminary Checklist</Text>
   </View>
 );
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingBottom: HORIZONTAL_SCREEN_MARGIN,
-    gap: 12,
+    gap: 5,
   },
   bar: {
     flexDirection: "row",

@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View, Dimensions, Text } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Dimensions,
+  Text,
+  ScrollView,
+} from "react-native";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import CallToActionBtn from "components/common/CallToActionBtn";
 import { router, useNavigation } from "expo-router";
@@ -72,20 +79,13 @@ export default function DonateScreen() {
     setAlertModalVisible(false);
   };
 
-  const noticeDescription = `
-This in-app screening is a preliminary evaluation to assess your potential eligibility for donation. Please note that:
-
-1. Completion of this screening does not guarantee final eligibility.
-
-2. You will still need to undergo a comprehensive medical examination to determine your full eligibility status.
-
-3. The examination will be conducted by authorized medical professionals to evaluate your overall health and fitness for donation.
-
-4. Results from this in-app screening are preliminary and may not reflect your final eligibility determination.
-
-5. Final eligibility decisions are made solely by authorized medical personnel based on the results of the comprehensive examination.
-
-By proceeding with this screening, you acknowledge that you understand these requirements and agree to participate in the full eligibility assessment process if deemed necessary.`;
+  const noticeDescription = [
+    "This in-app screening is a preliminary evaluation to assess your potential eligibility to donate. Please note that:",
+    "1. Completion of this preliminary evaluation does not guarantee final eligibility.",
+    "2. You will still need to undergo a comprehensive health screening by authorized medical personnel to determine your final eligibility.",
+    "3. Final decisions regarding donations are made solely by authorized medical personnel based on the results of the health screening.",
+    "By clicking 'I Agree', you confirm that you have read and agree with these guidelines.",
+  ];
 
   const submit = async () => {
     if (scheduleAppointmentRef.current) {
@@ -202,8 +202,7 @@ By proceeding with this screening, you acknowledge that you understand these req
         onRequestClose={closeModal}
         onPress={closeModal}
         title="Important Notice Regarding Eligibility Assessment"
-        renderMarkdown={true}
-        description={noticeDescription}
+        description={null}
         btnLabel="I Agree"
         extraBtn={
           <CallToActionBtn
@@ -212,7 +211,15 @@ By proceeding with this screening, you acknowledge that you understand these req
             secondary
           />
         }
-      />
+      >
+        <ScrollView style={{ maxHeight: "40%" }}>
+          {noticeDescription.map((line, index) => (
+            <Text key={index} style={{ marginBottom: 2, fontSize: 14 }}>
+              {line}
+            </Text>
+          ))}
+        </ScrollView>
+      </SingleBtnModal>
 
       <SingleBtnModal
         visible={alertModalVisible}
@@ -228,7 +235,7 @@ By proceeding with this screening, you acknowledge that you understand these req
         onRequestClose={handleCloseSuccessModal}
         onPress={handleCloseSuccessModal}
         title="Success!"
-        description="Please show the code included in this message to the hospital staff to confirm your attendance."
+        description="Your appointment is scheduled for review by the hospital staff. Please show this code to confirm your attendance."
         btnLabel="I Understand"
       >
         <View

@@ -96,7 +96,7 @@ interface TicketState {
 
 const tickets: TicketState[] = [
   {
-    name: "UERM Hospital",
+    name: "UERM Medical Hospital",
     status: "pending",
   },
   {

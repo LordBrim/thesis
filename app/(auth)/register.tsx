@@ -430,14 +430,11 @@ export default function RegisterScreen() {
               ></SingleBtnModal>
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TextInputWrapper
-                  label="6 Pin Number"
-                  customStyle={{ flex: 1 }}
-                >
+                <TextInputWrapper label="OTP Code" customStyle={{ flex: 1 }}>
                   <TextInput
                     style={styles.input}
                     value={otpInput}
-                    placeholder="Enter your otp..."
+                    placeholder="Enter OTP"
                     onChangeText={(otpInput) => setOtpInput(otpInput)}
                     autoCapitalize="none"
                     autoCorrect={false}

@@ -15,7 +15,7 @@
 // const hospitals = [
 //   {
 //     id: 1,
-//     name: "UERM Hospital",
+//     name: "UERM Medical Hospital",
 //     coordinates: { latitude: 14.607184, longitude: 121.020384 },
 //     address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",
 //     logoUrl: { uri: "https://via.placeholder.com/150" },

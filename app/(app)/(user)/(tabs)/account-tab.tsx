@@ -342,7 +342,7 @@ export default function AccountTab({
         onPress={confirmLogout}
         title="Confirm Logout"
         description="Are you sure you want to log out?"
-        btnLabel="OK"
+        btnLabel="Logout"
         extraBtn={
           <CallToActionBtn
             label="Cancel"

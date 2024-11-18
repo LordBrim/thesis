@@ -241,7 +241,7 @@ const initialState: HospitalsState = {
     {
       uuid: "GjaJAdRPfST9jKa5Mz9RXCzD7GN2",
       disabled: false,
-      name: "UERM Hospital",
+      name: "UERM Medical Hospital",
       logoUrl:
         "https://firebasestorage.googleapis.com/v0/b/lifeline-eb7f0.appspot.com/o/hospitalDataLogo%2FGjaJAdRPfST9jKa5Mz9RXCzD7GN2.png?alt=media&token=1abc8b21-edc2-44da-aaf0-a69f6bb8a183",
       address: "64 Aurora Blvd, Quezon City, 1113 Metro Manila",

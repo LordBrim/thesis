@@ -24,6 +24,8 @@ import {
 } from "firebase/firestore";
 import Divider from "constants/divider";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { Picker } from "@react-native-picker/picker";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 const Tab = createMaterialTopTabNavigator();
 
 interface TicketState {
@@ -175,6 +177,7 @@ function ManageTicketsRequestsPending() {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -190,6 +193,14 @@ function ManageTicketsRequestsPending() {
         data={tickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
+        ListEmptyComponent={
+          <View style={styles.centeredContainer}>
+            <MaterialIcons name="pending-actions" size={40} color="black" />
+            <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 15 }}>
+              No pending tickets at the moment.
+            </Text>
+          </View>
+        }
         overScrollMode="never"
         scrollEnabled={true}
         persistentScrollbar={true}
@@ -313,6 +324,7 @@ function ManageTicketsRequestsArchived() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string>("all");
 
   const fetchTickets = async () => {
     try {
@@ -347,10 +359,12 @@ function ManageTicketsRequestsArchived() {
         }
       );
 
-      // Sort tickets based on isEmergency field
-      ticketsData.sort(
-        (a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0)
-      );
+      // Sort tickets based on the closest date and status
+      ticketsData.sort((a, b) => {
+        const dateA = new Date(a.date || 0);
+        const dateB = new Date(b.date || 0);
+        return dateA.getTime() - dateB.getTime();
+      });
 
       setTickets(ticketsData);
       setLoading(false);
@@ -372,6 +386,11 @@ function ManageTicketsRequestsArchived() {
     fetchTickets();
   };
 
+  const filteredTickets = tickets.filter((ticket) => {
+    if (filter === "all") return true;
+    return ticket.status === filter;
+  });
+
   if (loading) {
     return (
       <View style={styles.centeredContainer}>
@@ -388,14 +407,6 @@ function ManageTicketsRequestsArchived() {
     );
   }
 
-  const rejectedTickets = tickets.filter(
-    (ticket) => ticket.status === "rejected"
-  );
-
-  const inProgressTickets = tickets.filter(
-    (ticket) => ticket.status === "in-progress"
-  );
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -403,34 +414,17 @@ function ManageTicketsRequestsArchived() {
           Archived Requests:
         </Text>
       </View>
-      <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
-        Click tickets to view more details.
-      </Text>
-      <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
-      <Text
-        style={{ fontFamily: "Poppins_700Bold", fontSize: 20, marginTop: 20 }}
+      <Picker
+        selectedValue={filter}
+        style={{ height: 50, width: 150 }}
+        onValueChange={(itemValue) => setFilter(itemValue)}
       >
-        Rejected Requests:
-      </Text>
+        <Picker.Item label="All" value="all" />
+        <Picker.Item label="In-Progress" value="in-progress" />
+        <Picker.Item label="Rejected" value="rejected" />
+      </Picker>
       <FlatList
-        data={rejectedTickets}
-        renderItem={({ item }) => <Card ticket={item} />}
-        keyExtractor={(item) => item.id} // Use the unique ID as the key
-        overScrollMode="never"
-        scrollEnabled={true}
-        persistentScrollbar={true}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
-
-      <Text
-        style={{ fontFamily: "Poppins_700Bold", fontSize: 20, marginTop: 20 }}
-      >
-        In-Progress Requests:
-      </Text>
-      <FlatList
-        data={inProgressTickets}
+        data={filteredTickets}
         renderItem={({ item }) => <Card ticket={item} />}
         keyExtractor={(item) => item.id} // Use the unique ID as the key
         overScrollMode="never"

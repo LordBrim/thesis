@@ -117,7 +117,6 @@ export default function AccountTab({
         .catch((error) => {
           // Handle the case where the avatar doesn't exist
           if (error.code === "storage/object-not-found") {
-            console.warn("Avatar not found, using default avatar.");
             setAvatar(null); // Use null to indicate that default avatar should be used
           } else {
             console.error("Error getting avatar URL:", error);

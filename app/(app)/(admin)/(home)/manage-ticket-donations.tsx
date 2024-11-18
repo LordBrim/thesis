@@ -789,7 +789,7 @@ const styles = StyleSheet.create({
 const card = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
+    width: "90%",
     minHeight: 35,
     flexDirection: "row",
     justifyContent: "space-between",

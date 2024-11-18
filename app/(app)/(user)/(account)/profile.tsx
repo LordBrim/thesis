@@ -64,6 +64,7 @@ const ProfileEditScreen = () => {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [iconModalVisible, setIconModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState({
     title: "",
     description: "",
@@ -111,7 +112,6 @@ const ProfileEditScreen = () => {
           .catch((error) => {
             // Handle the case where the avatar doesn't exist
             if (error.code === "storage/object-not-found") {
-              console.warn("Avatar not found, using default avatar.");
               setAvatar(null); // Use null to indicate that default avatar should be used
             } else {
               console.error("Error getting avatar URL:", error);
@@ -163,7 +163,7 @@ const ProfileEditScreen = () => {
       console.log(source);
       setImage(source.uri); // Set the selected image URI in the state
     }
-    setModalVisible(false);
+    setIconModalVisible(false);
   };
 
   const uploadImage = async (uri) => {
@@ -225,7 +225,7 @@ const ProfileEditScreen = () => {
                   ? { uri: avatar } // Firebase URL case
                   : require("../../../../assets/images/defaultAvatar.png") // Local image case
               }
-              onEdit={() => setModalVisible(true)} // Show modal when avatar is pressed
+              onEdit={() => setIconModalVisible(true)} // Show modal when avatar is pressed
             />
           )}
         </View>
@@ -312,8 +312,8 @@ const ProfileEditScreen = () => {
           disabled={loading}
         />
         <IconModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
+          modalVisible={iconModalVisible}
+          setModalVisible={setIconModalVisible}
           handleImagePicker={handleImagePicker}
         />
       </ScrollView>

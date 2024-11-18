@@ -440,7 +440,21 @@ export default function ManageTicketReview() {
         )}
 
         <View style={styles.buttonContainer}>
-          {ticketData.status === "accepted" ? (
+          {ticketData.status === "pending" && (
+            <>
+              <Button
+                title="Accept"
+                onPress={() => handleUpdateStatus("accepted")}
+                color="green"
+              />
+              <Button
+                title="Reject"
+                onPress={() => handleUpdateStatus("rejected")}
+                color={COLORS.primary}
+              />
+            </>
+          )}
+          {ticketData.status === "accepted" && (
             <>
               <Button
                 title="Processing Available"
@@ -453,17 +467,37 @@ export default function ManageTicketReview() {
                 color={COLORS.primary}
               />
             </>
-          ) : (
+          )}
+          {ticketData.status === "in-progress" && (
+            <>
+              <Button
+                title="Processing Available"
+                onPress={() => handleUpdateStatus("in-progress")}
+                color="green"
+                disabled
+              />
+              <Button
+                title="Cancel Request"
+                onPress={() => handleUpdateStatus("rejected")}
+                color={COLORS.primary}
+                disabled
+              />
+            </>
+          )}
+          {(ticketData.status === "rejected" ||
+            ticketData.status === "cancelled") && (
             <>
               <Button
                 title="Accept"
                 onPress={() => handleUpdateStatus("accepted")}
                 color="green"
+                disabled
               />
               <Button
                 title="Reject"
                 onPress={() => handleUpdateStatus("rejected")}
                 color={COLORS.primary}
+                disabled
               />
             </>
           )}

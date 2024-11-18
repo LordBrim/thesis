@@ -3,14 +3,12 @@ import {
   Text,
   StyleSheet,
   Modal as RNModal,
-  Image,
   Animated,
-  ScrollView,
 } from "react-native";
 import React, { ReactNode, useRef, useEffect } from "react";
 import { COLORS, HORIZONTAL_SCREEN_MARGIN } from "../../../constants";
 import CallToActionBtn from "../CallToActionBtn";
-import Markdown from "react-native-markdown-display";
+import Markdown from "react-native-markdown-display"; // Ensure this import is correct
 
 interface IModal {
   visible: boolean;
@@ -75,39 +73,27 @@ export default function SingleBtnModal({
       onRequestClose={onRequestClose}
     >
       <Animated.View style={[styles.modal, { opacity: opacityValue }]}>
-        <ScrollView
-          overScrollMode="never"
-          contentContainerStyle={styles.scrollview}
-        >
-          <View style={styles.container}>
-            {icon}
-            <Text style={styles.header}>{title}</Text>
+        <View style={styles.container}>
+          {icon}
+          <Text style={styles.header}>{title}</Text>
+          {renderMarkdown ? (
+            <Markdown style={styles.description}>{description}</Markdown>
+          ) : (
             <Text style={styles.description}>{description}</Text>
-            {errorMessage && (
-              <Text style={styles.description}>{errorMessage}</Text>
-            )}
-            {children}
-            <View
-              style={{
-                marginTop: 32,
-                width: 300,
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 20,
-              }}
-            >
-              <CallToActionBtn label={btnLabel} onPress={onPress} />
-              {extraBtn}
-            </View>
+          )}
+          {errorMessage && <Text style={styles.error}>{errorMessage}</Text>}
+          {children}
+          <View style={styles.buttonContainer}>
+            <CallToActionBtn label={btnLabel} onPress={onPress} />
+            {extraBtn}
           </View>
-        </ScrollView>
+        </View>
       </Animated.View>
     </RNModal>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollview: {},
   modal: {
     flex: 1,
     justifyContent: "center",
@@ -128,18 +114,15 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_700Bold",
   },
   description: {
-    fontSize: 12,
+    fontSize: 15,
     fontFamily: "Poppins_400Regular",
   },
-  btn: {
-    backgroundColor: COLORS.primary,
-    padding: 10,
-    borderRadius: 5,
-  },
-  btnText: {
-    color: "#fff",
-    fontSize: 16,
-    fontFamily: "Poppins_700Bold",
+  buttonContainer: {
+    marginTop: 32,
+    width: 300,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
   },
   error: {
     color: "red",

@@ -79,6 +79,18 @@ const UpdateCard = ({ update }) => {
             <Ionicons name="alert-circle" size={24} color="#ff3333" />
           </View>
         )}
+        {message === "deliberation" && lowerCaseStatus === "rejected" && (
+          <View
+            style={[
+              styles.cardIcon,
+              {
+                backgroundColor: "#ffb1b1",
+              },
+            ]}
+          >
+            <Ionicons name="close-circle" size={size} color="#ff3333" />
+          </View>
+        )}
         {message === "incentives" && (
           <View
             style={[
@@ -148,6 +160,22 @@ const UpdateCard = ({ update }) => {
                 declined
               </Text>
             )}{" "}
+            by
+            <Text style={{ fontFamily: "Poppins_700Bold" }}>
+              {" "}
+              {hospital || "the hospital"}
+            </Text>
+          </Text>
+        )}
+        {message === "deliberation" && lowerCaseStatus === "rejected" && (
+          <Text style={styles.cardMessage}>
+            Your request for a{" "}
+            {type === "appointment" && "donation appointment"}
+            {type === "request" && "blood unit"}
+            {type === "transfer" && `transfer of blood units`} has been{" "}
+            <Text style={{ color: "red", fontFamily: "Poppins_700Bold" }}>
+              rejected
+            </Text>{" "}
             by
             <Text style={{ fontFamily: "Poppins_700Bold" }}>
               {" "}

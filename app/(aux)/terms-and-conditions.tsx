@@ -115,5 +115,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
     textAlign: "justify",
+    fontFamily: "Poppins_400Regular",
   },
 });

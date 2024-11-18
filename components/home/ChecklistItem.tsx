@@ -241,10 +241,14 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    padding: 10,
     borderColor: "#ccc",
     borderRadius: 8,
     backgroundColor: "#fff",
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingTop: 16,
+    paddingBottom: 8,
+    fontFamily: "Poppins_400Regular",
   },
   buttonContainer: {
     flexDirection: "row",

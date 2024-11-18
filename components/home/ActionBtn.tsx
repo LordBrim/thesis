@@ -41,7 +41,7 @@ export default function ActionBtn({
 
   return (
     <>
-      {canDonate ? (
+      {true ? (
         <Link
           asChild
           href={href}

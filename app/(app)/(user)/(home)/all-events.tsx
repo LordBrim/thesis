@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: COLORS.background,
     fontSize: SIZES.medium,
+    fontFamily: "Poppins_700Bold",
   },
   modalView: {
     flex: 1,

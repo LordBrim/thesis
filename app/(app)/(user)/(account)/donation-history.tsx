@@ -243,6 +243,7 @@ const styles = StyleSheet.create({
   emptyText: {
     color: COLORS.text,
     fontSize: SIZES.medium,
+    fontFamily: "Poppins_400Regular",
   },
   loadingContainer: {
     flex: 1,
@@ -253,6 +254,7 @@ const styles = StyleSheet.create({
     marginTop: SPACES.md,
     fontSize: SIZES.medium,
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
   modalOverlay: {
     flex: 1,
@@ -289,6 +291,7 @@ const styles = StyleSheet.create({
   modalValue: {
     fontSize: SIZES.medium,
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
   closeButton: {
     marginTop: 20,
@@ -326,6 +329,7 @@ const card = StyleSheet.create({
   text: {
     flex: 1,
     justifyContent: "center",
+    fontFamily: "Poppins_400Regular",
   },
   location: {
     fontSize: SIZES.medium,
@@ -334,6 +338,7 @@ const card = StyleSheet.create({
   details: {
     fontSize: SIZES.small,
     color: COLORS.grayDark,
+    fontFamily: "Poppins_400Regular",
   },
   line: {
     width: 2,

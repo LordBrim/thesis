@@ -375,7 +375,13 @@ const HospitalMapView = () => {
       >
         <View style={styles.modalBackground}>
           <View style={{ flexDirection: "row" }}>
-            <Text style={{ color: COLORS.background, fontSize: 15 }}>
+            <Text
+              style={{
+                color: COLORS.background,
+                fontSize: 15,
+                fontFamily: "Poppins_400Regular",
+              }}
+            >
               Loading fetching data...
             </Text>
             <ActivityIndicator size="large" color={COLORS.primary} />
@@ -432,6 +438,7 @@ const HospitalMapView = () => {
                         margin: 5,
                         textDecorationLine: "underline",
                         color: COLORS.primary,
+                        fontFamily: "Poppins_400Regular",
                       }}
                     >
                       {selectedMarker?.contactNumber}
@@ -555,6 +562,7 @@ const HospitalMapView = () => {
                         margin: 5,
                         color: COLORS.primary,
                         fontSize: 15,
+                        fontFamily: "Poppins_400Regular",
                       }}
                     >
                       Start Date:{" "}
@@ -569,11 +577,22 @@ const HospitalMapView = () => {
                     </Text>
                   </View>
                   <Text
-                    style={{ margin: 10, textAlign: "justify", fontSize: 15 }}
+                    style={{
+                      margin: 10,
+                      textAlign: "justify",
+                      fontSize: 15,
+                      fontFamily: "Poppins_700Bold",
+                    }}
                   >
                     Event Details:
                     {"\n"}
-                    {selectedMarker?.description}
+                    <Text
+                      style={{
+                        fontFamily: "Poppins_400Regular",
+                      }}
+                    >
+                      {selectedMarker?.description}
+                    </Text>
                   </Text>
                   <CustomButtonWithIcon
                     icon={"location-arrow"}
@@ -633,9 +652,11 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
     fontSize: 20,
     margin: 8,
+    fontFamily: "Poppins_400Regular",
   },
   address: {
     width: "90%",
+    fontFamily: "Poppins_400Regular",
   },
   divider: {
     margin: 10,
@@ -645,6 +666,7 @@ const styles = StyleSheet.create({
   bloodTypeText: {
     fontSize: 14,
     marginBottom: 15,
+    fontFamily: "Poppins_400Regular",
   },
   bloodTypeContainer: {
     flexDirection: "row",
@@ -687,5 +709,6 @@ const styles = StyleSheet.create({
   permissionDeniedText: {
     color: "white",
     textAlign: "center",
+    fontFamily: "Poppins_400Regular",
   },
 });

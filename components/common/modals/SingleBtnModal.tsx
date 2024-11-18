@@ -77,7 +77,7 @@ export default function SingleBtnModal({
           {icon}
           <Text style={styles.header}>{title}</Text>
           {renderMarkdown ? (
-            <Markdown style={styles.description}>{description}</Markdown>
+            <Markdown>{description}</Markdown>
           ) : (
             <Text style={styles.description}>{description}</Text>
           )}
@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: "center",
     gap: 20,
+    fontFamily: "Poppins_400Regular",
   },
   header: {
     fontSize: 24,

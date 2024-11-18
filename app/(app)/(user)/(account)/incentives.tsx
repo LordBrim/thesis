@@ -326,6 +326,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginBottom: 10,
+    fontFamily: "Poppins_400Regular",
   },
   modalLabel: {
     fontSize: SIZES.medium,
@@ -335,6 +336,7 @@ const styles = StyleSheet.create({
   modalValue: {
     fontSize: SIZES.medium,
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
   closeButton: {
     marginTop: 20,

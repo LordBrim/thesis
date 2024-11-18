@@ -377,6 +377,7 @@ const card = StyleSheet.create({
     flexDirection: "row",
     textAlign: "justify",
     fontSize: 16,
+    fontFamily: "Poppins_400Regular",
   },
 });
 

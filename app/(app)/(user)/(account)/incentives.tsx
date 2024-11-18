@@ -147,11 +147,8 @@ export default function DonationHistory() {
         </ScrollView>
       ) : (
         <View style={styles.empty}>
-          <Image
-            source={require("../../../../assets/images/no-appointments.png")}
-            style={styles.emptyImage}
-          />
-          <Text style={styles.emptyText}>You do not have Inecntives yet.</Text>
+          <FontAwesome6 name="gifts" size={50} color="black" />
+          <Text style={styles.emptyText}>You do not have Incentives yet.</Text>
         </View>
       )}
       <Modal
@@ -291,6 +288,7 @@ const styles = StyleSheet.create({
   emptyText: {
     color: COLORS.text,
     fontSize: SIZES.medium,
+    fontWeight: "bold",
   },
   loadingContainer: {
     flex: 1,

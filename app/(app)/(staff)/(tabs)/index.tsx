@@ -53,21 +53,20 @@ export default function HomeTab() {
           justifyContent: "space-between",
           gap: SPACES.sm,
           width: "100%",
+          height: 105,
           marginBottom: SPACES.xxl,
         }}
       >
-        <View style={{}}>
-          <Link href="/(app)/(admin)/manage-ticket-donations" asChild>
-            <Pressable style={styles.ctaContainer}>
-              <Text style={[styles.title, styles.ctaTitle]}>
-                View pending tickets
-              </Text>
-              <Text style={[styles.subtitle, styles.ctaSubtitle]}>
-                Respond to incoming tickets
-              </Text>
-            </Pressable>
-          </Link>
-        </View>
+        <Link href="/(app)/(admin)/manage-ticket-donations" asChild>
+          <Pressable style={styles.ctaContainer}>
+            <Text style={[styles.title, styles.ctaTitle]}>
+              View pending tickets
+            </Text>
+            <Text style={[styles.subtitle, styles.ctaSubtitle]}>
+              Respond to incoming tickets
+            </Text>
+          </Pressable>
+        </Link>
 
         <Link href="/(app)/(staff)/(dashboard)/change-pass" asChild>
           <Pressable style={styles.containerCP}>
@@ -100,14 +99,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   containerCP: {
-    flex: 1,
-    width: "100%",
     aspectRatio: 16 / 9,
     borderRadius: SIZES.small,
     padding: SPACES.md,
     justifyContent: "space-between",
     overflow: "hidden",
     borderWidth: 1,
+    flex: 1,
   },
   defaultContainer: {
     borderWidth: 1,
@@ -118,13 +116,11 @@ const styles = StyleSheet.create({
     padding: SPACES.md,
     borderRadius: SIZES.small,
     justifyContent: "space-between",
-
-    width: "100%",
-    height: "100%",
     flex: 1,
+    aspectRatio: 16 / 9,
   },
   title: {
-    fontSize: 18,
+    fontSize: 15,
     fontFamily: "Poppins_700Bold",
   },
   defaultTitle: {},
@@ -132,7 +128,8 @@ const styles = StyleSheet.create({
     color: COLORS.background,
   },
   subtitle: {
-    fontSize: SIZES.small,
+    fontSize: 12,
+    fontFamily: "Poppins_400Regular",
   },
   defaultSubtitle: {
     color: COLORS.grayDark,

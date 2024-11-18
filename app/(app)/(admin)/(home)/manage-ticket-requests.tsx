@@ -77,6 +77,7 @@ export default function ManageTicketsRequests() {
         fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
+      headerShadowVisible: false,
     });
   }, []);
 
@@ -85,6 +86,9 @@ export default function ManageTicketsRequests() {
       screenOptions={{
         tabBarIndicatorStyle: {
           backgroundColor: COLORS.primary,
+        },
+        tabBarLabelStyle: {
+          fontFamily: "Poppins_400Regular",
         },
       }}
     >
@@ -163,7 +167,9 @@ function ManageTicketsRequestsPending() {
   if (loading) {
     return (
       <View style={styles.centeredContainer}>
-        <Text>Loading Tickets...</Text>
+        <Text style={{ fontFamily: "Poppins_400Regular" }}>
+          Loading Tickets...
+        </Text>
       </View>
     );
   }
@@ -171,7 +177,7 @@ function ManageTicketsRequestsPending() {
   if (error) {
     return (
       <View style={styles.centeredContainer}>
-        <Text>{error}</Text>
+        <Text style={{ fontFamily: "Poppins_400Regular" }}>{error}</Text>
       </View>
     );
   }
@@ -182,7 +188,13 @@ function ManageTicketsRequestsPending() {
           Pending Requests:
         </Text>
       </View>
-      <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
+      <Text
+        style={{
+          fontSize: 16,
+          fontFamily: "Poppins_400Regular_Italic",
+          marginVertical: 5,
+        }}
+      >
         Click tickets to view more details.
       </Text>
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
@@ -269,7 +281,9 @@ function ManageTicketsRequestsActive() {
   if (loading) {
     return (
       <View style={styles.centeredContainer}>
-        <Text>Loading Tickets...</Text>
+        <Text style={{ fontFamily: "Poppins_400Regular" }}>
+          Loading Tickets...
+        </Text>
       </View>
     );
   }
@@ -277,7 +291,7 @@ function ManageTicketsRequestsActive() {
   if (error) {
     return (
       <View style={styles.centeredContainer}>
-        <Text>{error}</Text>
+        <Text style={{ fontFamily: "Poppins_400Regular" }}>{error}</Text>
       </View>
     );
   }
@@ -285,11 +299,22 @@ function ManageTicketsRequestsActive() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontFamily: "Poppins_700Bold", fontSize: 24 }}>
+        <Text
+          style={{
+            fontFamily: "Poppins_700Bold",
+            fontSize: 24,
+          }}
+        >
           Active Requests:
         </Text>
       </View>
-      <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
+      <Text
+        style={{
+          fontSize: 16,
+          marginVertical: 5,
+          fontFamily: "Poppins_400Regular_Italic",
+        }}
+      >
         Request Tickets that are accepted and pending for scheduling.
       </Text>
       <Divider height={1} width={350} color={COLORS.grayDark} margin={5} />
@@ -375,7 +400,9 @@ function ManageTicketsRequestsArchived() {
   if (loading) {
     return (
       <View style={styles.centeredContainer}>
-        <Text>Loading Tickets...</Text>
+        <Text style={{ fontFamily: "Poppins_400Regular" }}>
+          Loading Tickets...
+        </Text>
       </View>
     );
   }
@@ -383,7 +410,7 @@ function ManageTicketsRequestsArchived() {
   if (error) {
     return (
       <View style={styles.centeredContainer}>
-        <Text>{error}</Text>
+        <Text style={{ fontFamily: "Poppins_400Regular" }}>{error}</Text>
       </View>
     );
   }
@@ -403,7 +430,13 @@ function ManageTicketsRequestsArchived() {
           Archived Requests:
         </Text>
       </View>
-      <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
+      <Text
+        style={{
+          fontSize: 16,
+          fontFamily: "Poppins_400Regular_Italic",
+          marginVertical: 5,
+        }}
+      >
         Click tickets to view more details.
       </Text>
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
@@ -539,5 +572,6 @@ const card = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+    fontFamily: "Poppins_400Regular",
   },
 });

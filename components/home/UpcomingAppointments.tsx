@@ -126,7 +126,7 @@ export default function UpcomingAppointments() {
         <Pressable style={styles.modalOverlay} onPress={closeModal}>
           <View style={styles.modalContent}>
             {selectedTicket && (
-              <>
+              <View>
                 <Text style={styles.modalTitle}>Appointment Details</Text>
                 <View style={styles.modalDetails}>
                   <Text style={styles.modalLabel}>Hospital:</Text>
@@ -164,7 +164,7 @@ export default function UpcomingAppointments() {
                 >
                   <Text style={styles.closeButtonText}>Close</Text>
                 </TouchableOpacity>
-              </>
+              </View>
             )}
           </View>
         </Pressable>
@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
   modalValue: {
     fontSize: SIZES.medium,
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
   closeButton: {
     marginTop: 20,
@@ -273,6 +274,7 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "white",
     fontFamily: "Poppins_700Bold",
+    textAlign: "center",
   },
 });
 
@@ -294,6 +296,7 @@ const card = StyleSheet.create({
   text: {
     flex: 1,
     justifyContent: "center",
+    fontFamily: "Poppins_400Regular",
   },
   location: {
     fontSize: SIZES.medium,
@@ -301,13 +304,15 @@ const card = StyleSheet.create({
   },
   details: {
     fontSize: SIZES.small,
+    fontFamily: "Poppins_400Regular",
   },
   line: {
     width: 2,
     height: "100%",
     position: "absolute",
-    backgroundColor: COLORS.grayDark,
+    backgroundColor: COLORS.primary,
     left: 43.3,
     bottom: 0,
+    opacity: 0.3,
   },
 });

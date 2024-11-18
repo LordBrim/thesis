@@ -173,7 +173,7 @@ export default function ManageStaffCreate() {
         </TextInputWrapper>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <IconBtn icon="circle-info" size={18} color="red" />
-          <Text style={{ flexShrink: 1 }}>
+          <Text style={{ flexShrink: 1, fontFamily: "Poppins_400Regular" }}>
             Accounts cannot be deleted, only disabled. Please make sure to input
             the proper account credentials.
           </Text>

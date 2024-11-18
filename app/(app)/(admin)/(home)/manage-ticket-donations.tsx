@@ -103,6 +103,7 @@ export default function ManageTicketsDonations() {
         fontFamily: "Poppins_400Regular",
       },
       headerTitleAlign: "center",
+      headerShadowVisible: false,
     });
   }, []);
 
@@ -111,6 +112,9 @@ export default function ManageTicketsDonations() {
       screenOptions={{
         tabBarIndicatorStyle: {
           backgroundColor: COLORS.primary,
+        },
+        tabBarLabelStyle: {
+          fontFamily: "Poppins_400Regular",
         },
       }}
     >
@@ -285,13 +289,19 @@ function ManageTicketsDonationsPending() {
           </Text>
         </View>
       </View>
-      <Text style={{ fontSize: 16, fontStyle: "italic", marginVertical: 5 }}>
+      <Text
+        style={{
+          fontSize: 16,
+          marginVertical: 5,
+          fontFamily: "Poppins_400Regular_Italic",
+        }}
+      >
         Click tickets to view more details.
       </Text>
       <Divider height={0.5} width={350} color={COLORS.grayMid} margin={5} />
       {error && (
         <View style={styles.centeredContainer}>
-          <Text>{error}</Text>
+          <Text style={{ fontFamily: "Poppins_400Regular" }}>{error}</Text>
         </View>
       )}
       {loading ? (
@@ -746,6 +756,7 @@ const ACTIVE = StyleSheet.create({
     marginTop: 20,
     fontSize: 18,
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
   emptyMessage: {
     fontSize: 18,
@@ -783,6 +794,7 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     textAlign: "center",
     marginTop: 20,
+    fontFamily: "Poppins_400Regular",
   },
 });
 
@@ -803,5 +815,6 @@ const card = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+    fontFamily: "Poppins_400Regular",
   },
 });

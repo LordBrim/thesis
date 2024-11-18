@@ -118,7 +118,10 @@ export default function ManageAdminCreate() {
             enablesReturnKeyAutomatically
             style={{
               flex: 1,
-              padding: 12,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
             }}
           />
         </TextInputWrapper>
@@ -132,7 +135,10 @@ export default function ManageAdminCreate() {
             enablesReturnKeyAutomatically
             style={{
               flex: 1,
-              padding: 12,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
             }}
           />
         </TextInputWrapper>
@@ -147,7 +153,10 @@ export default function ManageAdminCreate() {
             secureTextEntry={passwordVisibility}
             style={{
               flex: 1,
-              padding: 12,
+              paddingHorizontal: 12,
+              paddingTop: 16,
+              paddingBottom: 8,
+              fontFamily: "Poppins_400Regular",
             }}
           />
           <Pressable
@@ -163,7 +172,8 @@ export default function ManageAdminCreate() {
         </TextInputWrapper>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <IconBtn icon="circle-info" size={18} color="red" />
-          <Text style={{ flexShrink: 1 }}>
+
+          <Text style={{ flexShrink: 1, fontFamily: "Poppins_400Regular" }}>
             Accounts cannot be deleted, only disabled. Please make sure to input
             the proper account credentials.
           </Text>

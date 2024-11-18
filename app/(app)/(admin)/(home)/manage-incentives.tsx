@@ -110,7 +110,11 @@ export default function ManageIncentives() {
               <Text style={[GS.h3, styles.title]}>
                 {user.hospitalName} Incentives
               </Text>
-              {incentives.info && <Text>{incentives.info}</Text>}
+              {incentives.info && (
+                <Text style={{ fontFamily: "Poppins_400Regular" }}>
+                  {incentives.info}
+                </Text>
+              )}
             </View>
           </View>
         </View>
@@ -127,7 +131,9 @@ export default function ManageIncentives() {
                   minHeight: 90,
                 }}
               >
-                <Text>{index + 1}</Text>
+                <Text style={{ fontFamily: "Poppins_400Regualar" }}>
+                  {index + 1}
+                </Text>
                 <Fontisto
                   name="blood"
                   size={size}
@@ -170,7 +176,9 @@ export default function ManageIncentives() {
                   minHeight: 90,
                 }}
               >
-                <Text>{index + 1}</Text>
+                <Text style={{ fontFamily: "Poppins_400Regular" }}>
+                  {index + 1}
+                </Text>
                 <Fontisto
                   name="blood"
                   size={size}
@@ -213,7 +221,9 @@ export default function ManageIncentives() {
                   minHeight: 90,
                 }}
               >
-                <Text>{index + 1}</Text>
+                <Text style={{ fontFamily: "Poppins_400Regular" }}>
+                  {index + 1}
+                </Text>
                 <Fontisto
                   name="blood"
                   size={size}
@@ -256,7 +266,9 @@ export default function ManageIncentives() {
                   minHeight: 90,
                 }}
               >
-                <Text>{index + 1}</Text>
+                <Text style={{ fontFamily: "Poppins_400Regular" }}>
+                  {index + 1}
+                </Text>
                 <Fontisto
                   name="blood"
                   size={size}

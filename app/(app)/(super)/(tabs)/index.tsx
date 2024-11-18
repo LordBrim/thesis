@@ -215,6 +215,7 @@ const card = StyleSheet.create({
   name: {
     flex: 1,
     paddingVertical: 8,
+    fontFamily: "Poppins_700Bold",
   },
   bContainer: {
     minHeight: 35,

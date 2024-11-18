@@ -45,13 +45,20 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
           <Text
             style={{
               width: 70,
-              height: 16,
+              height: 20,
+              fontFamily: "Poppins_400Regular",
             }}
           >
             Donations
           </Text>
         </View>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <View
             style={{
               height: 12,
@@ -64,7 +71,8 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
           <Text
             style={{
               width: 70,
-              height: 16,
+              height: 20,
+              fontFamily: "Poppins_400Regular",
             }}
           >
             Requests
@@ -98,6 +106,7 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
         leftShiftForTooltip={0}
         leftShiftForLastIndexTooltip={55}
         autoCenterTooltip={true}
+        yAxisTextStyle={{ fontFamily: "Poppins_400Regular" }}
       />
     </View>
   );

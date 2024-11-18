@@ -22,6 +22,7 @@ import {
 } from "firebase/firestore";
 import moment from "moment";
 import { router } from "expo-router";
+import LinkBtn from "components/common/LinkBtn";
 
 interface Ticket {
   selectedHospital: string;
@@ -97,19 +98,12 @@ export default function UpcomingAppointmentsStaff() {
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Upcoming Appointments</Text>
-        <Text
-          style={{
-            color: COLORS.primary,
-            fontSize: 14,
-            fontFamily: "Poppins_700Bold",
-            textDecorationLine: "underline",
-          }}
+        <LinkBtn
+          label="View All"
           onPress={() =>
             router.push("/(app)/(admin)/(home)/manage-ticket-all-appointments")
           }
-        >
-          View all
-        </Text>
+        />
       </View>
       {hasAppointments ? (
         <FlatList
@@ -188,7 +182,7 @@ export default function UpcomingAppointmentsStaff() {
         <Pressable style={styles.modalOverlay} onPress={closeModal}>
           <View style={styles.modalContent}>
             {selectedTicket && (
-              <>
+              <View>
                 <Text style={styles.modalTitle}>Appointment Details</Text>
                 <View style={styles.modalDetails}>
                   <Text style={styles.modalLabel}>Hospital:</Text>
@@ -224,7 +218,7 @@ export default function UpcomingAppointmentsStaff() {
                 >
                   <Text style={styles.closeButtonText}>Close</Text>
                 </TouchableOpacity>
-              </>
+              </View>
             )}
           </View>
         </Pressable>
@@ -347,7 +341,7 @@ const styles = StyleSheet.create({
   modalDetails: {
     flexDirection: "row",
     justifyContent: "space-between",
-
+    fontFamily: "Poppins_400Regular",
     alignItems: "center",
     width: "70%",
     marginBottom: 10,
@@ -360,6 +354,7 @@ const styles = StyleSheet.create({
   modalValue: {
     fontSize: SIZES.medium,
     color: COLORS.text,
+    fontFamily: "Poppins_400Regular",
   },
   closeButton: {
     marginTop: 20,
@@ -370,6 +365,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: "white",
+    textAlign: "center",
     fontFamily: "Poppins_700Bold",
   },
 });
@@ -392,6 +388,7 @@ const card = StyleSheet.create({
   text: {
     flex: 1,
     justifyContent: "center",
+    fontFamily: "Poppins_400Regular",
   },
   location: {
     fontSize: SIZES.medium,
@@ -399,6 +396,7 @@ const card = StyleSheet.create({
   },
   details: {
     fontSize: SIZES.small,
+    fontFamily: "Poppins_400Regular",
   },
   line: {
     width: 2,

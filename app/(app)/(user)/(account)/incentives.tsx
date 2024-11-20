@@ -226,10 +226,6 @@ export default function DonationHistory() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Track your blood donation journey</Text>
-      </View>
-
       {tickets.length > 0 ? (
         <FlatList
           data={[{ key: "UERM" }, { key: "ACE" }]}

@@ -12,16 +12,18 @@ import {
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-
-const FAQItem = ({ question, answer }) => (
-  <View style={styles.faqItem}>
-    <View style={styles.faqQuestion}>
-      <MaterialIcons name="help-outline" size={24} color="#FF4444" />
-      <Text style={styles.faqQuestionText}>{question}</Text>
-    </View>
-    <Text style={styles.faqAnswerText}>{answer}</Text>
-  </View>
-);
+import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+// Remove FAQItem component
+// const FAQItem = ({ question, answer }) => (
+//   <View style={styles.faqItem}>
+//     <View style={styles.faqQuestion}>
+//       <MaterialIcons name="help-outline" size={24} color="#FF4444" />
+//       <Text style={styles.faqQuestionText}>{question}</Text>
+//     </View>
+//     <Text style={styles.faqAnswerText}>{answer}</Text>
+//   </View>
+// );
 
 const CustomModal = ({
   visible,
@@ -61,7 +63,8 @@ const CustomModal = ({
 export default function Help() {
   const [modalVisible, setModalVisible] = useState(false);
   const [emailModalVisible, setEmailModalVisible] = useState(false);
-
+  const navigation = useNavigation();
+  const router = useRouter();
   const handleContactSupport = () => {
     setModalVisible(true);
   };
@@ -78,19 +81,6 @@ export default function Help() {
     setEmailModalVisible(false);
   };
 
-  const faqs = [
-    {
-      question: "How do I reset my password?",
-      answer:
-        "Go to the login screen and tap 'Forgot Password'. Follow the instructions sent to your email.",
-    },
-    {
-      question: "How do I update my profile?",
-      answer:
-        "Navigate to Settings > Profile and tap the edit button to make changes to your information.",
-    },
-  ];
-
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
@@ -106,23 +96,23 @@ export default function Help() {
           style={styles.supportButton}
           onPress={handleContactSupport}
         >
-          <Ionicons name="chatbubble-ellipses" size={24} color="#FFFFFF" />
-          <Text style={styles.buttonText}>Contact Support</Text>
+          <Ionicons name="book" size={30} color="#FFFFFF" />
+          <Text style={styles.buttonText}>Download User Manual</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.emailButton} onPress={handleEmailUs}>
-          <Ionicons name="mail" size={24} color="#FF4444" />
+          <Ionicons name="mail" size={30} color="#FF4444" />
           <Text style={styles.emailButtonText}>Email Us</Text>
         </TouchableOpacity>
       </View>
 
-      {/* FAQ Section */}
-      <View style={styles.faqSection}>
+      {/* Remove FAQ Section */}
+      {/* <View style={styles.faqSection}>
         <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
         {faqs.map((faq, index) => (
           <FAQItem key={index} question={faq.question} answer={faq.answer} />
         ))}
-      </View>
+      </View> */}
 
       <SingleBtnModal
         visible={modalVisible}
@@ -170,7 +160,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   supportOptions: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     paddingHorizontal: 20,
     marginTop: 20,
@@ -183,7 +173,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 8,
     flex: 1,
-    marginRight: 10,
+    marginBottom: 10, // Adjust margin to prevent overlap
     justifyContent: "center",
   },
   buttonText: {
@@ -200,7 +190,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 8,
     flex: 1,
-    marginLeft: 10,
+    marginTop: 10, // Adjust margin to prevent overlap
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "#FF4444",
@@ -219,33 +209,34 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 20,
   },
-  faqSection: {
-    marginBottom: 40,
-  },
-  faqItem: {
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
-  },
-  faqQuestion: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  faqQuestionText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333333",
-    marginLeft: 12,
-    flex: 1,
-  },
-  faqAnswerText: {
-    fontSize: 14,
-    color: "#666666",
-    marginLeft: 36,
-  },
+  // Remove FAQ styles
+  // faqSection: {
+  //   marginBottom: 40,
+  // },
+  // faqItem: {
+  //   backgroundColor: "#FFFFFF",
+  //   paddingHorizontal: 20,
+  //   paddingVertical: 16,
+  //   borderBottomWidth: 1,
+  //   borderBottomColor: "#EEEEEE",
+  // },
+  // faqQuestion: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   marginBottom: 8,
+  // },
+  // faqQuestionText: {
+  //   fontSize: 16,
+  //   fontWeight: "600",
+  //   color: "#333333",
+  //   marginLeft: 12,
+  //   flex: 1,
+  // },
+  // faqAnswerText: {
+  //   fontSize: 14,
+  //   color: "#666666",
+  //   marginLeft: 36,
+  // },
   modalOverlay: {
     flex: 1,
     justifyContent: "center",

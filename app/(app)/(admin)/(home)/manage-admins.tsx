@@ -5,7 +5,7 @@ import { GS } from "constants/style";
 import { COLORS } from "constants/theme";
 import { router, useNavigation, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { FlatList, Pressable } from "react-native";
+import { Alert, FlatList, Pressable } from "react-native";
 import { ScrollView } from "react-native";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -103,14 +103,56 @@ export function AdminsCard({
   //   });
   // };
   const dispatch = useDispatch();
-  const handleDisable = (uuid) => {
-    dispatch(
-      disableAdmin({
-        uuid: uuid,
-        disabled: !disabled,
-      })
-    );
-    disableAdminInFirebase(uuid, !disabled);
+  const handleDisable = (uuid: string, disabled: boolean) => {
+    if (!disabled) {
+      Alert.alert(
+        "Confirm Disable",
+        "Are you sure you want to disable this admin account?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              dispatch(
+                disableAdmin({
+                  uuid: uuid,
+                  disabled: !disabled,
+                })
+              );
+              disableAdminInFirebase(uuid, !disabled);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert(
+        "Confirm Reenable",
+        "Are you sure you want to enable this admin account?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              dispatch(
+                disableAdmin({
+                  uuid: uuid,
+                  disabled: !disabled,
+                })
+              );
+              disableAdminInFirebase(uuid, !disabled);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
   };
   return (
     <>
@@ -122,14 +164,14 @@ export function AdminsCard({
             icon="circle-minus"
             size={18}
             color="gray"
-            onPress={() => handleDisable(uuid)}
+            onPress={() => handleDisable(uuid, disabled)}
           />
         ) : (
           <IconBtn
             icon="circle-minus"
             size={18}
             color="red"
-            onPress={() => handleDisable(uuid)}
+            onPress={() => handleDisable(uuid, disabled)}
           />
         )}
       </Pressable>

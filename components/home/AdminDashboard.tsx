@@ -26,37 +26,7 @@ import useIncrementHospitalReport from "hooks/useIncrementHospitalReport";
 export default function AdminDashboard() {
   const size = 40;
   const [chart, setChart] = useState("Daily");
-  const gridBtns1 = [
-    {
-      href: "/(app)/(admin)/(home)/manage-admins",
-      icon: (
-        <FontAwesome6 name="user-doctor" size={size} color={COLORS.primary} />
-      ),
-      title: "Admins",
-    },
-    {
-      href: "/(app)/(admin)/(home)/manage-staff",
-      icon: (
-        <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
-      ),
-      title: "Staff",
-    },
-    {
-      href: "/(app)/(admin)/(home)/manage-events",
-      icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
-      title: "Events",
-    },
-    {
-      href: "/(app)/(admin)/(home)/manage-incentives",
-      icon: <FontAwesome6 name="gifts" size={size} color={COLORS.primary} />,
-      title: "Incentives",
-    },
-    {
-      href: "/(app)/(admin)/(home)/manage-blood-units",
-      icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
-      title: "Blood Units",
-    },
-  ];
+
   const gridBtns2 = [
     {
       href: "/(app)/(admin)/(home)/manage-ticket-donations",
@@ -138,6 +108,43 @@ export default function AdminDashboard() {
   };
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
+  const { admins } = useSelector((state: RootState) => state.admins);
+  const filteredAdmin = user.displayName === user.hospitalName;
+  const gridBtns1 = [
+    {
+      href: "/(app)/(admin)/(home)/manage-admins",
+      icon: (
+        <FontAwesome6
+          name="user-doctor"
+          size={size}
+          color={filteredAdmin ? COLORS.primary : COLORS.grayDark}
+        />
+      ),
+      title: "Admins",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-staff",
+      icon: (
+        <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
+      ),
+      title: "Staff",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-events",
+      icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
+      title: "Events",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-incentives",
+      icon: <FontAwesome6 name="gifts" size={size} color={COLORS.primary} />,
+      title: "Incentives",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-blood-units",
+      icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
+      title: "Blood Units",
+    },
+  ];
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.section}>
@@ -146,15 +153,27 @@ export default function AdminDashboard() {
           data={gridBtns1}
           renderItem={({ item }) => (
             <View style={[styles.dBtnView]}>
-              <Link asChild push href={item.href}>
-                <Pressable
-                  style={styles.dBtnPress}
-                  android_ripple={{ radius: 200 }}
-                >
-                  {item.icon}
-                  <Text style={styles.dBtnText}>{item.title}</Text>
-                </Pressable>
-              </Link>
+              {!filteredAdmin && item.title === "Admins" ? (
+                <Link asChild push href={item.href} disabled={true}>
+                  <Pressable
+                    style={styles.dBtnPress}
+                    android_ripple={{ radius: 200 }}
+                  >
+                    {item.icon}
+                    <Text style={styles.dBtnText}>{item.title}</Text>
+                  </Pressable>
+                </Link>
+              ) : (
+                <Link asChild push href={item.href}>
+                  <Pressable
+                    style={styles.dBtnPress}
+                    android_ripple={{ radius: 200 }}
+                  >
+                    {item.icon}
+                    <Text style={styles.dBtnText}>{item.title}</Text>
+                  </Pressable>
+                </Link>
+              )}
             </View>
           )}
           keyExtractor={(item) => item.href}

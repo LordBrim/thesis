@@ -158,7 +158,6 @@ export function AdminsCard({
     <>
       <Pressable style={card.qContainer} android_ripple={{ radius: 250 }}>
         <Text style={[GS.h2, card.question]}>{displayName}</Text>
-        {/* <IconBtn icon="pencil" size={18} onPress={() => handleUpdate(uuid)} /> */}
         {disabled ? (
           <IconBtn
             icon="circle-minus"

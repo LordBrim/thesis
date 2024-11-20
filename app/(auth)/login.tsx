@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ScrollView,
   Dimensions,
+  Button,
 } from "react-native";
 import { useRouter } from "expo-router";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -24,10 +25,25 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "firebase-config";
 import { doc, getDoc } from "firebase/firestore";
-import { FlatList } from "react-native";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { showLongToast } from "hooks/useToast";
 import { useNavigation } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import { useOAuth } from "@clerk/clerk-expo";
+import * as Linking from "expo-linking";
+
+export const useWarmUpBrowser = () => {
+  React.useEffect(() => {
+    // Warm up the android browser to improve UX
+    // https://docs.expo.dev/guides/authentication/#improving-user-experience
+    void WebBrowser.warmUpAsync();
+    return () => {
+      void WebBrowser.coolDownAsync();
+    };
+  }, []);
+};
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const navigation = useNavigation();
@@ -220,7 +236,27 @@ export default function LoginScreen() {
       password: "123456",
     },
   ];
+  // Clerk
+  useWarmUpBrowser();
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+  const onPress = React.useCallback(async () => {
+    try {
+      const { createdSessionId, signIn, signUp, setActive } =
+        await startOAuthFlow({
+          redirectUrl: Linking.createURL("/app/(app)/(user)/(tabs)/index.tsx", {
+            scheme: "lifeline",
+          }),
+        });
 
+      if (createdSessionId) {
+        setActive!({ session: createdSessionId });
+      } else {
+        // Use signIn or signUp for next steps such as MFA
+      }
+    } catch (err) {
+      console.error("OAuth error", err);
+    }
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -322,6 +358,8 @@ export default function LoginScreen() {
             onPress={() => login(email, password)}
           />
         </View>
+
+        <Button title="Sign in with Google" onPress={onPress} />
 
         <View style={styles.cBottom}>
           <Text>Don't have an account? </Text>

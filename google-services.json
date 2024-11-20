@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:258884201826:android:c5a974015d9d492aa2d03b",
         "android_client_info": {
-          "package_name": "com.andreisager.lifeline"
+          "package_name": "com.lifeline"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "258884201826-8bkej8062hp5sguluv5jiluf150huie7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.andreisager.lifeline",
+            "package_name": "com.lifeline",
             "certificate_hash": "5bad46e18aaa9e60f4150a403d0bc4190f333f1e"
           }
         },

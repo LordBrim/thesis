@@ -19,7 +19,7 @@ export default function Welcome({ toDonate, toRequest, currentUser }) {
         <ActionBtn
           href={toRequest}
           title="Request"
-          subtitle="Request for compatible blood from a location."
+          subtitle="Request blood from partenered hospitals."
         />
       </View>
     </View>

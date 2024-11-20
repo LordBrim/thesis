@@ -202,7 +202,7 @@ export default function AccountTab({
               }
             />
           )}
-          <View style={{ flex: 1, gap: 4 }}>
+          <View style={styles.profileDetails}>
             {loading ? (
               <>
                 <Text>
@@ -317,7 +317,7 @@ export default function AccountTab({
           </View>
         </View>
 
-        <View style={styles.section}>
+        <View style={[styles.section, { marginBottom: 30 }]}>
           <View style={[styles.flatlist, { marginTop: 0 }]}>
             <Pressable
               style={styles.card}
@@ -374,13 +374,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   profile: {
-    flexDirection: "row",
-    padding: HORIZONTAL_SCREEN_MARGIN,
-    gap: 16,
-    justifyContent: "center",
     alignItems: "center",
+    padding: HORIZONTAL_SCREEN_MARGIN,
   },
-
+  profileDetails: {
+    alignItems: "center",
+    marginTop: 8,
+  },
   subtitle: {
     fontSize: SIZES.small,
     color: COLORS.text,

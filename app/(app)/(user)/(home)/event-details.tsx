@@ -17,13 +17,25 @@ import {
   SIZES,
   GS,
 } from "../../../../constants";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../../../firebase-config"; // Adjust the path as needed
 import { Card, Button, Icon, ProgressBar } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
+import SingleBtnModal from "../../../../components/common/modals/SingleBtnModal"; // Ensure this import is correct
+import CallToActionBtn from "components/common/CallToActionBtn";
 export default function EventDetailsScreen() {
   const {
+    title,
+    description,
+    date,
+    address = "No address provided", // Default value
+    time,
+    documentId,
+    latitude = "0", // Default value
+    longitude = "0", // Default value
+    isAdmin,
+  } = useLocalSearchParams();
+  console.log("Received parameters:", {
     title,
     description,
     date,
@@ -33,9 +45,10 @@ export default function EventDetailsScreen() {
     latitude,
     longitude,
     isAdmin,
-  } = useLocalSearchParams();
+  });
   const [imageUri, setImageUri] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   console.log(
     title,
     description,
@@ -92,6 +105,33 @@ export default function EventDetailsScreen() {
     }
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+  };
+
+  const formatTime = (timeString) => {
+    const date = new Date(timeString);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  const navigateToEditEvent = () => {
+    router.push({
+      pathname: "/(app)/(admin)/(home)/manage-event-edit",
+      params: {
+        title,
+        description,
+        date,
+        address,
+        time,
+        documentId,
+        latitude,
+        longitude,
+        imageUri,
+      },
+    });
+  };
+
   const downloadImage = async () => {
     try {
       const { status } = await MediaLibrary.requestPermissionsAsync();
@@ -113,13 +153,28 @@ export default function EventDetailsScreen() {
     }
   };
 
+  const handleDeleteEvent = async () => {
+    if (documentId) {
+      try {
+        await deleteDoc(doc(FIRESTORE_DB, `events/${documentId}`));
+        router.back();
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error deleting event:", error.message);
+        } else {
+          console.error("Unknown error deleting event");
+        }
+      }
+    }
+  };
+
   const donorsCount = 120;
   const donorsGoal = 200;
   const progress = donorsCount / donorsGoal;
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{ height: "100%" }}>
+      <ScrollView contentContainerStyle={{ height: "100%" }}>
         <Card>
           {imageUri ? (
             <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -175,7 +230,41 @@ export default function EventDetailsScreen() {
             Navigate to Location
           </Button>
         </View>
-      ) : null}
+      ) : (
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            onPress={navigateToEditEvent}
+            icon="pencil"
+            style={{ backgroundColor: "orange" }}
+          >
+            Edit Event
+          </Button>
+          <Button
+            mode="contained"
+            onPress={() => setDeleteModalVisible(true)}
+            icon="delete"
+            style={styles.secondaryButton}
+          >
+            Delete Event
+          </Button>
+        </View>
+      )}
+      <SingleBtnModal
+        visible={deleteModalVisible}
+        onRequestClose={() => setDeleteModalVisible(false)}
+        onPress={handleDeleteEvent}
+        title="Confirm Delete"
+        description="Are you sure you want to delete this event?"
+        btnLabel="Delete"
+        extraBtn={
+          <CallToActionBtn
+            secondary={true}
+            label={"Close"}
+            onPress={() => setDeleteModalVisible(false)}
+          />
+        }
+      />
     </View>
   );
 }
@@ -184,6 +273,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f0f0f0",
+    height: "100%",
   },
   title: {
     fontSize: 24,
@@ -253,6 +343,7 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     marginTop: 10,
+    backgroundColor: COLORS.primary,
   },
   placeholder: {
     height: 200,
@@ -277,6 +368,15 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
     marginBottom: 20,
+  },
+  debugContainer: {
+    padding: 10,
+    backgroundColor: "#e0e0e0",
+    marginTop: 20,
+  },
+  debugText: {
+    fontSize: 14,
+    color: "#333",
   },
 });
 

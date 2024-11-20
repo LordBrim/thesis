@@ -18,12 +18,14 @@ interface PlaceResult {
 
 interface AddressSearchComponentProps {
   onAddressSelect: (address: string, lat: number, lon: number) => void;
+  initialAddress?: string; // Add initialAddress as an optional prop
 }
 
 const AddressSearchComponent: React.FC<AddressSearchComponentProps> = ({
   onAddressSelect,
+  initialAddress = "", // Default to an empty string if not provided
 }) => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(initialAddress);
   const [results, setResults] = useState<PlaceResult[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

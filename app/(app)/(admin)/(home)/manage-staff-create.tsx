@@ -64,6 +64,11 @@ export default function ManageStaffCreate() {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
   const handleCreate = async () => {
+    const usernameRegex = /^[A-Za-z]+$/;
+    if (!usernameRegex.test(newUsername)) {
+      alert("Username should only contain characters.");
+      return;
+    }
     try {
       const response = await createUserWithEmailAndPassword(
         FIREBASE_AUTH,
@@ -101,6 +106,11 @@ export default function ManageStaffCreate() {
       alert("Registration Failed:" + error.message);
     }
   };
+  const handleUsernameChange = (username) => {
+    // Remove any numeric and special characters except spaces from the input
+    const filteredUsername = username.replace(/[^A-Za-z\s]/g, "");
+    setNewUsername(filteredUsername);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,7 +122,7 @@ export default function ManageStaffCreate() {
         <TextInputWrapper label="Username">
           <TextInput
             value={newUsername}
-            onChangeText={(username) => setNewUsername(username)}
+            onChangeText={handleUsernameChange}
             placeholder="Enter staff username..."
             autoCapitalize="none"
             autoCorrect={true}

@@ -8,30 +8,44 @@ import {
   Pressable,
   ImageBackground,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { HORIZONTAL_SCREEN_MARGIN } from "../../../../constants";
 import { COLORS, SPACES, SIZES } from "../../../../constants/theme";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "app/store";
-import { getCurrentUser } from "rtx/slices/user";
+import { FIREBASE_AUTH } from "firebase-config";
+import { getAuth } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { Link, useRouter } from "expo-router";
 import UpcomingAppointmentsStaff from "../(dashboard)/appointmentStaff";
 import Divider from "constants/divider";
+import UpcomingEvents from "components/home/UpcomingEvents";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function HomeTab() {
   const router = useRouter();
-  const dispatch = useDispatch<AppDispatch>();
-  useEffect(() => {
-    dispatch(getCurrentUser());
-  }, []);
-  const { user } = useSelector((state: RootState) => state.user);
+  const auth = getAuth();
+  const db = getFirestore();
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View
         style={{
           flexDirection: "column",
           marginVertical: SPACES.xl,
-          marginBottom: SPACES.xl,
         }}
       >
         <Text
@@ -42,9 +56,9 @@ export default function HomeTab() {
             color: COLORS.primary,
           }}
         >
-          Hello, Staff {user.displayName}
+          Hello, Staff {currentUser.displayName}
         </Text>
-        <Divider width={"100%"} height={1} color={COLORS.grayDark} margin={5} />
+        <Divider width={"100%"} height={1} color={COLORS.grayMid} />
       </View>
 
       <View
@@ -86,6 +100,14 @@ export default function HomeTab() {
         overScrollMode="never"
       >
         <UpcomingAppointmentsStaff />
+      </ScrollView>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+        overScrollMode="never"
+      >
+        <UpcomingEvents />
       </ScrollView>
     </SafeAreaView>
   );
@@ -141,5 +163,35 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: "cover",
+  },
+  dBtnText: {
+    fontFamily: "Poppins_500Medium",
+    textAlign: "center",
+  },
+  dBtnView: {
+    width: "25%",
+    aspectRatio: 1 / 1,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  dBtnPress: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 8,
+  },
+  sBtnView: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: COLORS.grayLight,
+    overflow: "hidden",
+  },
+  sBtnPress: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 12,
   },
 });

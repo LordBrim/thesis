@@ -7,6 +7,7 @@ import {
   Pressable,
   TouchableOpacity,
   Animated,
+  LayoutAnimation,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
@@ -271,26 +272,8 @@ export function QuestionCard({
   isAnimating,
   setIsAnimating,
 }: IQuestionCard) {
-  const animatedHeight = useState(new Animated.Value(0))[0];
-
   useEffect(() => {
-    if (isOpen) {
-      // Opening animation
-      setIsAnimating(true);
-      Animated.timing(animatedHeight, {
-        toValue: 150, // Set the desired open height
-        duration: 300,
-        useNativeDriver: false,
-      }).start(() => setIsAnimating(false));
-    } else {
-      // Closing animation
-      setIsAnimating(true);
-      Animated.timing(animatedHeight, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: false,
-      }).start(() => setIsAnimating(false));
-    }
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [isOpen]);
 
   return (
@@ -327,9 +310,9 @@ export function QuestionCard({
       </View>
 
       {isOpen && (
-        <Animated.View style={{ height: animatedHeight }}>
+        <View style={card.answerContainer}>
           <Text style={card.answer}>{answer}</Text>
-        </Animated.View>
+        </View>
       )}
     </Pressable>
   );
@@ -350,7 +333,6 @@ const card = StyleSheet.create({
   },
   openContainer: {
     width: "95%",
-    minHeight: 35,
     flexDirection: "column",
     paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
     paddingTop: 8,
@@ -372,8 +354,10 @@ const card = StyleSheet.create({
     color: COLORS.primary,
     fontSize: 16,
   },
+  answerContainer: {
+    padding: 10,
+  },
   answer: {
-    flex: 1,
     flexDirection: "row",
     textAlign: "justify",
     fontSize: 14,

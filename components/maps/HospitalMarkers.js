@@ -12,6 +12,7 @@ const HospitalMarker = ({ data, setSelectedMarker, styles, type }) => {
     : { latitude: data.latitude, longitude: data.longitude };
   const name = isHospital ? data.name : data.title;
   const description = isHospital ? data.address : data.description;
+  const logoUrl = isHospital ? data.logoUrl : data.imageUrl; // Add this line
 
   return (
     <Marker

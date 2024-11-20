@@ -43,14 +43,6 @@ export const mapStyle = [
   },
   {
     featureType: "poi.medical",
-    stylers: [
-      {
-        color: "#ff513d",
-      },
-      {
-        visibility: "on",
-      },
-    ],
   },
   {
     featureType: "poi.medical",

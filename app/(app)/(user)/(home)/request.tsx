@@ -272,28 +272,20 @@ export default function Request() {
         >
           <Text style={styles.title}>Guidelines For Requesting Blood</Text>
 
-          <ScrollView
-            contentContainerStyle={{
-              width: "90%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FlatList
-              scrollEnabled={false}
-              data={sampleGuidelines}
-              renderItem={({ item }) => (
-                <View style={{ gap: 4 }}>
-                  <Text style={styles.header}>{item.title}</Text>
-                  <Text style={styles.description}>{item.description}</Text>
-                </View>
-              )}
-              keyExtractor={(item) => item.id.toString()}
-              numColumns={1}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.flatlist}
-            />
-          </ScrollView>
+          <FlatList
+            scrollEnabled={true}
+            data={sampleGuidelines}
+            renderItem={({ item }) => (
+              <View style={{ width: "95%" }}>
+                <Text style={styles.header}>{item.title}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+              </View>
+            )}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={1}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flatlist}
+          />
         </View>
         <RequestBloodunitScreen
           patientName={patientName}
@@ -384,7 +376,7 @@ export default function Request() {
         onRequestClose={() => setWarningModalVisible(false)}
         onPress={() => setWarningModalVisible(false)}
         animation={true}
-        title="Validation Error"
+        title="Wait!"
         btnLabel="Okay"
         description={warningMessage}
         errorMessage={validationError}
@@ -414,7 +406,7 @@ const styles = StyleSheet.create({
   },
   flatlist: {
     rowGap: 8,
-    marginBottom: 70,
+    paddingBottom: "30%",
   },
   title: {
     fontSize: SIZES.large,

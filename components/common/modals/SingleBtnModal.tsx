@@ -23,6 +23,7 @@ interface IModal {
   animation?: boolean; // Add the animation prop
   renderMarkdown?: boolean; // Add the renderMarkdown prop
   errorMessage?: string; // Add the errorMessage prop
+  confirmDelete?: boolean; // Add the confirmDelete prop
 }
 
 export default function SingleBtnModal({
@@ -38,6 +39,7 @@ export default function SingleBtnModal({
   animation = false, // Default to false if not provided
   renderMarkdown = false, // Default to false if not provided
   errorMessage,
+  confirmDelete = false, // Default to false if not provided
 }: IModal) {
   const opacityValue = useRef(new Animated.Value(0)).current;
 

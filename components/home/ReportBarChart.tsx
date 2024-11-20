@@ -12,7 +12,7 @@ export default function ReportBarChart({ title, data }: ReportBarChart) {
     <View style={styles.chart}>
       <Text
         style={{
-          fontSize: 20,
+          fontSize: 16,
           fontFamily: "Poppins_700Bold",
           textAlign: "center",
         }}

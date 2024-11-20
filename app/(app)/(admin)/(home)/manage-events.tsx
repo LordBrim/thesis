@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet, Text, View, ActivityIndicator, Modal } from "react-native";
 import { COLORS } from "../../../../constants/theme";
 import { FIREBASE_AUTH, FIRESTORE_DB, FIREBASE_STORAGE } from "firebase-config";
@@ -11,6 +11,7 @@ import { router } from "expo-router";
 import EventCard from "components/home/EventCard";
 import CustomButtonWithIcon from "components/common/CustomButtonWithIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function ManageEvents({ navigation }) {
   const [events, setEvents] = useState([]);
@@ -20,38 +21,46 @@ export default function ManageEvents({ navigation }) {
   const [loading, setLoading] = useState(true); // Set initial loading state to true
   const [emptyDateMessage, setEmptyDateMessage] = useState(""); // New state for empty date message
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
-      if (user) {
-        setCurrentUser(user);
-        const q = query(
-          collection(FIRESTORE_DB, "events"),
-          where("userUID", "==", user.uid)
-        );
-        const querySnapshot = await getDocs(q);
-        const userEvents = await Promise.all(
-          querySnapshot.docs.map(async (doc) => {
-            const eventData = doc.data();
-            const imageUrl = await getDownloadURL(
-              ref(FIREBASE_STORAGE, `events/${doc.id}`)
-            );
-            return { id: doc.id, ...eventData, imageUrl };
-          })
-        );
-        setEvents(userEvents);
-        markEventDates(userEvents); // Mark events on calendar
-        transformEventsToAgendaItems(userEvents); // Transform events for Agenda
-      } else {
-        setCurrentUser(null);
-        setEvents([]);
-        setMarkedDates({});
-        setAgendaItems({});
-      }
-      setLoading(false); // Set loading to false after data fetching is done
-    });
+  const fetchData = async (user) => {
+    if (user) {
+      setCurrentUser(user);
+      const q = query(
+        collection(FIRESTORE_DB, "events"),
+        where("userUID", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      const userEvents = await Promise.all(
+        querySnapshot.docs.map(async (doc) => {
+          const eventData = doc.data();
+          const imageUrl = await getDownloadURL(
+            ref(FIREBASE_STORAGE, `events/${doc.id}`)
+          );
+          return { id: doc.id, ...eventData, imageUrl };
+        })
+      );
+      setEvents(userEvents);
+      markEventDates(userEvents); // Mark events on calendar
+      transformEventsToAgendaItems(userEvents); // Transform events for Agenda
+    } else {
+      setCurrentUser(null);
+      setEvents([]);
+      setMarkedDates({});
+      setAgendaItems({});
+    }
+    setLoading(false); // Set loading to false after data fetching is done
+  };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, fetchData);
     return () => unsubscribe();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true); // Show loading indicator
+      onAuthStateChanged(FIREBASE_AUTH, fetchData);
+    }, [])
+  );
 
   // Helper function to convert "MM/DD/YYYY" or "YYYY-MM-DD" to "YYYY-MM-DD"
   const convertDateString = (dateString) => {
@@ -121,6 +130,7 @@ export default function ManageEvents({ navigation }) {
         items[formattedDate].push({
           id: event.id,
           name: event.title,
+          address: event.address,
           startDate: event.startDate,
           endDate: event.endDate,
           startTime: event.startTime,
@@ -134,6 +144,23 @@ export default function ManageEvents({ navigation }) {
     });
 
     setAgendaItems(items);
+  };
+
+  const navigateToEventDetails = (event) => {
+    router.push({
+      pathname: "/(app)/(user)/(home)/event-details",
+      params: {
+        title: event.title,
+        description: event.description,
+        date: event.startDate,
+        address: event.address || "No address provided", // Provide a default value if address is not available
+        time: event.startTime,
+        documentId: event.id,
+        latitude: event.latitude || "0", // Provide a default value if latitude is not available
+        longitude: event.longitude || "0", // Provide a default value if longitude is not available
+        isAdmin: true, // or false depending on the context
+      },
+    });
   };
 
   const renderEventItem = (item) => (

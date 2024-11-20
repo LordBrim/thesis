@@ -251,8 +251,31 @@ export default function ManageTicketReview() {
   }, []);
 
   useEffect(() => {
+    const fetchTicketUserDetails = async (userEmail: string) => {
+      const userQuery = await getDoc(doc(db, "User", userEmail));
+      if (userQuery.exists()) {
+        const userData = userQuery.data();
+        setTicketData((prevData) => ({
+          ...prevData,
+          name: userData.displayName,
+          city: userData.city,
+          contactDetails: userData.contactDetails,
+          sex: userData.sex,
+          age: userData.age,
+        }));
+      }
+    };
+
     if (ticket) {
-      setTicketData(JSON.parse(ticket as string)); // Deserialize the ticket data
+      const parsedTicket = JSON.parse(ticket as string);
+      setTicketData(parsedTicket); // Deserialize the ticket data
+      if (
+        !parsedTicket.name ||
+        !parsedTicket.city ||
+        !parsedTicket.contactDetails
+      ) {
+        fetchTicketUserDetails(parsedTicket.userEmail);
+      }
     }
   }, [ticket]);
 

@@ -107,7 +107,7 @@ const HospitalMapView = () => {
   const selectedEvent = event ? JSON.parse(event) : null;
   const { hospital, hospitals } = route.params || {};
 
-  const selectedHospital = hospital ? JSON.parse(hospital) : null;
+  const [selectedHospital, setSelectedHospital] = useState(hospital ? JSON.parse(hospital) : null); // Define state and setter
   const [parsedHospitals, setParsedHospitals] = useState(
     hospitals ? JSON.parse(hospitals) : []
   );
@@ -149,6 +149,7 @@ const HospitalMapView = () => {
   const userId = user ? user.uid : null; // Get the current user's unique ID
   const [modalVisible, setModalVisible] = useState(false); // Add state for modal visibility
   const [fetchingData, setFetchingData] = useState(true); // Add state for fetching data
+  const [strokeColor, setStrokeColor] = useState("blue"); // Add state for stroke color
 
   const fetchUserData = async () => {
     if (!userId) return; // Exit if userId is not available
@@ -177,6 +178,7 @@ const HospitalMapView = () => {
       const eventsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        type: "event", // Add type field for events
       }));
       const filteredEvents = eventsData.filter(
         (event) =>
@@ -202,6 +204,7 @@ const HospitalMapView = () => {
       const hospitalsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        type: "hospital", // Add type field for hospitals
       }));
       setParsedHospitals(hospitalsData);
       setLoading(false); // Set loading to false after fetching data
@@ -228,7 +231,11 @@ const HospitalMapView = () => {
     console.log("Selected Marker:", selectedMarker);
     if (selectedMarker) {
       openBottomSheet();
-      fetchRoute();
+      fetchRoute(selectedMarker); // Pass selectedMarker to fetchRoute
+      setStrokeColor(selectedMarker.type === "event" ? COLORS.primary : "blue"); // Set stroke color based on marker type
+      if (selectedMarker.type === "hospital") {
+        setSelectedHospital(selectedMarker); // Update selectedHospital state
+      }
     }
     console.log("ue 1 triggered");
   }, [selectedMarker]);
@@ -247,17 +254,17 @@ const HospitalMapView = () => {
     }
   };
 
-  const fetchRoute = async () => {
+  const fetchRoute = async (selectedMarker) => {
     if (!currentLocation || !selectedMarker) {
       return;
     }
-
+  
     const start = `${currentLocation.longitude},${currentLocation.latitude}`;
     const end = selectedMarker.coordinates
       ? `${selectedMarker.coordinates.longitude},${selectedMarker.coordinates.latitude}`
       : `${selectedMarker.longitude},${selectedMarker.latitude}`;
     const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62480d5edcd000074935966b0d86d130c538&start=${start}&end=${end}`;
-
+  
     try {
       const response = await axios.get(url);
       const data = response.data;
@@ -320,6 +327,7 @@ const HospitalMapView = () => {
   const handleMapInteraction = () => {
     bottomSheetRef.current?.close(); // Close the bottom sheet
     setSelectedMarker(null); // Deselect the marker
+    // Do not reset strokeColor here to retain the polyline color
   };
   const formatDate = (dateString) => {
     if (!dateString) return "";
@@ -347,6 +355,14 @@ const HospitalMapView = () => {
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
+
+  const handlePhonePress = (phoneNumber) => {
+    const formattedNumber = phoneNumber.slice(3); // Remove the first two digits
+    Linking.openURL(`tel:${formattedNumber}`).catch((err) =>
+      console.error("Error opening phone app: ", err)
+    );
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* Add the SingleBtnModal component */}
@@ -409,7 +425,7 @@ const HospitalMapView = () => {
             <Polyline
               coordinates={routeCoordinates}
               strokeWidth={5}
-              strokeColor="blue"
+              strokeColor={strokeColor} // Use strokeColor state
             />
             {parsedHospitals
               .filter((hospital) => !hospital.disabled)
@@ -467,7 +483,7 @@ const HospitalMapView = () => {
                 <View style={styles.topAlignedContent}>
                   <View style={styles.rowContent}>
                     <Image
-                      source={{ uri: selectedHospital?.logoUrl }}
+                      source={{ uri: selectedHospital?.logoUrl }} // Use selectedHospital state
                       style={{ width: 60, height: 60 }}
                     />
                     <View style={[styles.columnContent, { marginLeft: 10 }]}>
@@ -477,11 +493,7 @@ const HospitalMapView = () => {
                           alignItems: "center",
                         }}
                       >
-                        <Icon
-                          source="hospital-building"
-                          size={20}
-                          color={COLORS.primary}
-                        />
+                    
                         <Text style={styles.hospitalName}>
                           {selectedMarker?.name}
                         </Text>
@@ -492,7 +504,7 @@ const HospitalMapView = () => {
                       <View
                         style={{
                           flexDirection: "row",
-                          alignselectedMarkers: "center",
+                          alignItems: "center",
                         }}
                       >
                         <Foundation
@@ -504,9 +516,11 @@ const HospitalMapView = () => {
                           style={{
                             margin: 5,
                             textDecorationLine: "underline",
+                            alignItems:'center',
                             color: COLORS.primary,
                             fontFamily: "Poppins_400Regular",
                           }}
+                          onPress={() => handlePhonePress(selectedMarker?.contactNumber)} // Make phone number pressable
                         >
                           {selectedMarker?.contactNumber}
                         </Text>
@@ -527,7 +541,7 @@ const HospitalMapView = () => {
                             selectedMarker?.stock
                               ?.filter((bt) => types.includes(bt.type))
                               .some((t) => t.available)
-                              ? "red"
+                              ? COLORS.primary
                               : "gray"
                           }
                           style={{ marginRight: 5 }}
@@ -538,7 +552,7 @@ const HospitalMapView = () => {
                             let iconColor = selectedMarker?.stock?.filter(
                               (bt) => bb == bt.type
                             )[0]?.available
-                              ? "red"
+                              ? COLORS.primary
                               : "gray";
                             const Icon = positive ? Plus : Minus;
 
@@ -606,6 +620,8 @@ const HospitalMapView = () => {
                         style={{
                           flexDirection: "row",
                           alignItems: "center",
+                          flexWrap: "wrap",
+                          width:'60%'
                         }}
                       >
                         <Fontisto name="blood" size={24} color={COLORS.primary} />
@@ -719,6 +735,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignselectedMarkers: "center",
     justifyContent: "center",
+    width:'90%',
     left: 20,
   },
   columnContent: {
@@ -726,13 +743,20 @@ const styles = StyleSheet.create({
   },
   hospitalName: {
     color: COLORS.primary,
-    fontSize: 20,
-    margin: 8,
-    fontFamily: "Poppins_400Regular",
+    fontSize: 18,
+    margin: 4,
+    fontFamily: "Poppins_700Bold",
+    flexDirection: 'column',
+  flexWrap: 'wrap',
+  width: '85%'
   },
   address: {
     width: "90%",
     fontFamily: "Poppins_400Regular",
+    flexDirection: 'column',
+  flexWrap: 'wrap',
+  width: '85%'
+
   },
   divider: {
     margin: 10,

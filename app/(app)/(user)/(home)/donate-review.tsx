@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import moment from "moment";
 import { checklistQuestions } from "../../../../constants/database"; // Adjust the path to your database.js file
 import IconBtn from "../../../../components/common/IconButton"; // Adjust the path to your IconBtn component
+import Divider from "constants/divider";
 
 interface Answers {
   appointmentDate: string;
@@ -41,6 +42,7 @@ const QuestionCard: React.FC<IQuestionCard> = ({ question, answer }) => {
           <Text style={styles.answer}>{answer}</Text>
         </View>
       )}
+      <Divider height={1} width={"90%"} margin={10} />
     </>
   );
 };
@@ -78,6 +80,7 @@ const DonateReview: React.FC<DonateReviewProps> = ({ answers }) => {
           Selected Hospital: {answers.selectedHospital}
         </Text>
       </View>
+      <Text style={styles.header}>Prelimniary checklist</Text>
       {/* Display preliminary checklist questions and answers */}
       {Object.keys(answers).map((key) => {
         if (

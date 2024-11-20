@@ -23,7 +23,6 @@ import {
 import moment from "moment";
 import { router } from "expo-router";
 import LinkBtn from "components/common/LinkBtn";
-
 interface Ticket {
   selectedHospital: string;
   selectedDate: string;
@@ -98,12 +97,20 @@ export default function UpcomingAppointmentsStaff() {
     <View style={styles.container}>
       <View style={styles.bar}>
         <Text style={styles.title}>Upcoming Appointments</Text>
-        <LinkBtn
-          label="View All"
+        <TouchableOpacity
           onPress={() =>
             router.push("/(app)/(admin)/(home)/manage-ticket-all-appointments")
           }
-        />
+        >
+          <Text
+            style={{
+              textDecorationLine: "underline",
+              fontFamily: "Poppins_500Medium",
+            }}
+          >
+            View All
+          </Text>
+        </TouchableOpacity>
       </View>
       {hasAppointments ? (
         <FlatList

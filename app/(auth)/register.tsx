@@ -148,6 +148,11 @@ export default function RegisterScreen() {
       console.log(`Email ${email} exists:`, emailExists);
       if (emailExists) {
         setEmailError("Email is already registered.");
+        setModalTitle("Email Already Registered");
+        setModalDescription(
+          "Only unregistered emails are allowed to receive OTP."
+        );
+        setModalVisible(true);
         console.log("Email is already registered. OTP not sent.");
       } else {
         console.log("Email is not registered. Sending OTP.");

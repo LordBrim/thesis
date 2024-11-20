@@ -76,6 +76,7 @@ export default function ManageAdminCreate() {
         password: newPassword,
         displayName: newUsername,
         role: "admin",
+        isSub: true,
         hospitalName: newTitle,
       };
       await firestoreOperations.addDocument(

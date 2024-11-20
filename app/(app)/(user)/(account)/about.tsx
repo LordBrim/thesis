@@ -15,20 +15,28 @@ export default function About() {
         <Text style={styles.header}>ABOUT US</Text>
         <Text style={styles.text}>
           Lifeline is an Android-based blood donation and request platform with
-          GPS route optimization. Developed by fourth-year Computer Science
-          students at STI College Sta. Mesa, Lifeline aims to optimize
-          interactions between donors, patients, and hospitals.
+          GPS route planning. Developed by fourth-year Computer Science students
+          at STI College Sta. Mesa, Lifeline aims to optimize interactions
+          between donors, patients, and hospitals.
         </Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>DEVELOPERS</Text>
-        <Text style={styles.text}>Manolito Angelo S. </Text>
-        <Text style={styles.text}>Sager, Andrei John S.</Text>
+        <Text style={[styles.text, { textAlign: "center" }]}>
+          Manolito Angelo S.{" "}
+        </Text>
+        <Text style={[styles.text, { textAlign: "center" }]}>
+          Sager, Andrei John S.
+        </Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>UI DESIGN & DOCUMENTATION</Text>
-        <Text style={styles.text}>Cruz, Jam Charmaine A.</Text>
-        <Text style={styles.text}>Sanchez, Nicole M.</Text>
+        <Text style={[styles.text, { textAlign: "center" }]}>
+          Cruz, Jam Charmaine A.
+        </Text>
+        <Text style={[styles.text, { textAlign: "center" }]}>
+          Sanchez, Nicole M.
+        </Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>LIFELINE’S BENEFITS</Text>
@@ -58,7 +66,6 @@ export default function About() {
           • University of the East Ramon Magsaysay Memorial Center Quezon City
         </Text>
         <Text style={styles.text}>• Ace Medical Center Mandaluyong</Text>
-        <Text style={styles.text}>• Quirino Medical Center</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.header}>FEEDBACK</Text>
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   text: {
-    textAlign: "center",
+    textAlign: "justify",
     fontSize: 16,
     lineHeight: 24,
     fontFamily: "Poppins_400Regular",

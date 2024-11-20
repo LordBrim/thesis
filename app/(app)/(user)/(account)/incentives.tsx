@@ -4,14 +4,10 @@ import {
   Text,
   FlatList,
   Image,
-  Modal,
-  TouchableOpacity,
-  Pressable,
   ActivityIndicator,
-  ScrollView,
+  Animated,
 } from "react-native";
-import { COLORS, SIZES, SPACES } from "../../../../constants/theme";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getAuth } from "firebase/auth";
 import {
   getFirestore,
@@ -20,9 +16,10 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { Ionicons } from "@expo/vector-icons";
-import moment from "moment";
-import { FontAwesome6, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import { Fontisto, MaterialIcons, FontAwesome6 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { COLORS } from "constants";
+import { ColorPicker } from "react-native-btr";
 
 interface Ticket {
   selectedHospital: string;
@@ -35,34 +32,104 @@ interface Ticket {
   isComplete: boolean;
 }
 
+interface Hospital {
+  name: string;
+  address: string;
+  contact: string;
+  logoUrl?: string;
+  incentives?: { number: number };
+}
+
+interface Incentive {
+  incentive: string;
+  position: number;
+  info?: string;
+}
+
+const incentivesData: Incentive[] = [
+  { incentive: "T-Shirt", position: 1 },
+  {
+    incentive: "Priority",
+    position: 3,
+    info: "Yes, you only need four (4) donation.",
+  },
+];
+
 export default function DonationHistory() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hospitalData, setHospitalData] = useState<{ [key: string]: Hospital }>(
+    {
+      UERM: { name: "", address: "", contact: "" },
+      ACE: { name: "", address: "", contact: "" },
+    }
+  );
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const auth = getAuth();
   const db = getFirestore();
   const currentUser = auth.currentUser;
-  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    const fetchTickets = async () => {
-      if (currentUser) {
-        const q = query(
-          collection(db, "ticketDonate"),
-          where("userUID", "==", currentUser.uid),
-          where("isComplete", "==", true)
-        );
-        const querySnapshot = await getDocs(q);
-        const fetchedTickets = querySnapshot.docs.map(
-          (doc) => doc.data() as Ticket
-        );
-        setTickets(fetchedTickets);
+    const fetchData = async () => {
+      try {
+        await Promise.all([fetchTickets(), fetchHospitalData()]);
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 1000,
+          useNativeDriver: true,
+        }).start();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    fetchTickets();
+    fetchData();
   }, [currentUser]);
+
+  const fetchTickets = async () => {
+    if (!currentUser) return;
+
+    const q = query(
+      collection(db, "ticketDonate"),
+      where("userUID", "==", currentUser.uid),
+      where("isComplete", "==", true)
+    );
+    const querySnapshot = await getDocs(q);
+    const fetchedTickets = querySnapshot.docs.map(
+      (doc) => doc.data() as Ticket
+    );
+    setTickets(fetchedTickets);
+  };
+
+  const fetchHospitalData = async () => {
+    const q = query(
+      collection(db, "hospital"),
+      where("name", "in", [
+        "UERM Medical Hospital",
+        "ACE Medical Center Mandaluyong",
+      ])
+    );
+    const querySnapshot = await getDocs(q);
+    const hospitals = querySnapshot.docs.reduce(
+      (acc, doc) => {
+        const data = doc.data() as Hospital;
+        if (data.name === "UERM Medical Hospital") {
+          acc.UERM = data;
+        } else if (data.name === "ACE Medical Center Mandaluyong") {
+          acc.ACE = data;
+        }
+        return acc;
+      },
+      {
+        UERM: { name: "", address: "", contact: "" },
+        ACE: { name: "", address: "", contact: "" },
+      }
+    );
+    setHospitalData(hospitals);
+  };
 
   const groupedTickets = tickets.reduce(
     (acc, ticket) => {
@@ -73,180 +140,109 @@ export default function DonationHistory() {
       }
       return acc;
     },
-    { UERM: [], ACE: [] }
+    { UERM: [] as Ticket[], ACE: [] as Ticket[] }
   );
+
+  const renderHospitalCard = ({ item }: { item: { key: string } }) => {
+    const hospital = item.key === "UERM" ? hospitalData.UERM : hospitalData.ACE;
+    const incentiveNumber = hospital.incentives?.number || 0;
+    const donationsCount = groupedTickets[item.key]?.length || 0;
+    const incentiveInfo = hospital.incentives?.info;
+
+    return (
+      <Animated.View style={[styles.hospitalCard, { opacity: fadeAnim }]}>
+        <LinearGradient
+          colors={[COLORS.primary, "#FF8C69"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 2, y: 0 }}
+          style={styles.headerGradient}
+        >
+          <View style={styles.hospitalHeader}>
+            {hospital.logoUrl ? (
+              <Image
+                source={{ uri: hospital.logoUrl }}
+                style={styles.hospitalLogo}
+              />
+            ) : (
+              <MaterialIcons name="local-hospital" size={40} color="white" />
+            )}
+            <View style={styles.hospitalInfo}>
+              <Text style={styles.hospitalName}>{hospital.name}</Text>
+              <Text style={styles.hospitalAddress}>
+                {incentiveInfo || hospital.address}
+              </Text>
+            </View>
+          </View>
+        </LinearGradient>
+
+        <View style={styles.progressContainer}>
+          <View style={styles.progressHeader}>
+            <Text style={styles.progressTitle}>Donation Progress</Text>
+            <Text style={styles.progressCount}>
+              {donationsCount}/{incentiveNumber} Donations
+            </Text>
+          </View>
+
+          <FlatList
+            data={Array(incentiveNumber).fill(null)}
+            renderItem={({ _, index }) => {
+              const incentive = incentivesData.find(
+                (inc) => inc.position === index + 1
+              );
+              return (
+                <View style={styles.donationIcon}>
+                  <Text style={styles.donationNumber}>{index + 1}</Text>
+                  <Fontisto
+                    name="blood"
+                    size={35}
+                    color={index < donationsCount ? "#FF5733" : "#E0E0E0"}
+                  />
+                  {incentive && (
+                    <Text style={styles.incentiveText}>
+                      {incentive.incentive}
+                    </Text>
+                  )}
+                </View>
+              );
+            }}
+            keyExtractor={(_, index) => index.toString()}
+            numColumns={4}
+            scrollEnabled={false}
+            contentContainerStyle={styles.donationGrid}
+          />
+        </View>
+      </Animated.View>
+    );
+  };
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-        <Text style={styles.loadingText}>Loading...</Text>
+        <ActivityIndicator size="large" color="#FF5733" />
+        <Text style={styles.loadingText}>Loading your Incentives...</Text>
       </View>
     );
   }
 
-  const hasAppointments = tickets.length > 0;
-
-  const handlePress = (ticket: Ticket) => {
-    setSelectedTicket(ticket);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-    setSelectedTicket(null);
-  };
-
   return (
     <View style={styles.container}>
-      <View style={styles.bar}>
-        <Text style={styles.title}>Incentive History</Text>
-      </View>
-      {hasAppointments ? (
-        <ScrollView>
-          <Text style={styles.sectionTitle}>UERM Medical Hospital</Text>
-          <FlatList
-            data={groupedTickets.UERM}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => handlePress(item)}
-                style={styles.cardContainer}
-              >
-                <AppointmentCard
-                  location={item.selectedHospital}
-                  date={item.selectedDate}
-                  time={item.selectedTime}
-                />
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item) => item.ticketNumber}
-            numColumns={1}
-            contentContainerStyle={styles.flatlist}
-          />
-          <Text style={styles.sectionTitle}>
-            ACE Medical Center Mandaluyong
-          </Text>
-          <FlatList
-            data={groupedTickets.ACE}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => handlePress(item)}
-                style={styles.cardContainer}
-              >
-                <AppointmentCard
-                  location={item.selectedHospital}
-                  date={item.selectedDate}
-                  time={item.selectedTime}
-                />
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item) => item.ticketNumber}
-            numColumns={1}
-            contentContainerStyle={styles.flatlist}
-          />
-        </ScrollView>
+      {tickets.length > 0 ? (
+        <FlatList
+          data={[{ key: "UERM" }, { key: "ACE" }]}
+          renderItem={renderHospitalCard}
+          keyExtractor={(item) => item.key}
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        />
       ) : (
-        <View style={styles.empty}>
-          <FontAwesome6 name="gifts" size={50} color="black" />
-          <Text style={styles.emptyText}>You do not have Incentives yet.</Text>
+        <View style={styles.emptyState}>
+          <FontAwesome6 name="hand-holding-heart" size={60} color="#FF5733" />
+          <Text style={styles.emptyTitle}>No Donations Yet</Text>
+          <Text style={styles.emptyText}>
+            Start your journey of saving lives through blood donation today.
+          </Text>
         </View>
       )}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}
-      >
-        <Pressable style={styles.modalOverlay} onPress={closeModal}>
-          <View style={styles.modalContent}>
-            {selectedTicket && (
-              <>
-                <Text style={styles.modalTitle}>Appointment Details</Text>
-                <View style={styles.modalDetails}>
-                  <Text style={styles.modalLabel}>Hospital:</Text>
-                  <Text style={styles.modalValue}>
-                    {selectedTicket.selectedHospital}
-                  </Text>
-                </View>
-                <View style={styles.modalDetails}>
-                  <Text style={styles.modalLabel}>Date:</Text>
-                  <Text style={styles.modalValue}>
-                    {moment(selectedTicket.selectedDate).format("MMMM D, YYYY")}
-                  </Text>
-                </View>
-                <View style={styles.modalDetails}>
-                  <Text style={styles.modalLabel}>Time:</Text>
-                  <Text style={styles.modalValue}>
-                    {selectedTicket.selectedTime}
-                  </Text>
-                </View>
-                <View style={styles.modalDetails}>
-                  <Text style={styles.modalLabel}>Ticket Number:</Text>
-                  <Text style={styles.modalValue}>
-                    {selectedTicket.ticketNumber}
-                  </Text>
-                </View>
-                <View style={styles.modalDetails}>
-                  <Text style={styles.modalLabel}>Status:</Text>
-                  <Text style={styles.modalValue}>
-                    {selectedTicket.status.toUpperCase()}
-                  </Text>
-                </View>
-                <View style={styles.modalDetails}>
-                  <Text style={styles.modalLabel}>Donation Result:</Text>
-                  <Text style={styles.modalValue}>
-                    {selectedTicket.isComplete ? "COMPLETE" : "Error"}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={closeModal}
-                  style={styles.closeButton}
-                >
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </Pressable>
-      </Modal>
-    </View>
-  );
-}
-
-type IAppointmentCard = {
-  location: string;
-  date: string;
-  time: string;
-};
-
-export function AppointmentCard({ location, date, time }: IAppointmentCard) {
-  return (
-    <View style={card.container}>
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: "#FF5733",
-
-          borderRadius: 20,
-        }}
-      >
-        <MaterialIcons
-          name="star"
-          size={30}
-          color="#FF5733"
-          style={{ margin: 5 }}
-        />
-      </View>
-      <View style={card.text}>
-        <Text style={card.location} numberOfLines={1}>
-          {location || "Medical Institution"}
-        </Text>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={card.details}>{date}</Text>
-          <Text style={card.details}> • {time}</Text>
-        </View>
-      </View>
-      <Ionicons name="chevron-forward" size={24} color={COLORS.grayDark} />
     </View>
   );
 }
@@ -254,147 +250,142 @@ export function AppointmentCard({ location, date, time }: IAppointmentCard) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: SPACES.xs,
-    backgroundColor: COLORS.background,
-    padding: SPACES.md,
+    backgroundColor: "#F8F9FA",
   },
-  bar: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: SPACES.md,
+  header: {
+    paddingHorizontal: 20,
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F0",
   },
   title: {
-    fontSize: SIZES.xLarge,
+    fontSize: 28,
     fontFamily: "Poppins_700Bold",
     color: COLORS.primary,
+    marginBottom: 4,
   },
-  flatlist: {
-    flex: 1,
-    gap: SPACES.sm,
-    padding: 2,
+  subtitle: {
+    fontSize: 16,
+    fontFamily: "Poppins_400Regular",
+    color: "#666666",
   },
-  empty: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  content: {
+    padding: 16,
     gap: 16,
   },
-  emptyImage: {
-    width: 100,
-    height: 100,
-    marginBottom: SPACES.md,
+  hospitalCard: {
+    backgroundColor: "white",
+    borderRadius: 16,
+    marginBottom: 16,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    overflow: "hidden",
   },
-  emptyText: {
-    color: COLORS.text,
-    fontSize: SIZES.medium,
-    fontWeight: "bold",
+  headerGradient: {
+    padding: 16,
+  },
+  hospitalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  hospitalLogo: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "white",
+  },
+  hospitalInfo: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  hospitalName: {
+    fontSize: 18,
+    fontFamily: "Poppins_600SemiBold",
+    color: "white",
+  },
+  hospitalAddress: {
+    fontSize: 14,
+    fontFamily: "Poppins_400Regular",
+    color: "rgba(255, 255, 255, 0.8)",
+  },
+  progressContainer: {
+    padding: 16,
+  },
+  progressHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  progressTitle: {
+    fontSize: 16,
+    fontFamily: "Poppins_600SemiBold",
+    color: "#333333",
+  },
+  progressCount: {
+    fontSize: 14,
+    fontFamily: "Poppins_400Regular",
+    color: "#666666",
+  },
+  donationGrid: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+  },
+  donationIcon: {
+    alignItems: "center",
+    width: 70,
+    gap: 4,
+  },
+  donationNumber: {
+    fontFamily: "Poppins_400Regular",
+    color: "#666666",
+  },
+  incentiveText: {
+    fontFamily: "Poppins_400Regular",
+    color: "#666666",
+    fontSize: 12,
+    textAlign: "center",
+  },
+  incentiveInfo: {
+    fontFamily: "Poppins_400Regular",
+    color: "#666666",
+    fontSize: 10,
+    textAlign: "center",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#F8F9FA",
   },
   loadingText: {
-    marginTop: SPACES.md,
-    fontSize: SIZES.medium,
-    color: COLORS.text,
+    marginTop: 16,
+    fontSize: 16,
+    fontFamily: "Poppins_400Regular",
+    color: "#666666",
   },
-  modalOverlay: {
+  emptyState: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    padding: 32,
   },
-  modalContent: {
-    width: "90%",
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    alignItems: "center",
-    elevation: 5,
+  emptyTitle: {
+    fontSize: 24,
+    fontFamily: "Poppins_600SemiBold",
+    color: "#333333",
+    marginTop: 16,
+    marginBottom: 8,
   },
-  modalTitle: {
-    fontSize: SIZES.large,
-    fontFamily: "Poppins_700Bold",
-    marginBottom: 20,
-    color: COLORS.primary,
-  },
-  modalDetails: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 10,
+  emptyText: {
+    fontSize: 16,
     fontFamily: "Poppins_400Regular",
-  },
-  modalLabel: {
-    fontSize: SIZES.medium,
-    fontFamily: "Poppins_700Bold",
-    color: COLORS.text,
-  },
-  modalValue: {
-    fontSize: SIZES.medium,
-    color: COLORS.text,
-    fontFamily: "Poppins_400Regular",
-  },
-  closeButton: {
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: COLORS.primary,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "white",
-    fontFamily: "Poppins_700Bold",
-  },
-  cardContainer: {
-    margin: 5,
-  },
-  sectionTitle: {
-    fontSize: SIZES.large,
-    fontFamily: "Poppins_700Bold",
-    color: COLORS.primary,
-    marginVertical: SPACES.md,
-  },
-});
-
-const card = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-    paddingHorizontal: 32,
-    paddingVertical: SPACES.md,
-    borderRadius: SIZES.small,
-    elevation: 3,
-    shadowColor: "#52006A",
-    gap: SPACES.md,
-    backgroundColor: COLORS.background,
-    position: "relative",
-    maxHeight: 70,
-    minHeight: 70,
-    alignItems: "center",
-  },
-  image: { height: 45, width: 25 },
-  text: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  location: {
-    fontSize: SIZES.medium,
-    fontFamily: "Poppins_700Bold",
-  },
-  details: {
-    fontSize: SIZES.small,
-    color: COLORS.grayDark,
-  },
-  line: {
-    width: 2,
-    height: "100%",
-    position: "absolute",
-    backgroundColor: COLORS.grayDark,
-    left: 43.3,
-    bottom: 0,
+    color: "#666666",
+    textAlign: "center",
+    lineHeight: 24,
   },
 });

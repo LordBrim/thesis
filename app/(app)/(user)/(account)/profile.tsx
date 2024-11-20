@@ -9,7 +9,6 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { COLORS, SIZES } from "../../../../constants/theme";
 import * as ImagePicker from "expo-image-picker";
 import { getAuth } from "firebase/auth";
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
@@ -27,6 +26,29 @@ import {
 import moment from "moment";
 import { black } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
 import SingleBtnModal from "../../../../components/common/modals/SingleBtnModal";
+
+// Updated color palette with maroon accent
+const COLORS = {
+  primary: "#DA2F47", // Deep maroon
+  secondary: "#D4AF37", // Gold accent
+  background: "#F8F7F4", // Warm off-white
+  text: "#2C1810", // Dark brown text
+  grayDark: "#666666",
+  grayLight: "#E5E5E5",
+  error: "#D32F2F",
+  success: "#388E3C",
+  inputBg: "#FFFFFF",
+  border: "#D1C4C4", // Soft maroon-tinted border
+};
+
+const SIZES = {
+  xSmall: 10,
+  small: 12,
+  medium: 16,
+  large: 20,
+  xLarge: 24,
+  xxLarge: 32,
+};
 
 const metroCities = [
   "Manila",
@@ -229,73 +251,75 @@ const ProfileEditScreen = () => {
             />
           )}
         </View>
-        <View style={styles.inputContainer}>
-          <TextInputWrapper label="Full Name">
-            <TextInput
-              style={styles.inputGrayed}
-              value={fullName}
-              placeholder={fullName}
-              editable={false}
-            />
-          </TextInputWrapper>
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInputWrapper label="Email">
-            <TextInput
-              style={styles.inputGrayed}
-              value={email}
-              placeholder={email}
-              editable={false}
-            />
-          </TextInputWrapper>
-        </View>
+        <View style={styles.formContainer}>
+          <View style={styles.inputContainer}>
+            <TextInputWrapper label="Full Name">
+              <TextInput
+                style={styles.inputGrayed}
+                value={fullName}
+                placeholder={fullName}
+                editable={false}
+              />
+            </TextInputWrapper>
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInputWrapper label="Email">
+              <TextInput
+                style={styles.inputGrayed}
+                value={email}
+                placeholder={email}
+                editable={false}
+              />
+            </TextInputWrapper>
+          </View>
 
-        <View style={styles.inputContainer}>
-          <TextInputWrapper label="Sex">
-            <View style={styles.radioContainer}>
-              <Text style={{ color: COLORS.grayDark }}>
-                {capitalizeFirstLetter(sex)}
-              </Text>
-            </View>
-          </TextInputWrapper>
-        </View>
+          <View style={styles.inputContainer}>
+            <TextInputWrapper label="Sex">
+              <View style={styles.radioContainer}>
+                <Text style={{ color: COLORS.grayDark }}>
+                  {capitalizeFirstLetter(sex)}
+                </Text>
+              </View>
+            </TextInputWrapper>
+          </View>
 
-        <View style={styles.inputContainer}>
-          <TextInputWrapper label="Date of Birth">
-            <TextInput
-              style={styles.inputGrayed}
-              value={dateOfBirth}
-              keyboardType="numeric"
-              editable={false}
-            />
-          </TextInputWrapper>
-        </View>
+          <View style={styles.inputContainer}>
+            <TextInputWrapper label="Date of Birth">
+              <TextInput
+                style={styles.inputGrayed}
+                value={dateOfBirth}
+                keyboardType="numeric"
+                editable={false}
+              />
+            </TextInputWrapper>
+          </View>
 
-        <View style={styles.inputContainer}>
-          <TextInputWrapper label="Phone Number">
-            <TextInput
-              style={styles.input}
-              value={contactDetails}
-              onChangeText={setContactDetails}
-              keyboardType="phone-pad"
-              placeholder="+63"
-            />
-          </TextInputWrapper>
-        </View>
+          <View style={styles.inputContainer}>
+            <TextInputWrapper label="Phone Number">
+              <TextInput
+                style={styles.input}
+                value={contactDetails}
+                onChangeText={setContactDetails}
+                keyboardType="phone-pad"
+                placeholder="+63"
+              />
+            </TextInputWrapper>
+          </View>
 
-        <View style={styles.inputContainer}>
-          <TextInputWrapper label="City">
-            <Picker
-              selectedValue={city}
-              onValueChange={(itemValue) => setCity(itemValue)}
-              style={styles.picker}
-            >
-              <Picker.Item label="Select city" value="" />
-              {metroCities.map((city) => (
-                <Picker.Item key={city} label={city} value={city} />
-              ))}
-            </Picker>
-          </TextInputWrapper>
+          <View style={styles.inputContainer}>
+            <TextInputWrapper label="City">
+              <Picker
+                selectedValue={city}
+                onValueChange={(itemValue) => setCity(itemValue)}
+                style={styles.picker}
+              >
+                <Picker.Item label="Select city" value="" />
+                {metroCities.map((city) => (
+                  <Picker.Item key={city} label={city} value={city} />
+                ))}
+              </Picker>
+            </TextInputWrapper>
+          </View>
         </View>
         <CustomButtonWithIcon
           onPress={handleSave}
@@ -335,66 +359,23 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: COLORS.background,
   },
-  imageContainer: {
-    alignItems: "center",
+  formContainer: {
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
     marginBottom: 20,
   },
   titleHeader: {
     fontSize: SIZES.xLarge,
     fontFamily: "Poppins_700Bold",
+    color: COLORS.primary,
     marginBottom: 20,
-  },
-  profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-  },
-  imagePlaceholder: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: "#e1e1e1",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    color: COLORS.text,
-    marginLeft: 20,
-    fontFamily: "Poppins_400Regular",
-  },
-  inputGrayed: {
-    flex: 1,
-    height: 40,
-    marginLeft: 20,
-    color: COLORS.grayDark,
-    fontFamily: "Poppins_400Regular",
-  },
-  picker: {
-    flex: 1,
-    height: 40,
-  },
-  saveButton: {
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-    marginBottom: 50,
-  },
-  disabledButton: {
-    backgroundColor: "#ccc",
-  },
-  saveButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontFamily: "Poppins_700Bold",
+    textAlign: "center",
   },
   profile: {
     flexDirection: "row",
@@ -404,13 +385,75 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  inputContainer: {
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  label: {
+    fontSize: SIZES.medium,
+    marginBottom: 5,
+    color: COLORS.text,
+    fontFamily: "Poppins_500Medium",
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    color: COLORS.text,
+    marginLeft: 20,
+    fontFamily: "Poppins_400Regular",
+    fontSize: SIZES.medium,
+  },
+  inputGrayed: {
+    flex: 1,
+    height: 40,
+    marginLeft: 20,
+    color: COLORS.grayDark,
+    fontFamily: "Poppins_400Regular",
+    fontSize: SIZES.medium,
+  },
+  picker: {
+    flex: 1,
+    height: 40,
+    color: COLORS.text,
+    marginLeft: 16,
+  },
+  saveButton: {
+    backgroundColor: COLORS.primary,
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 50,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  disabledButton: {
+    backgroundColor: COLORS.grayLight,
+    shadowOpacity: 0,
+    elevation: 0,
+  },
+  saveButtonText: {
+    color: "white",
+    fontSize: SIZES.large,
+    fontFamily: "Poppins_700Bold",
+    letterSpacing: 0.5,
+  },
   radioContainer: {
     marginLeft: 20,
     flexDirection: "row",
     alignItems: "center",
+    height: 40,
+  },
+  radioText: {
+    color: COLORS.grayDark,
+    fontFamily: "Poppins_400Regular",
+    fontSize: SIZES.medium,
   },
   disabledRadioButton: {
-    opacity: 0.6, // Optional: Make the button appear disabled
+    opacity: 0.6,
   },
 });
 

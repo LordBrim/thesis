@@ -113,6 +113,12 @@ export default function StackLayout() {
             headerTitle: "Admin",
           }}
         />
+            <Stack.Screen
+          name="(app)/(user)/(maps)/hospitalMapView"
+          options={{
+            headerTitle: "Hospital Location",
+          }}
+        />
         <Stack.Screen
           name="(app)/(staff)/(tabs)"
           options={{

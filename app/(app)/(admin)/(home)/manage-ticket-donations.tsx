@@ -19,7 +19,7 @@ import { Picker } from "@react-native-picker/picker"; // Import Picker from the 
 import {
   collection,
   getDocs,
-  doc,
+  doc as firestoreDoc, // Rename the import to avoid conflicts
   getDoc,
   QueryDocumentSnapshot,
   DocumentData,
@@ -135,7 +135,7 @@ function ManageTicketsDonationsPending() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
-        const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
+        const userDocRef = firestoreDoc(FIRESTORE_DB, "User", user.uid);
         const userDocSnapshot = await getDoc(userDocRef);
         if (userDocSnapshot.exists()) {
           const userData = userDocSnapshot.data() as UserData;
@@ -166,7 +166,11 @@ function ManageTicketsDonationsPending() {
           async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
             const data = docSnapshot.data() as TicketData;
             try {
-              const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
+              const userDocRef = firestoreDoc(
+                FIRESTORE_DB,
+                "User",
+                data.userUID
+              );
               const userDocSnapshot = await getDoc(userDocRef);
               const userData = userDocSnapshot.exists()
                 ? (userDocSnapshot.data() as UserData)
@@ -337,7 +341,7 @@ function ManageTicketsDonationsArchived() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
       if (user) {
-        const userDocRef = doc(FIRESTORE_DB, "User", user.uid);
+        const userDocRef = firestoreDoc(FIRESTORE_DB, "User", user.uid);
         const userDocSnapshot = await getDoc(userDocRef);
         if (userDocSnapshot.exists()) {
           const userData = userDocSnapshot.data() as UserData;
@@ -367,7 +371,11 @@ function ManageTicketsDonationsArchived() {
           async (docSnapshot: QueryDocumentSnapshot<DocumentData>) => {
             const data = docSnapshot.data() as TicketData;
             try {
-              const userDocRef = doc(FIRESTORE_DB, "User", data.userUID);
+              const userDocRef = firestoreDoc(
+                FIRESTORE_DB,
+                "User",
+                data.userUID
+              );
               const userDocSnapshot = await getDoc(userDocRef);
               const userData = userDocSnapshot.exists()
                 ? (userDocSnapshot.data() as UserData)
@@ -538,7 +546,7 @@ export function Card({ ticket }: CardProps) {
 
   const confirmDelete = async () => {
     try {
-      await deleteDoc(doc(FIRESTORE_DB, "ticketDonate", ticket.id));
+      await deleteDoc(firestoreDoc(FIRESTORE_DB, "ticketDonate", ticket.id));
       setModalVisible(false);
       setSuccessModalVisible(true); // Show success modal
     } catch (error) {
@@ -649,7 +657,7 @@ const ManageTicketDonationsActive = () => {
   const fetchTickets = async () => {
     if (currentUser) {
       // Get the current user's hospitalName
-      const userDocRef = doc(db, "User", currentUser.uid);
+      const userDocRef = firestoreDoc(db, "User", currentUser.uid);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -663,13 +671,26 @@ const ManageTicketDonationsActive = () => {
           where("isComplete", "==", false)
         );
         const querySnapshot = await getDocs(q);
-        const fetchedTickets = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            ...data,
-            id: doc.id,
-          };
-        });
+        const fetchedTickets = await Promise.all(
+          querySnapshot.docs.map(async (doc) => {
+            const data = doc.data();
+            const userDocRef = firestoreDoc(db, "User", data.userUID);
+            const userDoc = await getDoc(userDocRef);
+            const userData = userDoc.exists() ? userDoc.data() : {};
+            return {
+              ...data,
+              id: doc.id,
+              name: userData.displayName ?? "Unknown",
+              userEmail: userData.email ?? "Unknown",
+              age: userData.age,
+              avatarUrl: userData.avatarUrl,
+              city: userData.city,
+              contactDetails: userData.contactDetails,
+              displayName: userData.displayName,
+              sex: userData.sex,
+            };
+          })
+        );
 
         // Sort tickets by closest to the current date in descending order
         const sortedTickets = fetchedTickets.sort((a, b) => {
@@ -720,7 +741,6 @@ const ManageTicketDonationsActive = () => {
         <FlatList
           data={tickets}
           renderItem={({ item }) => <Card ticket={item} />}
-          key={tickets.id}
           keyExtractor={(item) => item.id}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

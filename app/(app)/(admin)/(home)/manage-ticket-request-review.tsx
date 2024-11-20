@@ -281,7 +281,9 @@ export default function ManageTicketReview() {
       console.error("Error updating ticket:", error);
     }
   };
-
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.container}>
@@ -431,7 +433,9 @@ export default function ManageTicketReview() {
               Phone: {userData.contactDetails}
             </Text>
             <Text style={styles.textDetails}>City: {userData.city}</Text>
-            <Text style={styles.textDetails}>Sex: {userData.sex}</Text>
+            <Text style={styles.textDetails}>
+              Sex: {capitalizeFirstLetter(userData.sex)}
+            </Text>
           </View>
         ) : (
           openUserDetails && (
@@ -521,10 +525,13 @@ const styles = StyleSheet.create({
   textDetails: {
     fontSize: 16,
     marginVertical: 3,
+    fontFamily: "Poppins_600SemiBold",
   },
   checklistContainer: {
     width: "100%",
-    marginLeft: 15,
+    borderWidth: 0.5,
+    padding: 10,
+    borderRadius: 10,
   },
   checklistTitle: {
     fontFamily: "Poppins_700Bold",

@@ -22,6 +22,7 @@ import {
 } from "rtx/slices/hospitals";
 import { router, useNavigation } from "expo-router";
 import { AppDispatch } from "app/store";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
 
 export default function ManageFaqCreate() {
   const [newHospitalName, setNewHospitalName] = useState("");
@@ -30,6 +31,8 @@ export default function ManageFaqCreate() {
   const [newContactNumber, setNewContactNumber] = useState("");
   const [newLatitude, setNewLatitude] = useState("");
   const [newLongitude, setNewLongitude] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation();
   useEffect(() => {
@@ -59,6 +62,23 @@ export default function ManageFaqCreate() {
     newLongitude,
   ]);
   const handleCreate = () => {
+    if (
+      !newHospitalName ||
+      !newLogoUrl ||
+      !newAddress ||
+      !newContactNumber ||
+      !newLatitude ||
+      !newLongitude
+    ) {
+      setModalMessage("All fields are required.");
+      setModalVisible(true);
+      return;
+    }
+    if (isNaN(parseFloat(newLatitude)) || isNaN(parseFloat(newLongitude))) {
+      setModalMessage("Latitude and Longitude must be valid numbers.");
+      setModalVisible(true);
+      return;
+    }
     dispatch(
       createHospital({
         disabled: false,
@@ -240,6 +260,14 @@ export default function ManageFaqCreate() {
           />
         </TextInputWrapper>
       </ScrollView>
+      <SingleBtnModal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        title="Validation Error"
+        description={modalMessage}
+        btnLabel="OK"
+        onPress={() => setModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }

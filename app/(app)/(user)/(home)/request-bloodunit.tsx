@@ -186,258 +186,262 @@ export default function RequestBloodunitScreen({
   };
 
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.scrollViewContainer}
-      extraScrollHeight={Platform.OS === "ios" ? 20 : 0}
-      enableOnAndroid={true}
-    >
-      <View style={styles.container}>
+    <>
+      <View style={styles.stickyHeader}>
         <Text style={styles.title}>File A Request</Text>
-        <Text
-          style={{
-            color: COLORS.text,
-            fontSize: 15,
-            fontFamily: "Poppins_400Regular",
-          }}
-        >
-          Please ensure all fields are completed and accurate before submission.
-          Incomplete requests will not be processed.
-        </Text>
-        <Text style={styles.header}>Patient's Name *</Text>
-        <TextInput
-          style={styles.inputContainer}
-          onChangeText={(text) => {
-            const filteredName = text.replace(/[^a-zA-Z\s]/g, "");
-
-            setPatientName(filteredName);
-            validateField("patientName", filteredName);
-          }}
-          value={patientName}
-          placeholder="Enter patient's name"
-        />
-        {errors.patientName && (
-          <Text style={styles.errorText}>{errors.patientName}</Text>
-        )}
-        <Text style={styles.header}>Blood Type *</Text>
-        <View style={styles.picker}>
-          <Picker
-            ref={bloodTypePickerRef}
-            selectedValue={selectedBloodType}
-            onValueChange={(itemValue) => {
-              setSelectedBloodType(itemValue);
-              validateField("selectedBloodType", itemValue);
-            }}
-            mode="dropdown"
-            style={{ fontFamily: "Poppins_400Regular" }}
-            itemStyle={{ fontFamily: "Poppins_400Regular" }}
-          >
-            <Picker.Item label="A+" value="A+" />
-            <Picker.Item label="A-" value="A-" />
-            <Picker.Item label="B+" value="B+" />
-            <Picker.Item label="B-" value="B-" />
-            <Picker.Item label="AB+" value="AB+" />
-            <Picker.Item label="AB-" value="AB-" />
-            <Picker.Item label="O+" value="O+" />
-            <Picker.Item label="O-" value="O-" />
-          </Picker>
-        </View>
-        {errors.selectedBloodType && (
-          <Text style={styles.errorText}>{errors.selectedBloodType}</Text>
-        )}
-        <Text style={styles.header}>Transfusion *</Text>
-        <View style={styles.picker}>
-          <Picker
-            ref={transfusionPickerRef}
-            selectedValue={packedRequest}
-            onValueChange={(itemValue) => setPackedRequest(itemValue)}
-            mode="dropdown"
-          >
-            <Picker.Item label="Whole Blood" value="Whole Blood" />
-            <Picker.Item label="Packed RBC" value="Packed RBC" />
-            <Picker.Item label="Washed RBC" value="Washed RBC" />
-            <Picker.Item label="Platelet" value="Platelet" />
-            <Picker.Item
-              label="Fresh Frozen Plasma"
-              value="Fresh Frozen Plasma"
-            />
-            <Picker.Item label="Cryoprecipitate" value="Cryoprecipitate" />
-            <Picker.Item label="Albumin" value="Albumin" />
-            <Picker.Item label="Immunoglobulin" value="Immunoglobulin" />
-            <Picker.Item
-              label="Factor Concentrate"
-              value="Factor Concentrate"
-            />
-            <Picker.Item label="Cord Blood" value="Cord Blood" />
-            <Picker.Item label="Stem Cells" value="Stem Cells" />
-            <Picker.Item label="Bone Marrow" value="Bone Marrow" />
-            <Picker.Item label="Other" value="Other" />
-          </Picker>
-        </View>
-        <TextInput
-          style={styles.inputContainer}
-          onChangeText={setPackedRequestInfo}
-          value={packedRequestInfo}
-          placeholder="Additional Information"
-        />
-        <Text style={styles.header}>Relationship To Patient *</Text>
-        <View style={styles.picker}>
-          <Picker
-            ref={relationshipPickerRef}
-            selectedValue={selectedRelationship}
-            onValueChange={(itemValue) => {
-              setSelectedRelationship(itemValue);
-              validateField("selectedRelationship", itemValue);
-            }}
-            mode="dropdown"
+      </View>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.scrollViewContainer}
+        extraScrollHeight={Platform.OS === "ios" ? 20 : 0}
+        enableOnAndroid={true}
+      >
+        <View style={styles.container}>
+          <Text
             style={{
-              fontFamily: "Poppins_400Regular",
-            }}
-            itemStyle={{
+              color: COLORS.text,
+              fontSize: 15,
               fontFamily: "Poppins_400Regular",
             }}
           >
-            {relationships.map((relationship) => (
+            Please ensure all fields are completed and accurate before
+            submission. Incomplete requests will not be processed.
+          </Text>
+          <Text style={styles.header}>Patient's Name *</Text>
+          <TextInput
+            style={styles.inputContainer}
+            onChangeText={(text) => {
+              const filteredName = text.replace(/[^a-zA-Z\s]/g, "");
+
+              setPatientName(filteredName);
+              validateField("patientName", filteredName);
+            }}
+            value={patientName}
+            placeholder="Enter patient's name"
+          />
+          {errors.patientName && (
+            <Text style={styles.errorText}>{errors.patientName}</Text>
+          )}
+          <Text style={styles.header}>Blood Type *</Text>
+          <View style={styles.picker}>
+            <Picker
+              ref={bloodTypePickerRef}
+              selectedValue={selectedBloodType}
+              onValueChange={(itemValue) => {
+                setSelectedBloodType(itemValue);
+                validateField("selectedBloodType", itemValue);
+              }}
+              mode="dropdown"
+              style={{ fontFamily: "Poppins_400Regular" }}
+              itemStyle={{ fontFamily: "Poppins_400Regular" }}
+            >
+              <Picker.Item label="A+" value="A+" />
+              <Picker.Item label="A-" value="A-" />
+              <Picker.Item label="B+" value="B+" />
+              <Picker.Item label="B-" value="B-" />
+              <Picker.Item label="AB+" value="AB+" />
+              <Picker.Item label="AB-" value="AB-" />
+              <Picker.Item label="O+" value="O+" />
+              <Picker.Item label="O-" value="O-" />
+            </Picker>
+          </View>
+          {errors.selectedBloodType && (
+            <Text style={styles.errorText}>{errors.selectedBloodType}</Text>
+          )}
+          <Text style={styles.header}>Transfusion *</Text>
+          <View style={styles.picker}>
+            <Picker
+              ref={transfusionPickerRef}
+              selectedValue={packedRequest}
+              onValueChange={(itemValue) => setPackedRequest(itemValue)}
+              mode="dropdown"
+            >
+              <Picker.Item label="Whole Blood" value="Whole Blood" />
+              <Picker.Item label="Packed RBC" value="Packed RBC" />
+              <Picker.Item label="Washed RBC" value="Washed RBC" />
+              <Picker.Item label="Platelet" value="Platelet" />
               <Picker.Item
-                key={relationship.value}
-                label={relationship.label}
-                value={relationship.value}
-                fontFamily="Poppins_400Regular"
-                style={{
-                  fontFamily: "Poppins_400Regular",
-                }}
+                label="Fresh Frozen Plasma"
+                value="Fresh Frozen Plasma"
               />
-            ))}
-          </Picker>
-        </View>
-        {errors.selectedRelationship && (
-          <Text style={styles.errorText}>{errors.selectedRelationship}</Text>
-        )}
-        <Text style={styles.header}>Is this request an Emergency? *</Text>
-        <RadioGroup
-          radioButtons={[
-            {
-              id: "yes",
-              label: "Yes",
-              value: "Yes",
-              color: selectedId === "yes" ? COLORS.black : undefined,
-              labelStyle:
-                selectedId === "yes"
-                  ? { fontFamily: "Poppins_700Bold" }
-                  : { fontFamily: "Poppins_400Regular" },
-            },
-            {
-              id: "no",
-              label: "No",
-              value: "No",
-              color: selectedId === "no" ? COLORS.black : undefined,
-              labelStyle:
-                selectedId === "no"
-                  ? { fontFamily: "Poppins_700Bold" }
-                  : { fontFamily: "Poppins_400Regular" },
-            },
-          ]}
-          onPress={(selectedId) => {
-            const selectedButton = [
+              <Picker.Item label="Cryoprecipitate" value="Cryoprecipitate" />
+              <Picker.Item label="Albumin" value="Albumin" />
+              <Picker.Item label="Immunoglobulin" value="Immunoglobulin" />
+              <Picker.Item
+                label="Factor Concentrate"
+                value="Factor Concentrate"
+              />
+              <Picker.Item label="Cord Blood" value="Cord Blood" />
+              <Picker.Item label="Stem Cells" value="Stem Cells" />
+              <Picker.Item label="Bone Marrow" value="Bone Marrow" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+          </View>
+          <TextInput
+            style={styles.inputContainer}
+            onChangeText={setPackedRequestInfo}
+            value={packedRequestInfo}
+            placeholder="Additional Information"
+          />
+          <Text style={styles.header}>Relationship To Patient *</Text>
+          <View style={styles.picker}>
+            <Picker
+              ref={relationshipPickerRef}
+              selectedValue={selectedRelationship}
+              onValueChange={(itemValue) => {
+                setSelectedRelationship(itemValue);
+                validateField("selectedRelationship", itemValue);
+              }}
+              mode="dropdown"
+              style={{
+                fontFamily: "Poppins_400Regular",
+              }}
+              itemStyle={{
+                fontFamily: "Poppins_400Regular",
+              }}
+            >
+              {relationships.map((relationship) => (
+                <Picker.Item
+                  key={relationship.value}
+                  label={relationship.label}
+                  value={relationship.value}
+                  fontFamily="Poppins_400Regular"
+                  style={{
+                    fontFamily: "Poppins_400Regular",
+                  }}
+                />
+              ))}
+            </Picker>
+          </View>
+          {errors.selectedRelationship && (
+            <Text style={styles.errorText}>{errors.selectedRelationship}</Text>
+          )}
+          <Text style={styles.header}>Is this request an Emergency? *</Text>
+          <RadioGroup
+            radioButtons={[
               {
                 id: "yes",
                 label: "Yes",
                 value: "Yes",
-                selected: selectedId === "yes",
+                color: selectedId === "yes" ? COLORS.black : undefined,
+                labelStyle:
+                  selectedId === "yes"
+                    ? { fontFamily: "Poppins_700Bold" }
+                    : { fontFamily: "Poppins_400Regular" },
               },
               {
                 id: "no",
                 label: "No",
                 value: "No",
-                selected: selectedId === "no",
+                color: selectedId === "no" ? COLORS.black : undefined,
+                labelStyle:
+                  selectedId === "no"
+                    ? { fontFamily: "Poppins_700Bold" }
+                    : { fontFamily: "Poppins_400Regular" },
               },
-            ].find((button) => button.selected);
-            if (selectedButton) {
-              setSelectedId(selectedButton.id);
-              setIsEmergency(selectedButton.value === "Yes");
-            }
-          }}
-          selectedId={selectedId}
-          layout="column"
-          containerStyle={styles.radioGroup}
-        />
-        {selectedId === "yes" && (
-          <>
-            <TextInput
-              style={styles.inputContainer}
-              onChangeText={(text) => {
-                setEmergencyReason(text);
-                validateField("emergencyReason", text);
-              }}
-              value={emergencyReason}
-              placeholder="Reasons for emergency"
-            />
-            {errors.emergencyReason && (
-              <Text style={styles.errorText}>{errors.emergencyReason}</Text>
-            )}
-          </>
-        )}
-
-        <Text style={styles.header}>Contact Information *</Text>
-        <View style={styles.phoneInputContainer}>
-          <Text style={styles.phonePrefix}>+63</Text>
-          <TextInput
-            style={[styles.inputContainer, styles.phoneInput]}
-            onChangeText={(text) => {
-              handleContactNumberChange(text);
-              validateField("contactNumber", text);
+            ]}
+            onPress={(selectedId) => {
+              const selectedButton = [
+                {
+                  id: "yes",
+                  label: "Yes",
+                  value: "Yes",
+                  selected: selectedId === "yes",
+                },
+                {
+                  id: "no",
+                  label: "No",
+                  value: "No",
+                  selected: selectedId === "no",
+                },
+              ].find((button) => button.selected);
+              if (selectedButton) {
+                setSelectedId(selectedButton.id);
+                setIsEmergency(selectedButton.value === "Yes");
+              }
             }}
-            value={contactNumber}
-            placeholder="912 345 6789"
-            keyboardType="phone-pad"
-            maxLength={12}
+            selectedId={selectedId}
+            layout="column"
+            containerStyle={styles.radioGroup}
           />
-        </View>
-        {errors.contactNumber && (
-          <Text style={styles.errorText}>{errors.contactNumber}</Text>
-        )}
+          {selectedId === "yes" && (
+            <>
+              <TextInput
+                style={styles.inputContainer}
+                onChangeText={(text) => {
+                  setEmergencyReason(text);
+                  validateField("emergencyReason", text);
+                }}
+                value={emergencyReason}
+                placeholder="Reasons for emergency"
+              />
+              {errors.emergencyReason && (
+                <Text style={styles.errorText}>{errors.emergencyReason}</Text>
+              )}
+            </>
+          )}
 
-        <Text style={styles.header}>Upload Blood Request Form *</Text>
-        <CustomButtonWithIcon
-          onPress={() => setModalVisible(true)}
-          icon="upload"
-          iconSize={24}
-          iconColor="white"
-          title="Upload Image"
-          buttonStyle={{ backgroundColor: COLORS.primary }}
-          textStyle={{ color: "white" }}
-        />
-        {imageUri && (
-          <Image source={{ uri: imageUri }} style={styles.uploadedImage} />
-        )}
-        <IconModal
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-          handleImagePicker={handleImagePicker}
-        />
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={invalidNumberModalVisible}
-          onRequestClose={() => {
-            setInvalidNumberModalVisible(!invalidNumberModalVisible);
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Contact number is invalid.</Text>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonClose]}
-                onPress={() =>
-                  setInvalidNumberModalVisible(!invalidNumberModalVisible)
-                }
-              >
-                <Text style={styles.textStyle}>OK</Text>
-              </TouchableOpacity>
-            </View>
+          <Text style={styles.header}>Contact Information *</Text>
+          <View style={styles.phoneInputContainer}>
+            <Text style={styles.phonePrefix}>+63</Text>
+            <TextInput
+              style={[styles.inputContainer, styles.phoneInput]}
+              onChangeText={(text) => {
+                handleContactNumberChange(text);
+                validateField("contactNumber", text);
+              }}
+              value={contactNumber}
+              placeholder="912 345 6789"
+              keyboardType="phone-pad"
+              maxLength={12}
+            />
           </View>
-        </Modal>
-      </View>
-    </KeyboardAwareScrollView>
+          {errors.contactNumber && (
+            <Text style={styles.errorText}>{errors.contactNumber}</Text>
+          )}
+
+          <Text style={styles.header}>Upload Blood Request Form *</Text>
+          <CustomButtonWithIcon
+            onPress={() => setModalVisible(true)}
+            icon="upload"
+            iconSize={24}
+            iconColor="white"
+            title="Upload Image"
+            buttonStyle={{ backgroundColor: COLORS.primary }}
+            textStyle={{ color: "white" }}
+          />
+          {imageUri && (
+            <Image source={{ uri: imageUri }} style={styles.uploadedImage} />
+          )}
+          <IconModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            handleImagePicker={handleImagePicker}
+          />
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={invalidNumberModalVisible}
+            onRequestClose={() => {
+              setInvalidNumberModalVisible(!invalidNumberModalVisible);
+            }}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Contact number is invalid.</Text>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() =>
+                    setInvalidNumberModalVisible(!invalidNumberModalVisible)
+                  }
+                >
+                  <Text style={styles.textStyle}>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      </KeyboardAwareScrollView>
+    </>
   );
 }
 
@@ -591,5 +595,11 @@ const styles = StyleSheet.create({
     marginTop: -10,
     marginBottom: 10,
     fontFamily: "Poppins_400Regular",
+  },
+  stickyHeader: {
+    backgroundColor: COLORS.background,
+    paddingHorizontal: HORIZONTAL_SCREEN_MARGIN,
+    marginBottom: 10,
+    zIndex: 1000,
   },
 });

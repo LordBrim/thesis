@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateHospital, updateHospitalByUuid } from "rtx/slices/hospitals";
 import { View } from "react-native";
 import { RootState } from "app/store";
+import SingleBtnModal from "components/common/modals/SingleBtnModal";
 
 export default function ManageFaqUpdate() {
   const { uuid } = useLocalSearchParams();
@@ -33,6 +34,8 @@ export default function ManageFaqUpdate() {
   const [updatedLongitude, setUpdatedLongitude] = useState(
     hospital.coordinates.longitude.toString()
   );
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
   useEffect(() => {
@@ -62,6 +65,26 @@ export default function ManageFaqUpdate() {
     updatedLongitude,
   ]);
   const handleUpdate = () => {
+    if (
+      !updatedHospitalName ||
+      !updatedLogoUrl ||
+      !updatedAddress ||
+      !updatedContactNumber ||
+      !updatedLatitude ||
+      !updatedLongitude
+    ) {
+      setModalMessage("All fields are required.");
+      setModalVisible(true);
+      return;
+    }
+    if (
+      isNaN(parseFloat(updatedLatitude)) ||
+      isNaN(parseFloat(updatedLongitude))
+    ) {
+      setModalMessage("Latitude and Longitude must be valid numbers.");
+      setModalVisible(true);
+      return;
+    }
     dispatch(
       updateHospital({
         uuid: uuid.toString(),
@@ -105,6 +128,14 @@ export default function ManageFaqUpdate() {
   }, []);
   return (
     <SafeAreaView style={styles.container}>
+      <SingleBtnModal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        title="Validation Error"
+        description={modalMessage}
+        btnLabel="OK"
+        onPress={() => setModalVisible(false)}
+      />
       <ScrollView
         contentContainerStyle={styles.scrollview}
         overScrollMode="never"

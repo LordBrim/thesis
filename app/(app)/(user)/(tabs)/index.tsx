@@ -73,12 +73,10 @@ export default function HomeTab() {
         }
       >
         <View>
-          <Text style={GS.h3}>
-            Welcome Back!
-            <Text style={[GS.h1, { color: COLORS.primary }]}>
-              {" "}
-              {user.displayName}
-            </Text>
+          <Text style={GS.h3}>Welcome back,</Text>
+          <Text style={[GS.h1, { color: COLORS.primary }]}>
+            {" "}
+            {user.displayName}
           </Text>
         </View>
 

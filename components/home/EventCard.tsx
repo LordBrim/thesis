@@ -49,13 +49,13 @@ export default function EventCard({
         <View style={styles.details}>
           {manageEvent ? (
             <View style={styles.columnDetails}>
-              <Text style={styles.subtitle}>{date}</Text>
-              {time && <Text style={styles.subtitle}> | {time}</Text>}
+              <Text style={styles.subtitle}>Start: {date} |</Text>
+              {time && <Text style={styles.subtitle}>End: {time}</Text>}
             </View>
           ) : (
-            <View style={{ flexDirection: "row" }}>
-              <Text style={styles.subtitle}>{date}</Text>
-              {time && <Text style={styles.subtitle}> | {time}</Text>}
+            <View style={styles.rowDetails}>
+              <Text style={styles.subtitle}>Start: {date} |</Text>
+              {time && <Text style={styles.subtitle}>End: {time}</Text>}
             </View>
           )}
           <Text numberOfLines={1} style={styles.title}>
@@ -117,6 +117,12 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     fontFamily: "Poppins_400Regular",
   },
+  rowDetails: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    maxWidth: "100%",
+    fontFamily: "Poppins_400Regular",
+  },
   title: {
     fontSize: SIZES.xLarge,
     color: COLORS.background,
@@ -125,6 +131,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: COLORS.background,
-    fontFamily: "Poppins_400Regular",
+    fontFamily: "Poppins_700Bold",
+    elevation: 10,
   },
 });

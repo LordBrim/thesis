@@ -110,18 +110,38 @@ export default function AdminDashboard() {
   const { user } = useSelector((state: RootState) => state.user);
   const { admins } = useSelector((state: RootState) => state.admins);
   const filteredAdmin = user.displayName === user.hospitalName;
-  const gridBtns1 = [
+  const gridBtnsAdmin = [
     {
       href: "/(app)/(admin)/(home)/manage-admins",
       icon: (
-        <FontAwesome6
-          name="user-doctor"
-          size={size}
-          color={filteredAdmin ? COLORS.primary : COLORS.grayDark}
-        />
+        <FontAwesome6 name="user-doctor" size={size} color={COLORS.primary} />
       ),
       title: "Admins",
     },
+    {
+      href: "/(app)/(admin)/(home)/manage-staff",
+      icon: (
+        <FontAwesome6 name="user-nurse" size={size} color={COLORS.primary} />
+      ),
+      title: "Staff",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-events",
+      icon: <Ionicons name="calendar" size={size} color={COLORS.primary} />,
+      title: "Events",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-incentives",
+      icon: <FontAwesome6 name="gifts" size={size} color={COLORS.primary} />,
+      title: "Incentives",
+    },
+    {
+      href: "/(app)/(admin)/(home)/manage-blood-units",
+      icon: <Fontisto name="blood" size={size} color={COLORS.primary} />,
+      title: "Blood Units",
+    },
+  ];
+  const gridBtnsSubadmin = [
     {
       href: "/(app)/(admin)/(home)/manage-staff",
       icon: (
@@ -149,21 +169,11 @@ export default function AdminDashboard() {
     <SafeAreaView style={styles.container}>
       <View style={styles.section}>
         <Text style={GS.h2}>Dashboard</Text>
-        <FlatList
-          data={gridBtns1}
-          renderItem={({ item }) => (
-            <View style={[styles.dBtnView]}>
-              {!filteredAdmin && item.title === "Admins" ? (
-                <Link asChild push href={item.href} disabled={true}>
-                  <Pressable
-                    style={styles.dBtnPress}
-                    android_ripple={{ radius: 200 }}
-                  >
-                    {item.icon}
-                    <Text style={styles.dBtnText}>{item.title}</Text>
-                  </Pressable>
-                </Link>
-              ) : (
+        {filteredAdmin ? (
+          <FlatList
+            data={gridBtnsAdmin}
+            renderItem={({ item }) => (
+              <View style={[styles.dBtnView]}>
                 <Link asChild push href={item.href}>
                   <Pressable
                     style={styles.dBtnPress}
@@ -173,15 +183,37 @@ export default function AdminDashboard() {
                     <Text style={styles.dBtnText}>{item.title}</Text>
                   </Pressable>
                 </Link>
-              )}
-            </View>
-          )}
-          keyExtractor={(item) => item.href}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          numColumns={4}
-          scrollEnabled={false}
-        />
+              </View>
+            )}
+            keyExtractor={(item) => item.href}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            numColumns={4}
+            scrollEnabled={false}
+          />
+        ) : (
+          <FlatList
+            data={gridBtnsSubadmin}
+            renderItem={({ item }) => (
+              <View style={[styles.dBtnView]}>
+                <Link asChild push href={item.href}>
+                  <Pressable
+                    style={styles.dBtnPress}
+                    android_ripple={{ radius: 200 }}
+                  >
+                    {item.icon}
+                    <Text style={styles.dBtnText}>{item.title}</Text>
+                  </Pressable>
+                </Link>
+              </View>
+            )}
+            keyExtractor={(item) => item.href}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            numColumns={4}
+            scrollEnabled={false}
+          />
+        )}
       </View>
       <View style={styles.section}>
         <Text style={GS.h2}>Transactions</Text>

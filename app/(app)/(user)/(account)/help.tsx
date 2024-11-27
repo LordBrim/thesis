@@ -4,21 +4,17 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Alert,
   Linking,
   Modal,
   TouchableWithoutFeedback,
   Platform,
 } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
-import { useNavigation } from "@react-navigation/native";
-import { useRouter } from "expo-router";
 import * as FileSystem from "expo-file-system";
 import { shareAsync } from "expo-sharing";
 import { getDownloadURL, getStorage, ref } from "@firebase/storage";
-import { saveToLibraryAsync } from "expo-media-library";
 
 const CustomModal = ({
   visible,
@@ -58,16 +54,9 @@ const CustomModal = ({
 export default function Help() {
   const [modalVisible, setModalVisible] = useState(false);
   const [emailModalVisible, setEmailModalVisible] = useState(false);
-  const navigation = useNavigation();
-  const router = useRouter();
-  const handleContactSupport = () => {
-    setModalVisible(true);
-  };
-
   const handleEmailUs = () => {
     setEmailModalVisible(true);
   };
-
   const handleEmailOption = (service) => {
     const email = "lifelineisthebest4@gmail.com";
     const subject = "Support Request";
@@ -75,67 +64,9 @@ export default function Help() {
     Linking.openURL(url);
     setEmailModalVisible(false);
   };
-  // const downloadPDF = async () => {
-  //   try {
-  //     const url = await storage()
-  //       .ref("manuals/LIFELINE_USER_MANUAL.pdf")
-  //       .getDownloadURL();
-  //     const localFilePath = `${FileSystem.documentDirectory}LIFELINE_USER_MANUAL.pdf`;
-  //     const download = await FileSystem.downloadAsync(url, localFilePath);
-  //     return download.uri;
-  //   } catch (error) {
-  //     console.error("Error downloading file:", error);
-  //   }
-  // };
-  // Expo File System from Indian
-  // const [mediaData, setMediaData] = useState([]);
-  // useEffect(() => {
-  //   async function getMediaData() {
-  //     const mediaRefs = [storage().ref("manuals/LIFELINE_USER_MANUAL.pdf")];
-  //     const mediaInfo = await Promise.all(
-  //       mediaRefs.map(async (ref) => {
-  //         const url = await ref.getDownloadURL();
-  //         const metadata = await ref.getMetadata();
-  //         return { url, metadata };
-  //       })
-  //     );
-  //     setMediaData(mediaInfo);
-  //   }
-  //   getMediaData();
-  // }, []);
-  // async function downloadFile(url: string, filename: string) {
-  //   try {
-  //     const { status } = await MediaLibrary.requestPermissionsAsync();
-  //     if (status !== "granted") {
-  //       Alert.alert(
-  //         "Permission Needed",
-  //         "This app needs access to your Media library"
-  //       );
-  //       return;
-  //     }
-  //     const fileUri = FileSystem.cacheDirectory + filename;
-  //     console.log("Starting download!");
-  //     const downloadResumable = FileSystem.createDownloadResumable(
-  //       url,
-  //       fileUri,
-  //       {},
-  //       undefined
-  //     );
-  //     const { uri } = await downloadResumable.downloadAsync(null, {
-  //       shouldCache: false,
-  //     });
-  //     console.log("Download completed: ", uri);
-
-  //     const asset = await MediaLibrary.createAssetAsync(uri);
-  //     console.log("Asset created: ", asset);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
   const downloadFromUrl = async () => {
     const storage = getStorage();
     const storageRef = ref(storage, "manuals/LIFELINE_USER_MANUAL.pdf");
-
     try {
       const url = await getDownloadURL(storageRef); // Retrieve HTTPS URL from Firebase
       const filename = "LIFELINE_USER_MANUAL.pdf";
@@ -143,8 +74,6 @@ export default function Help() {
         url,
         FileSystem.documentDirectory + filename
       );
-
-      console.log("Download result:", result);
       save(
         result.uri,
         filename,
@@ -158,24 +87,20 @@ export default function Help() {
     if (Platform.OS === "android") {
       const permissions =
         await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
-
       if (permissions.granted) {
         try {
           const base64 = await FileSystem.readAsStringAsync(uri, {
             encoding: FileSystem.EncodingType.Base64,
           });
-
           const fileUri =
             await FileSystem.StorageAccessFramework.createFileAsync(
               permissions.directoryUri,
               filename,
               mimetype
             );
-
           await FileSystem.writeAsStringAsync(fileUri, base64, {
             encoding: FileSystem.EncodingType.Base64,
           });
-
           console.log("File saved to:", fileUri);
         } catch (error) {
           console.error("Error saving file on Android:", error);
@@ -270,7 +195,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 8,
     flex: 1,
-    marginBottom: 10, // Adjust margin to prevent overlap
+    marginBottom: 10,
     justifyContent: "center",
   },
   buttonText: {
@@ -287,7 +212,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 8,
     flex: 1,
-    marginTop: 10, // Adjust margin to prevent overlap
+    marginTop: 10,
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "#FF4444",
@@ -306,34 +231,6 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 20,
   },
-  // Remove FAQ styles
-  // faqSection: {
-  //   marginBottom: 40,
-  // },
-  // faqItem: {
-  //   backgroundColor: "#FFFFFF",
-  //   paddingHorizontal: 20,
-  //   paddingVertical: 16,
-  //   borderBottomWidth: 1,
-  //   borderBottomColor: "#EEEEEE",
-  // },
-  // faqQuestion: {
-  //   flexDirection: "row",
-  //   alignItems: "center",
-  //   marginBottom: 8,
-  // },
-  // faqQuestionText: {
-  //   fontSize: 16,
-  //   fontWeight: "600",
-  //   color: "#333333",
-  //   marginLeft: 12,
-  //   flex: 1,
-  // },
-  // faqAnswerText: {
-  //   fontSize: 14,
-  //   color: "#666666",
-  //   marginLeft: 36,
-  // },
   modalOverlay: {
     flex: 1,
     justifyContent: "center",

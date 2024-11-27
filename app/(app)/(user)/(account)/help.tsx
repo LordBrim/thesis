@@ -8,22 +8,17 @@ import {
   Linking,
   Modal,
   TouchableWithoutFeedback,
+  Platform,
 } from "react-native";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SingleBtnModal from "components/common/modals/SingleBtnModal";
 import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
-// Remove FAQItem component
-// const FAQItem = ({ question, answer }) => (
-//   <View style={styles.faqItem}>
-//     <View style={styles.faqQuestion}>
-//       <MaterialIcons name="help-outline" size={24} color="#FF4444" />
-//       <Text style={styles.faqQuestionText}>{question}</Text>
-//     </View>
-//     <Text style={styles.faqAnswerText}>{answer}</Text>
-//   </View>
-// );
+import * as FileSystem from "expo-file-system";
+import { shareAsync } from "expo-sharing";
+import { getDownloadURL, getStorage, ref } from "@firebase/storage";
+import { saveToLibraryAsync } from "expo-media-library";
 
 const CustomModal = ({
   visible,
@@ -80,7 +75,120 @@ export default function Help() {
     Linking.openURL(url);
     setEmailModalVisible(false);
   };
+  // const downloadPDF = async () => {
+  //   try {
+  //     const url = await storage()
+  //       .ref("manuals/LIFELINE_USER_MANUAL.pdf")
+  //       .getDownloadURL();
+  //     const localFilePath = `${FileSystem.documentDirectory}LIFELINE_USER_MANUAL.pdf`;
+  //     const download = await FileSystem.downloadAsync(url, localFilePath);
+  //     return download.uri;
+  //   } catch (error) {
+  //     console.error("Error downloading file:", error);
+  //   }
+  // };
+  // Expo File System from Indian
+  // const [mediaData, setMediaData] = useState([]);
+  // useEffect(() => {
+  //   async function getMediaData() {
+  //     const mediaRefs = [storage().ref("manuals/LIFELINE_USER_MANUAL.pdf")];
+  //     const mediaInfo = await Promise.all(
+  //       mediaRefs.map(async (ref) => {
+  //         const url = await ref.getDownloadURL();
+  //         const metadata = await ref.getMetadata();
+  //         return { url, metadata };
+  //       })
+  //     );
+  //     setMediaData(mediaInfo);
+  //   }
+  //   getMediaData();
+  // }, []);
+  // async function downloadFile(url: string, filename: string) {
+  //   try {
+  //     const { status } = await MediaLibrary.requestPermissionsAsync();
+  //     if (status !== "granted") {
+  //       Alert.alert(
+  //         "Permission Needed",
+  //         "This app needs access to your Media library"
+  //       );
+  //       return;
+  //     }
+  //     const fileUri = FileSystem.cacheDirectory + filename;
+  //     console.log("Starting download!");
+  //     const downloadResumable = FileSystem.createDownloadResumable(
+  //       url,
+  //       fileUri,
+  //       {},
+  //       undefined
+  //     );
+  //     const { uri } = await downloadResumable.downloadAsync(null, {
+  //       shouldCache: false,
+  //     });
+  //     console.log("Download completed: ", uri);
 
+  //     const asset = await MediaLibrary.createAssetAsync(uri);
+  //     console.log("Asset created: ", asset);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
+  const downloadFromUrl = async () => {
+    const storage = getStorage();
+    const storageRef = ref(storage, "manuals/LIFELINE_USER_MANUAL.pdf");
+
+    try {
+      const url = await getDownloadURL(storageRef); // Retrieve HTTPS URL from Firebase
+      const filename = "LIFELINE_USER_MANUAL.pdf";
+      const result = await FileSystem.downloadAsync(
+        url,
+        FileSystem.documentDirectory + filename
+      );
+
+      console.log("Download result:", result);
+      save(
+        result.uri,
+        filename,
+        result.headers["Content-Type"] || "application/pdf"
+      );
+    } catch (error) {
+      console.error("Error downloading file from Firebase:", error);
+    }
+  };
+  const save = async (uri, filename, mimetype) => {
+    if (Platform.OS === "android") {
+      const permissions =
+        await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+      if (permissions.granted) {
+        try {
+          const base64 = await FileSystem.readAsStringAsync(uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          const fileUri =
+            await FileSystem.StorageAccessFramework.createFileAsync(
+              permissions.directoryUri,
+              filename,
+              mimetype
+            );
+
+          await FileSystem.writeAsStringAsync(fileUri, base64, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+
+          console.log("File saved to:", fileUri);
+        } catch (error) {
+          console.error("Error saving file on Android:", error);
+        }
+      } else {
+        console.log("Permissions denied. Sharing file...");
+        shareAsync(uri);
+      }
+    } else {
+      console.log("Sharing file on iOS...");
+      shareAsync(uri);
+    }
+  };
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
@@ -89,31 +197,21 @@ export default function Help() {
         <Text style={styles.title}>Help & Support</Text>
         <Text style={styles.subtitle}>How can we help you today?</Text>
       </View>
-
       {/* Support Options */}
       <View style={styles.supportOptions}>
         <TouchableOpacity
           style={styles.supportButton}
-          onPress={handleContactSupport}
+          onPress={downloadFromUrl}
         >
           <Ionicons name="book" size={30} color="#FFFFFF" />
           <Text style={styles.buttonText}>Download User Manual</Text>
         </TouchableOpacity>
-
         <TouchableOpacity style={styles.emailButton} onPress={handleEmailUs}>
           <Ionicons name="mail" size={30} color="#FF4444" />
           <Text style={styles.emailButtonText}>Email Us</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Remove FAQ Section */}
-      {/* <View style={styles.faqSection}>
-        <Text style={styles.sectionTitle}>Frequently Asked Questions</Text>
-        {faqs.map((faq, index) => (
-          <FAQItem key={index} question={faq.question} answer={faq.answer} />
-        ))}
-      </View> */}
-
+      {/* Modals */}
       <SingleBtnModal
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
@@ -122,7 +220,6 @@ export default function Help() {
         btnLabel="Close"
         onPress={() => setModalVisible(false)}
       />
-
       <CustomModal
         visible={emailModalVisible}
         onRequestClose={() => setEmailModalVisible(false)}

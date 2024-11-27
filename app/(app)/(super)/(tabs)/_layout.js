@@ -32,7 +32,7 @@ export default function TabLayout() {
           />
           <View
             style={{ height: 30, width: 1, backgroundColor: COLORS.grayLight }}
-          ></View>
+          />
           <View
             style={{
               overflow: "hidden",
